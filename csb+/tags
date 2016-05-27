@@ -1,0 +1,55 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ASSERT	csb.c	25;"	d	file:
+ASSERT	csb.c	27;"	d	file:
+BPINODE64	csb.c	/^struct BPINODE64 {$/;"	s	file:
+BPLNODE64	csb.c	/^struct BPLNODE64 {$/;"	s	file:
+CC	Makefile	/^CC=\/opt\/SUNWspro\/bin\/CC$/;"	m
+CFLAG	Makefile	/^CFLAG=-fast -xO5 -DPRODUCT$/;"	m
+CFLAG_FIX	Makefile	/^CFLAG_FIX=-fast -xO5 -DPRODUCT -DFIX_HARDCODE$/;"	m
+CFLAG_FIX_g	Makefile	/^CFLAG_FIX_g=-g -DFIX_HARDCODE $/;"	m
+CFLAG_FULL	Makefile	/^CFLAG_FULL=-fast -xO5 -DPRODUCT -DFIX_HARDCODE -DFULL_ALLOC $/;"	m
+CFLAG_FULL_g	Makefile	/^CFLAG_FULL_g=-g -DFIX_HARDCODE -DFULL_ALLOC $/;"	m
+CFLAG_FULL_space	Makefile	/^CFLAG_FULL_space=-fast -xO5 -DPRODUCT -DFIX_HARDCODE -DFULL_ALLOC -DSPACE$/;"	m
+CFLAG_VAR	Makefile	/^CFLAG_VAR=-fast -xO5 -DPRODUCT -DVAR_HARDCODE$/;"	m
+CFLAG_VAR_GCC	Makefile	/^CFLAG_VAR_GCC= -O -DPRODUCT -DVAR_HARDCODE -DGCC$/;"	m
+CFLAG_VAR_g	Makefile	/^CFLAG_VAR_g=-g -DVAR_HARDCODE $/;"	m
+CFLAG_g	Makefile	/^CFLAG_g=-g$/;"	m
+CFLAG_space	Makefile	/^CFLAG_space=-fast -xO5 -DPRODUCT -DFIX_HARDCODE -DSPACE $/;"	m
+CSBINODE64	csb.c	/^struct CSBINODE64 {$/;"	s	file:
+GCC	Makefile	/^GCC=g++$/;"	m
+IPair	csb.c	/^struct IPair {$/;"	s	file:
+IsLeaf	csb.c	33;"	d	file:
+LPair	csb.c	/^struct LPair {$/;"	s	file:
+MAX_KEY	csb.c	31;"	d	file:
+NumKey	csb.c	32;"	d	file:
+RANGE	csb.c	30;"	d	file:
+Stat	csb.c	/^  Stat() {$/;"	f	struct:Stat
+Stat	csb.c	/^struct Stat {$/;"	s	file:
+d_NINode	csb.c	/^  int    d_NINode;         \/\/number of internal nodes$/;"	m	struct:Stat	file:
+d_NLNode	csb.c	/^  int    d_NLNode;         \/\/number of leaf nodes$/;"	m	struct:Stat	file:
+d_NSplits	csb.c	/^  int    d_NSplits;        \/\/number of splits$/;"	m	struct:Stat	file:
+d_NTotalSlots	csb.c	/^  int    d_NTotalSlots;    \/\/number of total slots in all the nodes$/;"	m	struct:Stat	file:
+d_NUsedSlots	csb.c	/^  int    d_NUsedSlots;     \/\/number of slots being used$/;"	m	struct:Stat	file:
+d_child	csb.c	/^  void* d_child;$/;"	m	struct:IPair	file:
+d_entry	csb.c	/^  IPair d_entry[8];$/;"	m	struct:BPINODE64	file:
+d_entry	csb.c	/^  LPair d_entry[6];       \/* <key, TID> pairs *\/$/;"	m	struct:BPLNODE64	file:
+d_firstChild	csb.c	/^  void*  d_firstChild;       \/\/pointer to the first child in a node group$/;"	m	struct:CSBINODE64	file:
+d_flag	csb.c	/^  void*      d_flag;      \/* this pointer is always set to null and is used to distinguish$/;"	m	struct:BPLNODE64	file:
+d_internalSpace	csb.c	/^  int    d_internalSpace;  \/\/ space used by internal nodes$/;"	m	struct:Stat	file:
+d_key	csb.c	/^  int d_key;$/;"	m	struct:IPair	file:
+d_key	csb.c	/^  int d_key;$/;"	m	struct:LPair	file:
+d_keyList	csb.c	/^  int    d_keyList[14];$/;"	m	struct:CSBINODE64	file:
+d_leafSpace	csb.c	/^  int    d_leafSpace;      $/;"	m	struct:Stat	file:
+d_level	csb.c	/^  int    d_level;          \/\/number of levels of the tree$/;"	m	struct:Stat	file:
+d_next	csb.c	/^  BPLNODE64* d_next;$/;"	m	struct:BPLNODE64	file:
+d_num	csb.c	/^  int        d_num;       \/* number of keys in the node *\/$/;"	m	struct:BPLNODE64	file:
+d_num	csb.c	/^  int    d_num;$/;"	m	struct:CSBINODE64	file:
+d_prev	csb.c	/^  BPLNODE64* d_prev;      \/* backward and forward pointers *\/$/;"	m	struct:BPLNODE64	file:
+d_segRatio	csb.c	/^  double d_segRatio;       \/\/the relative size between segments, only used for GCSB+-Trees.$/;"	m	struct:Stat	file:
+d_tid	csb.c	/^  int d_tid;       \/* tuple ID *\/$/;"	m	struct:LPair	file:
+public	csb.c	/^public:$/;"	m	struct:CSBINODE64	file:

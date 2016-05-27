@@ -1,0 +1,85 @@
+Cache-Sensitive B+-Trees
+
+In csb.c, we implemented B+-Trees, full Cache-Sensitive Search Trees
+(CSS-Trees), Cache-Sensitive B+-Trees (CSB+-Trees), Segmented
+Cache-Sensitive B+-Trees (SCSB+-Trees) and Full Cache-Sensitive
+B+-Trees (FCSB+-Trees). The implementation uses 64-byte node size,
+which corresponds to the L2 cache line size in Sun's Ultra Sparc. Here
+is a list of the operations supported.
+
+CSS-Trees: bulkload and search.
+B+-Trees: bulkload, search, insert and delete.
+CSB+-Trees: bulkload, search, insert and delete.
+SCSB+-Trees: bulkload, search, insert and delete.
+FCSB+-Trees: bulkload, search, insert and delete.
+
+We perform lazy deletion for all the delete operations. 
+
+We also support three variants of node searching: basic, uniform and
+variant. Details on them can be found at [RR00]. We provide a makefile
+for compiling each version.
+
+To compile a basic version:
+   make csb
+To compile a uniform version:
+   make csb_fix
+To compile a variant version for CC:
+   make csb_var
+To compile a variant version for gcc:
+   make csb_var_gcc
+To compile a full CSB+-Tree (uniform version):
+   make csb_full
+
+In our implementation, we do assume that there is enough physical
+memory to hold everything in RAM. The parameter in init_memory()
+should be updated according to the number of leaf entries in the
+tree. Also, additional amount of memory have to be allocated for
+insertions as we don't reclaim the space deallocated during
+insertions.
+
+Usage:
+    csb #element #tests pinsert psearch P|L|G2|G3|C
+        uniform|random|skewed iupper lupper seed [i]
+
+    pinsert---percentage of insertion in the tests
+    psearch---percentage of search in the tests
+    (the remaining percentage is used by deletion)
+    C---CSS-Tree
+    P---B+ tree
+    L---CSB+-Tree
+    G2---segmented (2 segments) CSB+-Tree
+    G3---segmented (3 segments) CSB+-Tree
+    uniform--keys are from 1 to #elements
+    random--keys are randomly chosen from 1 to RANGE (10000000), 
+            so duplicates are possible
+    skewed--keys are skewly chosen from 1 to #elements
+    ordered--searching keys are sequential, keys are random
+    iupper---maximum keys in each internal node during bulk load.
+    lupper---maximum keys in each leaf node during bulk load.
+    iUpper has to be 6 or smaller for B+-Trees 
+    iUpper has to be 13 or smaller for CSB+-Trees 
+           (each node can have 14 keys at most though)
+    iUpper has to be 12 or smaller for SCSB+-Trees with two segments
+    iUpper has to be 11 or smaller for SCSB+-Trees with three segments
+    lUpper has to be 6 or smaller 
+    [i]--- if specified, bulkload 1/10 of the element and insert 
+           the rest 9/10.
+
+The output will report the following:
+  #element elapse_time total_#_inserts total_#_searches #_successful_searches 
+  #_successful_deletes
+
+Examples:
+    perform 20000 searches on a CSB+-Tree with 1000000 leaf entries.
+        csb 1000000 20000 0 1.0 L r 13 5 100
+    perform 20000 operations (20% inserts, 30% searches, 50% deletes) 
+    on a CSB+-Tree with 1000000 leaf entries.
+        csb 1000000 20000 0.2 0.3 L r 13 5 100
+    perform 20000 searches on a CSB+-Tree with 1000000 leaf entries. 
+    Half of the leaf entries are used for bulkload and the other half 
+    are inserted into the tree one by one.
+        csb 1000000 20000 0 1.0 L r 13 5 100 i
+
+[RR00] Making B+-Trees cache conscious, Jun Rao and Kenneth Ross, 
+       SIGMOD 2000.
+

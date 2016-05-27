@@ -1,0 +1,53 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+BIN_DIR	Makefile	/^BIN_DIR = .\/$/;"	m
+CACHE_LINE_SIZE	w_radix_tree.h	5;"	d
+CFLAGS	Makefile	/^CFLAGS = -c$/;"	m
+Insert	w_radix_tree.c	/^int Insert(tree *t, unsigned long key, void *value) $/;"	f
+Logentry	w_radix_tree.h	/^struct Logentry {$/;"	s
+Lookup	w_radix_tree.c	/^void *Lookup(tree *t, unsigned long key)$/;"	f
+META_NODE_SHIFT	w_radix_tree.h	3;"	d
+Node	w_radix_tree.h	/^struct Node {$/;"	s
+Range_Lookup	w_radix_tree.c	/^void Range_Lookup(tree *t, unsigned long start_key, unsigned long end_key,$/;"	f
+Range_Lookup2	w_radix_tree.c	/^void Range_Lookup2(tree *t, unsigned long start_key, unsigned long num,$/;"	f
+Scan	w_radix_tree.c	/^void Scan(tree *t, unsigned long num)$/;"	f
+Tree	w_radix_tree.h	/^struct Tree {$/;"	s
+add_logentry	w_radix_tree.c	/^void add_logentry()$/;"	f
+addr	w_radix_tree.h	/^	unsigned long addr;$/;"	m	struct:Logentry
+allocINode	w_radix_tree.c	/^node *allocINode(node *parent, unsigned int index)$/;"	f
+allocLNode	w_radix_tree.c	/^node *allocLNode(node *parent, unsigned int index)$/;"	f
+clflush	w_radix_tree.c	/^static inline void clflush(volatile void *__p)$/;"	f	file:
+elapsed_entry_flush	w_radix_tree.c	/^unsigned long elapsed_entry_flush = 0;$/;"	v
+elapsed_entry_flush	w_radix_tree.h	/^unsigned long elapsed_entry_flush;$/;"	v
+elapsed_node_flush	w_radix_tree.c	/^unsigned long elapsed_node_flush = 0;$/;"	v
+elapsed_node_flush	w_radix_tree.h	/^unsigned long elapsed_node_flush;$/;"	v
+entry_count	w_radix_tree.c	/^unsigned long entry_count = 0;$/;"	v
+entry_count	w_radix_tree.h	/^unsigned long entry_count;$/;"	v
+entry_ptr	w_radix_tree.h	/^	void *entry_ptr[32];$/;"	m	struct:Node
+find_prev_leaf	w_radix_tree.c	/^node *find_prev_leaf(node *parent, unsigned int index, unsigned char height)$/;"	f
+flush	w_radix_tree.c	/^void flush(void *start)$/;"	f
+flush_buffer	w_radix_tree.c	/^void flush_buffer(void *buf, unsigned int len)$/;"	f
+flush_range	w_radix_tree.c	/^void flush_range(void *start, void *end)$/;"	f
+height	w_radix_tree.h	/^	unsigned char height;$/;"	m	struct:Tree
+increase_radix_tree_height	w_radix_tree.c	/^int increase_radix_tree_height(tree *t, unsigned char new_height)$/;"	f
+initTree	w_radix_tree.c	/^tree *initTree()$/;"	f
+logentry	w_radix_tree.h	/^typedef struct Logentry logentry;$/;"	t	typeref:struct:Logentry
+main	main.c	/^int main(void)$/;"	f
+mfence	w_radix_tree.c	9;"	d	file:
+new_value	w_radix_tree.h	/^	unsigned long new_value;$/;"	m	struct:Logentry
+node	w_radix_tree.h	/^typedef struct Node node;$/;"	t	typeref:struct:Node
+node_count	w_radix_tree.c	/^unsigned long node_count = 0;$/;"	v
+node_count	w_radix_tree.h	/^unsigned long node_count;$/;"	v
+old_value	w_radix_tree.h	/^	unsigned long old_value;$/;"	m	struct:Logentry
+p_index	w_radix_tree.h	/^	unsigned int p_index;$/;"	m	struct:Node
+parent_ptr	w_radix_tree.h	/^	node *parent_ptr;$/;"	m	struct:Node
+recursive_alloc_nodes	w_radix_tree.c	/^int recursive_alloc_nodes(node *level_ptr, unsigned long key, void *value, $/;"	f
+root	w_radix_tree.h	/^	node *root;$/;"	m	struct:Tree
+search_to_leftmost_leaf	w_radix_tree.c	/^node *search_to_leftmost_leaf(node *level_ptr, unsigned char height)$/;"	f
+search_to_prev_leaf	w_radix_tree.c	/^node *search_to_prev_leaf(node *prev_branch, unsigned char height)$/;"	f
+sibling_ptr	w_radix_tree.h	/^	node *sibling_ptr;$/;"	m	struct:Node
+tree	w_radix_tree.h	/^typedef struct Tree tree;$/;"	t	typeref:struct:Tree

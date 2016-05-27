@@ -1,0 +1,1 @@
+cmd_/home/sekwon/old/home/sekwon/study/data_structure/linux_btree/bptree.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/sekwon/old/home/sekwon/study/data_structure/linux_btree/bptree.ko /home/sekwon/old/home/sekwon/study/data_structure/linux_btree/bptree.o /home/sekwon/old/home/sekwon/study/data_structure/linux_btree/bptree.mod.o

@@ -1,0 +1,31 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+BIN_DIR	Makefile	/^BIN_DIR = .\/$/;"	m
+CACHE_LINE_SIZE	wm_radix_tree.h	5;"	d
+CFLAGS	Makefile	/^CFLAGS = -c$/;"	m
+Insert	wm_radix_tree.c	/^int Insert(tree *t, unsigned long key, void *value) $/;"	f
+Lookup	wm_radix_tree.c	/^void *Lookup(tree *t, unsigned long key)$/;"	f
+META_NODE_SHIFT	wm_radix_tree.h	3;"	d
+Node	wm_radix_tree.h	/^struct Node {$/;"	s
+Tree	wm_radix_tree.h	/^struct Tree {$/;"	s
+allocNode	wm_radix_tree.c	/^node *allocNode()$/;"	f
+clflush	wm_radix_tree.c	/^static inline void clflush(volatile void *__p)$/;"	f	file:
+entry_ptr	test.c	/^	void *entry_ptr[16];$/;"	m	struct:pointer_array	file:
+entry_ptr	wm_radix_tree.h	/^	void *entry_ptr[8];$/;"	m	struct:Node
+flush	wm_radix_tree.c	/^void flush(void *start)$/;"	f
+flush_buffer	wm_radix_tree.c	/^void flush_buffer(void *buf, unsigned int len)$/;"	f
+flush_range	wm_radix_tree.c	/^void flush_range(void *start, void *end)$/;"	f
+initTree	wm_radix_tree.c	/^tree *initTree()$/;"	f
+main	main.c	/^int main(void)$/;"	f
+main	test.c	/^int main(void)$/;"	f
+mfence	wm_radix_tree.c	8;"	d	file:
+node	wm_radix_tree.h	/^typedef struct Node node;$/;"	t	typeref:struct:Node
+pointer_array	test.c	/^struct pointer_array {$/;"	s	file:
+ptr	test.c	/^typedef struct pointer_array ptr;$/;"	t	typeref:struct:pointer_array	file:
+recursive_alloc_nodes	wm_radix_tree.c	/^int recursive_alloc_nodes(node *level_ptr, unsigned long key, void *value, $/;"	f
+root	wm_radix_tree.h	/^	node *root[16];$/;"	m	struct:Tree
+tree	wm_radix_tree.h	/^typedef struct Tree tree;$/;"	t	typeref:struct:Tree

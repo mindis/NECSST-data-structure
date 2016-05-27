@@ -1,0 +1,54 @@
+#.sym "HFrr1duR2btRv-7Efi5i" 
+	=SN "" 
+	=SC "" ;
+#.sym "NY6YeYvfU3rEf2f9_-XP" 
+	=SN "" 
+	=SC "" ;
+#.sym "BC5bd0Us0zGMPgMaIaRz" 
+	=SN "" 
+	=SC "" ;
+#.sym "qRaUOVLQg7HNKNZWoFPg" 
+	=SN "" 
+	=SC "" ;
+#.sym "3YoOu1D22zdKIQ_8QLAm" 
+	=SN "" 
+	=SC "" ;
+#.sym "5weuFI5b3w5PKAC3qjlG" 
+	=SN "" 
+	=SC "" ;
+#.sym "UCsRR1P8Qt406PMsPP2R" 
+	=SN "" 
+	=SC "" ;
+#.obj "csb.o" 
+	+CS
+	"HFrr1duR2btRv-7Efi5i"
+	"NY6YeYvfU3rEf2f9_-XP"
+	"BC5bd0Us0zGMPgMaIaRz"
+	"qRaUOVLQg7HNKNZWoFPg"
+	"3YoOu1D22zdKIQ_8QLAm"
+	"5weuFI5b3w5PKAC3qjlG"
+	"UCsRR1P8Qt406PMsPP2R"
+	=BP "/n/babar/proj/main/Junr/CSB/download" 
+	=SO "/n/babar/proj/main/Junr/CSB/download/csb.c" 
+	=CM "-fast -xO5 -DPRODUCT -DFIX_HARDCODE -DFULL_ALLOC -xs " ;
+#.obj "csb" 
+	+CO
+	""
+	=BP "/n/babar/proj/main/Junr/CSB/download" 
+	=CM "csb.o -o csb " ;
+#.obj "" ;
+#.obj "csb_fix" 
+	+CO
+	""
+	=BP "/n/babar/proj/main/Junr/CSB/download" 
+	=CM "csb.o -o csb_fix " ;
+#.obj "csb_var" 
+	+CO
+	""
+	=BP "/n/babar/proj/main/Junr/CSB/download" 
+	=CM "csb.o -o csb_var " ;
+#.obj "csb_full" 
+	+CO
+	""
+	=BP "/n/babar/proj/main/Junr/CSB/download" 
+	=CM "csb.o -o csb_full " ;
