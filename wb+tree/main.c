@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <malloc.h>
-#include <sys/time.h>
 #include <time.h>
 #include "wbtree.h"
 /*
@@ -86,13 +85,14 @@ int main(int argc, char **argv){
 
 int main(void)
 {
-	struct timeval t1, t2;
+	struct timespec t1, t2;
 	int i;
 	char *dummy;
 	unsigned long *keys;
-	long elapsed_time;
+	unsigned long elapsed_time;
 	void *ret;
 	FILE *fp;
+	unsigned long *buf;
 /*
 	if ((fp = fopen("../input_file/input_2billion.txt","r")) == NULL)
 	{
@@ -101,6 +101,8 @@ int main(void)
 	}
 */
 	keys = malloc(sizeof(unsigned long) * 100000100);
+	buf = malloc(sizeof(unsigned long) * 100000100);
+	memset(buf, 0, sizeof(unsigned long) * 100000100);
 	for(i = 0; i < 100000100; i++) {
 		keys[i] = i;
 	//	fscanf(fp, "%d", &keys[i]);
@@ -108,54 +110,68 @@ int main(void)
 
 	dummy = (char *)malloc(15*1024*1024);
 	memset(dummy, 0, 15*1024*1024);
-	clflush_range((void *)dummy, (void *)dummy + 15*1024*1024);
-//	flush_buffer((void *)dummy, 15*1024*1024);
+//	clflush_range((void *)dummy, (void *)dummy + 15*1024*1024);
+	flush_buffer((void *)dummy, 15*1024*1024);
 
 	tree *t = initTree();
 
-	gettimeofday(&t1, NULL);
+	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for(i = 0; i < 100000000; i++)
 		Insert(t, keys[i], &keys[i]);
-	gettimeofday(&t2, NULL);
-	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000;
-	elapsed_time += (t2.tv_usec - t1.tv_usec);
+	clock_gettime(CLOCK_MONOTONIC, &t2);
+	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
+	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 
-	printf("Bulk load Time = %ld us\n",elapsed_time);
 	printf("sizeof(node) = %d\n", sizeof(node));
+	printf("Bulk load Time = %lu ns\n",elapsed_time);
 
 	memset(dummy, 0, 15*1024*1024);
-	clflush_range((void *)dummy, (void *)dummy + 15*1024*1024);
+//	clflush_range((void *)dummy, (void *)dummy + 15*1024*1024);
+	flush_buffer((void *)dummy, 15*1024*1024);
 
-	gettimeofday(&t1, NULL);
+	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for(i = 99999999; i < 100000100; i++)
 		Insert(t, keys[i], &keys[i]);
-	gettimeofday(&t2, NULL);
-	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000;
-	elapsed_time += (t2.tv_usec - t1.tv_usec);
-	printf("Insert Time = %ld us\n", elapsed_time);
+	clock_gettime(CLOCK_MONOTONIC, &t2);
+	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
+	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
+	printf("Insert Time = %lu ns\n", elapsed_time);
 
 	memset(dummy, 0, 15*1024*1024);
-	clflush_range((void *)dummy, (void *)dummy + 15*1024*1024);
-//	flush_buffer((void *)dummy, 15*1024*1024);
+//	clflush_range((void *)dummy, (void *)dummy + 15*1024*1024);
+	flush_buffer((void *)dummy, 15*1024*1024);
 
-	gettimeofday(&t1, NULL);
+	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for(i = 0; i < 100000100; i++) {
 		ret = (void *)Lookup(t, keys[i]);
-	//	if (ret == NULL) {
-	//		printf("There is no key[%d] = %ld\n", i, keys[i]);
-	//		exit(1);
-	//	}
-		/*
+		
+		if (ret == NULL) {
+			printf("There is no key[%d] = %ld\n", i, keys[i]);
+			exit(1);
+		}/*
 		else {
 			printf("Search value = %lu\n", *(unsigned long*)ret);
 			sleep(1);
-		}
-		*/
+		}*/
 	}
-	gettimeofday(&t2, NULL);
-	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000;
-	elapsed_time += (t2.tv_usec - t1.tv_usec);
-	printf("Search Time = %ld us\n", elapsed_time);
+	clock_gettime(CLOCK_MONOTONIC, &t2);
+	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
+	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
+	printf("Search Time = %lu ns\n", elapsed_time);
+
+	memset(dummy, 0, 15*1024*1024);
+	flush_buffer((void *)dummy, 15*1024*1024);
+
+	clock_gettime(CLOCK_MONOTONIC, &t1);
+	Range_Lookup(t, 0, 100000100, buf);
+	clock_gettime(CLOCK_MONOTONIC, &t2);
+	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
+	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
+
+	printf("Range search time = %lu ns\n", elapsed_time);
+
+	for (i = 0; i < 100000100; i++)
+		printf("buf[%d] = %lu\n", i, buf[i]);
 
 	return 0;
 }

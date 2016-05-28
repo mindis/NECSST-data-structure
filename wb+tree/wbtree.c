@@ -5,6 +5,7 @@
 #include <x86intrin.h>
 #include <malloc.h>
 #include <stdint.h>
+#include <time.h>
 #include "wbtree.h"
 
 char *redoLog;
@@ -25,7 +26,8 @@ static inline void clflush(volatile void *__p)
 
 long long clftime=0;
 
-int clflush_range(void *start, void *end){
+int clflush_range(void *start, void *end)
+{
 	start= (void *)((unsigned long)start &~(CACHE_LINE_SIZE-1));
 	mfence();
 	//printf("start = %x start&63 = %x\n",start,(unsigned long)start&~(CACHE_LINE_SIZE-1));
@@ -36,7 +38,9 @@ int clflush_range(void *start, void *end){
 	mfence();
 	/// Flush any possible final partial cacheline:
 }
-int clflush_range_nomb(void *start, void *end){
+
+int clflush_range_nomb(void *start, void *end)
+{
 	start= (void *)((unsigned long)start &~(CACHE_LINE_SIZE-1));
 	//printf("start = %x start&63 = %x\n",start,(unsigned long)start&~(CACHE_LINE_SIZE-1));
 	void *addr;
@@ -46,40 +50,121 @@ int clflush_range_nomb(void *start, void *end){
 	/// Flush any possible final partial cacheline:
 }
 
-node* allocNode(){
-	node *n = (node *)memalign(64,sizeof(node));
+void flush_buffer(void *buf, unsigned int len)
+{
+	unsigned int i;
+	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
+	mfence();
+	for (i = 0; i < len; i += CACHE_LINE_SIZE)
+		asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
+	mfence();
+}
+
+void add_redo_logentry()
+{
+	redo_log_entry *log = malloc(sizeof(redo_log_entry));
+	log->addr = 0;
+	log->new_value = 0;
+	log->type = LE_DATA;
+	flush_buffer(log, sizeof(redo_log_entry));
+}
+
+void add_commit_entry()
+{
+	redo_log_entry *log = malloc(sizeof(redo_log_entry));
+	log->addr = 0;
+	log->new_value = 0;
+	log->type = LE_COMMIT;
+	flush_buffer(log, sizeof(redo_log_entry));
+}
+
+node *allocNode()
+{
+	node *n = malloc(sizeof(node));
 	memset(n->slot,0,8);
 	n->isleaf = 1;
 	return n;
 }
 
-tree *initTree(){
+tree *initTree()
+{
 	tree *t =malloc(sizeof(tree)); 
 	t->root = allocNode(); 
 	t->height = 0;
 	clflush_cnt=0;
+	flush_buffer(t, sizeof(tree));
 	return t;
 }
 
-void *Lookup(tree *t, long key){
+void *Lookup(tree *t, long key)
+{
 	node *curr = t->root;
 	curr = find_leaf_node(curr, key);
 	int loc = Search(curr, curr->slot, key);
-	if( loc > curr->slot[0] ) loc = curr->slot[0];
-	if( curr->entries[curr->slot[loc]].key != key || loc > curr->slot[0] ){ 
+
+	if (loc > curr->slot[0]) 
+		loc = curr->slot[0];
+
+	if (curr->entries[curr->slot[loc]].key != key || loc > curr->slot[0])
 		return NULL;
-	}
+
 	return curr->entries[curr->slot[loc]].ptr;
 }
 
-int Append(node *n, long key, void *value){
+void Range_Lookup(tree *t, long start_key, unsigned int num, 
+		unsigned long buf[])
+{
+	int loc, i;
+	unsigned long search_count = 0;
+	struct timespec t1, t2;
+	unsigned long elapsed_time;
+	node *curr = t->root;
+
+//	clock_gettime(CLOCK_MONOTONIC, &t1);
+	curr = find_leaf_node(curr, start_key);
+	loc = Search(curr, curr->slot, start_key);
+//	printf("loc = %d\n", loc);
+//	clock_gettime(CLOCK_MONOTONIC, &t2);
+//	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
+//	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
+//	printf("Range lookup 1 = %lu\n", elapsed_time);
+
+//	clock_gettime(CLOCK_MONOTONIC, &t1);
+	while (search_count < num) {
+		for (i = loc; i <= curr->slot[0]; i++) {
+			buf[search_count] = *(unsigned long *)curr->entries[curr->slot[i]].ptr;
+			search_count++;
+			if(search_count == num) {
+//				clock_gettime(CLOCK_MONOTONIC, &t2);
+//				elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
+//				elapsed_time += (t2.tv_nsec - t1.tv_nsec);
+//				printf("Range lookup 2 = %lu\n", elapsed_time);
+				return ;
+			}
+		}
+
+		curr = curr->leftmostPtr;
+		if (curr == NULL) {
+			printf("error\n");
+			return ;
+		}
+		loc = 1;
+	}
+//	clock_gettime(CLOCK_MONOTONIC, &t2);
+//	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
+//	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
+//	printf("Range lookup 2 = %lu\n", elapsed_time);
+}
+
+int Append(node *n, long key, void *value)
+{
 	int checkBit = (1 << 8) - 1;
-	int j, missingMin = 0;
+	int i, j, missingMin = 0;
 
 	for (j = 1; j <= n->slot[0]; j++)
 		checkBit ^= (1 << n->slot[j]);
 
-	while ((checkBit % 2) == 0){
+	while ((checkBit % 2) == 0) {
 		checkBit = checkBit >> 1;
 		missingMin++;
 	}
@@ -90,32 +175,36 @@ int Append(node *n, long key, void *value){
 	return missingMin; 
 }
 
-int Append_in_inner(node *n, long key, void *value){
-	int checkBit = (1<<8)-1;
-	int j;
-	for( j=1; j<=n->slot[0]; j++ )
-		checkBit ^= (1<<n->slot[j]);
-	int missingMin = 0;
-	while( checkBit%2==0 ){
-		checkBit = checkBit>>1;
+int Append_in_inner(node *n, long key, void *value)
+{
+	int checkBit = (1 << 8) - 1;
+	int j, missingMin = 0;
+
+	for (j = 1; j <= n->slot[0]; j++)
+		checkBit ^= (1 << n->slot[j]);
+
+	while ((checkBit % 2) == 0) {
+		checkBit = checkBit >> 1;
 		missingMin++;
 	}
+
 	n->entries[missingMin].key = key;
 	n->entries[missingMin].ptr = value;
 	//Flush
 	return missingMin;
 }
 
-int Search(node *curr, char *temp, long key){
+int Search(node *curr, char *temp, long key)
+{
 	int low = 1, mid = 1;
 	int high = temp[0];
 
 	while (low <= high){
-		mid = (low+high)/2;
+		mid = (low + high) / 2;
 		if (curr->entries[temp[mid]].key > key)
-			high = mid-1;
+			high = mid - 1;
 		else if (curr->entries[temp[mid]].key < key)
-			low = mid+1;
+			low = mid + 1;
 		else
 			break;
 	}
@@ -134,13 +223,13 @@ node *find_leaf_node(node *curr, long key){
 	loc = Search(curr, curr->slot, key);
 
 	if (loc > curr->slot[0]) 
-		find_leaf_node(curr->entries[curr->slot[loc-1]].ptr, key);
-	else if (curr->entries[curr->slot[loc]].key == key) 
+		find_leaf_node(curr->entries[curr->slot[loc - 1]].ptr, key);
+	else if (curr->entries[curr->slot[loc]].key <= key) 
 		find_leaf_node(curr->entries[curr->slot[loc]].ptr, key);
 	else if (loc == 1) 
 		find_leaf_node(curr->leftmostPtr, key);
 	else 
-		find_leaf_node(curr->entries[curr->slot[loc-1]].ptr, key);
+		find_leaf_node(curr->entries[curr->slot[loc - 1]].ptr, key);
 }
 
 
@@ -154,30 +243,35 @@ void Insert(tree *t, long key, void *value){
 	numEntries = curr->slot[0];
 	if(numEntries == NODE_SIZE){
 		node *splitNode = allocNode();
-		int j, cp = curr->slot[0];
+		int j, loc, cp = curr->slot[0];
+		splitNode->leftmostPtr = curr->leftmostPtr;
 
 		//overflown node
-		node* log = allocNode(); 
-		memcpy(log, curr,sizeof(node));
-		clflush_range((void *)(log),(void *)(log)+sizeof(node));
-
-		for( j=min_live_entries; j>0; j-- ){
-			int loc = Append(splitNode, curr->entries[curr->slot[cp]].key, curr->entries[curr->slot[cp]].ptr);
+		for (j = min_live_entries; j > 0; j--) {
+			loc = Append(splitNode, curr->entries[curr->slot[cp]].key, 
+					curr->entries[curr->slot[cp]].ptr);
 			splitNode->slot[j] = loc;
 			splitNode->slot[0]++;
 			cp--;
 		}
-		if( splitNode->entries[splitNode->slot[1]].key > key ){
-			curr->slot[0] -= min_live_entries;
-			//insert_in_leaf_noflush(curr, key, value);
-			insert_in_leaf(curr, key, value); //In this function, slot and new entry will be flushed
-			clflush_range((void *)(splitNode),(void *)(splitNode)+sizeof(node));
+
+		add_redo_logentry();
+		curr->slot[0] -= min_live_entries;
+
+		if (splitNode->entries[splitNode->slot[1]].key > key) {
+			add_redo_logentry();	//slot redo logging for insert_in_leaf_noflush
+			loc = insert_in_leaf_noflush(curr, key, value);
+			flush_buffer(&(curr->entries[loc]), sizeof(entry));
+			//	insert_in_leaf(curr, key, value); //In this function, slot and new entry will be flushed
+			//	clflush_range((void *)(splitNode),(void *)(splitNode)+sizeof(node));
+			//	clflush_range((void *)(splitNode), (void *)(splitNode) + 56);
+			//	flush_buffer(splitNode, sizeof(node));
 		}
-		else{
-			curr->slot[0] -= min_live_entries;
-			clflush_range((void *)(curr->slot),(void *)(curr->slot)+8);
+		else {
+			//	clflush_range((void *)(curr->slot),(void *)(curr->slot)+8);
 			insert_in_leaf_noflush(splitNode, key, value);
-			clflush_range((void *)(splitNode),(void *)(splitNode)+sizeof(node));
+			//	clflush_range((void *)(splitNode),(void *)(splitNode)+sizeof(node));
+			//	flush_buffer(splitNode, sizeof(node));
 		}
 
 		//flush
@@ -185,31 +279,41 @@ void Insert(tree *t, long key, void *value){
 		//flush
 
 		insert_in_parent(t, curr, splitNode->entries[splitNode->slot[1]].key, splitNode);
-
+		add_redo_logentry();
+		curr->leftmostPtr = splitNode;
+		add_commit_entry();
 	}
 	else{
 		insert_in_leaf(curr, key, value);
 	}
 }
 
-void insert_in_leaf_noflush(node *curr, long key, void *value){
-	int loc = Append(curr,key,value);
-
+int insert_in_leaf_noflush(node *curr, long key, void *value)
+{
 	char temp[8];
+	int loc, mid, j;
 
-	int mid = Search(curr, curr->slot, key);
-	int j;
-	for( j=curr->slot[0]; j>=mid; j-- )
-		temp[j+1] = curr->slot[j];
+	loc = Append(curr, key, value);
+
+	//	flush_buffer(&(curr->entries[loc]), sizeof(entry));
+
+	mid = Search(curr, curr->slot, key);
+
+	for (j = curr->slot[0]; j >= mid; j--)
+		temp[j + 1] = curr->slot[j];
 
 	temp[mid] = loc;
 
-	for( j=mid-1; j>=1; j-- )
+	for (j = mid-1; j >= 1; j--)
 		temp[j] = curr->slot[j];
 
-	temp[0] = curr->slot[0]+1;
+	temp[0] = curr->slot[0] + 1;
 
 	*((uint64_t *)curr->slot) = *((uint64_t *)temp);
+//	for (j = 0; j <= temp[0]; j++)
+//		curr->slot[j] = temp[j];
+
+	return loc;
 }
 
 void insert_in_leaf(node *curr, long key, void *value){
@@ -218,8 +322,10 @@ void insert_in_leaf(node *curr, long key, void *value){
 
 	loc = Append(curr,key,value);
 
-	clflush_range((void *)&(curr->entries[loc]),
-			(void *)&(curr->entries[loc])+sizeof(entry));
+	flush_buffer(&(curr->entries[loc]), sizeof(entry));
+
+	//	clflush_range((void *)&(curr->entries[loc]),
+	//			(void *)&(curr->entries[loc])+sizeof(entry));
 
 	mid = Search(curr, curr->slot, key);
 
@@ -234,17 +340,22 @@ void insert_in_leaf(node *curr, long key, void *value){
 	temp[0] = curr->slot[0] + 1;
 
 	*((uint64_t *)curr->slot) = *((uint64_t *)temp);
-	clflush_range((void *)(curr->slot),(void *)(curr->slot)+8);
+//	for (j = 0; j <= temp[0]; j++)
+//		curr->slot[j] = temp[j];
+	flush_buffer(curr->slot, 8);
+	//	clflush_range((void *)(curr->slot),(void *)(curr->slot)+8);
 }
 
-void insert_in_inner(node *curr, long key, void *value){
-	int loc = Append_in_inner(curr, key, value);
-	clflush_range((void *)&(curr->entries[loc]),(void *)&(curr->entries[loc])+sizeof(entry));
-
+void insert_in_inner(node *curr, long key, void *value)
+{
+	int mid, j, loc;
 	char temp[8];
 
-	int mid = Search(curr, curr->slot, key);
-	int j;
+	loc = Append_in_inner(curr, key, value);
+	flush_buffer(&(curr->entries[loc]), sizeof(entry));
+	//	clflush_range((void *)&(curr->entries[loc]),(void *)&(curr->entries[loc])+sizeof(entry));
+
+	mid = Search(curr, curr->slot, key);
 
 	for (j = curr->slot[0]; j >= mid; j--)
 		temp[j+1] = curr->slot[j];
@@ -256,18 +367,22 @@ void insert_in_inner(node *curr, long key, void *value){
 
 	temp[0] = curr->slot[0] + 1;
 
-	for (j = 0; j <= temp[0]; j++)
-		curr->slot[j] = temp[j];
-
-	clflush_range((void *)(curr->slot),(void *)(curr->slot)+8);
+	*((uint64_t *)curr->slot) = *((uint64_t *)temp);
+//	for (j = 0; j <= temp[0]; j++)
+//		curr->slot[j] = temp[j];
+	flush_buffer(curr->slot, 8);
+	//	clflush_range((void *)(curr->slot),(void *)(curr->slot)+8);
 }
-void insert_in_inner_noflush(node *curr, long key, void *value){
-	int loc = Append_in_inner(curr, key, value);
 
+int insert_in_inner_noflush(node *curr, long key, void *value)
+{
+	int mid, j, loc;
 	char temp[8];
 
-	int mid = Search(curr, curr->slot, key);
-	int j;
+	loc = Append_in_inner(curr, key, value);
+	//	flush_buffer(&(curr->entries[loc], sizeof(entry)));
+
+	mid = Search(curr, curr->slot, key);
 
 	for( j=curr->slot[0]; j>=mid; j-- )
 		temp[j+1] = curr->slot[j];
@@ -279,83 +394,99 @@ void insert_in_inner_noflush(node *curr, long key, void *value){
 
 	temp[0] = curr->slot[0]+1;
 
-	for( j=0; j<=temp[0]; j++ )
-		curr->slot[j] = temp[j];
+	*((uint64_t *)curr->slot) = *((uint64_t *)temp);
+//	for (j = 0; j <= temp[0]; j++)
+//		curr->slot[j] = temp[j];
+
+	return loc;
 }
-void insert_in_parent(tree *t, node *curr, long key, node *splitNode){
-	if( curr == t->root ){
+
+void insert_in_parent(tree *t, node *curr, long key, node *splitNode) {
+	if (curr == t->root) {
 		node *root = allocNode();
 		root->isleaf = 0;
 		root->leftmostPtr = curr;
 		root->entries[0].ptr = splitNode;
 		root->entries[0].key = key;
-		curr->parent = root;
 		splitNode->parent = root;
 
 		root->slot[1] = 0;
 		root->slot[0] = 1;
-		clflush_range((void *)(root),(void *)(root)+sizeof(node));
+		//		clflush_range((void *)(root),(void *)(root)+sizeof(node));
+		flush_buffer(root, sizeof(node));
+		flush_buffer(splitNode, sizeof(node));
 
+		add_redo_logentry();
+		curr->parent = root;
+		add_redo_logentry();
 		t->root = root;
-		clflush_range((void *)&(t->root),(void *)&(t->root)+sizeof(node *));
-		return;
+		//		clflush_range((void *)&(t->root),(void *)&(t->root)+sizeof(node *));
+		return ;
 	}
 
 	node *parent = curr->parent;
-	if( parent->slot[0] < NODE_SIZE ){
-		int loc = Append_in_inner(parent, key, splitNode);
-		clflush_range((void *)&(curr->entries[loc]),(void *)&(curr->entries[loc])+sizeof(entry));
-		splitNode->parent = parent;
 
-		int mid = Search(parent, parent->slot, key);
+	if (parent->slot[0] < NODE_SIZE) {
+		int mid, j, loc;
 		char temp[8];
-		int j;
 
-		for( j=parent->slot[0]; j>=mid; j-- )
+		loc = Append_in_inner(parent, key, splitNode);
+		flush_buffer(&(parent->entries[loc]), sizeof(entry));
+		//		clflush_range((void *)&(curr->entries[loc]),(void *)&(curr->entries[loc])+sizeof(entry));
+		splitNode->parent = parent;
+		flush_buffer(splitNode, sizeof(node));
+
+		mid = Search(parent, parent->slot, key);
+
+		for (j = parent->slot[0]; j >= mid; j--)
 			temp[j+1] = parent->slot[j];
 
 		temp[mid] = loc;
 
-		for( j=mid-1; j>=1; j-- )
+		for (j = mid-1; j >= 1; j--)
 			temp[j] = parent->slot[j];
 
 		temp[0] = parent->slot[0]+1;
 
-		for( j=0; j<=temp[0]; j++ )
-			parent->slot[j] = temp[j];
-
-		clflush_range((void *)(parent->slot),(void *)(parent->slot)+8);
+		add_redo_logentry();
+		*((uint64_t *)parent->slot) = *((uint64_t *)temp);
+//		for (j = 0; j <= temp[0]; j++)
+//			parent->slot[j] = temp[j];
+		//		clflush_range((void *)(parent->slot),(void *)(parent->slot)+8);
 
 	}
-	else{
-		int log_start_offset = redoLog_offset;
-		node* log = allocNode();
-		memcpy(log, curr,sizeof(node));
-		clflush_range((void *)(log),(void *)(log)+sizeof(node));
-		//    memcpy(&redoLog[redoLog_offset], splitParent,sizeof(node));
+	else {
+		int j, loc, cp = parent->slot[0];
 		node *splitParent = allocNode();
 		splitParent->isleaf = 0;
-		int j = min_live_entries, cp = parent->slot[0];
-		for( ; j>0; j-- ){
-			int loc = Append_in_inner(splitParent, parent->entries[parent->slot[cp]].key, parent->entries[parent->slot[cp]].ptr);
+
+		for (j = min_live_entries ; j > 0; j--) {
+			loc = Append_in_inner(splitParent,parent->entries[parent->slot[cp]].key, parent->entries[parent->slot[cp]].ptr);
 			node *child = parent->entries[parent->slot[cp]].ptr;
+			add_redo_logentry();
 			child->parent = splitParent;
 			splitParent->slot[j] = loc;
 			splitParent->slot[0]++;
 			cp--;
 		}
-		if( splitParent->entries[splitParent->slot[1]].key > key ){
-			parent->slot[0] -= min_live_entries;
-			insert_in_inner(parent, key, splitNode);
+
+		add_redo_logentry();
+		parent->slot[0] -= min_live_entries;
+
+		if (splitParent->entries[splitParent->slot[1]].key > key) {
+			add_redo_logentry();
+			loc = insert_in_inner_noflush(parent, key, splitNode);
+			flush_buffer(&(parent->entries[loc]), sizeof(entry));
 			splitNode->parent = parent;
-			clflush_range((void *)(splitParent),(void *)splitParent+sizeof(node));
+			flush_buffer(splitNode, sizeof(node));
+			//			clflush_range((void *)(splitParent),(void *)splitParent+sizeof(node));
 		}
-		else{
-			parent->slot[0] -= min_live_entries;
-			clflush_range((void *)(parent->slot),(void *)(parent->slot)+8);
+		else {
+			//			clflush_range((void *)(parent->slot),(void *)(parent->slot)+8);
 			splitNode->parent = splitParent;
+			flush_buffer(splitNode, sizeof(node));
 			insert_in_inner_noflush(splitParent, key, splitNode);
-			clflush_range((void *)(splitParent),(void *)splitParent+sizeof(node));
+			//			clflush_range((void *)(splitParent),(void *)splitParent+sizeof(node));
 		}
 
 
@@ -364,7 +495,8 @@ void insert_in_parent(tree *t, node *curr, long key, node *splitNode){
 
 		//sibling node
 
-		insert_in_parent(t, parent, splitParent->entries[splitParent->slot[1]].key, splitParent);
+		insert_in_parent(t, parent, 
+				splitParent->entries[splitParent->slot[1]].key, splitParent);
 	}
 }
 

@@ -19,7 +19,7 @@ void flush_buffer(void *buf, unsigned int len)
 	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
 	mfence();
 	for (i = 0; i < len; i += CACHE_LINE_SIZE)
-		asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
+		asm volatile ("clflush %0\n" : "+m" (*(char *)(buf + i)));
 	mfence();
 }
 
@@ -330,7 +330,9 @@ void Range_Lookup(tree *t, unsigned long start_key, unsigned long num,
 					return ;
 			}
 		}
-		level_ptr = find_next_leaf(t, level_ptr->parent_ptr, level_ptr->p_index, 2);
+
+		level_ptr = find_next_leaf(t, level_ptr->parent_ptr, 
+				level_ptr->p_index, 2);
 		if (level_ptr == NULL) {
 			printf("error\n");
 			return ;

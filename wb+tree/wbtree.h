@@ -3,9 +3,24 @@
 #define min_live_entries 3
 #define CACHE_LINE_SIZE 64
 
+#define LE_DATA		0
+#define LE_COMMIT	1
+
 typedef struct entry entry;
 typedef struct node node;
 typedef struct tree tree;
+typedef struct redo_log_entry redo_log_entry;
+typedef struct commit_entry commit_entry;
+
+struct redo_log_entry {
+	unsigned long addr;
+	unsigned long new_value;
+	unsigned char type;
+};
+
+struct commit_entry {
+	unsigned char type;
+};
 
 struct entry{
 	long key;
@@ -15,7 +30,7 @@ struct entry{
 struct node{
 	char slot[NODE_SIZE+1];
 	struct entry entries[NODE_SIZE];
-	char *leftmostPtr;
+	struct node *leftmostPtr;
 	//long key[7];
 	//void *ptr[8];
 	struct node* parent;
@@ -29,13 +44,15 @@ struct tree{
 };
 
 tree *initTree();
+void Range_Lookup(tree *t, long start_key, unsigned int num, 
+		unsigned long buf[]);
 void *Lookup(tree *t, long key);
 int Append(node *n, long key, void *value);
 int Append_in_inner(node *n, long key, void *value);
 int Search(node *curr, char *temp, long key);
 node *find_leaf_node(node *curr, long key);
 void Insert(tree *t, long key, void *value);
-void insert_in_leaf_noflush(node *curr, long key, void *value);
+int insert_in_leaf_noflush(node *curr, long key, void *value);
 void insert_in_leaf(node *curr, long key, void *value);
 void insert_in_inner(node *curr, long key, void *value);
 void insert_in_parent(tree *t, node *curr, long key, node *splitNode);
