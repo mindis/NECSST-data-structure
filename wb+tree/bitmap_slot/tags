@@ -36,15 +36,14 @@ flush_buffer	wbtree.c	/^void flush_buffer(void *buf, unsigned int len)$/;"	f
 height	wbtree.h	/^	int height;$/;"	m	struct:tree
 initTree	wbtree.c	/^tree *initTree()$/;"	f
 insert_in_inner	wbtree.c	/^void insert_in_inner(node *curr, long key, void *value)$/;"	f
-insert_in_inner_noflush	wbtree.c	/^void insert_in_inner_noflush(node *curr, long key, void *value)$/;"	f
+insert_in_inner_noflush	wbtree.c	/^int insert_in_inner_noflush(node *curr, long key, void *value)$/;"	f
 insert_in_leaf	wbtree.c	/^void insert_in_leaf(node *curr, long key, void *value){$/;"	f
-insert_in_leaf_noflush	wbtree.c	/^void insert_in_leaf_noflush(node *curr, long key, void *value)$/;"	f
+insert_in_leaf_noflush	wbtree.c	/^int insert_in_leaf_noflush(node *curr, long key, void *value)$/;"	f
 insert_in_parent	wbtree.c	/^void insert_in_parent(tree *t, node *curr, long key, node *splitNode) {$/;"	f
 isleaf	wbtree.h	/^	int isleaf;$/;"	m	struct:node
 key	wbtree.h	/^	long key;$/;"	m	struct:entry
 leftmostPtr	wbtree.h	/^	struct node *leftmostPtr;$/;"	m	struct:node	typeref:struct:node::node
 main	main.c	/^int main(void)$/;"	f
-main	test.c	/^int main(void) {$/;"	f
 mbtime	wbtree.c	/^long long mbtime=0;$/;"	v
 mfence	wbtree.c	15;"	d	file:
 min_live_entries	wbtree.h	3;"	d
