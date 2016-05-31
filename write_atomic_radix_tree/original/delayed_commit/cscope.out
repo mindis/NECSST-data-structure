@@ -1,4 +1,4 @@
-cscope 15 $HOME/old/home/sekwon/study/data_structure/write_atomic_radix_tree/original/delayed_commit               0000289243
+cscope 15 $HOME/study/data_structures/write_atomic_radix_tree/original/delayed_commit               0000289226
 	@main.c
 
 1 
@@ -187,15 +187,15 @@ t1
 
 52 
 	`´štf
-("Bulk†ßd Timğ%lu‚s\n", 
-–­£d_time
-);
-
-53 
-	`´štf
 ("sizeofÒodeèğ%d\n", (
 node
 ));
+
+53 
+	`´štf
+("Bulk†ßd Timğ%lu‚s\n", 
+–­£d_time
+);
 
 60 
 	`mem£t
@@ -373,11 +373,11 @@ CLOCK_MONOTONIC
 t1
 );
 
-97 
+98 
 	`Rªge_Lookup
 (
 t
-, 0, 100000099, 
+, 8, 50000100, 
 buf
 );
 
@@ -1255,11 +1255,15 @@ v®ue
 height
  - 1);
 
-207 ià(
+208 ià(
 ”rv®
- == 0) {
+ < 0)
 
-208 
+209 
+ç
+;
+
+211 
 Ëv–_±r
 ->
 ’Œy_±r
@@ -1269,7 +1273,7 @@ height
 tmp_node
 ;
 
-209 
+212 
 	`æush_bufãr
 (
 Ëv–_±r
@@ -1279,12 +1283,8 @@ tmp_node
 šdex
 ], 8);
 
-210  
+213  
 ”rv®
-;
-
-213 
-ç
 ;
 
 215 
@@ -1474,7 +1474,7 @@ height
 263 
 ”rv®
  = 
-	`»cursive_£¬ch_Ëaf
+	`»cursive_®loc_nodes
 (
 tmp_t
 ->

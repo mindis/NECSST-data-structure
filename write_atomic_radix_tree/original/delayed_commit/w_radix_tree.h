@@ -1,6 +1,6 @@
 //#define META_NODE_SHIFT	9
 
-#define META_NODE_SHIFT 27
+#define META_NODE_SHIFT 3
 
 #define CACHE_LINE_SIZE 64
 
@@ -15,7 +15,7 @@ struct Logentry {
 };
 
 struct Node {
-	void *entry_ptr[134217728];
+	void *entry_ptr[8];
 	node *parent_ptr;
 	unsigned int p_index;
 };
