@@ -1,0 +1,65 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Append	wbtree.c	/^int Append(node *n, long key, void *value)$/;"	f
+Append_in_inner	wbtree.c	/^int Append_in_inner(node *n, long key, void *value)$/;"	f
+BIN_DIR	Makefile	/^BIN_DIR=.\/$/;"	m
+CACHE_LINE_SIZE	wbtree.h	4;"	d
+CFLAGS	Makefile	/^CFLAGS= -c $/;"	m
+Insert	wbtree.c	/^void Insert(tree *t, long key, void *value){$/;"	f
+LE_COMMIT	wbtree.h	7;"	d
+LE_DATA	wbtree.h	6;"	d
+Lookup	wbtree.c	/^void *Lookup(tree *t, long key)$/;"	f
+NODE_SIZE	wbtree.h	2;"	d
+Range_Lookup	wbtree.c	/^void Range_Lookup(tree *t, long start_key, unsigned int num, $/;"	f
+Search	wbtree.c	/^int Search(node *curr, char *temp, long key)$/;"	f
+add_commit_entry	wbtree.c	/^void add_commit_entry()$/;"	f
+add_redo_logentry	wbtree.c	/^void add_redo_logentry()$/;"	f
+addr	wbtree.h	/^	unsigned long addr;$/;"	m	struct:redo_log_entry
+allocNode	wbtree.c	/^node *allocNode()$/;"	f
+clflush	wbtree.c	/^static inline void clflush(volatile void *__p)$/;"	f	file:
+clflush_cnt	wbtree.c	/^long clflush_cnt;$/;"	v
+clflush_range	wbtree.c	/^int clflush_range(void *start, void *end)$/;"	f
+clflush_range_nomb	wbtree.c	/^int clflush_range_nomb(void *start, void *end)$/;"	f
+clftime	wbtree.c	/^long long clftime=0;$/;"	v
+commit_entry	wbtree.h	/^struct commit_entry {$/;"	s
+commit_entry	wbtree.h	/^typedef struct commit_entry commit_entry;$/;"	t	typeref:struct:commit_entry
+dummy	wbtree.h	/^	char dummy[52];$/;"	m	struct:node
+entries	wbtree.h	/^	struct entry entries[NODE_SIZE];$/;"	m	struct:node	typeref:struct:node::entry
+entry	wbtree.h	/^struct entry{$/;"	s
+entry	wbtree.h	/^typedef struct entry entry;$/;"	t	typeref:struct:entry
+find_leaf_node	wbtree.c	/^node *find_leaf_node(node *curr, long key){$/;"	f
+flush_buffer	wbtree.c	/^void flush_buffer(void *buf, unsigned int len)$/;"	f
+height	wbtree.h	/^	int height;$/;"	m	struct:tree
+initTree	wbtree.c	/^tree *initTree()$/;"	f
+insert_in_inner	wbtree.c	/^void insert_in_inner(node *curr, long key, void *value)$/;"	f
+insert_in_inner_noflush	wbtree.c	/^int insert_in_inner_noflush(node *curr, long key, void *value)$/;"	f
+insert_in_leaf	wbtree.c	/^void insert_in_leaf(node *curr, long key, void *value){$/;"	f
+insert_in_leaf_noflush	wbtree.c	/^int insert_in_leaf_noflush(node *curr, long key, void *value)$/;"	f
+insert_in_parent	wbtree.c	/^void insert_in_parent(tree *t, node *curr, long key, node *splitNode) {$/;"	f
+isleaf	wbtree.h	/^	int isleaf;$/;"	m	struct:node
+key	wbtree.h	/^	long key;$/;"	m	struct:entry
+leftmostPtr	wbtree.h	/^	struct node *leftmostPtr;$/;"	m	struct:node	typeref:struct:node::node
+main	main.c	/^int main(void)$/;"	f
+mbtime	wbtree.c	/^long long mbtime=0;$/;"	v
+mfence	wbtree.c	15;"	d	file:
+min_live_entries	wbtree.h	3;"	d
+new_value	wbtree.h	/^	unsigned long new_value;$/;"	m	struct:redo_log_entry
+node	wbtree.h	/^struct node{$/;"	s
+node	wbtree.h	/^typedef struct node node;$/;"	t	typeref:struct:node
+parent	wbtree.h	/^	struct node* parent;$/;"	m	struct:node	typeref:struct:node::node
+printNode	wbtree.c	/^void printNode(node *n){$/;"	f
+ptr	wbtree.h	/^	void *ptr;$/;"	m	struct:entry
+redoLog	wbtree.c	/^char *redoLog;$/;"	v
+redoLog_offset	wbtree.c	/^int redoLog_offset=0;$/;"	v
+redo_log_entry	wbtree.h	/^struct redo_log_entry {$/;"	s
+redo_log_entry	wbtree.h	/^typedef struct redo_log_entry redo_log_entry;$/;"	t	typeref:struct:redo_log_entry
+root	wbtree.h	/^	node *root;$/;"	m	struct:tree
+slot	wbtree.h	/^	char slot[NODE_SIZE+1];$/;"	m	struct:node
+tree	wbtree.h	/^struct tree{$/;"	s
+tree	wbtree.h	/^typedef struct tree tree;$/;"	t	typeref:struct:tree
+type	wbtree.h	/^	unsigned char type;$/;"	m	struct:commit_entry
+type	wbtree.h	/^	unsigned char type;$/;"	m	struct:redo_log_entry
