@@ -23,7 +23,7 @@ struct commit_entry {
 };
 
 struct entry{
-	long key;
+	unsigned long key;
 	void *ptr;
 };
 
@@ -44,16 +44,16 @@ struct tree{
 };
 
 tree *initTree();
-void Range_Lookup(tree *t, long start_key, unsigned int num, 
+void Range_Lookup(tree *t, unsigned long start_key, unsigned int num, 
 		unsigned long buf[]);
-void *Lookup(tree *t, long key);
-int Append(node *n, long key, void *value);
-int Append_in_inner(node *n, long key, void *value);
-int Search(node *curr, char *temp, long key);
-node *find_leaf_node(node *curr, long key);
-void Insert(tree *t, long key, void *value);
-int insert_in_leaf_noflush(node *curr, long key, void *value);
-void insert_in_leaf(node *curr, long key, void *value);
-void insert_in_inner(node *curr, long key, void *value);
-void insert_in_parent(tree *t, node *curr, long key, node *splitNode);
+void *Lookup(tree *t, unsigned long key);
+int Append(node *n, unsigned long key, void *value);
+int Append_in_inner(node *n, unsigned long key, void *value);
+int Search(node *curr, char *temp, unsigned long key);
+node *find_leaf_node(node *curr, unsigned long key);
+void Insert(tree *t, unsigned long key, void *value);
+int insert_in_leaf_noflush(node *curr, unsigned long key, void *value);
+void insert_in_leaf(node *curr, unsigned long key, void *value);
+void insert_in_inner(node *curr, unsigned long key, void *value);
+void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode);
 void printNode(node *n);

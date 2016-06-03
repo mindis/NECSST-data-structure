@@ -107,7 +107,7 @@ int recursive_alloc_nodes(node *level_ptr, unsigned long key, void *value,
 				goto fail;
 			}
 		}
-		next_key = (key & ((1 << node_bits) - 1));
+		next_key = (key & ((0x1UL << node_bits) - 1));
 		
 		errval = recursive_alloc_nodes(temp_node->entry_ptr[index], next_key, 
 				(void *)value, height - 1);
@@ -226,7 +226,7 @@ void *Lookup(tree *t, unsigned long key)
 
 		level_ptr = level_ptr->entry_ptr[idx];
 
-		key = key & ((1 << bit_shift) - 1);
+		key = key & ((0x1UL << bit_shift) - 1);
 		height--;
 	}
 	bit_shift = (height - 1) * meta_bits;

@@ -25,7 +25,7 @@ int main(void)
 
 	for (i = 0; i < 100000100; i++) {
 		keys[i] = i;
-//		fscanf(fp, "%d", &keys[i]);
+//		fscanf(fp, "%lu", &keys[i]);
 	}
 /*	
 	for (i = 0, j = 0; i < 100000100; i++, j++) {
@@ -79,7 +79,7 @@ int main(void)
 	for(i = 0; i < 100000100; i++) {
 		ret = Lookup(t, keys[i]);
 		if (ret == NULL) {
-			printf("There is no key[%d] = %ld\n", i, keys[i]);
+			printf("There is no key[%d] = %lu\n", i, keys[i]);
 			exit(1);
 		} /*
 		else {

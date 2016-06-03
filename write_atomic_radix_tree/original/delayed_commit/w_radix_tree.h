@@ -17,7 +17,7 @@ struct Logentry {
 struct Node {
 	void *entry_ptr[8];
 	node *parent_ptr;
-	unsigned int p_index;
+	unsigned long p_index;
 };
 
 struct Tree {

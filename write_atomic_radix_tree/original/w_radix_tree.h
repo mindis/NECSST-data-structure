@@ -1,5 +1,6 @@
 //#define META_NODE_SHIFT	9
-
+//#define mfence() asm volatile("mfence":::"memory")
+//#define sfence() asm volatile("sfence":::"memory")
 #define META_NODE_SHIFT 3
 
 #define CACHE_LINE_SIZE 64

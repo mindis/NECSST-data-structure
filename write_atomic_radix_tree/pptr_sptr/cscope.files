@@ -1,7 +1,7 @@
+./overhead/w_radix_tree.h
+./overhead/w_radix_tree.c
+./overhead/main.c
 ./test.c
 ./w_radix_tree.h
-./main.c
 ./w_radix_tree.c
-./overhead/w_radix_tree.h
-./overhead/main.c
-./overhead/w_radix_tree.c
+./main.c

@@ -72,7 +72,7 @@ node *search_to_leftmost_leaf(node *level_ptr, unsigned char height)
 	node *left_most;
 	
 	if (height != 1) {
-		for (i = 0; i < (1 << META_NODE_SHIFT); i--) {
+		for (i = 0; i < (0x1UL << META_NODE_SHIFT); i--) {
 			if (level_ptr->entry_ptr[i] != NULL) {
 				left_most = search_to_leftmost_leaf(level_ptr->entry_ptr[i], height - 1);
 				return left_most;
@@ -110,7 +110,7 @@ node *search_to_prev_leaf(node *prev_branch, unsigned char height)
 	node *prev_leaf;
 
 	if (height != 1) {
-		for (i = ((1 << META_NODE_SHIFT) - 1); i >= 0; i--) {
+		for (i = ((0x1UL << META_NODE_SHIFT) - 1); i >= 0; i--) {
 			if (prev_branch->entry_ptr[i] != NULL) {
 				prev_leaf = search_to_prev_leaf(prev_branch->entry_ptr[i], height - 1);
 				return prev_leaf;
@@ -305,7 +305,7 @@ int recursive_alloc_nodes(node *level_ptr, unsigned long key, void *value,
 			if (temp_node->entry_ptr[index] == NULL)
 				goto fail;
 		}
-		next_key = (key & ((1 << node_bits) - 1));
+		next_key = (key & ((0x1UL << node_bits) - 1));
 		
 		errval = recursive_alloc_nodes(temp_node->entry_ptr[index], next_key, (void *)value, height - 1);
 		if (errval < 0)
@@ -374,7 +374,7 @@ void *Lookup(tree *t, unsigned long key)
 
 		level_ptr = level_ptr->entry_ptr[idx];
 
-		key = key & ((1 << bit_shift) - 1);
+		key = key & ((0x1UL << bit_shift) - 1);
 		height--;
 	}
 	bit_shift = (height - 1) * META_NODE_SHIFT;
@@ -401,14 +401,14 @@ void Range_Lookup(tree *t, unsigned long start_key, unsigned long end_key,
 
 		level_ptr = level_ptr->entry_ptr[idx];
 
-		start_key = start_key & ((1 << bit_shift) - 1);
+		start_key = start_key & ((0x1UL << bit_shift) - 1);
 		height--;
 	}
 	bit_shift = (height - 1) * META_NODE_SHIFT;
 	idx = start_key >> bit_shift;
 
 	while (search_count < (end_key - start_key + 1)) {
-		for (i = idx; i < (1 << META_NODE_SHIFT); i++) {
+		for (i = idx; i < (0x1UL << META_NODE_SHIFT); i++) {
 			buf[search_count] = *(unsigned long *)level_ptr->entry_ptr[i];
 			search_count++;
 			if (search_count == (end_key - start_key + 1))
@@ -438,7 +438,7 @@ void Range_Lookup2(tree *t, unsigned long start_key, unsigned long num,
 
 		level_ptr = level_ptr->entry_ptr[idx];
 
-		start_key = start_key & ((1 << bit_shift) - 1);
+		start_key = start_key & ((0x1UL << bit_shift) - 1);
 		height--;
 	}
 	bit_shift = (height - 1) * META_NODE_SHIFT;
@@ -446,7 +446,7 @@ void Range_Lookup2(tree *t, unsigned long start_key, unsigned long num,
 
 	while (search_count < num) {
 		clock_gettime(CLOCK_MONOTONIC, &t1);
-		for (i = idx; i < (1 << META_NODE_SHIFT); i++) {
+		for (i = idx; i < (0x1UL << META_NODE_SHIFT); i++) {
 			if (level_ptr->entry_ptr[i] != NULL) {
 				buf[search_count] = *(unsigned long *)level_ptr->entry_ptr[i];
 				search_count++;
@@ -484,7 +484,7 @@ void Scan(tree *t, unsigned long num)
 	next_ptr = search_to_leftmost_leaf(next_ptr, height);
 
 	while (search_count < num) {
-		for (i = idx; i < (1 << META_NODE_SHIFT); i++) {
+		for (i = idx; i < (0x1UL << META_NODE_SHIFT); i++) {
 			if (next_ptr->entry_ptr[i] != NULL) {
 				next_ptr->entry_ptr[i];
 				search_count++;

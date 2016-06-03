@@ -16,13 +16,13 @@ int main(void)
 	FILE *fp;
 	unsigned long *buf;
 //	unsigned long smallest, largest;
-/*
-	if((fp = fopen("../../input_file/input_2billion.txt","r")) == NULL)
+
+	if((fp = fopen("/home/sekwon/Public/input_file/input_200million.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
 	}
-*/
+
 	keys = malloc(sizeof(unsigned long) * 100000100);
 	buf = malloc(sizeof(unsigned long) * 100000100);
 	memset(buf, 0, sizeof(unsigned long) * 100000100);
@@ -30,8 +30,8 @@ int main(void)
 //	smallest = keys[0];
 //	largest = keys[0];
 	for (i = 0; i < 100000100; i++) {
-		keys[i] = i;
-//		fscanf(fp, "%d", &keys[i]);
+//		keys[i] = i;
+		fscanf(fp, "%lu", &keys[i]);
 		/*
 		if (smallest > keys[i])
 			smallest = keys[i];
@@ -86,10 +86,10 @@ int main(void)
 	flush_buffer((void *)dummy, 15*1024*1024);
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 0; i < 50000100; i++) {
+	for(i = 0; i < 100000100; i++) {
 		ret = Lookup(t, keys[i]);
 		if (ret == NULL) {
-			printf("There is no key[%d] = %ld\n", i, keys[i]);
+			printf("There is no key[%d] = %lu\n", i, keys[i]);
 			exit(1);
 		}/*
 		else {
@@ -109,7 +109,7 @@ int main(void)
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 //	Range_Lookup(t, 0, 100000099, buf);
 //	Range_Lookup2(t, 8, 50000100, buf);
-	Range_Lookup2(t, 0, 100000099, buf);
+	Range_Lookup2(t, 0, 100000100, buf);
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);

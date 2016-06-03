@@ -96,7 +96,7 @@ tree *initTree()
 	return t;
 }
 
-void *Lookup(tree *t, long key)
+void *Lookup(tree *t, unsigned long key)
 {
 	node *curr = t->root;
 	curr = find_leaf_node(curr, key);
@@ -111,7 +111,7 @@ void *Lookup(tree *t, long key)
 	return curr->entries[curr->slot[loc]].ptr;
 }
 
-void Range_Lookup(tree *t, long start_key, unsigned int num, 
+void Range_Lookup(tree *t, unsigned long start_key, unsigned int num, 
 		unsigned long buf[])
 {
 	int loc, i;
@@ -156,7 +156,7 @@ void Range_Lookup(tree *t, long start_key, unsigned int num,
 //	printf("Range lookup 2 = %lu\n", elapsed_time);
 }
 
-int Append(node *n, long key, void *value)
+int Append(node *n, unsigned long key, void *value)
 {
 	int checkBit = (1 << 8) - 1;
 	int i, j, missingMin = 0;
@@ -175,7 +175,7 @@ int Append(node *n, long key, void *value)
 	return missingMin; 
 }
 
-int Append_in_inner(node *n, long key, void *value)
+int Append_in_inner(node *n, unsigned long key, void *value)
 {
 	int checkBit = (1 << 8) - 1;
 	int j, missingMin = 0;
@@ -194,7 +194,7 @@ int Append_in_inner(node *n, long key, void *value)
 	return missingMin;
 }
 
-int Search(node *curr, char *temp, long key)
+int Search(node *curr, char *temp, unsigned long key)
 {
 	int low = 1, mid = 1;
 	int high = temp[0];
@@ -215,7 +215,7 @@ int Search(node *curr, char *temp, long key)
 	return mid;
 }
 
-node *find_leaf_node(node *curr, long key){
+node *find_leaf_node(node *curr, unsigned long key){
 	int loc;
 
 	if (curr->isleaf) 
@@ -233,7 +233,7 @@ node *find_leaf_node(node *curr, long key){
 }
 
 
-void Insert(tree *t, long key, void *value){
+void Insert(tree *t, unsigned long key, void *value){
 	int numEntries;
 	node *curr = t->root;
 	/* Find proper leaf */
@@ -288,7 +288,7 @@ void Insert(tree *t, long key, void *value){
 	}
 }
 
-int insert_in_leaf_noflush(node *curr, long key, void *value)
+int insert_in_leaf_noflush(node *curr, unsigned long key, void *value)
 {
 	char temp[8];
 	int loc, mid, j;
@@ -316,7 +316,7 @@ int insert_in_leaf_noflush(node *curr, long key, void *value)
 	return loc;
 }
 
-void insert_in_leaf(node *curr, long key, void *value){
+void insert_in_leaf(node *curr, unsigned long key, void *value){
 	char temp[8];
 	int loc, mid, j;
 
@@ -346,7 +346,7 @@ void insert_in_leaf(node *curr, long key, void *value){
 	//	clflush_range((void *)(curr->slot),(void *)(curr->slot)+8);
 }
 
-void insert_in_inner(node *curr, long key, void *value)
+void insert_in_inner(node *curr, unsigned long key, void *value)
 {
 	int mid, j, loc;
 	char temp[8];
@@ -374,7 +374,7 @@ void insert_in_inner(node *curr, long key, void *value)
 	//	clflush_range((void *)(curr->slot),(void *)(curr->slot)+8);
 }
 
-int insert_in_inner_noflush(node *curr, long key, void *value)
+int insert_in_inner_noflush(node *curr, unsigned long key, void *value)
 {
 	int mid, j, loc;
 	char temp[8];
@@ -401,7 +401,7 @@ int insert_in_inner_noflush(node *curr, long key, void *value)
 	return loc;
 }
 
-void insert_in_parent(tree *t, node *curr, long key, node *splitNode) {
+void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {
 	if (curr == t->root) {
 		node *root = allocNode();
 		root->isleaf = 0;

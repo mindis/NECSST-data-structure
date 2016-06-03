@@ -10,8 +10,9 @@ CACHE_LINE_SIZE	overhead/w_radix_tree.h	5;"	d
 CACHE_LINE_SIZE	w_radix_tree.h	5;"	d
 CFLAGS	Makefile	/^CFLAGS = -c$/;"	m
 CFLAGS	overhead/Makefile	/^CFLAGS = -c$/;"	m
+CoW_Tree	w_radix_tree.c	/^tree *CoW_Tree(node *changed_root, unsigned char height)$/;"	f
 Insert	overhead/w_radix_tree.c	/^int Insert(tree *t, unsigned long key, void *value) $/;"	f
-Insert	w_radix_tree.c	/^int Insert(tree *t, unsigned long key, void *value) $/;"	f
+Insert	w_radix_tree.c	/^int Insert(tree **t, unsigned long key, void *value) $/;"	f
 Logentry	overhead/w_radix_tree.h	/^struct Logentry {$/;"	s
 Logentry	w_radix_tree.h	/^struct Logentry {$/;"	s
 Lookup	overhead/w_radix_tree.c	/^void *Lookup(tree *t, unsigned long key)$/;"	f
@@ -69,7 +70,7 @@ flush_range	w_radix_tree.c	/^void flush_range(void *start, void *end)$/;"	f
 height	overhead/w_radix_tree.h	/^	unsigned char height;$/;"	m	struct:Tree
 height	w_radix_tree.h	/^	unsigned char height;$/;"	m	struct:Tree
 increase_radix_tree_height	overhead/w_radix_tree.c	/^int increase_radix_tree_height(tree *t, unsigned char new_height)$/;"	f
-increase_radix_tree_height	w_radix_tree.c	/^int increase_radix_tree_height(tree *t, unsigned char new_height)$/;"	f
+increase_radix_tree_height	w_radix_tree.c	/^int increase_radix_tree_height(tree **t, unsigned char new_height)$/;"	f
 initTree	overhead/w_radix_tree.c	/^tree *initTree()$/;"	f
 initTree	w_radix_tree.c	/^tree *initTree()$/;"	f
 log_count	overhead/w_radix_tree.c	/^unsigned long log_count = 0;$/;"	v
