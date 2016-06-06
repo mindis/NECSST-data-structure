@@ -77,11 +77,11 @@ FILE
 å2
 ;
 
-20 
+20 
 nVmSize
  = 0;
 
-21 
+21 
 nVmRss
  = 0;
 
@@ -97,7 +97,7 @@ mš
 å
  = 
 	`fİ’
-("/home/£kwÚ/Public/šput_fe/šput_10bliÚ.txt","r")è=ğ
+("/home/£kwÚ/Public/šput_fe/šput_2bliÚ.txt","r")è=ğ
 NULL
 )
 
@@ -135,7 +135,7 @@ i
 	`fsÿnf
 (
 å
-, "%d", &
+, "%lu", &
 keys
 [
 i
@@ -349,7 +349,7 @@ size
 
 78 
 	`´štf
-("nVmSizğ%d\n", 
+("nVmSizğ%lu KB\n", 
 nVmSize
 );
 
@@ -387,7 +387,7 @@ size
 
 85 
 	`´štf
-("nVmRs ğ%d\n", 
+("nVmRs ğ%lu KB\n", 
 nVmRss
 );
 
@@ -525,7 +525,7 @@ NULL
 
 118 
 	`´štf
-("Th”i nØkey[%d] = %ld\n", 
+("Th”i nØkey[%d] = %lu\n", 
 i
 , 
 keys
@@ -1315,7 +1315,7 @@ NULL
 Ãxt_key
  = (
 key
- & ((1 << 
+ & ((0x1UL << 
 node_b™s
 ) - 1));
 
@@ -1481,7 +1481,7 @@ tmp_node
 Ãxt_key
  = (
 key
- & ((1 << 
+ & ((0x1UL << 
 node_b™s
 ) - 1));
 
@@ -1543,7 +1543,7 @@ tmp_node
 Ãxt_key
  = (
 key
- & ((1 << 
+ & ((0x1UL << 
 node_b™s
 ) - 1));
 
@@ -1881,7 +1881,7 @@ idx
 
 308 
 key
- = key & ((1 << 
+ = key & ((0x1UL << 
 b™_shiá
 ) - 1);
 
@@ -1951,7 +1951,7 @@ height
 
 323 
 i
- = 0; i < (1 << 
+ = 0; i < (0x1UL << 
 META_NODE_SHIFT
 ); i++) {
 
@@ -2033,7 +2033,7 @@ node
 i
  = (
 šdex
- + 1); i < (1 << 
+ + 1); i < (0x1UL << 
 META_NODE_SHIFT
 ); i++) {
 
@@ -2187,7 +2187,7 @@ idx
 
 376 
 ¡¬t_key
- = s¹_key & ((1 << 
+ = s¹_key & ((0x1UL << 
 b™_shiá
 ) - 1);
 
@@ -2221,7 +2221,7 @@ num
 i
  = 
 idx
-; i < (1 << 
+; i < (0x1UL << 
 META_NODE_SHIFT
 ); i++) {
 
@@ -2251,19 +2251,13 @@ i
 £¬ch_couÁ
 ++;
 
-387 
-	`´štf
-("£¬ch_couÁ = %lu\n", 
-£¬ch_couÁ
-);
-
-388 ià(
+387 ià(
 £¬ch_couÁ
  =ğ
 num
 )
 
-392 
+391 
 Ëv–_±r
  = 
 	`fšd_Ãxt_Ëaf
@@ -2271,7 +2265,11 @@ num
 t
 ,†ev–_±r->
 ·»Á_±r
-,†ev–_±r->
+,
+
+392 
+Ëv–_±r
+->
 p_šdex
 , 2);
 

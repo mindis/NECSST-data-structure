@@ -22,7 +22,7 @@ void flush_buffer(void *buf, unsigned int len, bool fence)
 //		sfence();
 		for (i = 0; i < len; i += CACHE_LINE_SIZE)
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
-		mfence();
+		sfence();
 	} else {
 		for (i = 0; i < len; i += CACHE_LINE_SIZE)
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));

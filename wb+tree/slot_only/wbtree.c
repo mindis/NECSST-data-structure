@@ -13,6 +13,7 @@ int redoLog_offset=0;
 long clflush_cnt;
 
 #define mfence() asm volatile("mfence":::"memory")
+#define sfence() asm volatile("sfence":::"memory")
 
 long long mbtime=0;
 
@@ -50,14 +51,19 @@ int clflush_range_nomb(void *start, void *end)
 	/// Flush any possible final partial cacheline:
 }
 
-void flush_buffer(void *buf, unsigned int len)
+void flush_buffer(void *buf, unsigned int len, bool fence)
 {
 	unsigned int i;
 	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
-	mfence();
-	for (i = 0; i < len; i += CACHE_LINE_SIZE)
-		asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
-	mfence();
+	if (fence) {
+//		mfence();
+		for (i = 0; i < len; i += CACHE_LINE_SIZE)
+			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
+		sfence();
+	} else {
+		for (i = 0; i < len; i += CACHE_LINE_SIZE)
+			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
+	}
 }
 
 void add_redo_logentry()
@@ -66,7 +72,7 @@ void add_redo_logentry()
 	log->addr = 0;
 	log->new_value = 0;
 	log->type = LE_DATA;
-	flush_buffer(log, sizeof(redo_log_entry));
+	flush_buffer(log, sizeof(redo_log_entry), false);
 }
 
 void add_commit_entry()
@@ -75,7 +81,7 @@ void add_commit_entry()
 	log->addr = 0;
 	log->new_value = 0;
 	log->type = LE_COMMIT;
-	flush_buffer(log, sizeof(redo_log_entry));
+	flush_buffer(log, sizeof(redo_log_entry), true);
 }
 
 node *allocNode()
@@ -92,7 +98,7 @@ tree *initTree()
 	t->root = allocNode(); 
 	t->height = 0;
 	clflush_cnt=0;
-	flush_buffer(t, sizeof(tree));
+	flush_buffer(t, sizeof(tree), true);
 	return t;
 }
 
@@ -261,26 +267,15 @@ void Insert(tree *t, unsigned long key, void *value){
 		if (splitNode->entries[splitNode->slot[1]].key > key) {
 			add_redo_logentry();	//slot redo logging for insert_in_leaf_noflush
 			loc = insert_in_leaf_noflush(curr, key, value);
-			flush_buffer(&(curr->entries[loc]), sizeof(entry));
-			//	insert_in_leaf(curr, key, value); //In this function, slot and new entry will be flushed
-			//	clflush_range((void *)(splitNode),(void *)(splitNode)+sizeof(node));
-			//	clflush_range((void *)(splitNode), (void *)(splitNode) + 56);
-			//	flush_buffer(splitNode, sizeof(node));
+			flush_buffer(&(curr->entries[loc]), sizeof(entry), false);
 		}
-		else {
-			//	clflush_range((void *)(curr->slot),(void *)(curr->slot)+8);
+		else
 			insert_in_leaf_noflush(splitNode, key, value);
-			//	clflush_range((void *)(splitNode),(void *)(splitNode)+sizeof(node));
-			//	flush_buffer(splitNode, sizeof(node));
-		}
-
-		//flush
-
-		//flush
 
 		insert_in_parent(t, curr, splitNode->entries[splitNode->slot[1]].key, splitNode);
 		add_redo_logentry();
 		curr->leftmostPtr = splitNode;
+		sfence();
 		add_commit_entry();
 	}
 	else{
@@ -295,8 +290,6 @@ int insert_in_leaf_noflush(node *curr, unsigned long key, void *value)
 
 	loc = Append(curr, key, value);
 
-	//	flush_buffer(&(curr->entries[loc]), sizeof(entry));
-
 	mid = Search(curr, curr->slot, key);
 
 	for (j = curr->slot[0]; j >= mid; j--)
@@ -310,9 +303,6 @@ int insert_in_leaf_noflush(node *curr, unsigned long key, void *value)
 	temp[0] = curr->slot[0] + 1;
 
 	*((uint64_t *)curr->slot) = *((uint64_t *)temp);
-//	for (j = 0; j <= temp[0]; j++)
-//		curr->slot[j] = temp[j];
-
 	return loc;
 }
 
@@ -322,10 +312,7 @@ void insert_in_leaf(node *curr, unsigned long key, void *value){
 
 	loc = Append(curr,key,value);
 
-	flush_buffer(&(curr->entries[loc]), sizeof(entry));
-
-	//	clflush_range((void *)&(curr->entries[loc]),
-	//			(void *)&(curr->entries[loc])+sizeof(entry));
+	flush_buffer(&(curr->entries[loc]), sizeof(entry), true);
 
 	mid = Search(curr, curr->slot, key);
 
@@ -340,10 +327,7 @@ void insert_in_leaf(node *curr, unsigned long key, void *value){
 	temp[0] = curr->slot[0] + 1;
 
 	*((uint64_t *)curr->slot) = *((uint64_t *)temp);
-//	for (j = 0; j <= temp[0]; j++)
-//		curr->slot[j] = temp[j];
-	flush_buffer(curr->slot, 8);
-	//	clflush_range((void *)(curr->slot),(void *)(curr->slot)+8);
+	flush_buffer(curr->slot, 8, true);
 }
 
 void insert_in_inner(node *curr, unsigned long key, void *value)
@@ -352,8 +336,7 @@ void insert_in_inner(node *curr, unsigned long key, void *value)
 	char temp[8];
 
 	loc = Append_in_inner(curr, key, value);
-	flush_buffer(&(curr->entries[loc]), sizeof(entry));
-	//	clflush_range((void *)&(curr->entries[loc]),(void *)&(curr->entries[loc])+sizeof(entry));
+	flush_buffer(&(curr->entries[loc]), sizeof(entry), true);
 
 	mid = Search(curr, curr->slot, key);
 
@@ -368,10 +351,7 @@ void insert_in_inner(node *curr, unsigned long key, void *value)
 	temp[0] = curr->slot[0] + 1;
 
 	*((uint64_t *)curr->slot) = *((uint64_t *)temp);
-//	for (j = 0; j <= temp[0]; j++)
-//		curr->slot[j] = temp[j];
-	flush_buffer(curr->slot, 8);
-	//	clflush_range((void *)(curr->slot),(void *)(curr->slot)+8);
+	flush_buffer(curr->slot, 8, true);
 }
 
 int insert_in_inner_noflush(node *curr, unsigned long key, void *value)
@@ -380,7 +360,6 @@ int insert_in_inner_noflush(node *curr, unsigned long key, void *value)
 	char temp[8];
 
 	loc = Append_in_inner(curr, key, value);
-	//	flush_buffer(&(curr->entries[loc], sizeof(entry)));
 
 	mid = Search(curr, curr->slot, key);
 
@@ -395,8 +374,6 @@ int insert_in_inner_noflush(node *curr, unsigned long key, void *value)
 	temp[0] = curr->slot[0]+1;
 
 	*((uint64_t *)curr->slot) = *((uint64_t *)temp);
-//	for (j = 0; j <= temp[0]; j++)
-//		curr->slot[j] = temp[j];
 
 	return loc;
 }
@@ -412,15 +389,13 @@ void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {
 
 		root->slot[1] = 0;
 		root->slot[0] = 1;
-		//		clflush_range((void *)(root),(void *)(root)+sizeof(node));
-		flush_buffer(root, sizeof(node));
-		flush_buffer(splitNode, sizeof(node));
+		flush_buffer(root, sizeof(node), false);
+		flush_buffer(splitNode, sizeof(node), false);
 
 		add_redo_logentry();
 		curr->parent = root;
 		add_redo_logentry();
 		t->root = root;
-		//		clflush_range((void *)&(t->root),(void *)&(t->root)+sizeof(node *));
 		return ;
 	}
 
@@ -431,10 +406,9 @@ void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {
 		char temp[8];
 
 		loc = Append_in_inner(parent, key, splitNode);
-		flush_buffer(&(parent->entries[loc]), sizeof(entry));
-		//		clflush_range((void *)&(curr->entries[loc]),(void *)&(curr->entries[loc])+sizeof(entry));
+		flush_buffer(&(parent->entries[loc]), sizeof(entry), false);
 		splitNode->parent = parent;
-		flush_buffer(splitNode, sizeof(node));
+		flush_buffer(splitNode, sizeof(node), false);
 
 		mid = Search(parent, parent->slot, key);
 
@@ -450,10 +424,6 @@ void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {
 
 		add_redo_logentry();
 		*((uint64_t *)parent->slot) = *((uint64_t *)temp);
-//		for (j = 0; j <= temp[0]; j++)
-//			parent->slot[j] = temp[j];
-		//		clflush_range((void *)(parent->slot),(void *)(parent->slot)+8);
-
 	}
 	else {
 		int j, loc, cp = parent->slot[0];
@@ -476,24 +446,15 @@ void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {
 		if (splitParent->entries[splitParent->slot[1]].key > key) {
 			add_redo_logentry();
 			loc = insert_in_inner_noflush(parent, key, splitNode);
-			flush_buffer(&(parent->entries[loc]), sizeof(entry));
+			flush_buffer(&(parent->entries[loc]), sizeof(entry), false);
 			splitNode->parent = parent;
-			flush_buffer(splitNode, sizeof(node));
-			//			clflush_range((void *)(splitParent),(void *)splitParent+sizeof(node));
+			flush_buffer(splitNode, sizeof(node), false);
 		}
 		else {
-			//			clflush_range((void *)(parent->slot),(void *)(parent->slot)+8);
 			splitNode->parent = splitParent;
-			flush_buffer(splitNode, sizeof(node));
+			flush_buffer(splitNode, sizeof(node), false);
 			insert_in_inner_noflush(splitParent, key, splitNode);
-			//			clflush_range((void *)(splitParent),(void *)splitParent+sizeof(node));
 		}
-
-
-		//overflown node
-		//   redoLog_offset+=sizeof(node);
-
-		//sibling node
 
 		insert_in_parent(t, parent, 
 				splitParent->entries[splitParent->slot[1]].key, splitParent);

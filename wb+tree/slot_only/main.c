@@ -110,10 +110,10 @@ int main(void)
 
 	dummy = (char *)malloc(15*1024*1024);
 	memset(dummy, 0, 15*1024*1024);
-//	clflush_range((void *)dummy, (void *)dummy + 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024);
+	flush_buffer((void *)dummy, 15*1024*1024, true);
 
 	tree *t = initTree();
+	flush_buffer(t, 8, true);
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for(i = 0; i < 100000000; i++)
@@ -126,8 +126,7 @@ int main(void)
 	printf("Bulk load Time = %lu ns\n",elapsed_time);
 
 	memset(dummy, 0, 15*1024*1024);
-//	clflush_range((void *)dummy, (void *)dummy + 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024);
+	flush_buffer((void *)dummy, 15*1024*1024, true);
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for(i = 99999999; i < 100000100; i++)
@@ -138,8 +137,7 @@ int main(void)
 	printf("Insert Time = %lu ns\n", elapsed_time);
 
 	memset(dummy, 0, 15*1024*1024);
-//	clflush_range((void *)dummy, (void *)dummy + 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024);
+	flush_buffer((void *)dummy, 15*1024*1024, true);
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for(i = 0; i < 100000100; i++) {
@@ -159,7 +157,7 @@ int main(void)
 	printf("Search Time = %lu ns\n", elapsed_time);
 
 	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024);
+	flush_buffer((void *)dummy, 15*1024*1024, true);
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	Range_Lookup(t, 0, 100000100, buf);

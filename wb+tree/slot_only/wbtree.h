@@ -1,3 +1,4 @@
+#include <stdbool.h>
 //#define NODE_SIZE 6
 #define NODE_SIZE 7
 #define min_live_entries 3
@@ -43,6 +44,7 @@ struct tree{
 	int height;
 };
 
+void flush_buffer(void *buf, unsigned int len, bool fence);
 tree *initTree();
 void Range_Lookup(tree *t, unsigned long start_key, unsigned int num, 
 		unsigned long buf[]);
