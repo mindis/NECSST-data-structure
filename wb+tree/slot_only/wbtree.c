@@ -77,11 +77,9 @@ void add_redo_logentry()
 
 void add_commit_entry()
 {
-	redo_log_entry *log = malloc(sizeof(redo_log_entry));
-	log->addr = 0;
-	log->new_value = 0;
-	log->type = LE_COMMIT;
-	flush_buffer(log, sizeof(redo_log_entry), true);
+	commit_entry *commit_log = malloc(sizeof(commit_entry));
+	commit_log->type = LE_COMMIT;
+	flush_buffer(commit_log, sizeof(commit_entry), true);
 }
 
 node *allocNode()

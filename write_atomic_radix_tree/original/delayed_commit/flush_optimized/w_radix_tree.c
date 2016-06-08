@@ -60,8 +60,9 @@ void add_logentry()
 
 node *allocNode(node *parent, unsigned int index)
 {
-	node *new_node = malloc(sizeof(node));
-	memset(new_node, 0, sizeof(node));
+//	node *new_node = malloc(sizeof(node));
+//	memset(new_node, 0, sizeof(node));
+	node *new_node = calloc(1, sizeof(node));
 	if (parent != NULL) {
 		new_node->parent_ptr = parent;
 		new_node->p_index = index;

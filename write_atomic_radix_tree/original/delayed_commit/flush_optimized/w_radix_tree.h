@@ -14,14 +14,14 @@ struct Logentry {
 };
 
 struct Node {
+	unsigned int p_index;
 	void *entry_ptr[8];
 	node *parent_ptr;
-	unsigned int p_index;
 };
 
 struct Tree {
-	node *root;
 	unsigned char height;
+	node *root;
 };
 
 void flush_buffer(void *buf, unsigned int len, bool fence);
