@@ -1,10 +1,3 @@
-/* *************************************************** */
-// Main for WB-tree (Write Atomic Btree Implemenation //
-// Made by Jihye Seo sjh8763@unist.ac.kr //
-// Modified by Wookhee Kim okie90@unist.ac.kr //
-/* ************************************************** */
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -42,23 +35,28 @@ int main(void)
 	dummy = (char *)malloc(15*1024*1024);
 	memset(dummy, 0, 15*1024*1024);
 //	clflush_range((void *)dummy, (void *)dummy + 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024);
+	flush_buffer((void *)dummy, 15*1024*1024, true);
 
 	tree *t = initTree();
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 0; i < 100000000; i++)
-		Insert(t, keys[i], &keys[i]);
+	for(i = 0; i < 100000000; i++) {
+		printf("Insert key = %lu\n", keys[i]);
+		if (Insert(t, keys[i], &keys[i]) < 0)
+			return 0;
+	}
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 
-	printf("sizeof(node) = %d\n", sizeof(node));
+	printf("sizeof(IN) = %d\n", sizeof(IN));
+	printf("sizeof(PLN) = %d\n", sizeof(PLN));
+	printf("sizeof(LN) = %d\n", sizeof(LN));
 	printf("Bulk load Time = %lu ns\n",elapsed_time);
 
 	memset(dummy, 0, 15*1024*1024);
 //	clflush_range((void *)dummy, (void *)dummy + 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024);
+	flush_buffer((void *)dummy, 15*1024*1024, true);
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for(i = 99999999; i < 100000100; i++)
@@ -70,7 +68,7 @@ int main(void)
 
 	memset(dummy, 0, 15*1024*1024);
 //	clflush_range((void *)dummy, (void *)dummy + 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024);
+	flush_buffer((void *)dummy, 15*1024*1024, true);
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for(i = 0; i < 100000100; i++) {
@@ -78,19 +76,19 @@ int main(void)
 		if (ret == NULL) {
 			printf("There is no key[%d] = %lu\n", i, keys[i]);
 			exit(1);
-		}
+		}/*
 		else {
 			printf("Search value = %lu\n", *(unsigned long*)ret);
 			sleep(1);
-		}
+		}*/
 	}
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 	printf("Search Time = %lu ns\n", elapsed_time);
-
+/*
 	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024);
+	flush_buffer((void *)dummy, 15*1024*1024, true);
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	Range_Lookup(t, 0, 100000100, buf);
@@ -99,7 +97,7 @@ int main(void)
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 
 	printf("Range search time = %lu ns\n", elapsed_time);
-
+*/
 //	for (i = 0; i < 50000100; i++)
 //		printf("buf[%d] = %lu\n", i, buf[i]);
 	return 0;

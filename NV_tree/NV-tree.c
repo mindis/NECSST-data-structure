@@ -71,17 +71,22 @@ void add_commit_entry()
 	flush_buffer(commit_log, sizeof(commit_entry), true);
 }
 
-void *allocINode()
+void *allocINode(unsigned long num)
 {
+	IN *new_INs = calloc(num, sizeof(IN));
+	return (void *)new_INs;
 }
 
 LN *allocLNode()
 {
+	LN *new_LN = calloc(1, sizeof(LN));
+	flush_buffer(new_LN, sizeof(LN), false);
+	return new_LN;
 }
 
 tree *initTree()
 {
-	tree *t =calloc(1, sizeof(tree));
+	tree *t = calloc(1, sizeof(tree));
 	flush_buffer(t, sizeof(tree), true);
 	return t;
 }
@@ -122,7 +127,7 @@ int binary_search_PLN(unsigned long key, PLN *node)
 
 	if (low > mid)
 		mid = low;
-	
+
 	return mid;
 }
 
@@ -133,20 +138,21 @@ LN *find_leaf(tree *t, unsigned long key)
 	PLN *current_PLN;
 
 	id = 0;
-	
+
+	current_IN = (IN *)t->root;
+
 	while (id < t->first_PLN_id) {
-		current_IN = t->root + (id * sizeof(IN));
-		pos = binary_search_IN(key, current_IN);
-		id = id * ((2 * (MAX_NUM_ENTRY_PLN - 1)) + 1) + 1 + pos;
-	//	id = id * (MAX_NUM_ENTRY_IN + 1) + 1 + pos;
+		pos = binary_search_IN(key, &current_IN[id]);
+	//	id = id * ((2 * (MAX_NUM_ENTRY_PLN - 1)) + 1) + 1 + pos;
+		id = id * (MAX_NUM_ENTRY_IN) + 1 + pos;
 	}
 
-	current_PLN = (PLN *)(t->root + (id * sizeof(PLN)));
-	pos = binary_search_PLN(key, current_PLN);
-	if (pos < current_PLN->nKeys)
-		return current_PLN->entries[pos].ptr;
+	current_PLN = (PLN *)t->root;
+	pos = binary_search_PLN(key, &current_PLN[id]);
+	if (pos < current_PLN[id].nKeys)
+		return current_PLN[id].entries[pos].ptr;
 	else
-		return current_PLN->last_ptr;
+		return current_PLN[id].last_ptr;
 }
 
 int search_leaf_node(LN *node, unsigned long key)
@@ -159,7 +165,7 @@ int search_leaf_node(LN *node, unsigned long key)
 			pos = i;
 			valid++;
 		}
-		
+
 		if (node->LN_Element[i].key == key &&
 				node->LN_Element[i].flag == false)
 			valid--;
@@ -189,23 +195,26 @@ fail:
 void Range_Lookup(tree *t, unsigned long start_key, unsigned int num, 
 		unsigned long buf[])
 {
-	
+
 }
 
-int create_new_tree(tree **t, unsigned long key, void *value)
+int create_new_tree(tree *t, unsigned long key, void *value)
 {
 	int errval = -1;
-	IN *new_root = allocINode();	
+	unsigned long total_IN_PLN = 1;
+	total_IN_PLN += 1 * MAX_NUM_ENTRY_IN;
+
+	IN *new_root = (IN *)allocINode(total_IN_PLN);	
 	if (new_root == NULL)
 		return errval;
 
 	PLN *p_leaf = (PLN *)new_root;
 
 	new_root[0].nKeys = 1;
-	new_root[0].key[0] = key;
+	new_root[0].key[0] = 100000000;
 
 	p_leaf[1].nKeys = 1;
-	p_leaf[1].entries[0].key = key;
+	p_leaf[1].entries[0].key = 50000000;
 	p_leaf[1].entries[0].ptr = allocLNode();
 	p_leaf[1].last_ptr = allocLNode();
 	if (p_leaf[1].entries[0].ptr == NULL || p_leaf[1].last_ptr == NULL)
@@ -224,12 +233,12 @@ int create_new_tree(tree **t, unsigned long key, void *value)
 	p_leaf[1].entries[0].ptr->nElements++;
 	flush_buffer(&p_leaf[1].entries[0].ptr->nElements, 1, true);
 
-	(*t)->height = 1;
-	(*t)->first_PLN_id = 1;
-	(*t)->last_PLN_id = 1;
-	(*t)->first_leaf = p_leaf[1].entries[0].ptr;
-	(*t)->root = new_root;
-	flush_buffer(*t, sizeof(tree), true);
+	t->height = 1;
+	t->first_PLN_id = 1;
+	t->last_PLN_id = 1;
+	t->first_leaf = p_leaf[1].entries[0].ptr;
+	t->root = new_root;
+	flush_buffer(t, sizeof(tree), true);
 	return 0;
 }
 
@@ -300,7 +309,7 @@ int leaf_scan_divide(tree *t, LN *leaf, LN *split_node1, LN *split_node2,
 	}
 
 	quick_sort(valid_Element, 0, j - 1);
-	
+
 	memcpy(split_node1->LN_Element, valid_Element, 
 			sizeof(unsigned long) * (j / 2));
 	split_node1->nElements = (j / 2);
@@ -325,14 +334,84 @@ int leaf_scan_divide(tree *t, LN *leaf, LN *split_node1, LN *split_node2,
 	return 0;
 }
 
-int reconstruct_from_PLN()
+int recursive_insert_IN(void *root_addr, unsigned long first_IN_id,
+		unsigned long num_IN)
 {
+	int errval = -1;
+	unsigned long id, last_id, pos, prev_id, IN_count = 0;
+	IN *current_IN, *prev_IN;
+
+	id = first_IN_id;
+	last_id = first_IN_id + num_IN - 1;
+
+	if (id > 0) {
+		while (id <= last_id) {
+			for (pos = 0; pos < MAX_NUM_ENTRY_IN; pos++) {
+				current_IN = (IN *)root_addr;
+				prev_id = (id - pos - 1) / MAX_NUM_ENTRY_IN;
+				prev_IN = (IN *)root_addr;
+				prev_IN[prev_id].key[prev_IN[prev_id].nKeys] =
+					current_IN[id].key[current_IN[id].nKeys - 1];
+				prev_IN[prev_id].nKeys++;
+				id++;
+				if (id > last_id)
+					break;
+			}
+			IN_count++;
+		}
+		first_IN_id = (first_IN_id - 1) / MAX_NUM_ENTRY_IN;
+		errval = recursive_insert_IN(root_addr, first_IN_id, IN_count);
+		if (errval < 0)
+			goto fail;
+	}
+	errval = 0;
+fail:
+	return errval;
 }
 
-int reconstruct_PLN(tree *t, unsigned long parent_id, unsigned long insert_key)
+int reconstruct_from_PLN(void *root_addr, unsigned long first_PLN_id, 
+		unsigned long num_PLN)
+{
+	unsigned long prev_id, id, pos, last_id, IN_count = 0, first_IN_id;
+	int i;
+	IN *prev_IN;
+	PLN *current_PLN;
+
+	id = first_PLN_id;
+	last_id = first_PLN_id + num_PLN - 1;
+
+	while (id <= last_id) {
+		for (pos = 0; pos < MAX_NUM_ENTRY_IN; pos++) {
+			current_PLN = (PLN *)root_addr;
+			
+			prev_id = (id - pos - 1) / MAX_NUM_ENTRY_IN;
+			
+			prev_IN = (IN *)root_addr;
+			prev_IN[prev_id].key[prev_IN[prev_id].nKeys] = 
+				current_PLN[id].entries[current_PLN[id].nKeys - 1].key;
+			prev_IN[prev_id].nKeys++;
+
+			for (i = 0; i < current_PLN[id].nKeys; i++)
+				current_PLN[id].entries[i].ptr->parent_id = id;
+
+			current_PLN[id].last_ptr->parent_id = id;
+
+			id++;
+			if (id > last_id)
+				break;
+		}
+		IN_count++;	//num_IN
+	}
+	first_IN_id = (first_PLN_id - 1) / MAX_NUM_ENTRY_IN;
+	recursive_insert_IN(root_addr, first_IN_id, IN_count);
+	return 0;
+}
+
+int reconstruct_PLN(tree *t, unsigned long parent_id, unsigned long insert_key,
+		LN *split_node1, LN *split_node2)
 {
 	unsigned long height, max_PLN, total_PLN, total_IN = 1;
-	unsigned int i;
+	unsigned int i, entry_index;
 	IN *new_INs;
 	PLN *old_PLNs, *new_PLNs;
 
@@ -352,7 +431,7 @@ int reconstruct_PLN(tree *t, unsigned long parent_id, unsigned long insert_key)
 		for (i = 1; i < height; i++)
 			total_IN += total_IN * MAX_NUM_ENTRY_IN;
 
-		new_PLNs = allocINode();	//total_IN + total_PLN
+		new_PLNs = (PLN *)allocINode(total_IN + total_PLN);	//total_IN + total_PLN
 		old_PLNs = (PLN *)t->root;
 		memcpy(&new_PLNs[total_IN], &old_PLNs[t->first_PLN_id],
 				sizeof(PLN) * (parent_id - t->first_PLN_id + 1));
@@ -368,17 +447,23 @@ int reconstruct_PLN(tree *t, unsigned long parent_id, unsigned long insert_key)
 			 (new_PLNs[total_IN + t->first_PLN_id - parent_id].nKeys / 2));
 		new_PLNs[total_IN + t->first_PLN_id - parent_id].nKeys =
 			new_PLNs[total_IN + t->first_PLN_id - parent_id].nKeys / 2;
-		reconstruct_from_PLN();
+		reconstruct_from_PLN(new_PLNs, total_IN, total_PLN);
+		free(t->root);
 		t->height = height;
 		t->root = (IN *)new_PLNs;
-		t->last_PLN_id++;
+		t->first_PLN_id = total_IN;
+		t->last_PLN_id = total_IN + total_PLN - 1;
 	} else {
-		new_PLNs = allocINode();
+		new_PLNs = (PLN *)allocINode(t->first_PLN_id + total_PLN);
 		old_PLNs = (PLN *)t->root;
+		/* old PLN에서 첫번째 PLN부터 parent_id's PLN까지 복사 */
 		memcpy(&new_PLNs[t->first_PLN_id], &old_PLNs[t->first_PLN_id],
 				sizeof(PLN) * (parent_id - t->first_PLN_id + 1));
+		/* old PLN의 parent_id + 1부터 마지막 PLN까지를 new의 parent_id + 2부터
+		 * 해서 복사 */
 		memcpy(&new_PLNs[parent_id + 2], &old_PLNs[parent_id + 1],
 				sizeof(PLN) * (t->last_PLN_id - parent_id));
+		/* parent_id's PLN의 entry값의 반을 parent_id + 1로 복사 */
 		memcpy(&new_PLNs[parent_id + 1].entries, 
 				&new_PLNs[parent_id].entries[new_PLNs[parent_id].nKeys / 2],
 				sizeof(struct PLN_entry) * (new_PLNs[parent_id].nKeys -
@@ -386,10 +471,50 @@ int reconstruct_PLN(tree *t, unsigned long parent_id, unsigned long insert_key)
 		new_PLNs[parent_id + 1].nKeys = (new_PLNs[parent_id].nKeys -
 				(new_PLNs[parent_id].nKeys / 2));
 		new_PLNs[parent_id].nKeys = new_PLNs[parent_id].nKeys / 2;
-		reconstruct_from_PLN();
+
+		if (new_PLNs[parent_id].entries[new_PLNs[parent_id].nKeys - 1].key < insert_key
+				&& insert_key < new_PLNs[parent_id + 1].entries[0].key) {
+			new_PLNs[parent_id].entries[new_PLNs[parent_id].nKeys].key = insert_key;
+			new_PLNs[parent_id].entries[new_PLNs[parent_id].nKeys].ptr = split_node1;
+			new_PLNs[parent_id].nKeys++;
+			new_PLNs[parent_id + 1].entries[0].ptr = split_node2;
+			entry_index = new_PLNs[parent_id].nKeys - 1;
+		} else if (insert_key < new_PLNs[parent_id].entries[new_PLNs[parent_id].nKeys - 1].key) {
+			for (i = 0; i < new_PLNs[parent_id].nKeys; i++) {
+				if (insert_key < new_PLNs[parent_id].entries[i].key) {
+					memcpy(&new_PLNs[parent_id].entries[i + 1], &new_PLNs[parent_id].entries[i],
+							sizeof(struct PLN_entry) * (parent[parent_id].nKeys - i));
+					parent[parent_id].entries[i].key = insert_key;
+					parent[parent_id].entries[i].ptr = split_node1;
+					parent[parent_id].entries[i + 1].ptr = split_node2;
+					split_node1->parent_id = parent_id;
+					split_node2->parent_id = parent_id;
+					entry_index = i;
+					break;
+				}
+			}
+		} else if (insert_key > new_PLNs[parent_id + 1].entries[0].key) {
+			for (i = 0; i < new_PLNs[parent_id + 1].nKeys; i++) {
+				if (insert_key < new_PLNs[parent_id + 1].entries[i].key) {
+					memcpy(&new_PLNs[parent_id + 1].entries[i + 1], &new_PLNs[parent_id + 1].entries[i],
+							sizeof(struct PLN_entry) * (parent[parent_id + 1].nKeys - i));
+					parent[parent_id + 1].entries[i].key = insert_key;
+					parent[parent_id + 1].entries[i].ptr = split_node2;
+					parent[parent_id + 1].entries[i + 1].ptr = split_node2;
+					split_node1->parent_id = parent_id;
+					split_node2->parent_id = parent_id;
+					entry_index = i;
+					break;
+				}
+			}
+		}
+
+		reconstruct_from_PLN(new_PLNs, total_IN, total_PLN);
+		free(t->root);
 		t->root = (IN *)new_PLNs;
 		t->last_PLN_id++;
 	}
+	return entry_index;
 }
 
 int insert_to_PLN(tree *t, unsigned long parent_id, 
@@ -397,22 +522,25 @@ int insert_to_PLN(tree *t, unsigned long parent_id,
 {
 	int i;
 	unsigned long insert_key = split_node1->LN_Element[split_node1->nElements - 1].key;
-	PLN *parent = (PLN *)(t->root + parent_id * sizeof(PLN));
+	PLN *parent = (PLN *)t->root;
 
-	if (parent->nKeys == MAX_NUM_ENTRY_PLN) {
-		reconstruct_PLN(t, parent_id, insert_key);
+	if (parent[parent_id].nKeys == MAX_NUM_ENTRY_PLN) {
+		i = reconstruct_PLN(t, parent_id, insert_key, split_node1, split_node2);
 	} else {
-		for (i = 0; i < parent->nKeys; i++) {
-			if (insert_key < parent->entries[i].key) {
-				memcpy(&parent->entries[i + 1], &parent->entries[i],
-						sizeof(struct PLN_entry) * (parent->nKeys - i));
-				parent->entries[i].key = insert_key;
-				parent->entries[i].ptr = split_node1;
-				parent->entries[i + 1].ptr = split_node2;
+		for (i = 0; i < parent[parent_id].nKeys; i++) {
+			if (insert_key < parent[parent_id].entries[i].key) {
+				memcpy(&parent[parent_id].entries[i + 1], &parent[parent_id].entries[i],
+						sizeof(struct PLN_entry) * (parent[parent_id].nKeys - i));
+				parent[parent_id].entries[i].key = insert_key;
+				parent[parent_id].entries[i].ptr = split_node1;
+				parent[parent_id].entries[i + 1].ptr = split_node2;
+				split_node1->parent_id = parent_id;
+				split_node2->parent_id = parent_id;
+				break;
 			}
 		}
 	}
-	return i;
+	return i;	//새로운 key가 삽입된 PLN의 entry index번호
 }
 
 int leaf_split_and_insert(tree *t, LN *leaf, unsigned long key, void *value)
@@ -432,12 +560,12 @@ int leaf_split_and_insert(tree *t, LN *leaf, unsigned long key, void *value)
 	current_idx = insert_to_PLN(t, leaf->parent_id, split_node1, split_node2);
 
 	if (current_idx != 0) {
-		prev_PLN = (PLN *)(t->root + (leaf->parent_id) * sizeof(PLN));
-		prev_leaf = prev_PLN->entries[current_idx - 1].ptr;
-	} else {	//need to fix
+		prev_PLN = (PLN *)t->root;
+		prev_leaf = prev_PLN[leaf->parent_id].entries[current_idx - 1].ptr;
+	} else {
 		if (leaf->parent_id > t->first_PLN_id) {
-			prev_PLN = (PLN *)(t->root + ((leaf->parent_id - 1) * sizeof(PLN)));
-			prev_leaf = prev_PLN->entries[prev_PLN->nKeys - 1].ptr;
+			prev_PLN = (PLN *)t->root;
+			prev_leaf = prev_PLN[leaf->parent_id - 1].entries[prev_PLN[leaf->parent_id - 1].nKeys - 1].ptr;
 		} else
 			return 0;
 	}
@@ -448,7 +576,30 @@ int leaf_split_and_insert(tree *t, LN *leaf, unsigned long key, void *value)
 	if (leaf == t->first_leaf)
 		t->first_leaf = split_node1;
 
+	free(leaf);
 	return 0;
+}
+
+LN *find_leaf_for_insert(tree *t, unsigned long key)
+{
+	unsigned int pos, id;
+	IN *current_IN;
+	PLN *current_PLN;
+
+	id = 0;
+	current_IN = (IN *)t->root;
+
+	while (id < t->first_PLN_id) {
+		pos = binary_search_IN(key, &current_IN[id]);
+		id = id * (MAX_NUM_ENTRY_IN) + 1 + pos;
+	}
+
+	current_PLN = (PLN *)t->root;
+	pos = binary_search_PLN(key, &current_PLN[id]);
+	if (pos < current_PLN[id].nKeys)
+		return current_PLN[id].entries[pos].ptr;
+	else
+		return current_PLN[id].last_ptr;
 }
 
 int Insert(tree *t, unsigned long key, void *value)
@@ -457,15 +608,17 @@ int Insert(tree *t, unsigned long key, void *value)
 	LN *leaf;
 
 	if (t->root == NULL) {
-		errval = create_new_tree(&t, key, value);
+		errval = create_new_tree(t, key, value);
 		if (errval < 0)
 			goto fail;
 		return errval;
 	}
 
-	leaf = find_leaf(t, key);
-	if (leaf == NULL)
+	leaf = find_leaf_for_insert(t, key);
+	if (leaf == NULL) {
+		printf("key = %d\n",key);
 		goto fail;
+	}
 
 	if (leaf->nElements < MAX_NUM_ENTRY_LN) {
 		leaf->LN_Element[leaf->nElements + 1].flag = true;
