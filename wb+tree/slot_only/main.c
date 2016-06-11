@@ -145,11 +145,10 @@ int main(void)
 		if (ret == NULL) {
 			printf("There is no key[%d] = %lu\n", i, keys[i]);
 			exit(1);
-		}/*
+		}
 		else {
 			printf("Search value = %lu\n", *(unsigned long*)ret);
-			sleep(1);
-		}*/
+		}
 	}
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;

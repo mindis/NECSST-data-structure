@@ -11,19 +11,19 @@ Append_in_inner	wbtree.c	/^int Append_in_inner(node *n, unsigned long key, void 
 BIN_DIR	Makefile	/^BIN_DIR=.\/$/;"	m
 BIN_DIR	no_flush_logging/Makefile	/^BIN_DIR=.\/$/;"	m
 CACHE_LINE_SIZE	no_flush_logging/wbtree.h	4;"	d
-CACHE_LINE_SIZE	wbtree.h	4;"	d
+CACHE_LINE_SIZE	wbtree.h	5;"	d
 CFLAGS	Makefile	/^CFLAGS= -c $/;"	m
 CFLAGS	no_flush_logging/Makefile	/^CFLAGS= -c $/;"	m
 Insert	no_flush_logging/wbtree.c	/^void Insert(tree *t, unsigned long key, void *value){$/;"	f
 Insert	wbtree.c	/^void Insert(tree *t, unsigned long key, void *value){$/;"	f
 LE_COMMIT	no_flush_logging/wbtree.h	7;"	d
-LE_COMMIT	wbtree.h	7;"	d
+LE_COMMIT	wbtree.h	8;"	d
 LE_DATA	no_flush_logging/wbtree.h	6;"	d
-LE_DATA	wbtree.h	6;"	d
+LE_DATA	wbtree.h	7;"	d
 Lookup	no_flush_logging/wbtree.c	/^void *Lookup(tree *t, unsigned long key)$/;"	f
 Lookup	wbtree.c	/^void *Lookup(tree *t, unsigned long key)$/;"	f
 NODE_SIZE	no_flush_logging/wbtree.h	2;"	d
-NODE_SIZE	wbtree.h	2;"	d
+NODE_SIZE	wbtree.h	3;"	d
 Range_Lookup	no_flush_logging/wbtree.c	/^void Range_Lookup(tree *t, unsigned long start_key, unsigned int num, $/;"	f
 Range_Lookup	wbtree.c	/^void Range_Lookup(tree *t, unsigned long start_key, unsigned int num, $/;"	f
 Search	no_flush_logging/wbtree.c	/^int Search(node *curr, char *temp, unsigned long key)$/;"	f
@@ -61,7 +61,7 @@ entry	wbtree.h	/^typedef struct entry entry;$/;"	t	typeref:struct:entry
 find_leaf_node	no_flush_logging/wbtree.c	/^node *find_leaf_node(node *curr, unsigned long key){$/;"	f
 find_leaf_node	wbtree.c	/^node *find_leaf_node(node *curr, unsigned long key){$/;"	f
 flush_buffer	no_flush_logging/wbtree.c	/^void flush_buffer(void *buf, unsigned int len)$/;"	f
-flush_buffer	wbtree.c	/^void flush_buffer(void *buf, unsigned int len)$/;"	f
+flush_buffer	wbtree.c	/^void flush_buffer(void *buf, unsigned int len, bool fence)$/;"	f
 height	no_flush_logging/wbtree.h	/^	int height;$/;"	m	struct:tree
 height	wbtree.h	/^	int height;$/;"	m	struct:tree
 initTree	no_flush_logging/wbtree.c	/^tree *initTree()$/;"	f
@@ -89,7 +89,7 @@ mbtime	wbtree.c	/^long long mbtime=0;$/;"	v
 mfence	no_flush_logging/wbtree.c	15;"	d	file:
 mfence	wbtree.c	15;"	d	file:
 min_live_entries	no_flush_logging/wbtree.h	3;"	d
-min_live_entries	wbtree.h	3;"	d
+min_live_entries	wbtree.h	4;"	d
 new_value	no_flush_logging/wbtree.h	/^	unsigned long new_value;$/;"	m	struct:redo_log_entry
 new_value	wbtree.h	/^	unsigned long new_value;$/;"	m	struct:redo_log_entry
 node	no_flush_logging/wbtree.h	/^struct node{$/;"	s
@@ -112,6 +112,7 @@ redo_log_entry	wbtree.h	/^struct redo_log_entry {$/;"	s
 redo_log_entry	wbtree.h	/^typedef struct redo_log_entry redo_log_entry;$/;"	t	typeref:struct:redo_log_entry
 root	no_flush_logging/wbtree.h	/^	node *root;$/;"	m	struct:tree
 root	wbtree.h	/^	node *root;$/;"	m	struct:tree
+sfence	wbtree.c	16;"	d	file:
 slot	no_flush_logging/wbtree.h	/^	char slot[NODE_SIZE+1];$/;"	m	struct:node
 slot	wbtree.h	/^	char slot[NODE_SIZE+1];$/;"	m	struct:node
 tree	no_flush_logging/wbtree.h	/^struct tree{$/;"	s

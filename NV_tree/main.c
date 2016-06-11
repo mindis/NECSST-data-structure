@@ -28,7 +28,7 @@ int main(void)
 	buf = malloc(sizeof(unsigned long) * 100000100);
 	memset(buf, 0, sizeof(unsigned long) * 100000100);
 	for(i = 0; i < 100000100; i++) {
-		keys[i] = i;
+		keys[i] = i + 1;
 	//	fscanf(fp, "%lu", &keys[i]);
 	}
 
@@ -40,8 +40,8 @@ int main(void)
 	tree *t = initTree();
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 0; i < 100000000; i++) {
-		printf("Insert key = %lu\n", keys[i]);
+	for(i = 0; i < 100000; i++) {
+	//	printf("insert key = %lu\n", keys[i]);
 		if (Insert(t, keys[i], &keys[i]) < 0)
 			return 0;
 	}
@@ -57,7 +57,7 @@ int main(void)
 	memset(dummy, 0, 15*1024*1024);
 //	clflush_range((void *)dummy, (void *)dummy + 15*1024*1024);
 	flush_buffer((void *)dummy, 15*1024*1024, true);
-
+/*
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for(i = 99999999; i < 100000100; i++)
 		Insert(t, keys[i], &keys[i]);
@@ -65,22 +65,22 @@ int main(void)
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 	printf("Insert Time = %lu ns\n", elapsed_time);
-
+*/
 	memset(dummy, 0, 15*1024*1024);
 //	clflush_range((void *)dummy, (void *)dummy + 15*1024*1024);
 	flush_buffer((void *)dummy, 15*1024*1024, true);
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 0; i < 100000100; i++) {
+	for(i = 0; i < 100000; i++) {
 		ret = (void *)Lookup(t, keys[i]);		
 		if (ret == NULL) {
 			printf("There is no key[%d] = %lu\n", i, keys[i]);
 			exit(1);
-		}/*
+		}
 		else {
 			printf("Search value = %lu\n", *(unsigned long*)ret);
-			sleep(1);
-		}*/
+		//	sleep(1);
+		}
 	}
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;

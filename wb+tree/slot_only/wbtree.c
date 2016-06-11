@@ -227,13 +227,13 @@ node *find_leaf_node(node *curr, unsigned long key){
 	loc = Search(curr, curr->slot, key);
 
 	if (loc > curr->slot[0]) 
-		find_leaf_node(curr->entries[curr->slot[loc - 1]].ptr, key);
+		return find_leaf_node(curr->entries[curr->slot[loc - 1]].ptr, key);
 	else if (curr->entries[curr->slot[loc]].key <= key) 
-		find_leaf_node(curr->entries[curr->slot[loc]].ptr, key);
+		return find_leaf_node(curr->entries[curr->slot[loc]].ptr, key);
 	else if (loc == 1) 
-		find_leaf_node(curr->leftmostPtr, key);
+		return find_leaf_node(curr->leftmostPtr, key);
 	else 
-		find_leaf_node(curr->entries[curr->slot[loc - 1]].ptr, key);
+		return find_leaf_node(curr->entries[curr->slot[loc - 1]].ptr, key);
 }
 
 

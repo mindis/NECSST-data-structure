@@ -49,7 +49,7 @@ struct Parent_Leaf_Node {
 };
 
 struct Leaf_Node {
-	unsigned char nElements;
+	unsigned long nElements;
 	LN *sibling;
 	unsigned long parent_id;
 	struct LN_entry LN_Element[169];
@@ -58,9 +58,10 @@ struct Leaf_Node {
 
 struct tree{
 	unsigned char height;
+	unsigned char is_leaf;	// 0.LN 1.PLN 2.IN
 	unsigned long first_PLN_id;
 	unsigned long last_PLN_id;
-	IN *root;
+	void *root;
 	LN *first_leaf;
 };
 
