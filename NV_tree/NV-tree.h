@@ -2,7 +2,8 @@
 #define CACHE_LINE_SIZE 	64
 #define MAX_NUM_ENTRY_IN	509
 #define MAX_NUM_ENTRY_PLN	255
-#define MAX_NUM_ENTRY_LN	169	
+#define MAX_NUM_ENTRY_LN	169
+#define MAX_KEY 200000000
 
 #define LE_DATA		0
 #define LE_COMMIT	1
@@ -44,8 +45,9 @@ struct Internal_Node {
 
 struct Parent_Leaf_Node {
 	unsigned int nKeys;
-	LN *last_ptr;
+//	LN *last_ptr;
 	struct PLN_entry entries[255];
+	char dummy[8];
 };
 
 struct Leaf_Node {

@@ -41,7 +41,7 @@ int main(void)
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for(i = 0; i < 100000; i++) {
-	//	printf("insert key = %lu\n", keys[i]);
+		printf("insert key = %lu\n", keys[i]);
 		if (Insert(t, keys[i], &keys[i]) < 0)
 			return 0;
 	}
