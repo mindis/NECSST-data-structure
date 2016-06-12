@@ -253,7 +253,7 @@ int create_new_tree(tree *t, unsigned long key, void *value)
 
 void quick_sort(struct LN_entry *base, int left, int right)
 {
-	int i, j, pivot = base[left].key;
+	unsigned long i, j, pivot = base[left].key;
 	struct LN_entry temp;
 
 	if (left < right)
@@ -283,6 +283,23 @@ void quick_sort(struct LN_entry *base, int left, int right)
 
 		quick_sort(base, left, j - 1);
 		quick_sort(base, j + 1, right);
+	}
+}
+
+void insertion_sort(struct LN_entry *base)
+{
+	unsigned long i, j;
+	struct LN_entry temp;
+
+	for (i = 1; i < MAX_NUM_ENTRY_LN; i++) {
+		temp = base[i];
+		j = i - 1;
+		
+		while (j >= 0 && base[j].key > temp.key) {
+			base[j + 1] = base[j];
+			j = j - 1;
+		}
+		base[j + 1] = temp;
 	}
 }
 
@@ -316,7 +333,8 @@ int leaf_scan_divide(tree *t, LN *leaf, LN *split_node1, LN *split_node2)
 		j++;
 	}
 
-	quick_sort(valid_Element, 0, j - 1);
+//	quick_sort(valid_Element, 0, j - 1);
+	insertion_sort(valid_Element);
 
 	memcpy(split_node1->LN_Element, valid_Element, 
 			sizeof(struct LN_entry) * (j / 2));
@@ -610,7 +628,7 @@ int insert_to_PLN(tree *t, unsigned long parent_id,
 				split_max_key, split_node1, split_node2);
 	} else if (split_max_key <= parent[parent_id].entries[parent[parent_id].nKeys - 1].key) {
 		for (entry_index = 0; entry_index < parent[parent_id].nKeys; entry_index++) {
-			if (split_max_key < parent[parent_id].entries[entry_index].key) {
+			if (split_max_key <= parent[parent_id].entries[entry_index].key) {
 				memcpy(&parent[parent_id].entries[entry_index + 1], &parent[parent_id].entries[entry_index],
 						sizeof(struct PLN_entry) * (parent[parent_id].nKeys - entry_index));
 				parent[parent_id].entries[entry_index].key = insert_key;
@@ -768,8 +786,8 @@ int main(void)
 	buf = malloc(sizeof(unsigned long) * 100000100);
 	memset(buf, 0, sizeof(unsigned long) * 100000100);
 	for(i = 0; i < 100000100; i++) {
-		keys[i] = i + 1;
-	//	fscanf(fp, "%lu", &keys[i]);
+		keys[i] = i;
+//		fscanf(fp, "%lu", &keys[i]);
 	}
 
 	dummy = (char *)malloc(15*1024*1024);
@@ -780,8 +798,8 @@ int main(void)
 	tree *t = initTree();
 
 //	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 0; i < 100000000; i++) {
-		printf("insert key = %lu\n", keys[i]);
+	for(i = 0; i < 10000000; i++) {
+		printf("insert key = %lu	count = %lu\n", keys[i], i);
 		if (Insert(t, keys[i], &keys[i]) < 0)
 			return 0;
 	}
@@ -811,7 +829,7 @@ int main(void)
 	flush_buffer((void *)dummy, 15*1024*1024, true);
 
 //	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 0; i < 100000000; i++) {
+	for(i = 0; i < 10000000; i++) {
 		ret = (void *)Lookup(t, keys[i]);		
 		if (ret == NULL) {
 			printf("There is no key[%d] = %lu\n", i, keys[i]);

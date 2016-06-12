@@ -3,7 +3,7 @@
 #define MAX_NUM_ENTRY_IN	509
 #define MAX_NUM_ENTRY_PLN	255
 #define MAX_NUM_ENTRY_LN	169
-#define MAX_KEY 200000000
+#define MAX_KEY 300000000
 
 #define LE_DATA		0
 #define LE_COMMIT	1

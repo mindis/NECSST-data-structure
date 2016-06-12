@@ -16,20 +16,20 @@ int main(void)
 	FILE *fp;
 	unsigned long *buf;
 
-/*
+
 	if ((fp = fopen("/home/sekwon/Public/input_file/input_200million.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
 	}
-*/
+
 
 	keys = malloc(sizeof(unsigned long) * 100000100);
 	buf = malloc(sizeof(unsigned long) * 100000100);
 	memset(buf, 0, sizeof(unsigned long) * 100000100);
 	for(i = 0; i < 100000100; i++) {
-		keys[i] = i + 1;
-	//	fscanf(fp, "%lu", &keys[i]);
+	//	keys[i] = i + 1;
+		fscanf(fp, "%lu", &keys[i]);
 	}
 
 	dummy = (char *)malloc(15*1024*1024);
@@ -40,8 +40,8 @@ int main(void)
 	tree *t = initTree();
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 0; i < 100000; i++) {
-		printf("insert key = %lu\n", keys[i]);
+	for(i = 0; i < 100000100; i++) {
+		printf("insert count = %d\n", i);
 		if (Insert(t, keys[i], &keys[i]) < 0)
 			return 0;
 	}
@@ -71,16 +71,16 @@ int main(void)
 	flush_buffer((void *)dummy, 15*1024*1024, true);
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 0; i < 100000; i++) {
+	for(i = 0; i < 100000100; i++) {
 		ret = (void *)Lookup(t, keys[i]);		
 		if (ret == NULL) {
 			printf("There is no key[%d] = %lu\n", i, keys[i]);
 			exit(1);
-		}
+		}/*
 		else {
 			printf("Search value = %lu\n", *(unsigned long*)ret);
 		//	sleep(1);
-		}
+		}*/
 	}
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
