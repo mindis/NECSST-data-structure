@@ -9,11 +9,6 @@
 #define mfence() asm volatile("mfence":::"memory")
 #define sfence() asm volatile("sfence":::"memory")
 
-static inline void clflush(volatile void *__p)
-{
-	asm volatile("clflush %0" : "+m" (*(volatile char *)__p));
-}
-
 void flush_buffer(void *buf, unsigned int len, bool fence)
 {
 	unsigned int i;
@@ -29,25 +24,6 @@ void flush_buffer(void *buf, unsigned int len, bool fence)
 	}
 }
 
-void flush(void *start)
-{
-	start = (void *)((unsigned long)start &~(CACHE_LINE_SIZE - 1));
-	mfence();
-	clflush(start);
-	mfence();
-}
-
-void flush_range(void *start, void *end)
-{
-	void *addr;
-
-	start = (void *)((unsigned long)start &~(CACHE_LINE_SIZE - 1));
-	mfence();
-	for(addr = start; addr < end; addr += CACHE_LINE_SIZE)
-		clflush(addr);
-	mfence();
-}
-
 void add_logentry()
 {
 	logentry *log = malloc(sizeof(logentry));
@@ -60,39 +36,18 @@ void add_logentry()
 
 node *allocNode(node *parent, unsigned int index)
 {
-//	node *new_node = malloc(sizeof(node));
-//	memset(new_node, 0, sizeof(node));
 	node *new_node = calloc(1, sizeof(node));
 	if (parent != NULL) {
 		new_node->parent_ptr = parent;
 		new_node->p_index = index;
 	}
-//	flush_buffer(new_node, sizeof(node));
 	return new_node;
 }
-
-/*
-node *allocNode()
-{
-//	struct timespec t1, t2;
-	node *new_node = malloc(sizeof(node));
-	memset(new_node, 0, sizeof(node));
-//	node_count++;
-//	clock_gettime(CLOCK_MONOTONIC, &t1);
-	flush_buffer(new_node, sizeof(node));
-//	clock_gettime(CLOCK_MONOTONIC, &t2);
-//	elapsed_node_flush += (t2.tv_sec - t1.tv_sec) * 1000000000;
-//	elapsed_node_flush += (t2.tv_nsec - t1.tv_nsec);
-	return new_node;
-}
-*/
 
 tree *initTree()
 {
 	tree *wradix_tree = malloc(sizeof(tree));
-//	printf("wradix_Tree address = %p\n", wradix_tree);
 	wradix_tree->root = allocNode(NULL, 0);
-//	wradix_tree->root = allocNode();
 	wradix_tree->height = 1;
 	flush_buffer(wradix_tree, sizeof(tree), true);
 	return wradix_tree;
@@ -112,8 +67,6 @@ int increase_radix_tree_height(tree **t, unsigned char new_height)
 	unsigned char height = (*t)->height;
 	node *root, *prev_root;
 	int errval = 0;
-//	printf("t address = %p\n", t);
-//	printf("prev_tree address = %p\n",prev_tree);
 //	struct timespec t1, t2;
 
 	prev_root = (*t)->root;
@@ -158,7 +111,6 @@ int recursive_alloc_nodes(node *temp_node, unsigned long key, void *value,
 	if (height == 1) {
 		temp_node->entry_ptr[index] = value;
 		flush_buffer(temp_node, sizeof(node), false);
-//		flush_buffer(temp_node->entry_ptr[index], 8, false);
 		if (temp_node->entry_ptr[index] == NULL)
 			goto fail;
 	}
@@ -166,7 +118,6 @@ int recursive_alloc_nodes(node *temp_node, unsigned long key, void *value,
 		if (temp_node->entry_ptr[index] == NULL) {
 			temp_node->entry_ptr[index] = allocNode(temp_node, index);
 			flush_buffer(temp_node, sizeof(node), false);
-//			flush_buffer(temp_node->entry_ptr[index], 8, false);
 			if (temp_node->entry_ptr[index] == NULL)
 				goto fail;
 		}
@@ -200,7 +151,7 @@ int recursive_search_leaf(node *level_ptr, unsigned long key, void *value,
 		level_ptr->entry_ptr[index] = value;
 //		entry_count++;
 //		clock_gettime(CLOCK_MONOTONIC, &t1);
-		flush_buffer(level_ptr->entry_ptr[index], 8, true);
+		flush_buffer(&level_ptr->entry_ptr[index], 8, true);
 //		clock_gettime(CLOCK_MONOTONIC, &t2);
 //		elapsed_entry_flush += (t2.tv_sec - t1.tv_sec) * 1000000000;
 //		elapsed_entry_flush += (t2.tv_nsec - t1.tv_nsec);
@@ -220,7 +171,7 @@ int recursive_search_leaf(node *level_ptr, unsigned long key, void *value,
 
 			sfence();
 			level_ptr->entry_ptr[index] = tmp_node;
-			flush_buffer(level_ptr->entry_ptr[index], 8, true);
+			flush_buffer(&level_ptr->entry_ptr[index], 8, true);
 			return errval;
 		}
 		next_key = (key & ((0x1UL << node_bits) - 1));

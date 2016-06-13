@@ -8,55 +8,14 @@
 #include <time.h>
 #include "wbtree.h"
 
-char *redoLog;
-int redoLog_offset=0;
-long clflush_cnt;
-
 #define mfence() asm volatile("mfence":::"memory")
 #define sfence() asm volatile("sfence":::"memory")
-
-long long mbtime=0;
-
-static inline void clflush(volatile void *__p)
-{
-	//asm volatile("clflush %0" : "+m" (*(volatile char __force *)__p));
-	clflush_cnt++;
-	//__builtin_ia32_clflush((void *) __p);
-	asm volatile("clflush %0" : "+m" (*(volatile char *)__p));
-}
-
-long long clftime=0;
-
-int clflush_range(void *start, void *end)
-{
-	start= (void *)((unsigned long)start &~(CACHE_LINE_SIZE-1));
-	mfence();
-	//printf("start = %x start&63 = %x\n",start,(unsigned long)start&~(CACHE_LINE_SIZE-1));
-	void *addr;
-	for(addr=start; addr<end; addr+=CACHE_LINE_SIZE){
-		clflush(addr);
-	}
-	mfence();
-	/// Flush any possible final partial cacheline:
-}
-
-int clflush_range_nomb(void *start, void *end)
-{
-	start= (void *)((unsigned long)start &~(CACHE_LINE_SIZE-1));
-	//printf("start = %x start&63 = %x\n",start,(unsigned long)start&~(CACHE_LINE_SIZE-1));
-	void *addr;
-	for(addr=start; addr<end; addr+=CACHE_LINE_SIZE){
-		clflush(addr);
-	}
-	/// Flush any possible final partial cacheline:
-}
 
 void flush_buffer(void *buf, unsigned int len, bool fence)
 {
 	unsigned int i;
 	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
 	if (fence) {
-//		mfence();
 		for (i = 0; i < len; i += CACHE_LINE_SIZE)
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
 		sfence();
@@ -175,7 +134,6 @@ int Append(node *n, unsigned long key, void *value)
 
 	n->entries[missingMin].key = key;
 	n->entries[missingMin].ptr = value;
-	//Flush
 	return missingMin; 
 }
 
@@ -194,7 +152,6 @@ int Append_in_inner(node *n, unsigned long key, void *value)
 
 	n->entries[missingMin].key = key;
 	n->entries[missingMin].ptr = value;
-	//Flush
 	return missingMin;
 }
 
@@ -456,22 +413,5 @@ void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {
 
 		insert_in_parent(t, parent, 
 				splitParent->entries[splitParent->slot[1]].key, splitParent);
-	}
-}
-
-void printNode(node *n){
-	int i,numEntries=n->slot[0];
-	printf("slot array: %d |", n->slot[0]);
-	for(i=1; i<=numEntries; i++){
-		printf("index: %d |", n->slot[i]);
-	}
-	printf("\n");
-	for(i=0; i<NODE_SIZE; i++){
-		printf("Key: %ld, Value: %ld |",n->entries[i].key,n->entries[i].ptr);
-	}
-	printf("\n");
-	if(!n->isleaf){
-		n = n->entries[1].ptr;
-		printNode(n);
 	}
 }
