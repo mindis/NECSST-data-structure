@@ -16,20 +16,20 @@ int main(void)
 	FILE *fp;
 	unsigned long *buf;
 
-
+	/*
 	if ((fp = fopen("/home/sekwon/Public/input_file/input_200million.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
 	}
-
+*/
 
 	keys = malloc(sizeof(unsigned long) * 100000100);
 	buf = malloc(sizeof(unsigned long) * 100000100);
 	memset(buf, 0, sizeof(unsigned long) * 100000100);
 	for(i = 0; i < 100000100; i++) {
-	//	keys[i] = i + 1;
-		fscanf(fp, "%lu", &keys[i]);
+		keys[i] = i;
+	//	fscanf(fp, "%lu", &keys[i]);
 	}
 
 	dummy = (char *)malloc(15*1024*1024);
@@ -38,10 +38,11 @@ int main(void)
 	flush_buffer((void *)dummy, 15*1024*1024, true);
 
 	tree *t = initTree();
+	flush_buffer(t, 8, true);
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 0; i < 100000100; i++) {
-		printf("insert count = %d\n", i);
+	for(i = 0; i < 100000000; i++) {
+//		printf("insert count = %d\n", i);
 		if (Insert(t, keys[i], &keys[i]) < 0)
 			return 0;
 	}
@@ -57,15 +58,15 @@ int main(void)
 	memset(dummy, 0, 15*1024*1024);
 //	clflush_range((void *)dummy, (void *)dummy + 15*1024*1024);
 	flush_buffer((void *)dummy, 15*1024*1024, true);
-/*
+
 	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 99999999; i < 100000100; i++)
+	for(i = 100000000; i < 100000100; i++)
 		Insert(t, keys[i], &keys[i]);
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 	printf("Insert Time = %lu ns\n", elapsed_time);
-*/
+
 	memset(dummy, 0, 15*1024*1024);
 //	clflush_range((void *)dummy, (void *)dummy + 15*1024*1024);
 	flush_buffer((void *)dummy, 15*1024*1024, true);

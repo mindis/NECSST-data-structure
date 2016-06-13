@@ -17,19 +17,19 @@ int main(void)
 	unsigned long *buf;
 	unsigned long max;
 	unsigned long min;
-
+/*
 	if((fp = fopen("/home/sekwon/Public/input_file/input_10billion.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
 	}
-
+*/
 	keys = malloc(sizeof(unsigned long) * 100000100);
 	buf = malloc(sizeof(unsigned long) * 100000100);
 	memset(buf, 0, sizeof(unsigned long) * 100000100);
 	for (i = 0; i < 100000100; i++) {
-//		keys[i] = i;
-		fscanf(fp, "%lu", &keys[i]);
+		keys[i] = i;
+//		fscanf(fp, "%lu", &keys[i]);
 	}
 
 	max = keys[0];

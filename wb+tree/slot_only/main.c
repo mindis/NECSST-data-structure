@@ -129,7 +129,7 @@ int main(void)
 	flush_buffer((void *)dummy, 15*1024*1024, true);
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 99999999; i < 100000100; i++)
+	for(i = 100000000; i < 100000100; i++)
 		Insert(t, keys[i], &keys[i]);
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
@@ -145,16 +145,16 @@ int main(void)
 		if (ret == NULL) {
 			printf("There is no key[%d] = %lu\n", i, keys[i]);
 			exit(1);
-		}
+		}/*
 		else {
 			printf("Search value = %lu\n", *(unsigned long*)ret);
-		}
+		}*/
 	}
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 	printf("Search Time = %lu ns\n", elapsed_time);
-
+/*
 	memset(dummy, 0, 15*1024*1024);
 	flush_buffer((void *)dummy, 15*1024*1024, true);
 
@@ -165,7 +165,7 @@ int main(void)
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 
 	printf("Range search time = %lu ns\n", elapsed_time);
-
+*/
 //	for (i = 0; i < 50000100; i++)
 //		printf("buf[%d] = %lu\n", i, buf[i]);
 

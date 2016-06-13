@@ -110,7 +110,7 @@ int main(void)
 	buf = malloc(sizeof(unsigned long) * 100000100);
 	memset(buf, 0, sizeof(unsigned long) * 100000100);
 	for(i = 0; i < 100000100; i++) {
-	//	keys[i] = i;
+//		keys[i] = i;
 		fscanf(fp, "%lu", &keys[i]);
 	}
 
@@ -171,7 +171,7 @@ int main(void)
 	flush_buffer((void *)dummy, 15*1024*1024);
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 100000000; i < 100000100; i++)
+	for(i = 100000000; i < 100000001; i++)
 		Insert(t, keys[i], &keys[i]);
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
@@ -183,7 +183,7 @@ int main(void)
 	flush_buffer((void *)dummy, 15*1024*1024);
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 0; i < 100000100; i++) {
+	for(i = 0; i < 100000001; i++) {
 		ret = (void *)Lookup(t, keys[i]);
 		if (ret == NULL) {
 			printf("There is no key[%d] = %lu\n", i, keys[i]);

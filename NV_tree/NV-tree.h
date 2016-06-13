@@ -3,7 +3,7 @@
 #define MAX_NUM_ENTRY_IN	509
 #define MAX_NUM_ENTRY_PLN	255
 #define MAX_NUM_ENTRY_LN	169
-#define MAX_KEY 300000000
+#define MAX_KEY 3000000000
 
 #define LE_DATA		0
 #define LE_COMMIT	1
@@ -51,7 +51,7 @@ struct Parent_Leaf_Node {
 };
 
 struct Leaf_Node {
-	unsigned long nElements;
+	unsigned char nElements;
 	LN *sibling;
 	unsigned long parent_id;
 	struct LN_entry LN_Element[169];
@@ -68,6 +68,7 @@ struct tree{
 };
 
 tree *initTree();
+void flush_buffer(void *buf, unsigned int len, bool fence);
 void Range_Lookup(tree *t, unsigned long start_key, unsigned int num, 
 		unsigned long buf[]);
 void *Lookup(tree *t, unsigned long key);

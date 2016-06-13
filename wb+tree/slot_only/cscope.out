@@ -1,4 +1,4 @@
-cscope 15 $HOME/study/data_structures/wb+tree/slot_only               0000315733
+cscope 15 $HOME/study/data_structures/wb+tree/slot_only               0000315281
 	@main.c
 
 8 
@@ -217,7 +217,7 @@ t1
 
 132 
 i
- = 99999999; i < 100000100; i++)
+ = 100000000; i < 100000001; i++)
 
 133 
 	`In£¹
@@ -287,7 +287,7 @@ t1
 
 143 
 i
- = 0; i < 100000100; i++) {
+ = 0; i < 100000001; i++) {
 
 144 
 »t
@@ -318,12 +318,6 @@ keys
 147 
 	`ex™
 (1);
-
-150 
-	`´štf
-("S—rch v®uð%lu\n", *(*)
-»t
-);
 
 153 
 	`þock_g‘time
@@ -356,70 +350,6 @@ t1
 156 
 	`´štf
 ("S—rch Timð%lu‚s\n", 
-–­£d_time
-);
-
-158 
-	`mem£t
-(
-dummy
-, 0, 15*1024*1024);
-
-159 
-	`æush_bufãr
-((*)
-dummy
-, 15*1024*1024, 
-Œue
-);
-
-161 
-	`þock_g‘time
-(
-CLOCK_MONOTONIC
-, &
-t1
-);
-
-162 
-	`Rªge_Lookup
-(
-t
-, 0, 100000100, 
-buf
-);
-
-163 
-	`þock_g‘time
-(
-CLOCK_MONOTONIC
-, &
-t2
-);
-
-164 
-–­£d_time
- = (
-t2
-.
-tv_£c
- - 
-t1
-.tv_sec) * 1000000000;
-
-165 
-–­£d_time
- +ð(
-t2
-.
-tv_n£c
- - 
-t1
-.tv_nsec);
-
-167 
-	`´štf
-("Rªg£¬chimð%lu‚s\n", 
 –­£d_time
 );
 
@@ -847,7 +777,7 @@ t1
 
 174 
 i
- = 100000000; i < 100000100; i++)
+ = 100000000; i < 100000001; i++)
 
 175 
 	`In£¹
@@ -915,7 +845,7 @@ t1
 
 186 
 i
- = 0; i < 100000100; i++) {
+ = 0; i < 100000001; i++) {
 
 187 
 »t
