@@ -54,8 +54,6 @@ tree *initTree()
 	tree *t =malloc(sizeof(tree)); 
 	t->root = allocNode(); 
 	t->height = 0;
-	clflush_cnt=0;
-	flush_buffer(t, sizeof(tree), true);
 	return t;
 }
 
@@ -349,7 +347,7 @@ void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {
 
 		add_redo_logentry();
 		curr->parent = root;
-		add_redo_logentry();
+//		add_redo_logentry();
 		t->root = root;
 		return ;
 	}

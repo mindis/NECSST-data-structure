@@ -18,12 +18,9 @@ Tree	w_radix_tree.h	/^struct Tree {$/;"	s
 add_logentry	w_radix_tree.c	/^void add_logentry()$/;"	f
 addr	w_radix_tree.h	/^	unsigned long addr;$/;"	m	struct:Logentry
 allocNode	w_radix_tree.c	/^node *allocNode(node *parent, unsigned int index)$/;"	f
-clflush	w_radix_tree.c	/^static inline void clflush(volatile void *__p)$/;"	f	file:
 entry_ptr	w_radix_tree.h	/^	void *entry_ptr[8];$/;"	m	struct:Node
 find_next_leaf	w_radix_tree.c	/^node *find_next_leaf(tree *t, node *parent, unsigned int index, $/;"	f
-flush	w_radix_tree.c	/^void flush(void *start)$/;"	f
 flush_buffer	w_radix_tree.c	/^void flush_buffer(void *buf, unsigned int len, bool fence)$/;"	f
-flush_range	w_radix_tree.c	/^void flush_range(void *start, void *end)$/;"	f
 height	w_radix_tree.h	/^	unsigned char height;$/;"	m	struct:Tree
 increase_radix_tree_height	w_radix_tree.c	/^int increase_radix_tree_height(tree **t, unsigned char new_height)$/;"	f
 initTree	w_radix_tree.c	/^tree *initTree()$/;"	f

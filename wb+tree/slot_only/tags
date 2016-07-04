@@ -37,15 +37,10 @@ addr	wbtree.h	/^	unsigned long addr;$/;"	m	struct:redo_log_entry
 allocNode	no_flush_logging/wbtree.c	/^node *allocNode()$/;"	f
 allocNode	wbtree.c	/^node *allocNode()$/;"	f
 clflush	no_flush_logging/wbtree.c	/^static inline void clflush(volatile void *__p)$/;"	f	file:
-clflush	wbtree.c	/^static inline void clflush(volatile void *__p)$/;"	f	file:
 clflush_cnt	no_flush_logging/wbtree.c	/^long clflush_cnt;$/;"	v
-clflush_cnt	wbtree.c	/^long clflush_cnt;$/;"	v
 clflush_range	no_flush_logging/wbtree.c	/^int clflush_range(void *start, void *end)$/;"	f
-clflush_range	wbtree.c	/^int clflush_range(void *start, void *end)$/;"	f
 clflush_range_nomb	no_flush_logging/wbtree.c	/^int clflush_range_nomb(void *start, void *end)$/;"	f
-clflush_range_nomb	wbtree.c	/^int clflush_range_nomb(void *start, void *end)$/;"	f
 clftime	no_flush_logging/wbtree.c	/^long long clftime=0;$/;"	v
-clftime	wbtree.c	/^long long clftime=0;$/;"	v
 commit_entry	no_flush_logging/wbtree.h	/^struct commit_entry {$/;"	s
 commit_entry	no_flush_logging/wbtree.h	/^typedef struct commit_entry commit_entry;$/;"	t	typeref:struct:commit_entry
 commit_entry	wbtree.h	/^struct commit_entry {$/;"	s
@@ -85,9 +80,8 @@ leftmostPtr	wbtree.h	/^	struct node *leftmostPtr;$/;"	m	struct:node	typeref:stru
 main	main.c	/^int main(void)$/;"	f
 main	no_flush_logging/main.c	/^int main(void)$/;"	f
 mbtime	no_flush_logging/wbtree.c	/^long long mbtime=0;$/;"	v
-mbtime	wbtree.c	/^long long mbtime=0;$/;"	v
 mfence	no_flush_logging/wbtree.c	15;"	d	file:
-mfence	wbtree.c	15;"	d	file:
+mfence	wbtree.c	11;"	d	file:
 min_live_entries	no_flush_logging/wbtree.h	3;"	d
 min_live_entries	wbtree.h	4;"	d
 new_value	no_flush_logging/wbtree.h	/^	unsigned long new_value;$/;"	m	struct:redo_log_entry
@@ -99,20 +93,17 @@ node	wbtree.h	/^typedef struct node node;$/;"	t	typeref:struct:node
 parent	no_flush_logging/wbtree.h	/^	struct node* parent;$/;"	m	struct:node	typeref:struct:node::node
 parent	wbtree.h	/^	struct node* parent;$/;"	m	struct:node	typeref:struct:node::node
 printNode	no_flush_logging/wbtree.c	/^void printNode(node *n){$/;"	f
-printNode	wbtree.c	/^void printNode(node *n){$/;"	f
 ptr	no_flush_logging/wbtree.h	/^	void *ptr;$/;"	m	struct:entry
 ptr	wbtree.h	/^	void *ptr;$/;"	m	struct:entry
 redoLog	no_flush_logging/wbtree.c	/^char *redoLog;$/;"	v
-redoLog	wbtree.c	/^char *redoLog;$/;"	v
 redoLog_offset	no_flush_logging/wbtree.c	/^int redoLog_offset=0;$/;"	v
-redoLog_offset	wbtree.c	/^int redoLog_offset=0;$/;"	v
 redo_log_entry	no_flush_logging/wbtree.h	/^struct redo_log_entry {$/;"	s
 redo_log_entry	no_flush_logging/wbtree.h	/^typedef struct redo_log_entry redo_log_entry;$/;"	t	typeref:struct:redo_log_entry
 redo_log_entry	wbtree.h	/^struct redo_log_entry {$/;"	s
 redo_log_entry	wbtree.h	/^typedef struct redo_log_entry redo_log_entry;$/;"	t	typeref:struct:redo_log_entry
 root	no_flush_logging/wbtree.h	/^	node *root;$/;"	m	struct:tree
 root	wbtree.h	/^	node *root;$/;"	m	struct:tree
-sfence	wbtree.c	16;"	d	file:
+sfence	wbtree.c	12;"	d	file:
 slot	no_flush_logging/wbtree.h	/^	char slot[NODE_SIZE+1];$/;"	m	struct:node
 slot	wbtree.h	/^	char slot[NODE_SIZE+1];$/;"	m	struct:node
 tree	no_flush_logging/wbtree.h	/^struct tree{$/;"	s

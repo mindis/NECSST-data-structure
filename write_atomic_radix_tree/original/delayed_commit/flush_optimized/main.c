@@ -21,21 +21,21 @@ int main(void)
 	unsigned long nVmRss = 0;
 	unsigned long max;
 	unsigned long min;
-/*
-	if((fp = fopen("/home/sekwon/Public/input_file/input_2billion.txt","r")) == NULL)
+
+	if((fp = fopen("/home/sekwon/Public/input_file/input_10billion.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
 	}
-*/
+
 	keys = malloc(sizeof(unsigned long) * 100000100);
 	buf = malloc(sizeof(unsigned long) * 100000100);
 	memset(buf, 0, sizeof(unsigned long) * 100000100);
 	for (i = 0; i < 100000100; i++) {
-		keys[i] = i;
-//		fscanf(fp, "%lu", &keys[i]);
+//		keys[i] = i;
+		fscanf(fp, "%lu", &keys[i]);
 	}
-/*
+
 	max = keys[0];
 	min = keys[0];
 	for (i = 1; i < 100000100; i++) {
@@ -44,14 +44,12 @@ int main(void)
 		if (keys[i] < min)
 			min = keys[i];
 	}
-*/
-	dummy = (char *)malloc(15*1024*1024);
-	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
-
 
 	tree *t = initTree();
 	flush_buffer(t, 8, true);
+	dummy = (char *)malloc(15*1024*1024);
+	memset(dummy, 0, 15*1024*1024);
+	flush_buffer((void *)dummy, 15*1024*1024, true);
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for(i = 0; i < 100000000; i++) {
@@ -63,7 +61,7 @@ int main(void)
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
-/*
+
 	sprintf(line, "/proc/%d/status", getpid());
 	fp2 = fopen(line, "r");
 	if (fp2 == NULL)
@@ -87,7 +85,7 @@ int main(void)
 		}
 	}
 	fclose(fp2);
-*/
+
 	printf("sizeof(node) = %d\n", sizeof(node));
 	printf("Bulk load Time = %lu ns\n", elapsed_time);
 //	printf("Node flush Time = %lu ns\n", elapsed_node_flush);
@@ -128,7 +126,7 @@ int main(void)
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 	
 	printf("Search Time = %lu ns\n", elapsed_time);
-/*
+
 	memset(dummy, 0, 15*1024*1024);
 	flush_buffer((void *)dummy, 15*1024*1024, true);
 
@@ -139,7 +137,7 @@ int main(void)
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 
 	printf("Range search time = %lu ns\n", elapsed_time);
-*/
+
 //	for (i = 0; i < 50000100; i++)
 //		printf("buf[%d] = %lu\n", i, buf[i]);
 
