@@ -36,7 +36,7 @@ struct node{
 	//void *ptr[8];
 	struct node* parent;
 	int isleaf;
-	char dummy[52];
+//	char dummy[52];
 };
 
 struct tree{

@@ -29,7 +29,7 @@ int main(void)
 	unsigned long max;
 	unsigned long min;
 
-	if ((fp = fopen("/home/sekwon/Public/input_file/input_10billion.txt","r")) == NULL)
+	if ((fp = fopen("/home/sekwon/Public/input_file/input_2billion.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);

@@ -1,3 +1,6 @@
+/* Developted by Se Kwon Lee in UNIST NECSST Lab
+ * E-mail: sekwonlee90@gmail.com */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
