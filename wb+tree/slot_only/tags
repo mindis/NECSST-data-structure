@@ -46,7 +46,6 @@ commit_entry	no_flush_logging/wbtree.h	/^typedef struct commit_entry commit_entr
 commit_entry	wbtree.h	/^struct commit_entry {$/;"	s
 commit_entry	wbtree.h	/^typedef struct commit_entry commit_entry;$/;"	t	typeref:struct:commit_entry
 dummy	no_flush_logging/wbtree.h	/^	char dummy[52];$/;"	m	struct:node
-dummy	wbtree.h	/^	char dummy[52];$/;"	m	struct:node
 entries	no_flush_logging/wbtree.h	/^	struct entry entries[NODE_SIZE];$/;"	m	struct:node	typeref:struct:node::entry
 entries	wbtree.h	/^	struct entry entries[NODE_SIZE];$/;"	m	struct:node	typeref:struct:node::entry
 entry	no_flush_logging/wbtree.h	/^struct entry{$/;"	s

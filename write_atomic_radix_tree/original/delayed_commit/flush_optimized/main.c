@@ -22,23 +22,23 @@ int main(void)
 	unsigned long max;
 	unsigned long min;
 
-	if((fp = fopen("/home/sekwon/Public/input_file/input_10billion.txt","r")) == NULL)
+	if((fp = fopen("/home/sekwon/Public/input_file/input_2billion.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
 	}
 
-	keys = malloc(sizeof(unsigned long) * 1000001000);
-	buf = malloc(sizeof(unsigned long) * 1000001000);
-	memset(buf, 0, sizeof(unsigned long) * 1000001000);
-	for (i = 0; i < 1000001000; i++) {
+	keys = malloc(sizeof(unsigned long) * 100000100);
+	buf = malloc(sizeof(unsigned long) * 100000100);
+	memset(buf, 0, sizeof(unsigned long) * 100000100);
+	for (i = 0; i < 100000100; i++) {
 //		keys[i] = i;
 		fscanf(fp, "%lu", &keys[i]);
 	}
 
 	max = keys[0];
 	min = keys[0];
-	for (i = 1; i < 1000001000; i++) {
+	for (i = 1; i < 100000100; i++) {
 		if (keys[i] > max)
 			max = keys[i];
 		if (keys[i] < min)
@@ -52,7 +52,7 @@ int main(void)
 	flush_buffer((void *)dummy, 15*1024*1024, true);
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 0; i < 1000000000; i++) {
+	for(i = 0; i < 100000000; i++) {
 		if (Insert(&t, keys[i], &keys[i]) < 0) {
 			printf("Insert error!\n");
 			exit(1);
@@ -98,7 +98,7 @@ int main(void)
 	flush_buffer((void *)dummy, 15*1024*1024, true);
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 1000000000; i < 1000001000; i++)
+	for(i = 100000000; i < 100000100; i++)
 		Insert(&t, keys[i], &keys[i]);
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
@@ -110,7 +110,7 @@ int main(void)
 	flush_buffer((void *)dummy, 15*1024*1024, true);
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 0; i < 1000001000; i++) {
+	for(i = 0; i < 100000100; i++) {
 		ret = Lookup(t, keys[i]);	
 		if (ret == NULL) {
 			printf("There is no key[%d] = %lu\n", i, keys[i]);
@@ -131,7 +131,7 @@ int main(void)
 	flush_buffer((void *)dummy, 15*1024*1024, true);
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
-	Range_Lookup(t, min, 1000001000, buf);
+	Range_Lookup(t, min, 100000100, buf);
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);

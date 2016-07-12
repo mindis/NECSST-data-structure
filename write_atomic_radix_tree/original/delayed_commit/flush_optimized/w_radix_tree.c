@@ -148,6 +148,7 @@ int recursive_search_leaf(node *level_ptr, unsigned long key, void *value,
 	index = key >> node_bits;
 
 	if (height == 1) {
+		sfence();
 		level_ptr->entry_ptr[index] = value;
 //		entry_count++;
 //		clock_gettime(CLOCK_MONOTONIC, &t1);
