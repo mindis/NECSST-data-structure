@@ -469,6 +469,24 @@ void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {
 	}
 }
 
+void *Update(tree *t, unsigned long key, void *value)
+{
+	node *curr = t->root;
+	curr = find_leaf_node(curr, key);
+	int loc = Search(curr, curr->slot, key);
+
+	if (loc > curr->slot[0]) 
+		loc = curr->slot[0];
+
+	if (curr->entries[curr->slot[loc]].key != key || loc > curr->slot[0])
+		return NULL;
+
+	curr->entries[curr->slot[loc]].ptr = value;
+	flush_buffer(&curr->entries[curr->slot[loc]].ptr, 8, true);
+
+	return curr->entries[curr->slot[loc]].ptr;
+}
+
 /*
 int main(void)
 {

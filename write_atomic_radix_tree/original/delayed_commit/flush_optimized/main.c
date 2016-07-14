@@ -32,9 +32,10 @@ int main(void)
 	buf = malloc(sizeof(unsigned long) * 100000100);
 	memset(buf, 0, sizeof(unsigned long) * 100000100);
 	for (i = 0; i < 100000100; i++) {
-//		keys[i] = i;
-		fscanf(fp, "%lu", &keys[i]);
+		keys[i] = i;
+//		fscanf(fp, "%lu", &keys[i]);
 	}
+	fclose(fp);
 
 	max = keys[0];
 	min = keys[0];
@@ -110,7 +111,7 @@ int main(void)
 	flush_buffer((void *)dummy, 15*1024*1024, true);
 
 	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 0; i < 100000100; i++) {
+	for (i = 0; i < 100000100; i++) {
 		ret = Lookup(t, keys[i]);	
 		if (ret == NULL) {
 			printf("There is no key[%d] = %lu\n", i, keys[i]);
@@ -137,7 +138,39 @@ int main(void)
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 
 	printf("Range search time = %lu ns\n", elapsed_time);
+/*
+	if((fp = fopen("/home/sekwon/Public/input_file/input_10billion.txt","r")) == NULL)
+	{
+		puts("error");
+		exit(0);
+	}
 
+	for (i = 0; i < 100000100; i++) {
+//		keys[i] = i;
+		fscanf(fp, "%lu", &keys[i]);
+	}
+	fclose(fp);
+
+	for (i = 0; i < 100000100; i++)
+		Update(t, keys[i], &keys[i]);
+	printf("Finish Update\n");
+
+	for (i = 0; i < 100000100; i++)
+		Delete(t, keys[i]);
+	printf("Finish Delete\n");
+
+	for (i = 0; i < 100000100; i++) {
+		ret = Lookup(t, keys[i]);	
+		if (ret == NULL) {
+			printf("There is no key[%d] = %lu\n", i, keys[i]);
+			sleep(1);
+		}
+		else {
+			printf("Search value = %lu\n", *(unsigned long *)ret);
+			sleep(1);
+		}
+	}
+*/
 //	for (i = 0; i < 50000100; i++)
 //		printf("buf[%d] = %lu\n", i, buf[i]);
 

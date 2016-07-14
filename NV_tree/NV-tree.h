@@ -53,7 +53,8 @@ struct tree{
 
 tree *initTree();
 void flush_buffer(void *buf, unsigned int len, bool fence);
+int Insert(tree *t, unsigned long key, void *value);
+int Update(tree *t, unsigned long key, void *value);
 int Range_Lookup(tree *t, unsigned long start_key, unsigned int num, 
 		unsigned long buf[]);
 void *Lookup(tree *t, unsigned long key);
-int Insert(tree *t, unsigned long key, void *value);

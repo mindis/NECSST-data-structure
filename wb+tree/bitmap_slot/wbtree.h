@@ -56,6 +56,7 @@ int Append_in_inner(node *n, unsigned long key, void *value);
 int Search(node *curr, char *temp, unsigned long key);
 node *find_leaf_node(node *curr, unsigned long key);
 void Insert(tree *t, unsigned long key, void *value);
+void *Update(tree *t, unsigned long key, void *value);
 int insert_in_leaf_noflush(node *curr, unsigned long key, void *value);
 void insert_in_leaf(node *curr, unsigned long key, void *value);
 void insert_in_inner(node *curr, unsigned long key, void *value);

@@ -23,12 +23,12 @@ struct commit_entry {
 	unsigned char type;
 };
 
-struct entry{
+struct entry {
 	unsigned long key;
 	void *ptr;
 };
 
-struct node{
+struct node {
 	char slot[NODE_SIZE+1];
 	struct entry entries[NODE_SIZE];
 	struct node *leftmostPtr;
@@ -39,7 +39,7 @@ struct node{
 //	char dummy[52];
 };
 
-struct tree{
+struct tree {
 	node *root;
 	int height;
 };
@@ -54,6 +54,8 @@ int Append_in_inner(node *n, unsigned long key, void *value);
 int Search(node *curr, char *temp, unsigned long key);
 node *find_leaf_node(node *curr, unsigned long key);
 void Insert(tree *t, unsigned long key, void *value);
+void *Update(tree *t, unsigned long key, void *value);
+void Delete(tree *t, unsigned long key);
 int insert_in_leaf_noflush(node *curr, unsigned long key, void *value);
 void insert_in_leaf(node *curr, unsigned long key, void *value);
 void insert_in_inner(node *curr, unsigned long key, void *value);
