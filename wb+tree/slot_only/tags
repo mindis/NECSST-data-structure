@@ -14,8 +14,9 @@ CACHE_LINE_SIZE	no_flush_logging/wbtree.h	4;"	d
 CACHE_LINE_SIZE	wbtree.h	5;"	d
 CFLAGS	Makefile	/^CFLAGS= -c $/;"	m
 CFLAGS	no_flush_logging/Makefile	/^CFLAGS= -c $/;"	m
+Delete	wbtree.c	/^void Delete(tree *t, unsigned long key)$/;"	f
 Insert	no_flush_logging/wbtree.c	/^void Insert(tree *t, unsigned long key, void *value){$/;"	f
-Insert	wbtree.c	/^void Insert(tree *t, unsigned long key, void *value){$/;"	f
+Insert	wbtree.c	/^void Insert(tree *t, unsigned long key, void *value)$/;"	f
 LE_COMMIT	no_flush_logging/wbtree.h	7;"	d
 LE_COMMIT	wbtree.h	8;"	d
 LE_DATA	no_flush_logging/wbtree.h	6;"	d
@@ -28,6 +29,7 @@ Range_Lookup	no_flush_logging/wbtree.c	/^void Range_Lookup(tree *t, unsigned lon
 Range_Lookup	wbtree.c	/^void Range_Lookup(tree *t, unsigned long start_key, unsigned int num, $/;"	f
 Search	no_flush_logging/wbtree.c	/^int Search(node *curr, char *temp, unsigned long key)$/;"	f
 Search	wbtree.c	/^int Search(node *curr, char *temp, unsigned long key)$/;"	f
+Update	wbtree.c	/^void *Update(tree *t, unsigned long key, void *value)$/;"	f
 add_commit_entry	no_flush_logging/wbtree.c	/^void add_commit_entry()$/;"	f
 add_commit_entry	wbtree.c	/^void add_commit_entry()$/;"	f
 add_redo_logentry	no_flush_logging/wbtree.c	/^void add_redo_logentry()$/;"	f
@@ -45,15 +47,16 @@ commit_entry	no_flush_logging/wbtree.h	/^struct commit_entry {$/;"	s
 commit_entry	no_flush_logging/wbtree.h	/^typedef struct commit_entry commit_entry;$/;"	t	typeref:struct:commit_entry
 commit_entry	wbtree.h	/^struct commit_entry {$/;"	s
 commit_entry	wbtree.h	/^typedef struct commit_entry commit_entry;$/;"	t	typeref:struct:commit_entry
+delete_in_leaf	wbtree.c	/^void delete_in_leaf(node *curr, unsigned long key)$/;"	f
 dummy	no_flush_logging/wbtree.h	/^	char dummy[52];$/;"	m	struct:node
 entries	no_flush_logging/wbtree.h	/^	struct entry entries[NODE_SIZE];$/;"	m	struct:node	typeref:struct:node::entry
 entries	wbtree.h	/^	struct entry entries[NODE_SIZE];$/;"	m	struct:node	typeref:struct:node::entry
 entry	no_flush_logging/wbtree.h	/^struct entry{$/;"	s
 entry	no_flush_logging/wbtree.h	/^typedef struct entry entry;$/;"	t	typeref:struct:entry
-entry	wbtree.h	/^struct entry{$/;"	s
+entry	wbtree.h	/^struct entry {$/;"	s
 entry	wbtree.h	/^typedef struct entry entry;$/;"	t	typeref:struct:entry
 find_leaf_node	no_flush_logging/wbtree.c	/^node *find_leaf_node(node *curr, unsigned long key){$/;"	f
-find_leaf_node	wbtree.c	/^node *find_leaf_node(node *curr, unsigned long key){$/;"	f
+find_leaf_node	wbtree.c	/^node *find_leaf_node(node *curr, unsigned long key)$/;"	f
 flush_buffer	no_flush_logging/wbtree.c	/^void flush_buffer(void *buf, unsigned int len)$/;"	f
 flush_buffer	wbtree.c	/^void flush_buffer(void *buf, unsigned int len, bool fence)$/;"	f
 height	no_flush_logging/wbtree.h	/^	int height;$/;"	m	struct:tree
@@ -87,7 +90,7 @@ new_value	no_flush_logging/wbtree.h	/^	unsigned long new_value;$/;"	m	struct:red
 new_value	wbtree.h	/^	unsigned long new_value;$/;"	m	struct:redo_log_entry
 node	no_flush_logging/wbtree.h	/^struct node{$/;"	s
 node	no_flush_logging/wbtree.h	/^typedef struct node node;$/;"	t	typeref:struct:node
-node	wbtree.h	/^struct node{$/;"	s
+node	wbtree.h	/^struct node {$/;"	s
 node	wbtree.h	/^typedef struct node node;$/;"	t	typeref:struct:node
 parent	no_flush_logging/wbtree.h	/^	struct node* parent;$/;"	m	struct:node	typeref:struct:node::node
 parent	wbtree.h	/^	struct node* parent;$/;"	m	struct:node	typeref:struct:node::node
@@ -107,7 +110,7 @@ slot	no_flush_logging/wbtree.h	/^	char slot[NODE_SIZE+1];$/;"	m	struct:node
 slot	wbtree.h	/^	char slot[NODE_SIZE+1];$/;"	m	struct:node
 tree	no_flush_logging/wbtree.h	/^struct tree{$/;"	s
 tree	no_flush_logging/wbtree.h	/^typedef struct tree tree;$/;"	t	typeref:struct:tree
-tree	wbtree.h	/^struct tree{$/;"	s
+tree	wbtree.h	/^struct tree {$/;"	s
 tree	wbtree.h	/^typedef struct tree tree;$/;"	t	typeref:struct:tree
 type	no_flush_logging/wbtree.h	/^	unsigned char type;$/;"	m	struct:commit_entry
 type	no_flush_logging/wbtree.h	/^	unsigned char type;$/;"	m	struct:redo_log_entry

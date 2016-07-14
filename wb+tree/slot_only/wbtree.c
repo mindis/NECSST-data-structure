@@ -174,7 +174,8 @@ int Search(node *curr, char *temp, unsigned long key)
 	return mid;
 }
 
-node *find_leaf_node(node *curr, unsigned long key){
+node *find_leaf_node(node *curr, unsigned long key)
+{
 	int loc;
 
 	if (curr->isleaf) 
@@ -232,9 +233,8 @@ void Insert(tree *t, unsigned long key, void *value)
 		sfence();
 		add_commit_entry();
 	}
-	else{
+	else
 		insert_in_leaf(curr, key, value);
-	}
 }
 
 void *Update(tree *t, unsigned long key, void *value)
@@ -349,7 +349,8 @@ int insert_in_inner_noflush(node *curr, unsigned long key, void *value)
 	return loc;
 }
 
-void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {
+void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode)
+{
 	if (curr == t->root) {
 		node *root = allocNode();
 		root->isleaf = 0;
@@ -395,8 +396,7 @@ void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {
 
 		add_redo_logentry();
 		*((uint64_t *)parent->slot) = *((uint64_t *)temp);
-	}
-	else {
+	} else {
 		int j, loc, cp = parent->slot[0];
 		node *splitParent = allocNode();
 		splitParent->isleaf = 0;
@@ -432,7 +432,55 @@ void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {
 	}
 }
 
-void delete_in_leaf(node *curr, unsigned long key)
+/*
+node *delete_parent_entry(node *curr, unsigned long key)
+{
+	int loc, j;
+	char temp[8];
+
+	if (curr->isleaf) 
+		return 비정상 리턴;
+
+	loc = Search(curr, curr->slot, key);
+
+	if (loc > curr->slot[0])
+		loc = loc - 1;
+	else if (curr->entries[curr->slot[loc]].key <= key)
+		loc = loc;
+	else if (loc == 1)
+		loc = 0;
+	else
+		loc = loc - 1;
+
+	if (loc != 0) {
+		for (j = curr->slot[0]; j > loc; j--)
+			temp[j - 1] = curr->slot[j];
+
+		for (j = loc - 1; j >= 1; j--)
+			temp[j] = curr->slot[j];
+
+		temp[0] = curr->slot[0] - 1;
+
+		*((uint64_t *)curr->slot) = *((uint64_t *)temp);
+		flush_buffer(curr->slot, 8, true);
+	} else {
+		curr->leftmostPtr = curr->entries[curr->slot[1]].ptr;
+		for (j = 1; j <= curr->slot[0]; j++)
+			temp[j] = curr->slot[j + 1];
+
+		temp[0] = curr->slot[0] - 1;
+
+		*((uint64_t *)curr->slot) = *((uint64_t *)temp);
+		flush_buffer(curr->slot, 8, true);
+	}
+
+	if (curr->slot[0] == 0)
+		merge(curr, curr->parent, key);
+
+	return 정상리턴;
+}
+*/
+int delete_in_leaf(node *curr, unsigned long key)
 {
 	char temp[8];
 	int mid, j;
@@ -449,49 +497,24 @@ void delete_in_leaf(node *curr, unsigned long key)
 
 	*((uint64_t *)curr->slot) = *((uint64_t *)temp);
 	flush_buffer(curr->slot, 8, true);
+
+	return 0;
 }
 
-void Delete(tree *t, unsigned long key)
+int Delete(tree *t, unsigned long key)
 {
-	int numEntries;
+	int numEntries, errval = 0;
 	node *curr = t->root;
 	/* Find proper leaf */
 	curr = find_leaf_node(curr, key);
 
 	/* Check underflow & merge */
 	numEntries = curr->slot[0];
-	if(numEntries == 1) {
-		node *splitNode = allocNode();
-		int j, loc, cp = curr->slot[0];
-		splitNode->leftmostPtr = curr->leftmostPtr;
+	if(numEntries <= 1) {
+		errval = -1;
+//		delete_parent_entry(curr->parent, key);
+	} else
+		errval = delete_in_leaf(curr, key);
 
-		//underflown node
-		for (j = min_live_entries; j > 0; j--) {
-			loc = Append(splitNode, curr->entries[curr->slot[cp]].key, 
-					curr->entries[curr->slot[cp]].ptr);
-			splitNode->slot[j] = loc;
-			splitNode->slot[0]++;
-			cp--;
-		}
-
-		add_redo_logentry();
-		curr->slot[0] -= min_live_entries;
-
-		if (splitNode->entries[splitNode->slot[1]].key > key) {
-			add_redo_logentry();	//slot redo logging for insert_in_leaf_noflush
-			loc = insert_in_leaf_noflush(curr, key, value);
-			flush_buffer(&(curr->entries[loc]), sizeof(entry), false);
-		}
-		else
-			insert_in_leaf_noflush(splitNode, key, value);
-
-		insert_in_parent(t, curr, splitNode->entries[splitNode->slot[1]].key, splitNode);
-		add_redo_logentry();
-		curr->leftmostPtr = splitNode;
-		sfence();
-		add_commit_entry();
-	}
-	else{
-		delete_in_leaf(curr, key, value);
-	}
+	return errval;
 }

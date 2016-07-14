@@ -1,5 +1,5 @@
 #include <stdbool.h>
-#define NODE_SIZE 15
+#define NODE_SIZE 31
 #define SLOT_SIZE NODE_SIZE + 1
 #define min_live_entries NODE_SIZE / 2
 #define CACHE_LINE_SIZE 64
@@ -62,6 +62,7 @@ void insert_in_leaf(node *curr, unsigned long key, void *value);
 void insert_in_inner(node *curr, unsigned long key, void *value);
 void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode);
 void printNode(node *n);
+int Delete(tree *t, unsigned long key);
 
 static inline unsigned long ffz(unsigned long word)
 {
