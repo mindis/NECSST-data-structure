@@ -1,7 +1,7 @@
 #include <stdbool.h>
 //#define NODE_SIZE 6
 #define NODE_SIZE 7
-#define min_live_entries 3
+#define MIN_LIVE_ENTRIES 3
 #define CACHE_LINE_SIZE 64
 
 #define LE_DATA		0
@@ -32,11 +32,9 @@ struct node {
 	char slot[NODE_SIZE+1];
 	struct entry entries[NODE_SIZE];
 	struct node *leftmostPtr;
-	//long key[7];
-	//void *ptr[8];
 	struct node* parent;
 	int isleaf;
-//	char dummy[52];
+	char dummy[48];
 };
 
 struct tree {

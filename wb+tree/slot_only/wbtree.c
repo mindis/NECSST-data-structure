@@ -208,7 +208,7 @@ void Insert(tree *t, unsigned long key, void *value)
 		splitNode->leftmostPtr = curr->leftmostPtr;
 
 		//overflown node
-		for (j = min_live_entries; j > 0; j--) {
+		for (j = MIN_LIVE_ENTRIES; j > 0; j--) {
 			loc = Append(splitNode, curr->entries[curr->slot[cp]].key, 
 					curr->entries[curr->slot[cp]].ptr);
 			splitNode->slot[j] = loc;
@@ -217,7 +217,7 @@ void Insert(tree *t, unsigned long key, void *value)
 		}
 
 		add_redo_logentry();
-		curr->slot[0] -= min_live_entries;
+		curr->slot[0] -= MIN_LIVE_ENTRIES;
 
 		if (splitNode->entries[splitNode->slot[1]].key > key) {
 			add_redo_logentry();	//slot redo logging for insert_in_leaf_noflush
@@ -401,7 +401,7 @@ void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode)
 		node *splitParent = allocNode();
 		splitParent->isleaf = 0;
 
-		for (j = min_live_entries ; j > 0; j--) {
+		for (j = MIN_LIVE_ENTRIES; j > 0; j--) {
 			loc = Append_in_inner(splitParent,parent->entries[parent->slot[cp]].key, parent->entries[parent->slot[cp]].ptr);
 			node *child = parent->entries[parent->slot[cp]].ptr;
 			add_redo_logentry();
@@ -412,7 +412,7 @@ void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode)
 		}
 
 		add_redo_logentry();
-		parent->slot[0] -= min_live_entries;
+		parent->slot[0] -= MIN_LIVE_ENTRIES;
 
 		if (splitParent->entries[splitParent->slot[1]].key > key) {
 			add_redo_logentry();

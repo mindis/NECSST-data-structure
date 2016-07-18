@@ -1,0 +1,69 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Append	FPTree.c	/^int Append(node *n, unsigned long key, void *value)$/;"	f
+Append_in_inner	FPTree.c	/^int Append_in_inner(node *n, unsigned long key, void *value)$/;"	f
+BIN_DIR	Makefile	/^BIN_DIR=.\/$/;"	m
+BITMAP_SIZE	FPTree.h	10;"	d
+BITOP_WORD	FPTree.c	13;"	d	file:
+BITS_PER_LONG	FPTree.h	9;"	d
+CACHE_LINE_SIZE	FPTree.h	4;"	d
+CFLAGS	Makefile	/^CFLAGS= -c $/;"	m
+Delete	FPTree.c	/^int Delete(tree *t, unsigned long key)$/;"	f
+IN	FPTree.h	/^typedef struct Internal_Node IN;$/;"	t	typeref:struct:Internal_Node
+Insert	FPTree.c	/^void Insert(tree *t, unsigned long key, void *value){$/;"	f
+Internal_Node	FPTree.h	/^struct Internal_Node {$/;"	s
+LE_COMMIT	FPTree.h	7;"	d
+LE_DATA	FPTree.h	6;"	d
+LN	FPTree.h	/^typedef struct Leaf_Node LN;$/;"	t	typeref:struct:Leaf_Node
+Leaf_Node	FPTree.h	/^struct Leaf_Node {$/;"	s
+Lookup	FPTree.c	/^void *Lookup(tree *t, unsigned long key)$/;"	f
+MIN_LIVE_ENTRIES	FPTree.h	3;"	d
+NUM_LN_ENTRY	FPTree.h	2;"	d
+Range_Lookup	FPTree.c	/^void Range_Lookup(tree *t, unsigned long start_key, unsigned int num, $/;"	f
+Search	FPTree.c	/^int Search(node *curr, char *temp, unsigned long key)$/;"	f
+Update	FPTree.c	/^void *Update(tree *t, unsigned long key, void *value)$/;"	f
+add_commit_entry	FPTree.c	/^void add_commit_entry()$/;"	f
+add_redo_logentry	FPTree.c	/^void add_redo_logentry()$/;"	f
+addr	FPTree.h	/^	unsigned long addr;$/;"	m	struct:redo_log_entry
+allocNode	FPTree.c	/^node *allocNode()$/;"	f
+bitmap	FPTree.h	/^	unsigned long bitmap;$/;"	m	struct:Leaf_Node
+commit_entry	FPTree.h	/^struct commit_entry {$/;"	s
+commit_entry	FPTree.h	/^typedef struct commit_entry commit_entry;$/;"	t	typeref:struct:commit_entry
+delete_in_leaf	FPTree.c	/^int delete_in_leaf(node *curr, unsigned long key)$/;"	f
+entries	FPTree.h	/^	struct entry entries[NUM_LN_ENTRY];$/;"	m	struct:Leaf_Node	typeref:struct:Leaf_Node::entry
+entry	FPTree.h	/^struct entry{$/;"	s
+entry	FPTree.h	/^typedef struct entry entry;$/;"	t	typeref:struct:entry
+ffz	FPTree.h	/^static inline unsigned long ffz(unsigned long word)$/;"	f
+find_leaf_node	FPTree.c	/^node *find_leaf_node(node *curr, unsigned long key) $/;"	f
+find_next_zero_bit	FPTree.c	/^unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,$/;"	f
+fingerprints	FPTree.h	/^	char fingerprints[NUM_LN_ENTRY];$/;"	m	struct:Leaf_Node
+flush_buffer	FPTree.c	/^void flush_buffer(void *buf, unsigned int len, bool fence)$/;"	f
+height	FPTree.h	/^	int height;$/;"	m	struct:tree
+initTree	FPTree.c	/^tree *initTree()$/;"	f
+insert_in_inner	FPTree.c	/^void insert_in_inner(node *curr, unsigned long key, void *value)$/;"	f
+insert_in_inner_noflush	FPTree.c	/^int insert_in_inner_noflush(node *curr, unsigned long key, void *value)$/;"	f
+insert_in_leaf	FPTree.c	/^void insert_in_leaf(node *curr, unsigned long key, void *value)$/;"	f
+insert_in_leaf_noflush	FPTree.c	/^int insert_in_leaf_noflush(node *curr, unsigned long key, void *value)$/;"	f
+insert_in_parent	FPTree.c	/^void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {$/;"	f
+key	FPTree.h	/^	unsigned long key;$/;"	m	struct:entry
+keys	FPTree.h	/^	unsigned long keys[NUM_IN_ENTRY];$/;"	m	struct:Internal_Node
+leafmostptr	FPTree.h	/^	void *leafmostptr;$/;"	m	struct:Internal_Node
+main	main.c	/^int main(void)$/;"	f
+mfence	FPTree.c	11;"	d	file:
+nKeys	FPTree.h	/^	unsigned int nKeys;$/;"	m	struct:Internal_Node
+new_value	FPTree.h	/^	unsigned long new_value;$/;"	m	struct:redo_log_entry
+pNext	FPTree.h	/^	struct Leaf_Node *pNext;$/;"	m	struct:Leaf_Node	typeref:struct:Leaf_Node::Leaf_Node
+ptr	FPTree.h	/^	void *ptr;$/;"	m	struct:entry
+ptr	FPTree.h	/^	void *ptr[NUM_IN_ENTRY];$/;"	m	struct:Internal_Node
+redo_log_entry	FPTree.h	/^struct redo_log_entry {$/;"	s
+redo_log_entry	FPTree.h	/^typedef struct redo_log_entry redo_log_entry;$/;"	t	typeref:struct:redo_log_entry
+root	FPTree.h	/^	node *root;$/;"	m	struct:tree
+sfence	FPTree.c	12;"	d	file:
+tree	FPTree.h	/^struct tree {$/;"	s
+tree	FPTree.h	/^typedef struct tree tree;$/;"	t	typeref:struct:tree
+type	FPTree.h	/^	unsigned char type;$/;"	m	struct:commit_entry
+type	FPTree.h	/^	unsigned char type;$/;"	m	struct:redo_log_entry

@@ -58,3 +58,4 @@ int Update(tree *t, unsigned long key, void *value);
 int Range_Lookup(tree *t, unsigned long start_key, unsigned int num, 
 		unsigned long buf[]);
 void *Lookup(tree *t, unsigned long key);
+int Delete(tree *t, unsigned long key);

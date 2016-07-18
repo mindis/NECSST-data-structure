@@ -1,6 +1,6 @@
 #include <stdbool.h>
 
-#define META_NODE_SHIFT 6
+#define META_NODE_SHIFT 9
 #define CACHE_LINE_SIZE 64
 #define NUM_ENTRY	0x1UL << META_NODE_SHIFT
 
@@ -18,6 +18,8 @@ struct Node {
 	unsigned int p_index;
 	void *entry_ptr[NUM_ENTRY];
 	node *parent_ptr;
+//	char dummy[16];		// 2
+	char dummy[48];		// 3, 4, 5, 6, 7, 8, 9
 };
 
 struct Tree {

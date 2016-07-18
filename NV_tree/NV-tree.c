@@ -856,7 +856,6 @@ fail:
 	return current_idx;
 }
 
-
 int Update(tree *t, unsigned long key, void *value)
 {
 	int errval = -1, pos, i;
@@ -886,6 +885,132 @@ int Update(tree *t, unsigned long key, void *value)
 		/* Insert after split */
 		errval = leaf_split_and_update(t, current_LN, old_key, old_value,
 				new_key, new_value);
+		if (errval < 0)
+			goto fail;
+	}
+
+	return 0;
+fail:
+	return errval;
+}
+
+void delete_entry_to_leaf(LN *leaf, unsigned long key, void *value, bool flush)
+{
+	if (flush == true) {
+		leaf->LN_Element[leaf->nElements].flag = false;
+		leaf->LN_Element[leaf->nElements].key = key;
+		leaf->LN_Element[leaf->nElements].value = value;
+		flush_buffer(&leaf->LN_Element[leaf->nElements], 
+				sizeof(struct LN_entry), true);
+		leaf->nElements++;
+		flush_buffer(&leaf->nElements, sizeof(unsigned char), true);
+	} else {
+		leaf->LN_Element[leaf->nElements].flag = false;
+		leaf->LN_Element[leaf->nElements].key = key;
+		leaf->LN_Element[leaf->nElements].value = value;
+		leaf->nElements++;
+	}
+}
+
+int leaf_split_and_delete(tree *t, LN *leaf, unsigned long key, void *value)
+{
+	int errval = -1, current_idx;
+	LN *split_node1, *split_node2, *prev_leaf, *new_leaf;
+	PLN *prev_PLN;
+
+	split_node1 = allocLNode();
+	split_node2 = allocLNode();
+	split_node1->sibling = split_node2;
+	split_node2->sibling = leaf->sibling;
+
+	if (split_node1 == NULL || split_node2 == NULL)
+		return errval;
+
+	leaf_scan_divide(t, leaf, split_node1, split_node2);
+
+	if (t->is_leaf != 0) {
+		current_idx = insert_to_PLN(t, leaf->parent_id, split_node1, split_node2);
+		if (current_idx < 0)
+			goto fail;
+
+		if (current_idx != 0) {
+			prev_PLN = (PLN *)t->root;
+			prev_leaf = prev_PLN[split_node1->parent_id].entries[current_idx - 1].ptr;
+		} else {
+			if (split_node1->parent_id > t->first_PLN_id) {
+				prev_PLN = (PLN *)t->root;
+				prev_leaf = prev_PLN[split_node1->parent_id - 1].entries[prev_PLN[split_node1->parent_id - 1].nKeys - 1].ptr;
+			} else {
+				t->first_leaf = split_node1;
+				goto end;
+			}
+		}
+
+		new_leaf = find_leaf(t, key);
+
+		delete_entry_to_leaf(new_leaf, key, value, false);
+
+		flush_buffer(split_node1, sizeof(LN), false);
+		flush_buffer(split_node2, sizeof(LN), true);
+
+		prev_leaf->sibling = split_node1;
+		flush_buffer(&prev_leaf->sibling, sizeof(&prev_leaf->sibling), true);
+	} else {
+		PLN *new_PLN = (PLN *)allocINode(1);
+
+		split_node1->parent_id = 0;
+		split_node2->parent_id = 0;
+		split_node2->sibling = NULL;
+
+		new_PLN->entries[new_PLN->nKeys].key = 
+			split_node1->LN_Element[split_node1->nElements - 1].key;
+		new_PLN->entries[new_PLN->nKeys].ptr = split_node1;
+		new_PLN->nKeys++;
+		new_PLN->entries[new_PLN->nKeys].key = MAX_KEY;
+		new_PLN->entries[new_PLN->nKeys].ptr = split_node2;
+		new_PLN->nKeys++;
+
+		t->height = 0;
+		t->is_leaf = 1;
+		t->first_PLN_id = 0;
+		t->last_PLN_id = 0;
+		t->root = new_PLN;
+
+		new_leaf = find_leaf(t, key);
+		
+		delete_entry_to_leaf(new_leaf, key, value, false);
+
+		flush_buffer(split_node1, sizeof(LN), false);
+		flush_buffer(split_node2, sizeof(LN), true);
+	}
+
+end:
+	free(leaf);
+	return 0;
+fail:
+	return current_idx;
+}
+
+int Delete(tree *t, unsigned long key)
+{
+	int pos, errval = -1;
+	LN *leaf;
+
+	leaf = find_leaf(t, key);
+	if (leaf == NULL)
+		goto fail;
+
+	pos = search_leaf_node(leaf, key);
+	if (pos < 0)
+		goto fail;
+
+	if (leaf->nElements < MAX_NUM_ENTRY_LN)
+		delete_entry_to_leaf(leaf, leaf->LN_Element[pos].key,
+				leaf->LN_Element[pos].value, true);
+	else {
+		/* Delete after split */
+		errval = leaf_split_and_delete(t, leaf, leaf->LN_Element[pos].key, 
+				leaf->LN_Element[pos].value);
 		if (errval < 0)
 			goto fail;
 	}

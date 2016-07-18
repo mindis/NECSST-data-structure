@@ -19,6 +19,10 @@ add_logentry	w_radix_tree.c	/^void add_logentry()$/;"	f
 addr	w_radix_tree.h	/^	unsigned long addr;$/;"	m	struct:Logentry
 allocNode	w_radix_tree.c	/^node *allocNode(node *parent, unsigned int index)$/;"	f
 clflush	w_radix_tree.c	/^static inline void clflush(volatile void *__p)$/;"	f	file:
+elapsed_entry_search	w_radix_tree.c	/^unsigned long elapsed_entry_search = 0;$/;"	v
+elapsed_entry_search	w_radix_tree.h	/^unsigned long elapsed_entry_search;$/;"	v
+elapsed_leaf_search	w_radix_tree.c	/^unsigned long elapsed_leaf_search = 0;$/;"	v
+elapsed_leaf_search	w_radix_tree.h	/^unsigned long elapsed_leaf_search;$/;"	v
 entry_ptr	w_radix_tree.h	/^	void *entry_ptr[8];$/;"	m	struct:Node
 find_next_leaf	w_radix_tree.c	/^node *find_next_leaf(tree *t, node *parent, unsigned int index, $/;"	f
 flush	w_radix_tree.c	/^void flush(void *start)$/;"	f

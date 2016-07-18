@@ -1,6 +1,3 @@
 ./wbtree.c
-./no_flush_logging/wbtree.c
-./no_flush_logging/main.c
-./no_flush_logging/wbtree.h
 ./main.c
 ./wbtree.h

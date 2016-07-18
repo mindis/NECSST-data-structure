@@ -1,7 +1,7 @@
 #include <stdbool.h>
-#define NODE_SIZE 31
+#define NODE_SIZE 63
 #define SLOT_SIZE NODE_SIZE + 1
-#define min_live_entries NODE_SIZE / 2
+#define MIN_LIVE_ENTRIES NODE_SIZE / 2
 #define CACHE_LINE_SIZE 64
 
 #define LE_DATA		0
@@ -38,7 +38,9 @@ struct node{
 	struct node *leftmostPtr;
 	struct node *parent;
 	int isleaf;
-//	char dummy[52];
+//	char dummy[32];		//15
+//	char dummy[16];		//31
+	char dummy[48];		//63
 };
 
 struct tree{
