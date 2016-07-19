@@ -1,4 +1,4 @@
-cscope 15 $HOME/study/data_structures/NV_tree               0000319760
+cscope 15 $HOME/study/data_structures/NV_tree               0000319211
 	@NV-tree.c
 
 4 
@@ -4643,61 +4643,7 @@ NULL
 çž
 ;
 
-871 
-pos
- = 
-	`£¬ch_Ëaf_node
-(
-cu¼’t_LN
-, 
-key
-);
-
-872 ià(
-pos
- < 0)
-
-873 
-çž
-;
-
-875 
-Þd_key
- = 
-cu¼’t_LN
-->
-LN_EËm’t
-[
-pos
-].
-key
-;
-
-876 
-Þd_v®ue
- = 
-cu¼’t_LN
-->
-LN_EËm’t
-[
-pos
-].
-v®ue
-;
-
-878 
-Ãw_key
- = 
-key
-;
-
-879 
-Ãw_v®ue
- = 
-v®ue
-;
-
-881 ià(
+871 ià(
 cu¼’t_LN
 ->
 nEËm’ts
@@ -4705,29 +4651,21 @@ nEËm’ts
 MAX_NUM_ENTRY_LN
  - 1)
 
-882 
+872 
 	`upd©e_’Œy_to_Ëaf
 (
 cu¼’t_LN
 , 
-Þd_key
+key
 , 
-Þd_v®ue
-,
-
-883 
-Ãw_key
-, 
-Ãw_v®ue
+NULL
+, key, 
+v®ue
 , 
 Œue
 );
 
-885 
-	`´štf
-("Update split!!\n");
-
-887 
+875 
 ”rv®
  = 
 	`Ëaf_¥l™_ªd_upd©e
@@ -4736,38 +4674,34 @@ t
 , 
 cu¼’t_LN
 , 
-Þd_key
+key
 , 
-Þd_v®ue
-,
-
-888 
-Ãw_key
-, 
-Ãw_v®ue
+NULL
+, key, 
+v®ue
 );
 
-889 ià(
+876 ià(
 ”rv®
  < 0)
 
-890 
+877 
 çž
 ;
 
-894 
+881 
 çž
 :
 
-895  
+882  
 ”rv®
 ;
 
-896 
+883 
 	}
 }
 
-898 
+885 
 	$d–‘e_’Œy_to_Ëaf
 (
 LN
@@ -4783,13 +4717,13 @@ boÞ
 æush
 )
 
-900 ià(
+887 ià(
 æush
  =ð
 Œue
 ) {
 
-901 
+888 
 Ëaf
 ->
 LN_EËm’t
@@ -4801,7 +4735,7 @@ nEËm’ts
 çl£
 ;
 
-902 
+889 
 Ëaf
 ->
 LN_EËm’t
@@ -4811,7 +4745,7 @@ nEËm’ts
 key
  = key;
 
-903 
+890 
 Ëaf
 ->
 LN_EËm’t
@@ -4821,7 +4755,7 @@ nEËm’ts
 v®ue
  = value;
 
-904 
+891 
 	`æush_bufãr
 (&
 Ëaf
@@ -4831,19 +4765,19 @@ LN_EËm’t
 nEËm’ts
 ],
 
-905 (
+892 (
 LN_’Œy
 ), 
 Œue
 );
 
-906 
+893 
 Ëaf
 ->
 nEËm’ts
 ++;
 
-907 
+894 
 	`æush_bufãr
 (&
 Ëaf
@@ -4853,7 +4787,7 @@ nEËm’ts
 Œue
 );
 
-909 
+896 
 Ëaf
 ->
 LN_EËm’t
@@ -4865,7 +4799,7 @@ nEËm’ts
 çl£
 ;
 
-910 
+897 
 Ëaf
 ->
 LN_EËm’t
@@ -4875,7 +4809,7 @@ nEËm’ts
 key
  = key;
 
-911 
+898 
 Ëaf
 ->
 LN_EËm’t
@@ -4885,17 +4819,17 @@ nEËm’ts
 v®ue
  = value;
 
-912 
+899 
 Ëaf
 ->
 nEËm’ts
 ++;
 
-914 
+901 
 	}
 }
 
-916 
+903 
 	$Ëaf_¥l™_ªd_d–‘e
 (
 Œ“
@@ -4911,13 +4845,13 @@ key
 v®ue
 )
 
-918 
+905 
 ”rv®
  = -1, 
 cu¼’t_idx
 ;
 
-919 
+906 
 LN
  *
 ¥l™_node1
@@ -4929,25 +4863,25 @@ LN
 Ãw_Ëaf
 ;
 
-920 
+907 
 PLN
  *
 ´ev_PLN
 ;
 
-922 
+909 
 ¥l™_node1
  = 
 	`®locLNode
 ();
 
-923 
+910 
 ¥l™_node2
  = 
 	`®locLNode
 ();
 
-924 
+911 
 ¥l™_node1
 ->
 siblšg
@@ -4955,7 +4889,7 @@ siblšg
 ¥l™_node2
 ;
 
-925 
+912 
 ¥l™_node2
 ->
 siblšg
@@ -4963,7 +4897,7 @@ siblšg
 Ëaf
 ->sibling;
 
-927 ià(
+914 ià(
 ¥l™_node1
  =ð
 NULL
@@ -4971,11 +4905,11 @@ NULL
 ¥l™_node2
  == NULL)
 
-928  
+915  
 ”rv®
 ;
 
-930 
+917 
 	`Ëaf_sÿn_divide
 (
 t
@@ -4987,13 +4921,13 @@ t
 ¥l™_node2
 );
 
-932 ià(
+919 ià(
 t
 ->
 is_Ëaf
  != 0) {
 
-933 
+920 
 cu¼’t_idx
  = 
 	`š£¹_to_PLN
@@ -5009,19 +4943,19 @@ t
 ¥l™_node2
 );
 
-934 ià(
+921 ià(
 cu¼’t_idx
  < 0)
 
-935 
+922 
 çž
 ;
 
-937 ià(
+924 ià(
 cu¼’t_idx
  != 0) {
 
-938 
+925 
 ´ev_PLN
  = (
 PLN
@@ -5031,7 +4965,7 @@ t
 roÙ
 ;
 
-939 
+926 
 ´ev_Ëaf
  = 
 ´ev_PLN
@@ -5047,7 +4981,7 @@ cu¼’t_idx
 ±r
 ;
 
-941 ià(
+928 ià(
 ¥l™_node1
 ->
 ·»Á_id
@@ -5057,7 +4991,7 @@ t
 fœ¡_PLN_id
 ) {
 
-942 
+929 
 ´ev_PLN
  = (
 PLN
@@ -5067,7 +5001,7 @@ t
 roÙ
 ;
 
-943 
+930 
 ´ev_Ëaf
  = 
 ´ev_PLN
@@ -5083,7 +5017,7 @@ nKeys
 ±r
 ;
 
-945 
+932 
 t
 ->
 fœ¡_Ëaf
@@ -5091,11 +5025,11 @@ fœ¡_Ëaf
 ¥l™_node1
 ;
 
-946 
+933 
 ’d
 ;
 
-950 
+937 
 Ãw_Ëaf
  = 
 	`fšd_Ëaf
@@ -5105,7 +5039,7 @@ t
 key
 );
 
-952 
+939 
 	`d–‘e_’Œy_to_Ëaf
 (
 Ãw_Ëaf
@@ -5117,7 +5051,7 @@ v®ue
 çl£
 );
 
-954 
+941 
 	`æush_bufãr
 (
 ¥l™_node1
@@ -5127,7 +5061,7 @@ LN
 çl£
 );
 
-955 
+942 
 	`æush_bufãr
 (
 ¥l™_node2
@@ -5137,7 +5071,7 @@ LN
 Œue
 );
 
-957 
+944 
 ´ev_Ëaf
 ->
 siblšg
@@ -5145,7 +5079,7 @@ siblšg
 ¥l™_node1
 ;
 
-958 
+945 
 	`æush_bufãr
 (&
 ´ev_Ëaf
@@ -5155,7 +5089,7 @@ siblšg
 Œue
 );
 
-960 
+947 
 PLN
  *
 Ãw_PLN
@@ -5163,19 +5097,19 @@ PLN
 	`®locINode
 (1);
 
-962 
+949 
 ¥l™_node1
 ->
 ·»Á_id
  = 0;
 
-963 
+950 
 ¥l™_node2
 ->
 ·»Á_id
  = 0;
 
-964 
+951 
 ¥l™_node2
 ->
 siblšg
@@ -5183,7 +5117,7 @@ siblšg
 NULL
 ;
 
-966 
+953 
 Ãw_PLN
 ->
 ’Œ›s
@@ -5193,7 +5127,7 @@ nKeys
 key
  =
 
-967 
+954 
 ¥l™_node1
 ->
 LN_EËm’t
@@ -5203,7 +5137,7 @@ nEËm’ts
 key
 ;
 
-968 
+955 
 Ãw_PLN
 ->
 ’Œ›s
@@ -5215,13 +5149,13 @@ nKeys
 ¥l™_node1
 ;
 
-969 
+956 
 Ãw_PLN
 ->
 nKeys
 ++;
 
-970 
+957 
 Ãw_PLN
 ->
 ’Œ›s
@@ -5233,7 +5167,7 @@ key
 MAX_KEY
 ;
 
-971 
+958 
 Ãw_PLN
 ->
 ’Œ›s
@@ -5245,37 +5179,37 @@ nKeys
 ¥l™_node2
 ;
 
-972 
+959 
 Ãw_PLN
 ->
 nKeys
 ++;
 
-974 
+961 
 t
 ->
 height
  = 0;
 
-975 
+962 
 t
 ->
 is_Ëaf
  = 1;
 
-976 
+963 
 t
 ->
 fœ¡_PLN_id
  = 0;
 
-977 
+964 
 t
 ->
 Ï¡_PLN_id
  = 0;
 
-978 
+965 
 t
 ->
 roÙ
@@ -5283,7 +5217,7 @@ roÙ
 Ãw_PLN
 ;
 
-980 
+967 
 Ãw_Ëaf
  = 
 	`fšd_Ëaf
@@ -5293,7 +5227,7 @@ t
 key
 );
 
-982 
+969 
 	`d–‘e_’Œy_to_Ëaf
 (
 Ãw_Ëaf
@@ -5305,7 +5239,7 @@ v®ue
 çl£
 );
 
-984 
+971 
 	`æush_bufãr
 (
 ¥l™_node1
@@ -5315,7 +5249,7 @@ LN
 çl£
 );
 
-985 
+972 
 	`æush_bufãr
 (
 ¥l™_node2
@@ -5325,29 +5259,29 @@ LN
 Œue
 );
 
-988 
+975 
 ’d
 :
 
-989 
+976 
 	`ä“
 (
 Ëaf
 );
 
-991 
+978 
 çž
 :
 
-992  
+979  
 cu¼’t_idx
 ;
 
-993 
+980 
 	}
 }
 
-995 
+982 
 	$D–‘e
 (
 Œ“
@@ -5357,19 +5291,17 @@ t
 key
 )
 
-997 
-pos
-, 
+984 
 ”rv®
  = -1;
 
-998 
+985 
 LN
  *
 Ëaf
 ;
 
-1000 
+987 
 Ëaf
  = 
 	`fšd_Ëaf
@@ -5379,35 +5311,17 @@ t
 key
 );
 
-1001 ià(
+988 ià(
 Ëaf
  =ð
 NULL
 )
 
-1002 
+989 
 çž
 ;
 
-1004 
-pos
- = 
-	`£¬ch_Ëaf_node
-(
-Ëaf
-, 
-key
-);
-
-1005 ià(
-pos
- < 0)
-
-1006 
-çž
-;
-
-1008 ià(
+991 ià(
 Ëaf
 ->
 nEËm’ts
@@ -5415,35 +5329,19 @@ nEËm’ts
 MAX_NUM_ENTRY_LN
 )
 
-1009 
+992 
 	`d–‘e_’Œy_to_Ëaf
 (
 Ëaf
-,†—f->
-LN_EËm’t
-[
-pos
-].
+, 
 key
-,
-
-1010 
-Ëaf
-->
-LN_EËm’t
-[
-pos
-].
-v®ue
+, 
+NULL
 , 
 Œue
 );
 
-1013 
-	`´štf
-("delete split!!\n");
-
-1014 
+995 
 ”rv®
  = 
 	`Ëaf_¥l™_ªd_d–‘e
@@ -5451,41 +5349,29 @@ v®ue
 t
 , 
 Ëaf
-,†—f->
-LN_EËm’t
-[
-pos
-].
+, 
 key
-,
-
-1015 
-Ëaf
-->
-LN_EËm’t
-[
-pos
-].
-v®ue
+, 
+NULL
 );
 
-1016 ià(
+996 ià(
 ”rv®
  < 0)
 
-1017 
+997 
 çž
 ;
 
-1021 
+1001 
 çž
 :
 
-1022  
+1002  
 ”rv®
 ;
 
-1023 
+1003 
 	}
 }
 
@@ -5855,7 +5741,7 @@ mš
 å
  = 
 	`fÝ’
-("/home/£kwÚ/Public/šput_fže/šput_10bžliÚ.txt","r")è=ð
+("/home/£kwÚ/Public/šput_fže/šput_1bžliÚ.txt","r")è=ð
 NULL
 )
 

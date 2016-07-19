@@ -1,4 +1,4 @@
-cscope 15 $HOME/old/home/sekwon/study/data_structure/write_atomic_radix_tree/original/undoredo_logging               0000287932
+cscope 15 $HOME/study/data_structures/write_atomic_radix_tree/original/undoredo_logging               0000288268
 	@main.c
 
 1 
@@ -67,6 +67,22 @@ FILE
 buf
 ;
 
+19 if((
+Â
+ = 
+	`f›í
+("/home/£kw⁄/Public/öput_fûe/öput_200mûli⁄.txt","r")Ë=
+NULL
+)
+
+21 
+	`puts
+("error");
+
+22 
+	`exô
+(0);
+
 25 
 keys
  = 
@@ -89,11 +105,15 @@ buf
 i
  = 0; i < 100000100; i++) {
 
-29 
+30 
+	`fsˇnf
+(
+Â
+, "%lu", &
 keys
 [
 i
-] = i;
+]);
 
 33 
 dummy
@@ -287,7 +307,7 @@ t1
 
 76 
 i
- = 0; i < 50000100; i++) {
+ = 0; i < 100000100; i++) {
 
 77 
 ªt
@@ -309,7 +329,7 @@ NULL
 
 79 
 	`¥ötf
-("Thîêi†nÿkey[%d] = %ld\n", 
+("Thîêi†nÿkey[%d] = %lu\n", 
 i
 , 
 keys
@@ -377,11 +397,11 @@ t1
 	`R™ge_Lookup
 (
 t
-, 0, 100000099, 
+, 0, 100000100, 
 buf
 );
 
-99 
+98 
 	`˛ock_gëtime
 (
 CLOCK_MONOTONIC
@@ -389,7 +409,7 @@ CLOCK_MONOTONIC
 t2
 );
 
-100 
+99 
 ñ≠£d_time
  = (
 t2
@@ -399,7 +419,7 @@ tv_£c
 t1
 .tv_sec) * 1000000000;
 
-101 
+100 
 ñ≠£d_time
  +(
 t2
@@ -409,13 +429,13 @@ tv_n£c
 t1
 .tv_nsec);
 
-103 
+102 
 	`¥ötf
 ("R™gê£¨chÅimê%luÇs\n", 
 ñ≠£d_time
 );
 
-106 
+108 
 	}
 }
 
@@ -928,26 +948,24 @@ height
 );
 
 135 
-	`Êush_buf„r
-(*
-t
-, 8);
+	`add_logíåy
+();
 
-136 
+137 
 	`‰ì
 (
 ¥ev_åì
 );
 
-137  
+138  
 îrvÆ
 ;
 
-138 
+139 
 	}
 }
 
-140 
+141 
 	$ªcursive_Æloc_nodes
 (
 node
@@ -959,15 +977,15 @@ key
 vÆue
 ,
 
-141 
+142 
 height
 )
 
-143 
+144 
 îrvÆ
  = -1;
 
-144 
+145 
 mëa_bôs
  = 
 META_NODE_SHIFT
@@ -975,27 +993,27 @@ META_NODE_SHIFT
 node_bôs
 ;
 
-145 
+146 
 node
  *
 ãmp_node
 ;
 
-146 
+147 
 √xt_key
 ;
 
-147 
+148 
 ödex
 ;
 
-150 
+151 
 ãmp_node
  = 
 Àvñ_±r
 ;
 
-152 
+153 
 node_bôs
  = (
 height
@@ -1003,7 +1021,7 @@ height
 mëa_bôs
 ;
 
-154 
+155 
 ödex
  = 
 key
@@ -1011,11 +1029,11 @@ key
 node_bôs
 ;
 
-156 i‡(
+157 i‡(
 height
  == 1) {
 
-157 
+158 
 ãmp_node
 ->
 íåy_±r
@@ -1025,17 +1043,11 @@ height
 vÆue
 ;
 
-160 
-	`Êush_buf„r
-(
-ãmp_node
-->
-íåy_±r
-[
-ödex
-], 8);
+161 
+	`add_logíåy
+();
 
-164 i‡(
+166 i‡(
 ãmp_node
 ->
 íåy_±r
@@ -1045,11 +1057,11 @@ vÆue
 NULL
 )
 
-165 
+167 
 Áû
 ;
 
-168 i‡(
+170 i‡(
 ãmp_node
 ->
 íåy_±r
@@ -1059,7 +1071,7 @@ NULL
 NULL
 ) {
 
-170 
+172 
 ãmp_node
 ->
 íåy_±r
@@ -1069,17 +1081,11 @@ NULL
 	`ÆlocNode
 (temp_node, index);
 
-174 
-	`Êush_buf„r
-(
-ãmp_node
-->
-íåy_±r
-[
-ödex
-], 8);
+173 
+	`add_logíåy
+();
 
-178 i‡(
+180 i‡(
 ãmp_node
 ->
 íåy_±r
@@ -1089,19 +1095,19 @@ NULL
 NULL
 )
 
-179 
+181 
 Áû
 ;
 
-181 
+183 
 √xt_key
  = (
 key
- & ((1 << 
+ & ((0x1UL << 
 node_bôs
 ) - 1));
 
-183 
+185 
 îrvÆ
  = 
 	`ªcursive_Æloc_nodes
@@ -1119,31 +1125,31 @@ vÆue
 height
  - 1);
 
-184 i‡(
+186 i‡(
 îrvÆ
  < 0)
 
-185 
+187 
 Áû
 ;
 
-187 
+189 
 îrvÆ
  = 0;
 
-188 
+190 
 Áû
 :
 
-189  
+191  
 îrvÆ
 ;
 
-190 
+192 
 	}
 }
 
-192 
+194 
 	$In£π
 (
 åì
@@ -1155,19 +1161,19 @@ key
 vÆue
 )
 
-194 
+196 
 îrvÆ
 ;
 
-195 
+197 
 max_keys
 ;
 
-196 
+198 
 height
 ;
 
-197 
+199 
 blk_shi·
 , 
 mëa_bôs
@@ -1175,17 +1181,17 @@ mëa_bôs
 META_NODE_SHIFT
 ;
 
-198 
+200 
 tŸÆ_keys
 ;
 
-200 
+202 
 height
  = (*
 t
 )->height;
 
-202 
+204 
 blk_shi·
  = 
 height
@@ -1193,19 +1199,19 @@ height
 mëa_bôs
 ;
 
-204 
+206 
 max_keys
  = 0x1UL << 
 blk_shi·
 ;
 
-206 i‡(
+208 i‡(
 key
  > 
 max_keys
  - 1) {
 
-208 
+210 
 tŸÆ_keys
  = 
 key
@@ -1213,31 +1219,31 @@ key
 blk_shi·
 ;
 
-209 
+211 
 tŸÆ_keys
  > 0) {
 
-210 
+212 
 tŸÆ_keys
  =ÅŸÆ_key†>> 
 mëa_bôs
 ;
 
-211 
+213 
 height
 ++;
 
-215 i‡(
+217 i‡(
 height
  == 0)
 
-218 if(
+220 if(
 height
  > (*
 t
 )->height) {
 
-219 
+221 
 îrvÆ
  = 
 	`ö¸ó£_ødix_åì_height
@@ -1247,19 +1253,19 @@ t
 height
 );
 
-220 if(
+222 if(
 îrvÆ
 ) {
 
-221 
+223 
 	`¥ötf
  ("IncreaseÑadixÅree heightÉrror!\n");
 
-222 
+224 
 Áû
 ;
 
-225 
+227 
 îrvÆ
  = 
 	`ªcursive_Æloc_nodes
@@ -1275,27 +1281,31 @@ vÆue
 height
 );
 
-226 i‡(
+228 i‡(
 îrvÆ
  < 0)
 
-227 
+229 
 Áû
 ;
 
-230 
+231 
+	`add_logíåy
+();
+
+233 
 Áû
 :
 
-231  
+234  
 îrvÆ
 ;
 
-232 
+235 
 	}
 }
 
-234 *
+237 *
 	$Lookup
 (
 åì
@@ -1305,33 +1315,33 @@ t
 key
 )
 
-236 
+239 
 node
  *
 Àvñ_±r
 ;
 
-237 
+240 
 height
 ;
 
-238 
+241 
 bô_shi·
 , 
 idx
 ;
 
-239 *
+242 *
 vÆue
 ;
 
-241 
+244 
 height
  = 
 t
 ->height;
 
-242 
+245 
 Àvñ_±r
  = 
 t
@@ -1339,11 +1349,11 @@ t
 roŸ
 ;
 
-244 
+247 
 height
  > 1) {
 
-245 
+248 
 bô_shi·
  = (
 height
@@ -1351,7 +1361,7 @@ height
 META_NODE_SHIFT
 ;
 
-246 
+249 
 idx
  = 
 key
@@ -1359,7 +1369,7 @@ key
 bô_shi·
 ;
 
-248 
+251 
 Àvñ_±r
  =Üevñ_±r->
 íåy_±r
@@ -1367,17 +1377,17 @@ bô_shi·
 idx
 ];
 
-250 
+253 
 key
- = key & ((1 << 
+ = key & ((0x1UL << 
 bô_shi·
 ) - 1);
 
-251 
+254 
 height
 --;
 
-253 
+256 
 bô_shi·
  = (
 height
@@ -1385,7 +1395,7 @@ height
 META_NODE_SHIFT
 ;
 
-254 
+257 
 idx
  = 
 key
@@ -1393,7 +1403,7 @@ key
 bô_shi·
 ;
 
-255 
+258 
 vÆue
  = 
 Àvñ_±r
@@ -1403,15 +1413,15 @@ vÆue
 idx
 ];
 
-256  
+259  
 vÆue
 ;
 
-257 
+260 
 	}
 }
 
-259 
+262 
 node
  *
 	$£¨ch_to_√xt_Àaf
@@ -1423,27 +1433,27 @@ node
 height
 )
 
-261 
+264 
 i
 ;
 
-262 
+265 
 node
  *
 √xt_Àaf
 ;
 
-264 i‡(
+267 i‡(
 height
  != 1) {
 
-265 
+268 
 i
- = 0; i < (1 << 
+ = 0; i < (0x1UL << 
 META_NODE_SHIFT
 ); i++) {
 
-266 i‡(
+269 i‡(
 √xt_bønch
 ->
 íåy_±r
@@ -1453,7 +1463,7 @@ i
 NULL
 ) {
 
-267 
+270 
 √xt_Àaf
  = 
 	`£¨ch_to_√xt_Àaf
@@ -1465,29 +1475,29 @@ NULL
 i
 ],
 
-268 
+271 
 height
  - 1);
 
-269  
+272  
 √xt_Àaf
 ;
 
-274 
+277 
 √xt_Àaf
  = 
 √xt_bønch
 ;
 
-275  
+278  
 √xt_Àaf
 ;
 
-277 
+280 
 	}
 }
 
-279 
+282 
 node
  *
 	$föd_√xt_Àaf
@@ -1503,29 +1513,29 @@ node
 ödex
 ,
 
-280 
+283 
 height
 )
 
-282 
+285 
 i
 ;
 
-283 
+286 
 node
  *
 √xt_Àaf
 ;
 
-285 
+288 
 i
  = (
 ödex
- + 1); i < (1 << 
+ + 1); i < (0x1UL << 
 META_NODE_SHIFT
 ); i++) {
 
-286 i‡(
+289 i‡(
 ∑ª¡
 ->
 íåy_±r
@@ -1535,7 +1545,7 @@ i
 NULL
 ) {
 
-287 
+290 
 √xt_Àaf
  = 
 	`£¨ch_to_√xt_Àaf
@@ -1549,17 +1559,17 @@ i
 height
  - 1);
 
-288  
+291  
 √xt_Àaf
 ;
 
-292 i‡(
+295 i‡(
 t
 ->
 height
  > height) {
 
-293 
+296 
 √xt_Àaf
  = 
 	`föd_√xt_Àaf
@@ -1573,23 +1583,23 @@ t
 p_ödex
 ,
 
-294 
+297 
 height
  + 1);
 
-295  
+298  
 √xt_Àaf
 ;
 
-298  
+301  
 NULL
 ;
 
-299 
+302 
 	}
 }
 
-301 
+304 
 	$R™ge_Lookup
 (
 åì
@@ -1601,21 +1611,21 @@ t
 num
 ,
 
-302 
+305 
 buf
 [])
 
-304 
+307 
 node
  *
 Àvñ_±r
 ;
 
-305 
+308 
 height
 ;
 
-306 
+309 
 bô_shi·
 , 
 idx
@@ -1623,21 +1633,21 @@ idx
 i
 ;
 
-307 
+310 
 £¨ch_cou¡
  = 0;
 
-308 *
+311 *
 vÆue
 ;
 
-310 
+313 
 height
  = 
 t
 ->height;
 
-311 
+314 
 Àvñ_±r
  = 
 t
@@ -1645,11 +1655,11 @@ t
 roŸ
 ;
 
-313 
+316 
 height
  > 1) {
 
-314 
+317 
 bô_shi·
  = (
 height
@@ -1657,7 +1667,7 @@ height
 META_NODE_SHIFT
 ;
 
-315 
+318 
 idx
  = 
 °¨t_key
@@ -1665,7 +1675,7 @@ idx
 bô_shi·
 ;
 
-317 
+320 
 Àvñ_±r
  =Üevñ_±r->
 íåy_±r
@@ -1673,17 +1683,17 @@ bô_shi·
 idx
 ];
 
-318 
+321 
 °¨t_key
- = sèπ_key & ((1 << 
+ = sèπ_key & ((0x1UL << 
 bô_shi·
 ) - 1);
 
-319 
+322 
 height
 --;
 
-321 
+324 
 bô_shi·
  = (
 height
@@ -1691,7 +1701,7 @@ height
 META_NODE_SHIFT
 ;
 
-322 
+325 
 idx
  = 
 °¨t_key
@@ -1699,21 +1709,21 @@ idx
 bô_shi·
 ;
 
-324 
+327 
 £¨ch_cou¡
  < 
 num
 ) {
 
-325 
+328 
 i
  = 
 idx
-; i < (1 << 
+; i < (0x1UL << 
 META_NODE_SHIFT
 ); i++) {
 
-326 i‡(
+329 i‡(
 Àvñ_±r
 ->
 íåy_±r
@@ -1723,7 +1733,7 @@ i
 NULL
 ) {
 
-327 
+330 
 buf
 [
 £¨ch_cou¡
@@ -1735,17 +1745,17 @@ buf
 i
 ];
 
-328 
+331 
 £¨ch_cou¡
 ++;
 
-329 i‡(
+332 i‡(
 £¨ch_cou¡
  =
 num
 )
 
-333 
+336 
 Àvñ_±r
  = 
 	`föd_√xt_Àaf
@@ -1757,21 +1767,21 @@ t
 p_ödex
 , 2);
 
-334 i‡(
+337 i‡(
 Àvñ_±r
  =
 NULL
 ) {
 
-335 
+338 
 	`¥ötf
 ("error\n");
 
-338 
+341 
 idx
  = 0;
 
-340 
+343 
 	}
 }
 
@@ -33751,11 +33761,51 @@ __STDC_VERSION__
 
 	)
 
-365 
+365 #i‡
+__GNUC__
+ >= 3
+
+366 
+	#__glibc_u∆ikñy
+(
+c⁄d
+Ë
+	`__buûtö_ex≥˘
+ ((c⁄d), 0)
+
+	)
+
+367 
+	#__glibc_likñy
+(
+c⁄d
+Ë
+	`__buûtö_ex≥˘
+ ((c⁄d), 1)
+
+	)
+
+369 
+	#__glibc_u∆ikñy
+(
+c⁄d
+Ë(c⁄d)
+
+	)
+
+370 
+	#__glibc_likñy
+(
+c⁄d
+Ë(c⁄d)
+
+	)
+
+373 
 	~<bôs/w‹dsize.h
 >
 
-367 #i‡
+375 #i‡
 deföed
  
 __LONG_DOUBLE_MATH_OPTIONAL
@@ -33763,17 +33813,17 @@ __LONG_DOUBLE_MATH_OPTIONAL
 __NO_LONG_DOUBLE_MATH
 
 
-368 
+376 
 	#__LDBL_COMPAT
  1
 
 	)
 
-369 #ifde‡
+377 #ifde‡
 __REDIRECT
 
 
-370 
+378 
 	#__LDBL_REDIR1
 (
 «me
@@ -33787,7 +33837,7 @@ __REDIRECT
 
 	)
 
-371 
+379 
 	#__LDBL_REDIR
 (
 «me
@@ -33795,7 +33845,7 @@ __REDIRECT
 ¥Ÿo
 ) \
 
-372 
+380 
 	`__LDBL_REDIR1
  (
 «me
@@ -33807,7 +33857,7 @@ __∆dbl_
 
 	)
 
-373 
+381 
 	#__LDBL_REDIR1_NTH
 (
 «me
@@ -33821,7 +33871,7 @@ __∆dbl_
 
 	)
 
-374 
+382 
 	#__LDBL_REDIR_NTH
 (
 «me
@@ -33829,7 +33879,7 @@ __∆dbl_
 ¥Ÿo
 ) \
 
-375 
+383 
 	`__LDBL_REDIR1_NTH
  (
 «me
@@ -33841,7 +33891,7 @@ __∆dbl_
 
 	)
 
-376 
+384 
 	#__LDBL_REDIR1_DECL
 (
 «me
@@ -33849,7 +33899,7 @@ __∆dbl_
 Æüs
 ) \
 
-377 
+385 
 	`__ty≥of
  (
 «me
@@ -33861,13 +33911,13 @@ __∆dbl_
 
 	)
 
-378 
+386 
 	#__LDBL_REDIR_DECL
 (
 «me
 ) \
 
-379 
+387 
 	`__ty≥of
  (
 «me
@@ -33879,7 +33929,7 @@ __∆dbl_
 
 	)
 
-380 
+388 
 	#__REDIRECT_LDBL
 (
 «me
@@ -33889,7 +33939,7 @@ __∆dbl_
 Æüs
 ) \
 
-381 
+389 
 	`__LDBL_REDIR1
  (
 «me
@@ -33903,7 +33953,7 @@ __∆dbl_
 
 	)
 
-382 
+390 
 	#__REDIRECT_NTH_LDBL
 (
 «me
@@ -33913,7 +33963,7 @@ __∆dbl_
 Æüs
 ) \
 
-383 
+391 
 	`__LDBL_REDIR1_NTH
  (
 «me
@@ -33927,7 +33977,7 @@ __∆dbl_
 
 	)
 
-386 #i‡!
+394 #i‡!
 deföed
  
 __LDBL_COMPAT
@@ -33935,7 +33985,7 @@ __LDBL_COMPAT
 __REDIRECT
 
 
-387 
+395 
 	#__LDBL_REDIR1
 (
 «me
@@ -33947,7 +33997,7 @@ __REDIRECT
 	)
 proto
 
-388 
+396 
 	#__LDBL_REDIR
 (
 «me
@@ -33957,7 +34007,7 @@ proto
 	)
 proto
 
-389 
+397 
 	#__LDBL_REDIR1_NTH
 (
 «me
@@ -33971,7 +34021,7 @@ __THROW
 
 	)
 
-390 
+398 
 	#__LDBL_REDIR_NTH
 (
 «me
@@ -33983,7 +34033,7 @@ __THROW
 
 	)
 
-391 
+399 
 	#__LDBL_REDIR_DECL
 (
 «me
@@ -33991,11 +34041,11 @@ __THROW
 
 	)
 
-392 #ifde‡
+400 #ifde‡
 __REDIRECT
 
 
-393 
+401 
 	#__REDIRECT_LDBL
 (
 «me
@@ -34009,7 +34059,7 @@ __REDIRECT
 
 	)
 
-394 
+402 
 	#__REDIRECT_NTH_LDBL
 (
 «me
@@ -34019,7 +34069,7 @@ __REDIRECT
 Æüs
 ) \
 
-395 
+403 
 	`__REDIRECT_NTH
  (
 «me

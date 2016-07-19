@@ -480,116 +480,14 @@ int Delete(tree *t, unsigned long key)
 	node *curr = t->root;
 	
 	curr = find_leaf_node(curr, key);
-
+/*
 	numEntries = curr->slot[0];
 	if (numEntries <= 1)
 		errval = -1;
 	else
 		errval = delete_in_leaf(curr, key);
+*/
+	errval = delete_in_leaf(curr, key);
 
 	return errval;
 }
-
-/*
-int main(void)
-{
-	int i;
-	char *dummy;
-	unsigned long *keys;
-	void *ret;
-	FILE *fp;
-	unsigned long *buf;
-	char line[1024];
-	FILE *fp2;
-	unsigned long nVmSize = 0;
-	unsigned long nVmRss = 0;
-	unsigned long max;
-	unsigned long min;
-
-	if ((fp = fopen("/home/sekwon/Public/input_file/input_2billion.txt","r")) == NULL)
-	{
-		puts("error");
-		exit(0);
-	}
-
-	keys = malloc(sizeof(unsigned long) * 100000100);
-	buf = malloc(sizeof(unsigned long) * 100000100);
-	memset(buf, 0, sizeof(unsigned long) * 100000100);
-	for(i = 0; i < 100000100; i++) {
-//		keys[i] = i;
-		fscanf(fp, "%lu", &keys[i]);
-	}
-
-	max = keys[0];
-	min = keys[0];
-	for (i = 1; i < 100000100; i++) {
-		if (keys[i] > max)
-			max = keys[i];
-		if (keys[i] < min)
-			min = keys[i];
-	}
-
-	tree *t = initTree();
-	dummy = (char *)malloc(15*1024*1024);
-	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
-
-	for(i = 0; i < 100000000; i++)
-		Insert(t, keys[i], &keys[i]);
-
-	sprintf(line, "/proc/%d/status", getpid());
-	fp2 = fopen(line, "r");
-	if (fp2 == NULL)
-		return ;
-
-	while (fgets(line, 1024, fp2) != NULL) {
-		if (strstr(line, "VmSize")) {
-			char tmp[32];
-			char size[32];
-			sscanf(line,"%s%s", tmp, size);
-			nVmSize = atoi(size);
-			printf("nVmSize = %lu KB\n", nVmSize);
-		}
-		else if (strstr(line, "VmRSS")) {
-			char tmp[32];
-			char size[32];
-			sscanf(line, "%s%s", tmp, size);
-			nVmRss = atoi(size);
-			printf("nVmRSS = %lu KB\n", nVmRss);
-			break;
-		}
-	}
-	fclose(fp2);
-
-	printf("sizeof(node) = %d\n", sizeof(node));
-
-	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
-
-	for(i = 100000000; i < 100000100; i++)
-		Insert(t, keys[i], &keys[i]);
-
-	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
-
-	for(i = 0; i < 100000100; i++) {
-		ret = (void *)Lookup(t, keys[i]);		
-		if (ret == NULL) {
-			printf("There is no key[%d] = %lu\n", i, keys[i]);
-			exit(1);
-		}
-		else {
-			printf("Search value = %lu\n", *(unsigned long*)ret);
-		}
-	}
-
-	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
-
-	Range_Lookup(t, min, 100000100, buf);
-
-//	for (i = 0; i < 100000100; i++)
-//		printf("buf[%d] = %lu\n", i, buf[i]);
-
-	return 0;
-}*/

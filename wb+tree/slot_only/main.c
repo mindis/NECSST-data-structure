@@ -57,7 +57,7 @@ int main(void)
 
 	tree *t = initTree();
 
-	/* Insertion */
+	/* 100million Insertion */
 	dummy = (char *)malloc(15*1024*1024);
 	memset(dummy, 0, 15*1024*1024);
 	flush_buffer((void *)dummy, 15*1024*1024, true);
@@ -67,7 +67,7 @@ int main(void)
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
-	printf("Insertion Time = %lu ns\n",elapsed_time);
+	printf("100million Insertion Time = %lu ns\n",elapsed_time);
 
 	/* Check space overhead */
 	sprintf(line, "/proc/%d/status", getpid());

@@ -868,23 +868,11 @@ int Update(tree *t, unsigned long key, void *value)
 	if (current_LN == NULL)
 		goto fail;
 
-	pos = search_leaf_node(current_LN, key);
-	if (pos < 0)
-		goto fail;
-
-	old_key = current_LN->LN_Element[pos].key;
-	old_value = current_LN->LN_Element[pos].value;
-
-	new_key = key;
-	new_value = value;
-
 	if (current_LN->nElements < MAX_NUM_ENTRY_LN - 1)
-		update_entry_to_leaf(current_LN, old_key, old_value,
-				new_key, new_value, true);
+		update_entry_to_leaf(current_LN, key, NULL, key, value, true);
 	else {
 		/* Insert after split */
-		errval = leaf_split_and_update(t, current_LN, old_key, old_value,
-				new_key, new_value);
+		errval = leaf_split_and_update(t, current_LN, key, NULL, key, value);
 		if (errval < 0)
 			goto fail;
 	}
@@ -993,24 +981,18 @@ fail:
 
 int Delete(tree *t, unsigned long key)
 {
-	int pos, errval = -1;
+	int errval = -1;
 	LN *leaf;
 
 	leaf = find_leaf(t, key);
 	if (leaf == NULL)
 		goto fail;
 
-	pos = search_leaf_node(leaf, key);
-	if (pos < 0)
-		goto fail;
-
 	if (leaf->nElements < MAX_NUM_ENTRY_LN)
-		delete_entry_to_leaf(leaf, leaf->LN_Element[pos].key,
-				leaf->LN_Element[pos].value, true);
+		delete_entry_to_leaf(leaf, key, NULL, true);
 	else {
 		/* Delete after split */
-		errval = leaf_split_and_delete(t, leaf, leaf->LN_Element[pos].key, 
-				leaf->LN_Element[pos].value);
+		errval = leaf_split_and_delete(t, leaf, key, NULL);
 		if (errval < 0)
 			goto fail;
 	}
