@@ -1,4 +1,4 @@
-cscope 15 $HOME/study/data_structures/NV_tree               0000319211
+cscope 15 $HOME/study/data_structures/NV_tree               0000319187
 	@NV-tree.c
 
 4 
@@ -45,15 +45,7 @@ asm
 
 	)
 
-15 
-	#sãnû
-(è
-asm
- vŞ©e("sãnû":::"memÜy")
-
-	)
-
-17 
+16 
 	$æush_bufãr
 (*
 buf
@@ -65,11 +57,11 @@ boŞ
 ãnû
 )
 
-19 
+18 
 i
 ;
 
-20 
+19 
 Ën
  =†’ + (()(
 buf
@@ -77,9 +69,13 @@ buf
 CACHE_LINE_SIZE
  - 1));
 
-21 ià(
+20 ià(
 ãnû
 ) {
+
+21 
+	`mãnû
+();
 
 22 
 i
@@ -98,7 +94,7 @@ i
 )));
 
 24 
-	`sãnû
+	`mãnû
 ();
 
 26 
@@ -3548,7 +3544,7 @@ LN
 , (
 LN
 ), 
-Œue
+çl£
 );
 
 683 
@@ -5933,7 +5929,7 @@ t1
 
 67 
 	`´štf
-("In£¹iÚ Timğ%lu‚s\n",
+("100mliÚ In£¹iÚ Timğ%lu‚s\n",
 –­£d_time
 );
 

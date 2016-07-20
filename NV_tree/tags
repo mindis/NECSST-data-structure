@@ -92,7 +92,6 @@ reconstruct_from_PLN	NV-tree.c	/^int reconstruct_from_PLN(void *root_addr, unsig
 recursive_insert_IN	NV-tree.c	/^int recursive_insert_IN(void *root_addr, unsigned long first_IN_id,$/;"	f
 root	NV-tree.h	/^	void *root;$/;"	m	struct:tree
 search_leaf_node	NV-tree.c	/^int search_leaf_node(LN *node, unsigned long key)$/;"	f
-sfence	NV-tree.c	15;"	d	file:
 sibling	NV-tree.h	/^	LN *sibling;$/;"	m	struct:Leaf_Node
 sibling	test.c	/^	LN *sibling;$/;"	m	struct:Leaf_Node	file:
 tree	NV-tree.h	/^struct tree{$/;"	s

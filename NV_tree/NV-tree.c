@@ -12,16 +12,16 @@
 #include "NV-tree.h"
 
 #define mfence() asm volatile("mfence":::"memory")
-#define sfence() asm volatile("sfence":::"memory")
 
 void flush_buffer(void *buf, unsigned int len, bool fence)
 {
 	unsigned int i;
 	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
 	if (fence) {
+		mfence();
 		for (i = 0; i < len; i += CACHE_LINE_SIZE)
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
-		sfence();
+		mfence();
 	} else {
 		for (i = 0; i < len; i += CACHE_LINE_SIZE)
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
@@ -678,7 +678,7 @@ int leaf_split_and_insert(tree *t, LN *leaf, unsigned long key, void *value)
 		insert_entry_to_leaf(new_leaf, key, value, false);
 
 		flush_buffer(split_node1, sizeof(LN), false);
-		flush_buffer(split_node2, sizeof(LN), true);
+		flush_buffer(split_node2, sizeof(LN), false);
 
 		prev_leaf->sibling = split_node1;
 		flush_buffer(&prev_leaf->sibling, sizeof(&prev_leaf->sibling), true);
@@ -762,7 +762,7 @@ void update_entry_to_leaf(LN *leaf, unsigned long old_key, void *old_value,
 		leaf->LN_Element[leaf->nElements + 1].key = new_key;
 		leaf->LN_Element[leaf->nElements + 1].value = new_value;
 		flush_buffer(&leaf->LN_Element[leaf->nElements], 
-				sizeof(struct LN_entry), true);
+				sizeof(struct LN_entry) * 2, true);
 		leaf->nElements = leaf->nElements + 2;
 		flush_buffer(&leaf->nElements, sizeof(unsigned char), true);
 	} else {
@@ -816,7 +816,7 @@ int leaf_split_and_update(tree *t, LN *leaf, unsigned long key, void *value,
 		update_entry_to_leaf(new_leaf, key, value, new_key, new_value, false);
 
 		flush_buffer(split_node1, sizeof(LN), false);
-		flush_buffer(split_node2, sizeof(LN), true);
+		flush_buffer(split_node2, sizeof(LN), false);
 
 		prev_leaf->sibling = split_node1;
 		flush_buffer(&prev_leaf->sibling, sizeof(&prev_leaf->sibling), true);
@@ -939,7 +939,7 @@ int leaf_split_and_delete(tree *t, LN *leaf, unsigned long key, void *value)
 		delete_entry_to_leaf(new_leaf, key, value, false);
 
 		flush_buffer(split_node1, sizeof(LN), false);
-		flush_buffer(split_node2, sizeof(LN), true);
+		flush_buffer(split_node2, sizeof(LN), false);
 
 		prev_leaf->sibling = split_node1;
 		flush_buffer(&prev_leaf->sibling, sizeof(&prev_leaf->sibling), true);

@@ -7,17 +7,16 @@
 #include "w_radix_tree.h"
 
 #define mfence() asm volatile("mfence":::"memory")
-#define sfence() asm volatile("sfence":::"memory")
 
 void flush_buffer(void *buf, unsigned int len, bool fence)
 {
 	unsigned int i;
 	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
 	if (fence) {
-//		sfence();
+		mfence();
 		for (i = 0; i < len; i += CACHE_LINE_SIZE)
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
-		sfence();
+		mfence();
 	} else {
 		for (i = 0; i < len; i += CACHE_LINE_SIZE)
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
@@ -159,7 +158,6 @@ int recursive_search_leaf(node *level_ptr, unsigned long key, void *value,
 			if (errval < 0)
 				goto fail;
 
-			sfence();
 			level_ptr->entry_ptr[index] = tmp_node;
 			flush_buffer(&level_ptr->entry_ptr[index], 8, true);
 			return errval;
@@ -216,7 +214,6 @@ int Insert(tree **t, unsigned long key, void *value)
 		if (errval < 0)
 			goto fail;
 
-		sfence();
 		*t = tmp_t;
 		flush_buffer(*t, 8, true);
 		free(prev_tree);

@@ -9,7 +9,6 @@
 #include "wbtree.h"
 
 #define mfence() asm volatile("mfence":::"memory")
-#define sfence() asm volatile("sfence":::"memory")
 #define BITOP_WORD(nr)	((nr) / BITS_PER_LONG)
 
 void flush_buffer(void *buf, unsigned int len, bool fence)
@@ -17,9 +16,10 @@ void flush_buffer(void *buf, unsigned int len, bool fence)
 	unsigned int i;
 	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
 	if (fence) {
+		mfence();
 		for (i = 0; i < len; i += CACHE_LINE_SIZE)
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
-		sfence();
+		mfence();
 	} else {
 		for (i = 0; i < len; i += CACHE_LINE_SIZE)
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
@@ -257,7 +257,6 @@ void Insert(tree *t, unsigned long key, void *value){
 		insert_in_parent(t, curr, splitNode->entries[splitNode->slot[1]].key, splitNode);
 		add_redo_logentry();
 		curr->leftmostPtr = splitNode;
-		sfence();
 		add_commit_entry();
 	}
 	else{
@@ -302,7 +301,7 @@ void insert_in_leaf(node *curr, unsigned long key, void *value)
 	curr->slot[mid] = loc;
 
 	curr->slot[0] = curr->slot[0] + 1;
-	flush_buffer(curr->slot, sizeof(curr->slot), true);
+	flush_buffer(curr->slot, sizeof(curr->slot), false);
 	
 	curr->bitmap = curr->bitmap + 1 + (0x1UL << (loc + 1));
 	flush_buffer(&curr->bitmap, sizeof(unsigned long), true);
@@ -325,7 +324,7 @@ void insert_in_inner(node *curr, unsigned long key, void *value)
 	curr->slot[mid] = loc;
 
 	curr->slot[0] = curr->slot[0] + 1;
-	flush_buffer(curr->slot, sizeof(curr->slot), true);
+	flush_buffer(curr->slot, sizeof(curr->slot), false);
 	
 	curr->bitmap = curr->bitmap + 1 + (0x1UL << (loc + 1));
 	flush_buffer(&curr->bitmap, sizeof(unsigned long), true);

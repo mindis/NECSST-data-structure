@@ -1,4 +1,4 @@
-cscope 15 $HOME/study/data_structures/write_atomic_radix_tree/original/delayed_commit/flush_optimized               0000291434
+cscope 15 $HOME/study/data_structures/write_atomic_radix_tree/original/delayed_commit/flush_optimized               0000292668
 	@main.c
 
 1 
@@ -93,73 +93,83 @@ max
 mš
 ;
 
-25 if((
+25 
+	`´štf
+("sizeofÒodeèğ%d\n", (
+node
+));
+
+27 if((
 å
  = 
 	`fİ’
-("/home/£kwÚ/Public/šput_fe/šput_2bliÚ.txt","r")è=ğ
+("/home/£kwÚ/Public/šput_fe/šput_10bliÚ.txt","r")è=ğ
 NULL
 )
 
-27 
+29 
 	`puts
 ("error");
 
-28 
+30 
 	`ex™
 (0);
 
-31 
+33 
 keys
  = 
 	`m®loc
-(() * 100000100);
+(() * 100000000);
 
-32 
+34 
 buf
  = 
 	`m®loc
-(() * 100000100);
+(() * 100000000);
 
-33 
+35 
 	`mem£t
 (
 buf
-, 0, () * 100000100);
+, 0, () * 100000000);
 
-34 
+36 
 i
- = 0; i < 100000100; i++) {
+ = 0; i < 100000000; i++) {
 
-35 
+38 
+	`fsÿnf
+(
+å
+, "%lu", &
 keys
 [
 i
-] = i;
+]);
 
-38 
+40 
 	`fşo£
 (
 å
 );
 
-40 
+42 
 max
  = 
 keys
 [0];
 
-41 
+43 
 mš
  = 
 keys
 [0];
 
-42 
+44 
 i
- = 1; i < 100000100; i++) {
+ = 1; i < 100000000; i++) {
 
-43 ià(
+45 ià(
 keys
 [
 i
@@ -167,7 +177,7 @@ i
 max
 )
 
-44 
+46 
 max
  = 
 keys
@@ -175,7 +185,7 @@ keys
 i
 ];
 
-45 ià(
+47 ià(
 keys
 [
 i
@@ -183,7 +193,7 @@ i
 mš
 )
 
-46 
+48 
 mš
  = 
 keys
@@ -191,7 +201,7 @@ keys
 i
 ];
 
-49 
+51 
 Œ“
  *
 t
@@ -199,7 +209,7 @@ t
 	`š™T»e
 ();
 
-50 
+52 
 	`æush_bufãr
 (
 t
@@ -207,19 +217,19 @@ t
 Œue
 );
 
-51 
+55 
 dummy
  = (*)
 	`m®loc
 (15*1024*1024);
 
-52 
+56 
 	`mem£t
 (
 dummy
 , 0, 15*1024*1024);
 
-53 
+57 
 	`æush_bufãr
 ((*)
 dummy
@@ -227,7 +237,7 @@ dummy
 Œue
 );
 
-55 
+58 
 	`şock_g‘time
 (
 CLOCK_MONOTONIC
@@ -235,11 +245,11 @@ CLOCK_MONOTONIC
 t1
 );
 
-56 
+59 
 i
  = 0; i < 100000000; i++) {
 
-57 ià(
+60 ià(
 	`In£¹
 (&
 t
@@ -249,15 +259,15 @@ keys
 i
 ], &keys[i]) < 0) {
 
-58 
+61 
 	`´štf
 ("Insertƒrror!\n");
 
-59 
+62 
 	`ex™
 (1);
 
-62 
+65 
 	`şock_g‘time
 (
 CLOCK_MONOTONIC
@@ -265,7 +275,7 @@ CLOCK_MONOTONIC
 t2
 );
 
-63 
+66 
 –­£d_time
  = (
 t2
@@ -275,7 +285,7 @@ tv_£c
 t1
 .tv_sec) * 1000000000;
 
-64 
+67 
 –­£d_time
  +ğ(
 t2
@@ -285,7 +295,13 @@ tv_n£c
 t1
 .tv_nsec);
 
-66 
+68 
+	`´štf
+("100mliÚ In£¹iÚ Timğ%lu‚s\n", 
+–­£d_time
+);
+
+71 
 	`¥rštf
 (
 lše
@@ -293,7 +309,7 @@ lše
 	`g‘pid
 ());
 
-67 
+72 
 å2
  = 
 	`fİ’
@@ -301,13 +317,13 @@ lše
 lše
 , "r");
 
-68 ià(
+73 ià(
 å2
  =ğ
 NULL
 )
 
-71 
+76 
 	`fg‘s
 (
 lše
@@ -317,21 +333,21 @@ lše
 NULL
 ) {
 
-72 ià(
+77 ià(
 	`¡r¡r
 (
 lše
 , "VmSize")) {
 
-73 
+78 
 tmp
 [32];
 
-74 
+79 
 size
 [32];
 
-75 
+80 
 	`ssÿnf
 (
 lše
@@ -341,7 +357,7 @@ tmp
 size
 );
 
-76 
+81 
 nVmSize
  = 
 	`©oi
@@ -349,27 +365,27 @@ nVmSize
 size
 );
 
-77 
+82 
 	`´štf
 ("nVmSizğ%lu KB\n", 
 nVmSize
 );
 
-79 ià(
+84 ià(
 	`¡r¡r
 (
 lše
 , "VmRSS")) {
 
-80 
+85 
 tmp
 [32];
 
-81 
+86 
 size
 [32];
 
-82 
+87 
 	`ssÿnf
 (
 lše
@@ -379,7 +395,7 @@ tmp
 size
 );
 
-83 
+88 
 nVmRss
  = 
 	`©oi
@@ -387,45 +403,33 @@ nVmRss
 size
 );
 
-84 
+89 
 	`´štf
 ("nVmRs ğ%lu KB\n", 
 nVmRss
 );
 
-88 
+93 
 	`fşo£
 (
 å2
 );
 
-90 
-	`´štf
-("sizeofÒodeèğ%d\n", (
-node
-));
+96 
+	`mem£t
+(
+dummy
+, 0, 15*1024*1024);
 
-91 
-	`´štf
-("Bulk†ßd Timğ%lu‚s\n", 
-–­£d_time
+97 
+	`æush_bufãr
+((*)
+dummy
+, 15*1024*1024, 
+Œue
 );
 
 98 
-	`mem£t
-(
-dummy
-, 0, 15*1024*1024);
-
-99 
-	`æush_bufãr
-((*)
-dummy
-, 15*1024*1024, 
-Œue
-);
-
-101 
 	`şock_g‘time
 (
 CLOCK_MONOTONIC
@@ -433,81 +437,11 @@ CLOCK_MONOTONIC
 t1
 );
 
-102 
+99 
 i
- = 100000000; i < 100000100; i++)
+ = 0; i < 100000000; i++) {
 
-103 
-	`In£¹
-(&
-t
-, 
-keys
-[
-i
-], &keys[i]);
-
-104 
-	`şock_g‘time
-(
-CLOCK_MONOTONIC
-, &
-t2
-);
-
-105 
-–­£d_time
- = (
-t2
-.
-tv_£c
- - 
-t1
-.tv_sec) * 1000000000;
-
-106 
-–­£d_time
- +ğ(
-t2
-.
-tv_n£c
- - 
-t1
-.tv_nsec);
-
-108 
-	`´štf
-("In£¹ Timğ%lu‚s\n", 
-–­£d_time
-);
-
-110 
-	`mem£t
-(
-dummy
-, 0, 15*1024*1024);
-
-111 
-	`æush_bufãr
-((*)
-dummy
-, 15*1024*1024, 
-Œue
-);
-
-113 
-	`şock_g‘time
-(
-CLOCK_MONOTONIC
-, &
-t1
-);
-
-114 
-i
- = 0; i < 100000100; i++) {
-
-115 
+100 
 »t
  = 
 	`Lookup
@@ -519,13 +453,13 @@ keys
 i
 ]);
 
-116 ià(
+101 ià(
 »t
  =ğ
 NULL
 ) {
 
-117 
+102 
 	`´štf
 ("Th”i nØkey[%d] = %lu\n", 
 i
@@ -533,11 +467,11 @@ i
 keys
 [i]);
 
-118 
+103 
 	`ex™
 (1);
 
-125 
+110 
 	`şock_g‘time
 (
 CLOCK_MONOTONIC
@@ -545,7 +479,7 @@ CLOCK_MONOTONIC
 t2
 );
 
-126 
+111 
 –­£d_time
  = (
 t2
@@ -555,7 +489,7 @@ tv_£c
 t1
 .tv_sec) * 1000000000;
 
-127 
+112 
 –­£d_time
  +ğ(
 t2
@@ -565,19 +499,19 @@ tv_n£c
 t1
 .tv_nsec);
 
-129 
+113 
 	`´štf
 ("S—rch Timğ%lu‚s\n", 
 –­£d_time
 );
 
-131 
+116 
 	`mem£t
 (
 dummy
 , 0, 15*1024*1024);
 
-132 
+117 
 	`æush_bufãr
 ((*)
 dummy
@@ -585,7 +519,7 @@ dummy
 Œue
 );
 
-134 
+118 
 	`şock_g‘time
 (
 CLOCK_MONOTONIC
@@ -593,17 +527,17 @@ CLOCK_MONOTONIC
 t1
 );
 
-135 
+119 
 	`Rªge_Lookup
 (
 t
 , 
 mš
-, 100000100, 
+, 1000000, 
 buf
 );
 
-136 
+120 
 	`şock_g‘time
 (
 CLOCK_MONOTONIC
@@ -611,7 +545,7 @@ CLOCK_MONOTONIC
 t2
 );
 
-137 
+121 
 –­£d_time
  = (
 t2
@@ -621,7 +555,7 @@ tv_£c
 t1
 .tv_sec) * 1000000000;
 
-138 
+122 
 –­£d_time
  +ğ(
 t2
@@ -631,13 +565,285 @@ tv_n£c
 t1
 .tv_nsec);
 
-140 
+123 
 	`´štf
-("Rªg£¬chimğ%lu‚s\n", 
+("RªgsÿÀ1% = %lu‚s\n", 
 –­£d_time
 );
 
-178 
+126 
+	`mem£t
+(
+dummy
+, 0, 15*1024*1024);
+
+127 
+	`æush_bufãr
+((*)
+dummy
+, 15*1024*1024, 
+Œue
+);
+
+128 
+	`şock_g‘time
+(
+CLOCK_MONOTONIC
+, &
+t1
+);
+
+129 
+	`Rªge_Lookup
+(
+t
+, 
+mš
+, 5000000, 
+buf
+);
+
+130 
+	`şock_g‘time
+(
+CLOCK_MONOTONIC
+, &
+t2
+);
+
+131 
+–­£d_time
+ = (
+t2
+.
+tv_£c
+ - 
+t1
+.tv_sec) * 1000000000;
+
+132 
+–­£d_time
+ +ğ(
+t2
+.
+tv_n£c
+ - 
+t1
+.tv_nsec);
+
+133 
+	`´štf
+("RªgsÿÀ5% = %lu‚s\n", 
+–­£d_time
+);
+
+136 
+	`mem£t
+(
+dummy
+, 0, 15*1024*1024);
+
+137 
+	`æush_bufãr
+((*)
+dummy
+, 15*1024*1024, 
+Œue
+);
+
+138 
+	`şock_g‘time
+(
+CLOCK_MONOTONIC
+, &
+t1
+);
+
+139 
+	`Rªge_Lookup
+(
+t
+, 
+mš
+, 10000000, 
+buf
+);
+
+140 
+	`şock_g‘time
+(
+CLOCK_MONOTONIC
+, &
+t2
+);
+
+141 
+–­£d_time
+ = (
+t2
+.
+tv_£c
+ - 
+t1
+.tv_sec) * 1000000000;
+
+142 
+–­£d_time
+ +ğ(
+t2
+.
+tv_n£c
+ - 
+t1
+.tv_nsec);
+
+143 
+	`´štf
+("RªgsÿÀ10% = %lu‚s\n", 
+–­£d_time
+);
+
+146 
+	`mem£t
+(
+dummy
+, 0, 15*1024*1024);
+
+147 
+	`æush_bufãr
+((*)
+dummy
+, 15*1024*1024, 
+Œue
+);
+
+148 
+	`şock_g‘time
+(
+CLOCK_MONOTONIC
+, &
+t1
+);
+
+149 
+i
+ = 0; i < 100; i++)
+
+150 
+	`Upd©e
+(
+t
+, 
+keys
+[
+i
+], &keys[50000000 - i]);
+
+151 
+	`şock_g‘time
+(
+CLOCK_MONOTONIC
+, &
+t2
+);
+
+152 
+–­£d_time
+ = (
+t2
+.
+tv_£c
+ - 
+t1
+.tv_sec) * 1000000000;
+
+153 
+–­£d_time
+ +ğ(
+t2
+.
+tv_n£c
+ - 
+t1
+.tv_nsec);
+
+154 
+	`´štf
+("Upd©Timğ%lu‚s\n", 
+–­£d_time
+);
+
+157 
+	`mem£t
+(
+dummy
+, 0, 15*1024*1024);
+
+158 
+	`æush_bufãr
+((*)
+dummy
+, 15*1024*1024, 
+Œue
+);
+
+159 
+	`şock_g‘time
+(
+CLOCK_MONOTONIC
+, &
+t1
+);
+
+160 
+i
+ = 0; i < 100; i++)
+
+161 
+	`D–‘e
+(
+t
+, 
+keys
+[
+i
+]);
+
+162 
+	`şock_g‘time
+(
+CLOCK_MONOTONIC
+, &
+t2
+);
+
+163 
+–­£d_time
+ = (
+t2
+.
+tv_£c
+ - 
+t1
+.tv_sec) * 1000000000;
+
+164 
+–­£d_time
+ +ğ(
+t2
+.
+tv_n£c
+ - 
+t1
+.tv_nsec);
+
+165 
+	`´štf
+("D–‘Timğ%lu‚s\n", 
+–­£d_time
+);
+
+171 
 	}
 }
 
@@ -679,15 +885,7 @@ asm
 
 	)
 
-10 
-	#sãnû
-(è
-asm
- vŞ©e("sãnû":::"memÜy")
-
-	)
-
-12 
+11 
 	$æush_bufãr
 (*
 buf
@@ -699,11 +897,11 @@ boŞ
 ãnû
 )
 
-14 
+13 
 i
 ;
 
-15 
+14 
 Ën
  =†’ + (()(
 buf
@@ -711,31 +909,15 @@ buf
 CACHE_LINE_SIZE
  - 1));
 
-16 ià(
+15 ià(
 ãnû
 ) {
 
-18 
-i
- = 0; i < 
-Ën
-; i +ğ
-CACHE_LINE_SIZE
-)
-
-19 
-asm
- vŞ©("şæush %0\n" : "+m" (*(*)(
-buf
-+
-i
-)));
-
-20 
-	`sãnû
+16 
+	`mãnû
 ();
 
-22 
+17 
 i
  = 0; i < 
 Ën
@@ -743,7 +925,7 @@ i
 CACHE_LINE_SIZE
 )
 
-23 
+18 
 asm
  vŞ©("şæush %0\n" : "+m" (*(*)(
 buf
@@ -751,11 +933,31 @@ buf
 i
 )));
 
-25 
+19 
+	`mãnû
+();
+
+21 
+i
+ = 0; i < 
+Ën
+; i +ğ
+CACHE_LINE_SIZE
+)
+
+22 
+asm
+ vŞ©("şæush %0\n" : "+m" (*(*)(
+buf
++
+i
+)));
+
+24 
 	}
 }
 
-27 
+26 
 node
  *
 	$®locNode
@@ -767,7 +969,7 @@ node
 šdex
 )
 
-29 
+28 
 node
  *
 Ãw_node
@@ -775,13 +977,13 @@ node
 	`ÿÎoc
 (1, (node));
 
-30 ià(
+29 ià(
 ·»Á
  !ğ
 NULL
 ) {
 
-31 
+30 
 Ãw_node
 ->
 ·»Á_±r
@@ -789,7 +991,7 @@ NULL
 ·»Á
 ;
 
-32 
+31 
 Ãw_node
 ->
 p_šdex
@@ -797,21 +999,21 @@ p_šdex
 šdex
 ;
 
-34  
+33  
 Ãw_node
 ;
 
-35 
+34 
 	}
 }
 
-37 
+36 
 Œ“
  *
 	$š™T»e
 ()
 
-39 
+38 
 Œ“
  *
 w¿dix_Œ“
@@ -819,7 +1021,7 @@ w¿dix_Œ“
 	`m®loc
 ((tree));
 
-40 
+39 
 w¿dix_Œ“
 ->
 roÙ
@@ -829,13 +1031,13 @@ roÙ
 NULL
 , 0);
 
-41 
+40 
 w¿dix_Œ“
 ->
 height
  = 1;
 
-42 
+41 
 	`æush_bufãr
 (
 w¿dix_Œ“
@@ -845,15 +1047,15 @@ w¿dix_Œ“
 Œue
 );
 
-43  
+42  
 w¿dix_Œ“
 ;
 
-44 
+43 
 	}
 }
 
-46 
+45 
 Œ“
  *
 	$CoW_T»e
@@ -865,7 +1067,7 @@ chªged_roÙ
 height
 )
 
-48 
+47 
 Œ“
  *
 chªged_Œ“
@@ -873,7 +1075,7 @@ chªged_Œ“
 	`m®loc
 ((tree));
 
-49 
+48 
 chªged_Œ“
 ->
 roÙ
@@ -881,13 +1083,13 @@ roÙ
 chªged_roÙ
 ;
 
-50 
+49 
 chªged_Œ“
 ->
 height
  = height;
 
-51 
+50 
 	`æush_bufãr
 (
 chªged_Œ“
@@ -897,15 +1099,15 @@ chªged_Œ“
 çl£
 );
 
-52  
+51  
 chªged_Œ“
 ;
 
-53 
+52 
 	}
 }
 
-55 
+54 
 	$šü—£_¿dix_Œ“_height
 (
 Œ“
@@ -915,13 +1117,13 @@ t
 Ãw_height
 )
 
-57 
+56 
 height
  = (*
 t
 )->height;
 
-58 
+57 
 node
  *
 roÙ
@@ -929,11 +1131,11 @@ roÙ
 ´ev_roÙ
 ;
 
-59 
+58 
 ”rv®
  = 0;
 
-62 
+61 
 ´ev_roÙ
  = (*
 t
@@ -941,13 +1143,13 @@ t
 roÙ
 ;
 
-64 
+63 
 height
  < 
 Ãw_height
 ) {
 
-66 
+65 
 roÙ
  = 
 	`®locNode
@@ -955,21 +1157,21 @@ roÙ
 NULL
 , 0);
 
-67 ià(
+66 ià(
 roÙ
  =ğ
 NULL
 ){
 
-68 
+67 
 ”rv®
  = 1;
 
-69  
+68  
 ”rv®
 ;
 
-71 
+70 
 roÙ
 ->
 ’Œy_±r
@@ -977,7 +1179,7 @@ roÙ
 ´ev_roÙ
 ;
 
-78 
+77 
 ´ev_roÙ
 ->
 ·»Á_±r
@@ -985,7 +1187,7 @@ roÙ
 roÙ
 ;
 
-79 
+78 
 	`æush_bufãr
 (
 ´ev_roÙ
@@ -995,17 +1197,17 @@ node
 çl£
 );
 
-80 
+79 
 ´ev_roÙ
  = 
 roÙ
 ;
 
-81 
+80 
 height
 ++;
 
-83 
+82 
 	`æush_bufãr
 (
 ´ev_roÙ
@@ -1015,7 +1217,7 @@ node
 çl£
 );
 
-84 *
+83 *
 t
  = 
 	`CoW_T»e
@@ -1025,15 +1227,15 @@ t
 height
 );
 
-86  
+85  
 ”rv®
 ;
 
-87 
+86 
 	}
 }
 
-89 
+88 
 	$»cursive_®loc_nodes
 (
 node
@@ -1045,15 +1247,15 @@ key
 v®ue
 ,
 
-90 
+89 
 height
 )
 
-92 
+91 
 ”rv®
  = -1;
 
-93 
+92 
 m‘a_b™s
  = 
 META_NODE_SHIFT
@@ -1061,15 +1263,15 @@ META_NODE_SHIFT
 node_b™s
 ;
 
-94 
+93 
 Ãxt_key
 ;
 
-95 
+94 
 šdex
 ;
 
-97 
+96 
 node_b™s
  = (
 height
@@ -1077,7 +1279,7 @@ height
 m‘a_b™s
 ;
 
-99 
+98 
 šdex
  = 
 key
@@ -1085,11 +1287,11 @@ key
 node_b™s
 ;
 
-101 ià(
+100 ià(
 height
  == 1) {
 
-102 
+101 
 ‹mp_node
 ->
 ’Œy_±r
@@ -1099,7 +1301,7 @@ height
 v®ue
 ;
 
-103 
+102 
 	`æush_bufãr
 (
 ‹mp_node
@@ -1109,7 +1311,7 @@ node
 çl£
 );
 
-104 ià(
+103 ià(
 ‹mp_node
 ->
 ’Œy_±r
@@ -1119,11 +1321,11 @@ node
 NULL
 )
 
-105 
+104 
 ç
 ;
 
-108 ià(
+107 ià(
 ‹mp_node
 ->
 ’Œy_±r
@@ -1133,7 +1335,7 @@ NULL
 NULL
 ) {
 
-109 
+108 
 ‹mp_node
 ->
 ’Œy_±r
@@ -1143,7 +1345,7 @@ NULL
 	`®locNode
 (temp_node, index);
 
-110 
+109 
 	`æush_bufãr
 (
 ‹mp_node
@@ -1153,7 +1355,7 @@ node
 çl£
 );
 
-111 ià(
+110 ià(
 ‹mp_node
 ->
 ’Œy_±r
@@ -1163,11 +1365,11 @@ node
 NULL
 )
 
-112 
+111 
 ç
 ;
 
-114 
+113 
 Ãxt_key
  = (
 key
@@ -1175,7 +1377,7 @@ key
 node_b™s
 ) - 1));
 
-116 
+115 
 ”rv®
  = 
 	`»cursive_®loc_nodes
@@ -1189,37 +1391,37 @@ node_b™s
 Ãxt_key
 ,
 
-117 (*)
+116 (*)
 v®ue
 , 
 height
  - 1);
 
-118 ià(
+117 ià(
 ”rv®
  < 0)
 
-119 
+118 
 ç
 ;
 
-121 
+120 
 ”rv®
  = 0;
 
-122 
+121 
 ç
 :
 
-123  
+122  
 ”rv®
 ;
 
-124 
+123 
 	}
 }
 
-127 
+126 
 	$»cursive_£¬ch_Ëaf
 (
 node
@@ -1231,15 +1433,15 @@ key
 v®ue
 ,
 
-128 
+127 
 height
 )
 
-130 
+129 
 ”rv®
  = -1;
 
-131 
+130 
 m‘a_b™s
  = 
 META_NODE_SHIFT
@@ -1247,15 +1449,15 @@ META_NODE_SHIFT
 node_b™s
 ;
 
-132 
+131 
 Ãxt_key
 ;
 
-133 
+132 
 šdex
 ;
 
-136 
+135 
 node_b™s
  = (
 height
@@ -1263,7 +1465,7 @@ height
 m‘a_b™s
 ;
 
-138 
+137 
 šdex
  = 
 key
@@ -1271,15 +1473,11 @@ key
 node_b™s
 ;
 
-140 ià(
+139 ià(
 height
  == 1) {
 
-141 
-	`sãnû
-();
-
-142 
+140 
 Ëv–_±r
 ->
 ’Œy_±r
@@ -1289,7 +1487,7 @@ height
 v®ue
 ;
 
-145 
+143 
 	`æush_bufãr
 (&
 Ëv–_±r
@@ -1301,7 +1499,7 @@ v®ue
 Œue
 );
 
-149 ià(
+147 ià(
 Ëv–_±r
 ->
 ’Œy_±r
@@ -1311,11 +1509,11 @@ v®ue
 NULL
 )
 
-150 
+148 
 ç
 ;
 
-153 ià(
+151 ià(
 Ëv–_±r
 ->
 ’Œy_±r
@@ -1325,7 +1523,7 @@ NULL
 NULL
 ) {
 
-155 
+153 
 node
  *
 tmp_node
@@ -1337,7 +1535,7 @@ tmp_node
 šdex
 );
 
-156 
+154 
 Ãxt_key
  = (
 key
@@ -1345,7 +1543,7 @@ key
 node_b™s
 ) - 1));
 
-157 
+155 
 ”rv®
  = 
 	`»cursive_®loc_nodes
@@ -1357,23 +1555,19 @@ tmp_node
 v®ue
 ,
 
-158 
+156 
 height
  - 1);
 
-160 ià(
+158 ià(
 ”rv®
  < 0)
 
-161 
+159 
 ç
 ;
 
-163 
-	`sãnû
-();
-
-164 
+161 
 Ëv–_±r
 ->
 ’Œy_±r
@@ -1383,7 +1577,7 @@ height
 tmp_node
 ;
 
-165 
+162 
 	`æush_bufãr
 (&
 Ëv–_±r
@@ -1395,11 +1589,11 @@ tmp_node
 Œue
 );
 
-166  
+163  
 ”rv®
 ;
 
-168 
+165 
 Ãxt_key
  = (
 key
@@ -1407,7 +1601,7 @@ key
 node_b™s
 ) - 1));
 
-170 
+167 
 ”rv®
  = 
 	`»cursive_£¬ch_Ëaf
@@ -1421,37 +1615,37 @@ node_b™s
 Ãxt_key
 ,
 
-171 (*)
+168 (*)
 v®ue
 , 
 height
  - 1);
 
-172 ià(
+169 ià(
 ”rv®
  < 0)
 
-173 
+170 
 ç
 ;
 
-175 
+172 
 ”rv®
  = 0;
 
-176 
+173 
 ç
 :
 
-177  
+174  
 ”rv®
 ;
 
-178 
+175 
 	}
 }
 
-180 
+177 
 	$In£¹
 (
 Œ“
@@ -1463,19 +1657,19 @@ key
 v®ue
 )
 
-182 
+179 
 ”rv®
 ;
 
-183 
+180 
 max_keys
 ;
 
-184 
+181 
 height
 ;
 
-185 
+182 
 blk_shiá
 , 
 m‘a_b™s
@@ -1483,17 +1677,17 @@ m‘a_b™s
 META_NODE_SHIFT
 ;
 
-186 
+183 
 tÙ®_keys
 ;
 
-188 
+185 
 height
  = (*
 t
 )->height;
 
-190 
+187 
 blk_shiá
  = 
 height
@@ -1501,19 +1695,19 @@ height
 m‘a_b™s
 ;
 
-192 
+189 
 max_keys
  = 0x1UL << 
 blk_shiá
 ;
 
-194 ià(
+191 ià(
 key
  > 
 max_keys
  - 1) {
 
-196 
+193 
 tÙ®_keys
  = 
 key
@@ -1521,31 +1715,31 @@ key
 blk_shiá
 ;
 
-197 
+194 
 tÙ®_keys
  > 0) {
 
-198 
+195 
 tÙ®_keys
  =Ù®_key >> 
 m‘a_b™s
 ;
 
-199 
+196 
 height
 ++;
 
-203 ià(
+200 ià(
 height
  == 0)
 
-206 if(
+203 if(
 height
  > (*
 t
 )->height) {
 
-208 
+205 
 Œ“
  *
 tmp_t
@@ -1553,7 +1747,7 @@ tmp_t
 t
 ;
 
-209 
+206 
 Œ“
  *
 ´ev_Œ“
@@ -1561,7 +1755,7 @@ t
 t
 ;
 
-210 
+207 
 ”rv®
  = 
 	`šü—£_¿dix_Œ“_height
@@ -1571,19 +1765,19 @@ tmp_t
 height
 );
 
-211 if(
+208 if(
 ”rv®
 ) {
 
-212 
+209 
 	`´štf
  ("Increase„adixree heightƒrror!\n");
 
-213 
+210 
 ç
 ;
 
-216 
+213 
 ”rv®
  = 
 	`»cursive_®loc_nodes
@@ -1599,25 +1793,21 @@ v®ue
 height
 );
 
-217 ià(
+214 ià(
 ”rv®
  < 0)
 
-218 
+215 
 ç
 ;
 
-220 
-	`sãnû
-();
-
-221 *
+217 *
 t
  = 
 tmp_t
 ;
 
-222 
+218 
 	`æush_bufãr
 (*
 t
@@ -1625,13 +1815,13 @@ t
 Œue
 );
 
-223 
+219 
 	`ä“
 (
 ´ev_Œ“
 );
 
-226 
+222 
 ”rv®
  = 
 	`»cursive_£¬ch_Ëaf
@@ -1647,27 +1837,27 @@ v®ue
 height
 );
 
-227 ià(
+223 ià(
 ”rv®
  < 0)
 
-228 
+224 
 ç
 ;
 
-231 
+227 
 ç
 :
 
-232  
+228  
 ”rv®
 ;
 
-233 
+229 
 	}
 }
 
-235 *
+231 *
 	$Upd©e
 (
 Œ“
@@ -1679,29 +1869,29 @@ key
 v®ue
 )
 
-237 
+233 
 node
  *
 Ëv–_±r
 ;
 
-238 
+234 
 height
 ;
 
-239 
+235 
 b™_shiá
 , 
 idx
 ;
 
-241 
+237 
 height
  = 
 t
 ->height;
 
-242 
+238 
 Ëv–_±r
  = 
 t
@@ -1709,11 +1899,11 @@ t
 roÙ
 ;
 
-244 
+240 
 height
  > 1) {
 
-245 
+241 
 b™_shiá
  = (
 height
@@ -1721,7 +1911,7 @@ height
 META_NODE_SHIFT
 ;
 
-246 
+242 
 idx
  = 
 key
@@ -1729,7 +1919,7 @@ key
 b™_shiá
 ;
 
-248 
+244 
 Ëv–_±r
  =†ev–_±r->
 ’Œy_±r
@@ -1737,27 +1927,27 @@ b™_shiá
 idx
 ];
 
-249 ià(
+245 ià(
 Ëv–_±r
  =ğ
 NULL
 )
 
-250  
+246  
 Ëv–_±r
 ;
 
-252 
+248 
 key
  = key & ((0x1UL << 
 b™_shiá
 ) - 1);
 
-253 
+249 
 height
 --;
 
-255 
+251 
 b™_shiá
  = (
 height
@@ -1765,7 +1955,7 @@ height
 META_NODE_SHIFT
 ;
 
-256 
+252 
 idx
  = 
 key
@@ -1773,7 +1963,7 @@ key
 b™_shiá
 ;
 
-257 
+253 
 Ëv–_±r
 ->
 ’Œy_±r
@@ -1783,7 +1973,7 @@ idx
 v®ue
 ;
 
-258 
+254 
 	`æush_bufãr
 (&
 Ëv–_±r
@@ -1795,15 +1985,15 @@ idx
 Œue
 );
 
-259  
+255  
 v®ue
 ;
 
-260 
+256 
 	}
 }
 
-262 *
+258 *
 	$Lookup
 (
 Œ“
@@ -1813,33 +2003,33 @@ t
 key
 )
 
-264 
+260 
 node
  *
 Ëv–_±r
 ;
 
-265 
+261 
 height
 ;
 
-266 
+262 
 b™_shiá
 , 
 idx
 ;
 
-267 *
+263 *
 v®ue
 ;
 
-269 
+265 
 height
  = 
 t
 ->height;
 
-270 
+266 
 Ëv–_±r
  = 
 t
@@ -1847,11 +2037,11 @@ t
 roÙ
 ;
 
-272 
+268 
 height
  > 1) {
 
-273 
+269 
 b™_shiá
  = (
 height
@@ -1859,7 +2049,7 @@ height
 META_NODE_SHIFT
 ;
 
-274 
+270 
 idx
  = 
 key
@@ -1867,7 +2057,7 @@ key
 b™_shiá
 ;
 
-276 
+272 
 Ëv–_±r
  =†ev–_±r->
 ’Œy_±r
@@ -1875,27 +2065,27 @@ b™_shiá
 idx
 ];
 
-277 ià(
+273 ià(
 Ëv–_±r
  =ğ
 NULL
 )
 
-278  
+274  
 Ëv–_±r
 ;
 
-280 
+276 
 key
  = key & ((0x1UL << 
 b™_shiá
 ) - 1);
 
-281 
+277 
 height
 --;
 
-283 
+279 
 b™_shiá
  = (
 height
@@ -1903,7 +2093,7 @@ height
 META_NODE_SHIFT
 ;
 
-284 
+280 
 idx
  = 
 key
@@ -1911,7 +2101,7 @@ key
 b™_shiá
 ;
 
-285 
+281 
 v®ue
  = 
 Ëv–_±r
@@ -1921,15 +2111,15 @@ v®ue
 idx
 ];
 
-286  
+282  
 v®ue
 ;
 
-287 
+283 
 	}
 }
 
-289 
+285 
 node
  *
 	$£¬ch_to_Ãxt_Ëaf
@@ -1941,27 +2131,27 @@ node
 height
 )
 
-291 
+287 
 i
 ;
 
-292 
+288 
 node
  *
 Ãxt_Ëaf
 ;
 
-294 ià(
+290 ià(
 height
  != 1) {
 
-295 
+291 
 i
  = 0; i < (0x1UL << 
 META_NODE_SHIFT
 ); i++) {
 
-296 ià(
+292 ià(
 Ãxt_b¿nch
 ->
 ’Œy_±r
@@ -1971,7 +2161,7 @@ i
 NULL
 ) {
 
-297 
+293 
 Ãxt_Ëaf
  = 
 	`£¬ch_to_Ãxt_Ëaf
@@ -1983,29 +2173,29 @@ NULL
 i
 ],
 
-298 
+294 
 height
  - 1);
 
-299  
+295  
 Ãxt_Ëaf
 ;
 
-304 
+300 
 Ãxt_Ëaf
  = 
 Ãxt_b¿nch
 ;
 
-305  
+301  
 Ãxt_Ëaf
 ;
 
-307 
+303 
 	}
 }
 
-309 
+305 
 node
  *
 	$fšd_Ãxt_Ëaf
@@ -2021,21 +2211,21 @@ node
 šdex
 ,
 
-310 
+306 
 height
 )
 
-312 
+308 
 i
 ;
 
-313 
+309 
 node
  *
 Ãxt_Ëaf
 ;
 
-315 
+311 
 i
  = (
 šdex
@@ -2043,7 +2233,7 @@ i
 META_NODE_SHIFT
 ); i++) {
 
-316 ià(
+312 ià(
 ·»Á
 ->
 ’Œy_±r
@@ -2053,7 +2243,7 @@ i
 NULL
 ) {
 
-317 
+313 
 Ãxt_Ëaf
  = 
 	`£¬ch_to_Ãxt_Ëaf
@@ -2067,17 +2257,17 @@ i
 height
  - 1);
 
-318  
+314  
 Ãxt_Ëaf
 ;
 
-322 ià(
+318 ià(
 t
 ->
 height
  > height) {
 
-323 
+319 
 Ãxt_Ëaf
  = 
 	`fšd_Ãxt_Ëaf
@@ -2091,23 +2281,23 @@ t
 p_šdex
 ,
 
-324 
+320 
 height
  + 1);
 
-325  
+321  
 Ãxt_Ëaf
 ;
 
-328  
+324  
 NULL
 ;
 
-329 
+325 
 	}
 }
 
-331 
+327 
 	$Rªge_Lookup
 (
 Œ“
@@ -2119,21 +2309,21 @@ t
 num
 ,
 
-332 
+328 
 buf
 [])
 
-334 
+330 
 node
  *
 Ëv–_±r
 ;
 
-335 
+331 
 height
 ;
 
-336 
+332 
 b™_shiá
 , 
 idx
@@ -2141,21 +2331,21 @@ idx
 i
 ;
 
-337 
+333 
 £¬ch_couÁ
  = 0;
 
-338 *
+334 *
 v®ue
 ;
 
-340 
+336 
 height
  = 
 t
 ->height;
 
-341 
+337 
 Ëv–_±r
  = 
 t
@@ -2163,11 +2353,11 @@ t
 roÙ
 ;
 
-343 
+339 
 height
  > 1) {
 
-344 
+340 
 b™_shiá
  = (
 height
@@ -2175,7 +2365,7 @@ height
 META_NODE_SHIFT
 ;
 
-345 
+341 
 idx
  = 
 ¡¬t_key
@@ -2183,7 +2373,7 @@ idx
 b™_shiá
 ;
 
-347 
+343 
 Ëv–_±r
  =†ev–_±r->
 ’Œy_±r
@@ -2191,17 +2381,17 @@ b™_shiá
 idx
 ];
 
-348 
+344 
 ¡¬t_key
  = s¹_key & ((0x1UL << 
 b™_shiá
 ) - 1);
 
-349 
+345 
 height
 --;
 
-351 
+347 
 b™_shiá
  = (
 height
@@ -2209,7 +2399,7 @@ height
 META_NODE_SHIFT
 ;
 
-352 
+348 
 idx
  = 
 ¡¬t_key
@@ -2217,13 +2407,13 @@ idx
 b™_shiá
 ;
 
-354 
+350 
 £¬ch_couÁ
  < 
 num
 ) {
 
-355 
+351 
 i
  = 
 idx
@@ -2231,7 +2421,7 @@ idx
 META_NODE_SHIFT
 ); i++) {
 
-356 ià(
+352 ià(
 Ëv–_±r
 ->
 ’Œy_±r
@@ -2241,7 +2431,7 @@ i
 NULL
 ) {
 
-357 
+353 
 buf
 [
 £¬ch_couÁ
@@ -2253,17 +2443,17 @@ buf
 i
 ];
 
-358 
+354 
 £¬ch_couÁ
 ++;
 
-359 ià(
+355 ià(
 £¬ch_couÁ
  =ğ
 num
 )
 
-363 
+359 
 Ëv–_±r
  = 
 	`fšd_Ãxt_Ëaf
@@ -2273,31 +2463,31 @@ t
 ·»Á_±r
 ,
 
-364 
+360 
 Ëv–_±r
 ->
 p_šdex
 , 2);
 
-365 ià(
+361 ià(
 Ëv–_±r
  =ğ
 NULL
 ) {
 
-366 
+362 
 	`´štf
 ("error\n");
 
-369 
+365 
 idx
  = 0;
 
-371 
+367 
 	}
 }
 
-373 
+369 
 	$»cursive_ä“_nodes
 (
 Œ“
@@ -2311,29 +2501,29 @@ node
 šdex
 ,
 
-374 
+370 
 height
 )
 
-376 
+372 
 i
 , 
 ”rv®
  = 0;
 
-378 ià(
+374 ià(
 height
  < 
 t
 ->height) {
 
-379 
+375 
 i
  = 0; i < 
 NUM_ENTRY
 ; i++) {
 
-381 ià(
+377 ià(
 i
  !ğ
 šdex
@@ -2345,7 +2535,7 @@ i
 NULL
 ) {
 
-382 
+378 
 ·»Á
 ->
 ’Œy_±r
@@ -2355,7 +2545,7 @@ NULL
 NULL
 ;
 
-383 
+379 
 	`æush_bufãr
 (&
 ·»Á
@@ -2367,11 +2557,11 @@ NULL
 Œue
 );
 
-384  
+380  
 ”rv®
 ;
 
-387 
+383 
 ”rv®
  = 
 	`»cursive_ä“_nodes
@@ -2383,7 +2573,7 @@ t
 ·»Á_±r
 ,
 
-388 
+384 
 ·»Á
 ->
 p_šdex
@@ -2391,7 +2581,7 @@ p_šdex
 height
  + 1);
 
-390 
+386 
 ·»Á
 ->
 ’Œy_±r
@@ -2401,7 +2591,7 @@ height
 NULL
 ;
 
-391 
+387 
 	`æush_bufãr
 (&
 ·»Á
@@ -2413,15 +2603,15 @@ NULL
 Œue
 );
 
-394  
+390  
 ”rv®
 ;
 
-395 
+391 
 	}
 }
 
-397 
+393 
 	$D–‘e
 (
 Œ“
@@ -2431,29 +2621,29 @@ t
 key
 )
 
-399 
+395 
 node
  *
 Ëv–_±r
 ;
 
-400 
+396 
 height
 ;
 
-401 
+397 
 b™_shiá
 , 
 idx
 ;
 
-403 
+399 
 height
  = 
 t
 ->height;
 
-404 
+400 
 Ëv–_±r
  = 
 t
@@ -2461,11 +2651,11 @@ t
 roÙ
 ;
 
-406 
+402 
 height
  > 1) {
 
-407 
+403 
 b™_shiá
  = (
 height
@@ -2473,7 +2663,7 @@ height
 META_NODE_SHIFT
 ;
 
-408 
+404 
 idx
  = 
 key
@@ -2481,7 +2671,7 @@ key
 b™_shiá
 ;
 
-410 
+406 
 Ëv–_±r
  =†ev–_±r->
 ’Œy_±r
@@ -2489,17 +2679,17 @@ b™_shiá
 idx
 ];
 
-412 
+408 
 key
  = key & ((0x1UL << 
 b™_shiá
 ) - 1);
 
-413 
+409 
 height
 --;
 
-415 
+411 
 b™_shiá
  = (
 height
@@ -2507,7 +2697,7 @@ height
 META_NODE_SHIFT
 ;
 
-416 
+412 
 idx
  = 
 key
@@ -2515,17 +2705,29 @@ key
 b™_shiá
 ;
 
-418 
-	`»cursive_ä“_nodes
-(
-t
-, 
+414 
 Ëv–_±r
-, 
+->
+’Œy_±r
+[
 idx
-, 1);
+] = 
+NULL
+;
 
-419 
+415 
+	`æush_bufãr
+(&
+Ëv–_±r
+->
+’Œy_±r
+[
+idx
+], 8, 
+Œue
+);
+
+418 
 	}
 }
 
@@ -2537,7 +2739,7 @@ idx
 
 3 
 	#META_NODE_SHIFT
- 6
+ 5
 
 	)
 
@@ -2609,21 +2811,25 @@ node
 	m·»Á_±r
 ;
 
-23 
+22 
+	mdummy
+[48];
+
+25 
 	sT»e
  {
 
-24 
+26 
 	mheight
 ;
 
-25 
+27 
 node
  *
 	mroÙ
 ;
 
-28 
+30 
 æush_bufãr
 (*
 buf
@@ -2635,13 +2841,13 @@ boŞ
 ãnû
 );
 
-29 
+31 
 Œ“
  *
 š™T»e
 ();
 
-30 
+32 
 In£¹
 (
 Œ“
@@ -2653,7 +2859,7 @@ key
 v®ue
 );
 
-31 *
+33 *
 Upd©e
 (
 Œ“
@@ -2665,7 +2871,7 @@ key
 v®ue
 );
 
-32 *
+34 *
 Lookup
 (
 Œ“
@@ -2675,7 +2881,7 @@ t
 key
 );
 
-33 
+35 
 Rªge_Lookup
 (
 Œ“
@@ -2687,11 +2893,11 @@ t
 num
 ,
 
-34 
+36 
 buf
 []);
 
-35 
+37 
 D–‘e
 (
 Œ“

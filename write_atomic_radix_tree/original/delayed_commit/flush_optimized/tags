@@ -20,6 +20,7 @@ Tree	w_radix_tree.h	/^struct Tree {$/;"	s
 Update	w_radix_tree.c	/^void *Update(tree *t, unsigned long key, void *value)$/;"	f
 addr	w_radix_tree.h	/^	unsigned long addr;$/;"	m	struct:Logentry
 allocNode	w_radix_tree.c	/^node *allocNode(node *parent, unsigned int index)$/;"	f
+dummy	w_radix_tree.h	/^	char dummy[48];		\/\/ 3, 4, 5, 6, 7, 8, 9$/;"	m	struct:Node
 entry_ptr	w_radix_tree.h	/^	void *entry_ptr[NUM_ENTRY];$/;"	m	struct:Node
 find_next_leaf	w_radix_tree.c	/^node *find_next_leaf(tree *t, node *parent, unsigned int index, $/;"	f
 flush_buffer	w_radix_tree.c	/^void flush_buffer(void *buf, unsigned int len, bool fence)$/;"	f
@@ -39,5 +40,4 @@ recursive_free_nodes	w_radix_tree.c	/^int recursive_free_nodes(tree *t, node *pa
 recursive_search_leaf	w_radix_tree.c	/^int recursive_search_leaf(node *level_ptr, unsigned long key, void *value, $/;"	f
 root	w_radix_tree.h	/^	node *root;$/;"	m	struct:Tree
 search_to_next_leaf	w_radix_tree.c	/^node *search_to_next_leaf(node *next_branch, unsigned char height)$/;"	f
-sfence	w_radix_tree.c	10;"	d	file:
 tree	w_radix_tree.h	/^typedef struct Tree tree;$/;"	t	typeref:struct:Tree
