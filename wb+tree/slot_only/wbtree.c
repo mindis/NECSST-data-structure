@@ -9,16 +9,16 @@
 #include "wbtree.h"
 
 #define mfence() asm volatile("mfence":::"memory")
-#define sfence() asm volatile("sfence":::"memory")
 
 void flush_buffer(void *buf, unsigned int len, bool fence)
 {
 	unsigned int i;
 	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
 	if (fence) {
+		mfence();
 		for (i = 0; i < len; i += CACHE_LINE_SIZE)
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
-		sfence();
+		mfence();
 	} else {
 		for (i = 0; i < len; i += CACHE_LINE_SIZE)
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
@@ -230,7 +230,6 @@ void Insert(tree *t, unsigned long key, void *value)
 		insert_in_parent(t, curr, splitNode->entries[splitNode->slot[1]].key, splitNode);
 		add_redo_logentry();
 		curr->leftmostPtr = splitNode;
-		sfence();
 		add_commit_entry();
 	}
 	else
@@ -509,12 +508,14 @@ int Delete(tree *t, unsigned long key)
 	curr = find_leaf_node(curr, key);
 
 	/* Check underflow & merge */
-	numEntries = curr->slot[0];
-	if(numEntries <= 1) {
-		errval = -1;
+//	numEntries = curr->slot[0];
+//	if(numEntries <= 1) {
+//		errval = -1;
 //		delete_parent_entry(curr->parent, key);
-	} else
-		errval = delete_in_leaf(curr, key);
+//	} else
+//		errval = delete_in_leaf(curr, key);
+
+	errval = delete_in_leaf(curr, key);
 
 	return errval;
 }

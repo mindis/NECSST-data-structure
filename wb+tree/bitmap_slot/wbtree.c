@@ -466,7 +466,7 @@ int delete_in_leaf(node *curr, unsigned long key)
 
 	curr->slot[0] = curr->slot[0] - 1;
 
-	flush_buffer(curr->slot, sizeof(curr->slot), true);
+	flush_buffer(curr->slot, sizeof(curr->slot), false);
 	
 	curr->bitmap = curr->bitmap + 1 - (0x1UL << (mid + 1));
 	flush_buffer(&curr->bitmap, sizeof(unsigned long), true);
