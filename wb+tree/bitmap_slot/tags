@@ -8,18 +8,21 @@ Append	wbtree.c	/^int Append(node *n, unsigned long key, void *value)$/;"	f
 Append_in_inner	wbtree.c	/^int Append_in_inner(node *n, unsigned long key, void *value)$/;"	f
 BIN_DIR	Makefile	/^BIN_DIR=.\/$/;"	m
 BITMAP_SIZE	wbtree.h	11;"	d
-BITOP_WORD	wbtree.c	13;"	d	file:
+BITOP_WORD	wbtree.c	12;"	d	file:
 BITS_PER_LONG	wbtree.h	10;"	d
 CACHE_LINE_SIZE	wbtree.h	5;"	d
 CFLAGS	Makefile	/^CFLAGS= -c $/;"	m
+Delete	wbtree.c	/^int Delete(tree *t, unsigned long key)$/;"	f
 Insert	wbtree.c	/^void Insert(tree *t, unsigned long key, void *value){$/;"	f
 LE_COMMIT	wbtree.h	8;"	d
 LE_DATA	wbtree.h	7;"	d
 Lookup	wbtree.c	/^void *Lookup(tree *t, unsigned long key)$/;"	f
+MIN_LIVE_ENTRIES	wbtree.h	4;"	d
 NODE_SIZE	wbtree.h	2;"	d
 Range_Lookup	wbtree.c	/^void Range_Lookup(tree *t, unsigned long start_key, unsigned int num, $/;"	f
 SLOT_SIZE	wbtree.h	3;"	d
 Search	wbtree.c	/^int Search(node *curr, char *temp, unsigned long key)$/;"	f
+Update	wbtree.c	/^void *Update(tree *t, unsigned long key, void *value)$/;"	f
 add_commit_entry	wbtree.c	/^void add_commit_entry()$/;"	f
 add_redo_logentry	wbtree.c	/^void add_redo_logentry()$/;"	f
 addr	wbtree.h	/^	unsigned long addr;$/;"	m	struct:redo_log_entry
@@ -27,28 +30,27 @@ allocNode	wbtree.c	/^node *allocNode()$/;"	f
 bitmap	wbtree.h	/^	unsigned long bitmap;$/;"	m	struct:node
 commit_entry	wbtree.h	/^struct commit_entry {$/;"	s
 commit_entry	wbtree.h	/^typedef struct commit_entry commit_entry;$/;"	t	typeref:struct:commit_entry
+delete_in_leaf	wbtree.c	/^int delete_in_leaf(node *curr, unsigned long key)$/;"	f
+dummy	wbtree.h	/^	char dummy[48];		\/\/63$/;"	m	struct:node
 entries	wbtree.h	/^	struct entry entries[NODE_SIZE];$/;"	m	struct:node	typeref:struct:node::entry
 entry	wbtree.h	/^struct entry{$/;"	s
 entry	wbtree.h	/^typedef struct entry entry;$/;"	t	typeref:struct:entry
 ffz	wbtree.h	/^static inline unsigned long ffz(unsigned long word)$/;"	f
-find_leaf_node	wbtree.c	/^node *find_leaf_node(node *curr, unsigned long key) {$/;"	f
+find_leaf_node	wbtree.c	/^node *find_leaf_node(node *curr, unsigned long key) $/;"	f
 find_next_zero_bit	wbtree.c	/^unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,$/;"	f
 flush_buffer	wbtree.c	/^void flush_buffer(void *buf, unsigned int len, bool fence)$/;"	f
 height	wbtree.h	/^	int height;$/;"	m	struct:tree
 initTree	wbtree.c	/^tree *initTree()$/;"	f
 insert_in_inner	wbtree.c	/^void insert_in_inner(node *curr, unsigned long key, void *value)$/;"	f
 insert_in_inner_noflush	wbtree.c	/^int insert_in_inner_noflush(node *curr, unsigned long key, void *value)$/;"	f
-insert_in_leaf	wbtree.c	/^void insert_in_leaf(node *curr, unsigned long key, void *value){$/;"	f
+insert_in_leaf	wbtree.c	/^void insert_in_leaf(node *curr, unsigned long key, void *value)$/;"	f
 insert_in_leaf_noflush	wbtree.c	/^int insert_in_leaf_noflush(node *curr, unsigned long key, void *value)$/;"	f
 insert_in_parent	wbtree.c	/^void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {$/;"	f
 isleaf	wbtree.h	/^	int isleaf;$/;"	m	struct:node
 key	wbtree.h	/^	unsigned long key;$/;"	m	struct:entry
 leftmostPtr	wbtree.h	/^	struct node *leftmostPtr;$/;"	m	struct:node	typeref:struct:node::node
 main	main.c	/^int main(void)$/;"	f
-main	test.c	/^int main(void)$/;"	f
-main	wbtree.c	/^int main(void)$/;"	f
 mfence	wbtree.c	11;"	d	file:
-min_live_entries	wbtree.h	4;"	d
 new_value	wbtree.h	/^	unsigned long new_value;$/;"	m	struct:redo_log_entry
 node	wbtree.h	/^struct node{$/;"	s
 node	wbtree.h	/^typedef struct node node;$/;"	t	typeref:struct:node
@@ -57,7 +59,6 @@ ptr	wbtree.h	/^	void *ptr;$/;"	m	struct:entry
 redo_log_entry	wbtree.h	/^struct redo_log_entry {$/;"	s
 redo_log_entry	wbtree.h	/^typedef struct redo_log_entry redo_log_entry;$/;"	t	typeref:struct:redo_log_entry
 root	wbtree.h	/^	node *root;$/;"	m	struct:tree
-sfence	wbtree.c	12;"	d	file:
 slot	wbtree.h	/^	char slot[SLOT_SIZE];$/;"	m	struct:node
 tree	wbtree.h	/^struct tree{$/;"	s
 tree	wbtree.h	/^typedef struct tree tree;$/;"	t	typeref:struct:tree

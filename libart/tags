@@ -182,7 +182,7 @@ CYGPATH_W	deps/check-0.9.8/doc/Makefile	/^CYGPATH_W = echo$/;"	m
 CYGPATH_W	deps/check-0.9.8/lib/Makefile	/^CYGPATH_W = echo$/;"	m
 CYGPATH_W	deps/check-0.9.8/src/Makefile	/^CYGPATH_W = echo$/;"	m
 CYGPATH_W	deps/check-0.9.8/tests/Makefile	/^CYGPATH_W = echo$/;"	m
-CheckMsg	deps/check-0.9.8/src/check_pack.h	/^} CheckMsg;$/;"	t	typeref:union:__anon10
+CheckMsg	deps/check-0.9.8/src/check_pack.h	/^} CheckMsg;$/;"	t	typeref:union:__anon8
 CtxMsg	deps/check-0.9.8/src/check_pack.h	/^typedef struct CtxMsg$/;"	s
 CtxMsg	deps/check-0.9.8/src/check_pack.h	/^} CtxMsg;$/;"	t	typeref:struct:CtxMsg
 DATA	deps/check-0.9.8/Makefile	/^DATA = $(doc_DATA) $(m4data_DATA) $(pcdata_DATA)$/;"	m
@@ -1089,11 +1089,11 @@ cleanup	deps/check-0.9.8/tests/check_check_master.c	/^void cleanup (void)$/;"	f
 close	deps/check-0.9.8/src/check_impl.h	/^  int close;$/;"	m	struct:Log
 construct_test_result	deps/check-0.9.8/src/check_msg.c	/^static TestResult *construct_test_result (RcvMsg *rmsg, int waserror)$/;"	f	file:
 copy_header	src/art.c	/^static void copy_header(art_node *dest, art_node *src) {$/;"	f	file:
-count	tests/test_art.c	/^    int count;$/;"	m	struct:__anon8	file:
+count	tests/test_art.c	/^    int count;$/;"	m	struct:__anon11	file:
 counter	deps/check-0.9.8/tests/check_check_fork.c	/^static int counter;$/;"	v	file:
 ctx	deps/check-0.9.8/src/check_impl.h	/^  enum ck_result_ctx ctx;     \/* When the result occurred *\/$/;"	m	struct:TestResult	typeref:enum:TestResult::ck_result_ctx
 ctx	deps/check-0.9.8/src/check_pack.h	/^  enum ck_result_ctx ctx;$/;"	m	struct:CtxMsg	typeref:enum:CtxMsg::ck_result_ctx
-ctx_msg	deps/check-0.9.8/src/check_pack.h	/^  CtxMsg  ctx_msg;$/;"	m	union:__anon10
+ctx_msg	deps/check-0.9.8/src/check_pack.h	/^  CtxMsg  ctx_msg;$/;"	m	union:__anon8
 cur_fork_status	deps/check-0.9.8/src/check.c	/^enum fork_status cur_fork_status (void)$/;"	f
 currency	deps/check-0.9.8/doc/example/src/money.5.c	/^  char *currency;$/;"	m	struct:Money	file:
 currency	deps/check-0.9.8/doc/example/src/money.6.c	/^  char *currency;$/;"	m	struct:Money	file:
@@ -1169,13 +1169,13 @@ exec_prefix	deps/check-0.9.8/lib/Makefile	/^exec_prefix = ${prefix}$/;"	m
 exec_prefix	deps/check-0.9.8/src/Makefile	/^exec_prefix = ${prefix}$/;"	m
 exec_prefix	deps/check-0.9.8/tests/Makefile	/^exec_prefix = ${prefix}$/;"	m
 exit_msg	deps/check-0.9.8/src/check_run.c	/^static char *exit_msg (int exitval)$/;"	f	file:
-expected	tests/test_art.c	/^    const char **expected;$/;"	m	struct:__anon8	file:
+expected	tests/test_art.c	/^    const char **expected;$/;"	m	struct:__anon11	file:
 fail	deps/check-0.9.8/src/check.h	235;"	d
 fail_if	deps/check-0.9.8/src/check.h	230;"	d
-fail_msg	deps/check-0.9.8/src/check_pack.h	/^  FailMsg fail_msg;$/;"	m	union:__anon10
+fail_msg	deps/check-0.9.8/src/check_pack.h	/^  FailMsg fail_msg;$/;"	m	union:__anon8
 fail_unless	deps/check-0.9.8/src/check.h	219;"	d
 failctx	deps/check-0.9.8/src/check_pack.h	/^  enum ck_result_ctx failctx;$/;"	m	struct:RcvMsg	typeref:enum:RcvMsg::ck_result_ctx
-failure_type	deps/check-0.9.8/tests/check_check_master.c	/^  int failure_type;$/;"	m	struct:__anon11	file:
+failure_type	deps/check-0.9.8/tests/check_check_master.c	/^  int failure_type;$/;"	m	struct:__anon10	file:
 file	deps/check-0.9.8/src/check_impl.h	/^  char *file;    \/* File where the test occured *\/$/;"	m	struct:TestResult
 file	deps/check-0.9.8/src/check_pack.h	/^  char *file;$/;"	m	struct:LocMsg
 fileno	deps/check-0.9.8/lib/fileno.c	/^int fileno(FILE *stream CK_ATTRIBUTE_UNUSED)$/;"	f
@@ -1458,7 +1458,7 @@ list_at_end	deps/check-0.9.8/src/check_list.c	/^int list_at_end (List *lp)$/;"	f
 list_free	deps/check-0.9.8/src/check_list.c	/^void list_free (List *lp)$/;"	f
 list_front	deps/check-0.9.8/src/check_list.c	/^void list_front (List *lp)$/;"	f
 list_val	deps/check-0.9.8/src/check_list.c	/^void *list_val (List *lp)$/;"	f
-loc_msg	deps/check-0.9.8/src/check_pack.h	/^  LocMsg  loc_msg;$/;"	m	union:__anon10
+loc_msg	deps/check-0.9.8/src/check_pack.h	/^  LocMsg  loc_msg;$/;"	m	union:__anon8
 localedir	deps/check-0.9.8/Makefile	/^localedir = ${datarootdir}\/locale$/;"	m
 localedir	deps/check-0.9.8/doc/Makefile	/^localedir = ${datarootdir}\/locale$/;"	m
 localedir	deps/check-0.9.8/lib/Makefile	/^localedir = ${datarootdir}\/locale$/;"	m
@@ -1534,10 +1534,10 @@ mandir	deps/check-0.9.8/lib/Makefile	/^mandir = ${datarootdir}\/man$/;"	m
 mandir	deps/check-0.9.8/src/Makefile	/^mandir = ${datarootdir}\/man$/;"	m
 mandir	deps/check-0.9.8/tests/Makefile	/^mandir = ${datarootdir}\/man$/;"	m
 mark_point	deps/check-0.9.8/src/check.h	262;"	d
-master_test_t	deps/check-0.9.8/tests/check_check_master.c	/^} master_test_t;$/;"	t	typeref:struct:__anon11	file:
+master_test_t	deps/check-0.9.8/tests/check_check_master.c	/^} master_test_t;$/;"	t	typeref:struct:__anon10	file:
 master_tests	deps/check-0.9.8/tests/check_check_master.c	/^static master_test_t master_tests[] = {$/;"	v	file:
 master_tests_lineno	deps/check-0.9.8/tests/check_check_master.c	/^int master_tests_lineno[sizeof master_tests \/sizeof master_tests[0]];$/;"	v
-max_count	tests/test_art.c	/^    int max_count;$/;"	m	struct:__anon8	file:
+max_count	tests/test_art.c	/^    int max_count;$/;"	m	struct:__anon11	file:
 max_elts	deps/check-0.9.8/src/check_list.c	/^  int max_elts;$/;"	m	struct:List	file:
 maximum	src/art.c	/^static art_leaf* maximum(const art_node *n) {$/;"	f	file:
 maybe_grow	deps/check-0.9.8/src/check_list.c	/^static void maybe_grow (List *lp)$/;"	f	file:
@@ -1581,7 +1581,7 @@ money_suite	deps/check-0.9.8/doc/example/tests/check_money.c	/^money_suite (void
 msg	deps/check-0.9.8/src/check_impl.h	/^  char *msg;     \/* Failure message *\/$/;"	m	struct:TestResult
 msg	deps/check-0.9.8/src/check_pack.h	/^  char *msg;$/;"	m	struct:FailMsg
 msg	deps/check-0.9.8/src/check_pack.h	/^  char *msg;$/;"	m	struct:RcvMsg
-msg	deps/check-0.9.8/tests/check_check_master.c	/^  const char *msg;$/;"	m	struct:__anon11	file:
+msg	deps/check-0.9.8/tests/check_check_master.c	/^  const char *msg;$/;"	m	struct:__anon10	file:
 mutex_lock	deps/check-0.9.8/src/check_pack.c	/^pthread_mutex_t mutex_lock = PTHREAD_MUTEX_INITIALIZER;$/;"	v
 mypid	deps/check-0.9.8/tests/check_check_fork.c	/^static pid_t mypid;$/;"	v	file:
 n	src/art.h	/^    art_node n;$/;"	m	struct:__anon2
@@ -1650,7 +1650,7 @@ prefix	deps/check-0.9.8/doc/Makefile	/^prefix = \/usr\/local$/;"	m
 prefix	deps/check-0.9.8/lib/Makefile	/^prefix = \/usr\/local$/;"	m
 prefix	deps/check-0.9.8/src/Makefile	/^prefix = \/usr\/local$/;"	m
 prefix	deps/check-0.9.8/tests/Makefile	/^prefix = \/usr\/local$/;"	m
-prefix_data	tests/test_art.c	/^} prefix_data;$/;"	t	typeref:struct:__anon8	file:
+prefix_data	tests/test_art.c	/^} prefix_data;$/;"	t	typeref:struct:__anon11	file:
 prefix_mismatch	src/art.c	/^static int prefix_mismatch(const art_node *n, const unsigned char *key, int key_len, int depth) {$/;"	f	file:
 print_output	deps/check-0.9.8/src/check.h	/^enum print_output {$/;"	g
 print_usage	deps/check-0.9.8/tests/ex_output.c	/^static void print_usage(void)$/;"	f	file:
@@ -1837,7 +1837,7 @@ tcase_run_tfun_nofork	deps/check-0.9.8/src/check_run.c	/^static TestResult *tcas
 tcase_set_timeout	deps/check-0.9.8/src/check.c	/^void tcase_set_timeout (TCase *tc, int timeout)$/;"	f
 tclst	deps/check-0.9.8/src/check_impl.h	/^  List *tclst; \/* List of test cases *\/$/;"	m	struct:Suite
 tcname	deps/check-0.9.8/src/check_impl.h	/^  const char *tcname;  \/* Test case that generated the result *\/$/;"	m	struct:TestResult
-tcname	deps/check-0.9.8/tests/check_check_master.c	/^  const char *tcname;$/;"	m	struct:__anon11	file:
+tcname	deps/check-0.9.8/tests/check_check_master.c	/^  const char *tcname;$/;"	m	struct:__anon10	file:
 teardown	deps/check-0.9.8/doc/example/tests/check_money.7.c	/^teardown (void)$/;"	f
 teardown	deps/check-0.9.8/doc/example/tests/check_money.c	/^teardown (void)$/;"	f
 teardown_fixture	deps/check-0.9.8/tests/check_check_fixture.c	/^void teardown_fixture (void)$/;"	f

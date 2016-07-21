@@ -393,7 +393,6 @@ void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {
 
 		parent->slot[0] = parent->slot[0] + 1;
 
-		add_redo_logentry();
 		parent->bitmap = parent->bitmap + 1 + (0x1UL << (loc + 1));
 	} else {
 		int j, loc, cp = parent->slot[0];

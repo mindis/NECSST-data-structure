@@ -22,7 +22,7 @@ int main(void)
 	unsigned long max;
 	unsigned long min;
 
-	if ((fp = fopen("/home/sekwon/Public/input_file/input_1billion.txt","r")) == NULL)
+	if ((fp = fopen("/home/sekwon/Public/input_file/input_sparse_100million.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
@@ -33,8 +33,8 @@ int main(void)
 	buf = malloc(sizeof(unsigned long) * 100000000);
 	memset(buf, 0, sizeof(unsigned long) * 100000000);
 	for(i = 0; i < 100000000; i++) {
-		keys[i] = i;
-//		fscanf(fp, "%lu", &keys[i]);
+//		keys[i] = i;
+		fscanf(fp, "%lu", &keys[i]);
 	}
 	fclose(fp);
 

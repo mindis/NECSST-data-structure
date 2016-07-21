@@ -1,4 +1,3 @@
-./test.c
 ./wbtree.c
 ./main.c
 ./wbtree.h

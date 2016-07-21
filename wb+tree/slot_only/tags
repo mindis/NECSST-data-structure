@@ -26,6 +26,7 @@ allocNode	wbtree.c	/^node *allocNode()$/;"	f
 commit_entry	wbtree.h	/^struct commit_entry {$/;"	s
 commit_entry	wbtree.h	/^typedef struct commit_entry commit_entry;$/;"	t	typeref:struct:commit_entry
 delete_in_leaf	wbtree.c	/^int delete_in_leaf(node *curr, unsigned long key)$/;"	f
+dummy	wbtree.h	/^	char dummy[48];$/;"	m	struct:node
 entries	wbtree.h	/^	struct entry entries[NODE_SIZE];$/;"	m	struct:node	typeref:struct:node::entry
 entry	wbtree.h	/^struct entry {$/;"	s
 entry	wbtree.h	/^typedef struct entry entry;$/;"	t	typeref:struct:entry
@@ -51,7 +52,6 @@ ptr	wbtree.h	/^	void *ptr;$/;"	m	struct:entry
 redo_log_entry	wbtree.h	/^struct redo_log_entry {$/;"	s
 redo_log_entry	wbtree.h	/^typedef struct redo_log_entry redo_log_entry;$/;"	t	typeref:struct:redo_log_entry
 root	wbtree.h	/^	node *root;$/;"	m	struct:tree
-sfence	wbtree.c	12;"	d	file:
 slot	wbtree.h	/^	char slot[NODE_SIZE+1];$/;"	m	struct:node
 tree	wbtree.h	/^struct tree {$/;"	s
 tree	wbtree.h	/^typedef struct tree tree;$/;"	t	typeref:struct:tree
