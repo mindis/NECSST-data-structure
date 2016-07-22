@@ -171,11 +171,48 @@ void *Lookup(tree *t, unsigned long key)
 fail:
 	return;
 }
+/*
+void insertion_sort(struct LN_entry *base, int num)
+{
+	unsigned long i, j;
+	struct LN_entry temp;
+
+//	MAX_NUM_ENTRY_LN
+
+	for (i = 1; i < num; i++) {
+		temp = base[i];
+		j = i - 1;
+
+		while (j >= 0 && base[j].key > temp.key) {
+			base[j + 1] = base[j];
+			j = j - 1;
+		}
+		base[j + 1] = temp;
+	}
+}
+*/
+
+void insertion_sort(struct LN_entry *base, int num)
+{
+	int i, j;
+	struct LN_entry temp;
+
+	for (i = 1; i < num; i++) {
+		for (j = i; j > 0; j--) {
+			if (base[j - 1].key > base[j].key) {
+				temp = base[j - 1];
+				base[j - 1] = base[j];
+				base[j] = temp;
+			} else
+				break;
+		}
+	}
+}
 
 int Range_Lookup(tree *t, unsigned long start_key, unsigned int num, 
 		unsigned long buf[])
 {
-	int i, j = 0, count = 0, invalid_count = 0;
+	int i, j = 0, count = 0, invalid_count, valid_num;
 	LN *current_LN;
 	unsigned long *invalid_key =
 		malloc(((MAX_NUM_ENTRY_LN)/2 + 1) * sizeof(unsigned long));
@@ -187,6 +224,7 @@ int Range_Lookup(tree *t, unsigned long start_key, unsigned int num,
 		goto fail;
 
 	while (current_LN != NULL && j < num) {
+		valid_num = 0;
 		invalid_count = 0;
 		for (i = 0; i < current_LN->nElements; i++) {
 			if (current_LN->LN_Element[i].flag == false) {
@@ -198,7 +236,7 @@ int Range_Lookup(tree *t, unsigned long start_key, unsigned int num,
 		for (i = 0; i < current_LN->nElements; i++) {
 			if (current_LN->LN_Element[i].flag == false)
 				continue;
-
+	
 			if (invalid_count > 0) {
 				if (current_LN->LN_Element[i].key == invalid_key[count]) {
 					count++;
@@ -206,13 +244,21 @@ int Range_Lookup(tree *t, unsigned long start_key, unsigned int num,
 					continue;
 				}
 			}
-			buf[j] = *(unsigned long *)current_LN->LN_Element[i].value;
+			valid_Element[valid_num] = current_LN->LN_Element[i];
+			valid_num++;
+		}
+
+		insertion_sort(valid_Element, valid_num);
+
+		for (i = 0; i < current_LN->nElements; i++) {
+			buf[j] = *(unsigned long *)valid_Element[i].value;
 			j++;
 			if (j == num)
 				break;
 		}
 		current_LN = current_LN->sibling;
 	}
+
 	return 0;
 fail:
 	return -1;
@@ -280,23 +326,6 @@ void quick_sort(struct LN_entry *base, int left, int right)
 	}
 }
 
-void insertion_sort(struct LN_entry *base)
-{
-	unsigned long i, j;
-	struct LN_entry temp;
-
-	for (i = 1; i < MAX_NUM_ENTRY_LN; i++) {
-		temp = base[i];
-		j = i - 1;
-
-		while (j >= 0 && base[j].key > temp.key) {
-			base[j + 1] = base[j];
-			j = j - 1;
-		}
-		base[j + 1] = temp;
-	}
-}
-
 int leaf_scan_divide(tree *t, LN *leaf, LN *split_node1, LN *split_node2)
 {
 	int i, j = 0, count = 0, invalid_count = 0, errval = -1;
@@ -328,7 +357,7 @@ int leaf_scan_divide(tree *t, LN *leaf, LN *split_node1, LN *split_node2)
 	}
 
 //	quick_sort(valid_Element, 0, j - 1);
-	insertion_sort(valid_Element);
+	insertion_sort(valid_Element, j);
 
 	memcpy(split_node1->LN_Element, valid_Element, 
 			sizeof(struct LN_entry) * (j / 2));

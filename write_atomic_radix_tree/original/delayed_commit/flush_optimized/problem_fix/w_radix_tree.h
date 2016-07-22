@@ -1,27 +1,33 @@
 #include <stdbool.h>
 
-#define META_NODE_SHIFT 5
+#define META_NODE_SHIFT 8
 #define CACHE_LINE_SIZE 64
 #define NUM_ENTRY	0x1UL << META_NODE_SHIFT
 
 typedef struct Tree tree;
 typedef struct Node node;
-typedef struct item item;
+typedef struct Item item;
+
+struct Item {
+	unsigned long key;
+	void *value;
+	item *next;
+};
 
 struct Node {
-	unsigned long p_index;
+	unsigned int p_index;
 	void *entry_ptr[NUM_ENTRY];
 	node *parent_ptr;
 //	char dummy[16];		// 2
-//	char dummy[48];		// 3, 4, 5, 6, 7, 8, 9
+	char dummy[48];		// 3, 4, 5, 6, 7, 8, 9
 };
 
 struct Tree {
-	unsigned long height;
+	unsigned char height;
 	node *root;
 };
 
-void flush_buffer(void *buf, unsigned long len, bool fence);
+void flush_buffer(void *buf, unsigned int len, bool fence);
 tree *initTree();
 int Insert(tree **t, unsigned long key, void *value);
 void *Update(tree *t, unsigned long key, void *value);

@@ -3,9 +3,9 @@
 #include <string.h>
 #include <malloc.h>
 #include <time.h>
-#include "NV-tree.h"
+#include "w_radix_tree.h"
 
-#define INPUT_NUM	100000000
+#define INPUT_NUM	1000000000
 
 int main(void)
 {
@@ -24,20 +24,18 @@ int main(void)
 	unsigned long max;
 	unsigned long min;
 
-	if ((fp = fopen("/home/sekwon/Public/input_file/input_dense_100million.txt","r")) == NULL)
+	printf("sizeof(node) = %d\n", sizeof(node));
+
+	if((fp = fopen("/home/sekwon/Public/input_file/input_sparse_1billion.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
 	}
 
-	printf("sizeof(IN) = %d\n", sizeof(IN));
-	printf("sizeof(PLN) = %d\n", sizeof(PLN));
-	printf("sizeof(LN) = %d\n", sizeof(LN));
-
 	keys = malloc(sizeof(unsigned long) * INPUT_NUM);
 	buf = malloc(sizeof(unsigned long) * INPUT_NUM);
 	memset(buf, 0, sizeof(unsigned long) * INPUT_NUM);
-	for(i = 0; i < INPUT_NUM; i++) {
+	for (i = 0; i < INPUT_NUM; i++) {
 //		keys[i] = i;
 		fscanf(fp, "%lu", &keys[i]);
 	}
@@ -52,7 +50,11 @@ int main(void)
 			min = keys[i];
 	}
 
+//	printf("max = %lu\n", max);
+//	printf("min = %lu\n", min);
+
 	tree *t = initTree();
+	flush_buffer(t, 8, true);
 
 	/* Insertion */
 	dummy = (char *)malloc(15*1024*1024);
@@ -60,13 +62,15 @@ int main(void)
 	flush_buffer((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for(i = 0; i < INPUT_NUM; i++) {
-		if (Insert(t, keys[i], &keys[i]) < 0)
-			return 0;
+		if (Insert(&t, keys[i], &keys[i]) < 0) {
+			printf("Insert error!\n");
+			exit(1);
+		}
 	}
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
-	printf("Insertion Time = %lu ns\n",elapsed_time);
+	printf("Insertion Time = %lu ns\n", elapsed_time);
 
 	/* Check space overhead */
 	sprintf(line, "/proc/%d/status", getpid());
@@ -78,7 +82,7 @@ int main(void)
 		if (strstr(line, "VmSize")) {
 			char tmp[32];
 			char size[32];
-			sscanf(line,"%s%s", tmp, size);
+			sscanf(line, "%s%s", tmp, size);
 			nVmSize = atoi(size);
 			printf("nVmSize = %lu KB\n", nVmSize);
 		}
@@ -87,7 +91,7 @@ int main(void)
 			char size[32];
 			sscanf(line, "%s%s", tmp, size);
 			nVmRss = atoi(size);
-			printf("nVmRSS = %lu KB\n", nVmRss);
+			printf("nVmRss = %lu KB\n", nVmRss);
 			break;
 		}
 	}
@@ -97,51 +101,52 @@ int main(void)
 	memset(dummy, 0, 15*1024*1024);
 	flush_buffer((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 0; i < INPUT_NUM; i++) {
-		ret = (void *)Lookup(t, keys[i]);		
+	for (i = 0; i < INPUT_NUM; i++) {
+		ret = Lookup(t, keys[i]);	
 		if (ret == NULL) {
 			printf("There is no key[%d] = %lu\n", i, keys[i]);
 			exit(1);
-		}/*
+		} /*
 		else {
-			printf("Search value = %lu\n", *(unsigned long*)ret);
-		//	sleep(1);
-		}*/
+			printf("Search value = %lu	count = %lu\n", *(unsigned long *)ret, i);
+			sleep(1);
+		}
+		*/
 	}
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
-	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
+	elapsed_time += (t2.tv_nsec - t1.tv_nsec);	
 	printf("Search Time = %lu ns\n", elapsed_time);
 
 	/* Range scan 0.1% */
-	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
-	clock_gettime(CLOCK_MONOTONIC, &t1);
-	Range_Lookup(t, min, INPUT_NUM / 1000, buf);
-	clock_gettime(CLOCK_MONOTONIC, &t2);
-	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
-	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
-	printf("Range scan 0.1% = %lu ns\n", elapsed_time);
+//	memset(dummy, 0, 15*1024*1024);
+//	flush_buffer((void *)dummy, 15*1024*1024, true);
+//	clock_gettime(CLOCK_MONOTONIC, &t1);
+//	Range_Lookup(t, min, INPUT_NUM / 1000, buf);
+//	clock_gettime(CLOCK_MONOTONIC, &t2);
+//	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
+//	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
+//	printf("Range scan 0.1% = %lu ns\n", elapsed_time);
 
 	/* Range scan 1% */
-	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
-	clock_gettime(CLOCK_MONOTONIC, &t1);
-	Range_Lookup(t, min, INPUT_NUM / 100, buf);
-	clock_gettime(CLOCK_MONOTONIC, &t2);
-	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
-	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
-	printf("Range scan 1% = %lu ns\n", elapsed_time);
+//	memset(dummy, 0, 15*1024*1024);
+//	flush_buffer((void *)dummy, 15*1024*1024, true);
+//	clock_gettime(CLOCK_MONOTONIC, &t1);
+//	Range_Lookup(t, min, INPUT_NUM / 100, buf);
+//	clock_gettime(CLOCK_MONOTONIC, &t2);
+//	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
+//	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
+//	printf("Range scan 1% = %lu ns\n", elapsed_time);
 
 	/* Range scan 10% */
-	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
-	clock_gettime(CLOCK_MONOTONIC, &t1);
-	Range_Lookup(t, min, INPUT_NUM / 10, buf);
-	clock_gettime(CLOCK_MONOTONIC, &t2);
-	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
-	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
-	printf("Range scan 10% = %lu ns\n", elapsed_time);
+//	memset(dummy, 0, 15*1024*1024);
+//	flush_buffer((void *)dummy, 15*1024*1024, true);
+//	clock_gettime(CLOCK_MONOTONIC, &t1);
+//	Range_Lookup(t, min, INPUT_NUM / 10, buf);
+//	clock_gettime(CLOCK_MONOTONIC, &t2);
+//	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
+//	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
+//	printf("Range scan 10% = %lu ns\n", elapsed_time);
 
 	/* Update */
 	new_value = malloc(sizeof(unsigned long) * INPUT_NUM);
@@ -154,8 +159,8 @@ int main(void)
 		Update(t, keys[i], &new_value[i]);
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
-	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
-	printf("Update time = %lu ns\n", elapsed_time);
+	elapsed_time += (t2.tv_nsec - t1.tv_nsec);	
+	printf("Update Time = %lu ns\n", elapsed_time);
 
 	/* Delete */
 //	memset(dummy, 0, 15*1024*1024);
@@ -166,8 +171,9 @@ int main(void)
 //	clock_gettime(CLOCK_MONOTONIC, &t2);
 //	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 //	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
-//	printf("Delete time = %lu ns\n", elapsed_time);
-//	for (i = 0; i < 100000100; i++)
+//	printf("Delete Time = %lu ns\n", elapsed_time);
+
+//	for (i = 0; i < 50000100; i++)
 //		printf("buf[%d] = %lu\n", i, buf[i]);
 
 	return 0;

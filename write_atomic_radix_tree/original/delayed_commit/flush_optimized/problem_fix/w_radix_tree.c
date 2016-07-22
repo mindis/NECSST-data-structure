@@ -4,92 +4,50 @@
 #include <x86intrin.h>
 #include <malloc.h>
 #include <time.h>
+#include <limits.h>
 #include "w_radix_tree.h"
 
 #define mfence() asm volatile("mfence":::"memory")
-unsigned long elapsed_entry_search = 0;
-unsigned long elapsed_leaf_search = 0;
 
-static inline void clflush(volatile void *__p)
-{
-	asm volatile("clflush %0" : "+m" (*(volatile char *)__p));
-}
-
-void flush_buffer(void *buf, unsigned int len)
+void flush_buffer(void *buf, unsigned int len, bool fence)
 {
 	unsigned int i;
 	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
-	mfence();
-	for (i = 0; i < len; i += CACHE_LINE_SIZE)
-		asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
-	mfence();
+	if (fence) {
+		mfence();
+		for (i = 0; i < len; i += CACHE_LINE_SIZE)
+			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
+		mfence();
+	} else {
+		for (i = 0; i < len; i += CACHE_LINE_SIZE)
+			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
+	}
 }
 
-void flush(void *start)
+unsigned long hash(unsigned long key)
 {
-	start = (void *)((unsigned long)start &~(CACHE_LINE_SIZE - 1));
-	mfence();
-	clflush(start);
-	mfence();
+	unsigned long new_key;
+	new_key = key >> 40;
+
+	return new_key;
 }
-
-void flush_range(void *start, void *end)
-{
-	void *addr;
-
-	start = (void *)((unsigned long)start &~(CACHE_LINE_SIZE - 1));
-	mfence();
-	for(addr = start; addr < end; addr += CACHE_LINE_SIZE)
-		clflush(addr);
-	mfence();
-}
-
-void add_logentry()
-{
-	logentry *log = malloc(sizeof(logentry));
-	log->addr = 0;
-	log->old_value = 0;
-	log->new_value = 0;
-	flush_buffer(log, sizeof(logentry));
-}
-
 
 node *allocNode(node *parent, unsigned int index)
 {
-	node *new_node = malloc(sizeof(node));
-	memset(new_node, 0, sizeof(node));
+	node *new_node = calloc(1, sizeof(node));
 	if (parent != NULL) {
 		new_node->parent_ptr = parent;
 		new_node->p_index = index;
 	}
-	flush_buffer(new_node, sizeof(node));
 	return new_node;
 }
-
-/*
-node *allocNode()
-{
-//	struct timespec t1, t2;
-	node *new_node = malloc(sizeof(node));
-	memset(new_node, 0, sizeof(node));
-//	node_count++;
-//	clock_gettime(CLOCK_MONOTONIC, &t1);
-	flush_buffer(new_node, sizeof(node));
-//	clock_gettime(CLOCK_MONOTONIC, &t2);
-//	elapsed_node_flush += (t2.tv_sec - t1.tv_sec) * 1000000000;
-//	elapsed_node_flush += (t2.tv_nsec - t1.tv_nsec);
-	return new_node;
-}
-*/
 
 tree *initTree()
 {
 	tree *wradix_tree = malloc(sizeof(tree));
-//	printf("wradix_Tree address = %p\n", wradix_tree);
 	wradix_tree->root = allocNode(NULL, 0);
-//	wradix_tree->root = allocNode();
 	wradix_tree->height = 1;
-	flush_buffer(wradix_tree, sizeof(tree));
+	flush_buffer(wradix_tree, sizeof(tree), true);
 	return wradix_tree;
 }
 
@@ -98,7 +56,7 @@ tree *CoW_Tree(node *changed_root, unsigned char height)
 	tree *changed_tree = malloc(sizeof(tree));
 	changed_tree->root = changed_root;
 	changed_tree->height = height;
-	flush_buffer(changed_tree, sizeof(tree));
+	flush_buffer(changed_tree, sizeof(tree), false);
 	return changed_tree;
 }
 
@@ -107,8 +65,6 @@ int increase_radix_tree_height(tree **t, unsigned char new_height)
 	unsigned char height = (*t)->height;
 	node *root, *prev_root;
 	int errval = 0;
-//	printf("t address = %p\n", t);
-//	printf("prev_tree address = %p\n",prev_tree);
 //	struct timespec t1, t2;
 
 	prev_root = (*t)->root;
@@ -123,15 +79,16 @@ int increase_radix_tree_height(tree **t, unsigned char new_height)
 		root->entry_ptr[0] = prev_root;
 //		entry_count++;
 //		clock_gettime(CLOCK_MONOTONIC, &t1);
-		flush_buffer(root->entry_ptr[0], 8);
+//		flush_buffer(root->entry_ptr[0], 8);
 //		clock_gettime(CLOCK_MONOTONIC, &t2);
 //		elapsed_entry_flush += (t2.tv_sec - t1.tv_sec) * 1000000000;
 //		elapsed_entry_flush += (t2.tv_nsec - t1.tv_nsec);
 		prev_root->parent_ptr = root;
-		flush_buffer(prev_root->parent_ptr, 8);
+		flush_buffer(prev_root, sizeof(node), false);
 		prev_root = root;
 		height++;
 	}
+	flush_buffer(prev_root, sizeof(node), false);
 	*t = CoW_Tree(prev_root, height);
 //	flush_buffer(*t, 8);
 	return errval;
@@ -150,15 +107,17 @@ int recursive_alloc_nodes(node *temp_node, unsigned long key, void *value,
 	index = key >> node_bits;
 
 	if (height == 1) {
+		((item *)value)->next = temp_node->entry_ptr[index];
+		flush_buffer(value, sizeof(item), false);
 		temp_node->entry_ptr[index] = value;
-		flush_buffer(temp_node->entry_ptr[index], 8);
+		flush_buffer(temp_node, sizeof(node), false);
 		if (temp_node->entry_ptr[index] == NULL)
 			goto fail;
 	}
 	else {
 		if (temp_node->entry_ptr[index] == NULL) {
 			temp_node->entry_ptr[index] = allocNode(temp_node, index);
-			flush_buffer(temp_node->entry_ptr[index], 8);
+			flush_buffer(temp_node, sizeof(node), false);
 			if (temp_node->entry_ptr[index] == NULL)
 				goto fail;
 		}
@@ -189,10 +148,12 @@ int recursive_search_leaf(node *level_ptr, unsigned long key, void *value,
 	index = key >> node_bits;
 
 	if (height == 1) {
+		((item *)value)->next = level_ptr->entry_ptr[index];
+		flush_buffer(value, sizeof(item), true);
 		level_ptr->entry_ptr[index] = value;
 //		entry_count++;
 //		clock_gettime(CLOCK_MONOTONIC, &t1);
-		flush_buffer(level_ptr->entry_ptr[index], 8);
+		flush_buffer(&level_ptr->entry_ptr[index], 8, true);
 //		clock_gettime(CLOCK_MONOTONIC, &t2);
 //		elapsed_entry_flush += (t2.tv_sec - t1.tv_sec) * 1000000000;
 //		elapsed_entry_flush += (t2.tv_nsec - t1.tv_nsec);
@@ -211,7 +172,7 @@ int recursive_search_leaf(node *level_ptr, unsigned long key, void *value,
 				goto fail;
 
 			level_ptr->entry_ptr[index] = tmp_node;
-			flush_buffer(level_ptr->entry_ptr[index], 8);
+			flush_buffer(&level_ptr->entry_ptr[index], 8, true);
 			return errval;
 		}
 		next_key = (key & ((0x1UL << node_bits) - 1));
@@ -233,6 +194,11 @@ int Insert(tree **t, unsigned long key, void *value)
 	unsigned char height;
 	unsigned int blk_shift, meta_bits = META_NODE_SHIFT;
 	unsigned long total_keys;
+	item *new_item = malloc(sizeof(item));
+	new_item->key = key;
+	new_item->value = value;
+
+	key = hash(key);
 
 	height = (*t)->height;
 
@@ -262,16 +228,16 @@ int Insert(tree **t, unsigned long key, void *value)
 			goto fail;
 		}
 
-		errval = recursive_alloc_nodes(tmp_t->root, key, (void *)value, height);
+		errval = recursive_alloc_nodes(tmp_t->root, key, new_item, height);
 		if (errval < 0)
 			goto fail;
 
 		*t = tmp_t;
-		flush_buffer(*t, 8);
+		flush_buffer(*t, 8, true);
 		free(prev_tree);
 		return 0;
 	}
-	errval = recursive_search_leaf((*t)->root, key, (void *)value, height);
+	errval = recursive_search_leaf((*t)->root, key, new_item, height);
 	if (errval < 0)
 		goto fail;
 
@@ -280,29 +246,84 @@ fail:
 	return errval;
 }
 
-void *Lookup(tree *t, unsigned long key)
+void *Update(tree *t, unsigned long key, void *value)
 {
 	node *level_ptr;
+	item *next_item;
 	unsigned char height;
 	unsigned int bit_shift, idx;
-	void *value;
+	unsigned long hash_key;
+
+	hash_key = hash(key);
 
 	height = t->height;
 	level_ptr = t->root;
 	
 	while (height > 1) {
 		bit_shift = (height - 1) * META_NODE_SHIFT;
-		idx = key >> bit_shift;
+		idx = hash_key >> bit_shift;
 
 		level_ptr = level_ptr->entry_ptr[idx];
+		if (level_ptr == NULL)
+			return level_ptr;
 
-		key = key & ((0x1UL << bit_shift) - 1);
+		hash_key = hash_key & ((0x1UL << bit_shift) - 1);
 		height--;
 	}
 	bit_shift = (height - 1) * META_NODE_SHIFT;
-	idx = key >> bit_shift;
-	value = level_ptr->entry_ptr[idx];
-	return value;
+	idx = hash_key >> bit_shift;
+	next_item = level_ptr->entry_ptr[idx];
+
+	while (next_item != NULL) {
+		if (next_item->key == key) {
+			next_item->value = value;
+			flush_buffer(&next_item->value, 8, true);
+			return next_item->value;
+		}
+		else
+			next_item = next_item->next;
+	}
+
+	return NULL;
+
+}
+
+void *Lookup(tree *t, unsigned long key)
+{
+	node *level_ptr;
+	item *next_item;
+	unsigned char height;
+	unsigned int bit_shift, idx;
+	unsigned long hash_key;
+
+	hash_key = hash(key);
+
+	height = t->height;
+	level_ptr = t->root;
+	
+	while (height > 1) {
+		bit_shift = (height - 1) * META_NODE_SHIFT;
+		idx = hash_key >> bit_shift;
+
+		level_ptr = level_ptr->entry_ptr[idx];
+		if (level_ptr == NULL)
+			return level_ptr;
+
+		hash_key = hash_key & ((0x1UL << bit_shift) - 1);
+		height--;
+	}
+	bit_shift = (height - 1) * META_NODE_SHIFT;
+	idx = hash_key >> bit_shift;
+	next_item = level_ptr->entry_ptr[idx];
+
+	while (next_item != NULL) {
+		if (next_item->key == key)
+			return next_item->value;
+		else
+			next_item = next_item->next;
+	}
+
+	return NULL;
 }
 
 node *search_to_next_leaf(node *next_branch, unsigned char height)
@@ -355,7 +376,6 @@ void Range_Lookup(tree *t, unsigned long start_key, unsigned long num,
 	unsigned int bit_shift, idx, i;
 	unsigned long search_count = 0;
 	void *value;
-	struct timespec t1, t2;
 
 	height = t->height;
 	level_ptr = t->root;
@@ -372,33 +392,71 @@ void Range_Lookup(tree *t, unsigned long start_key, unsigned long num,
 	idx = start_key >> bit_shift;
 
 	while (search_count < num) {
-		clock_gettime(CLOCK_MONOTONIC, &t1);
 		for (i = idx; i < (0x1UL << META_NODE_SHIFT); i++) {
 			if (level_ptr->entry_ptr[i] != NULL) {
 				buf[search_count] = *(unsigned long *)level_ptr->entry_ptr[i];
 				search_count++;
-				if (search_count == num) {
-					clock_gettime(CLOCK_MONOTONIC, &t2);
-					elapsed_entry_search += (t2.tv_sec - t1.tv_sec) * 1000000000;
-					elapsed_entry_search += (t2.tv_nsec - t1.tv_nsec);
+				if (search_count == num)
 					return ;
-				}
 			}
 		}
-		clock_gettime(CLOCK_MONOTONIC, &t2);
-		elapsed_entry_search += (t2.tv_sec - t1.tv_sec) * 1000000000;
-		elapsed_entry_search += (t2.tv_nsec - t1.tv_nsec);
-
-		clock_gettime(CLOCK_MONOTONIC, &t1);
-		level_ptr = find_next_leaf(t, level_ptr->parent_ptr, level_ptr->p_index, 2);
-		clock_gettime(CLOCK_MONOTONIC, &t2);
-		elapsed_leaf_search += (t2.tv_sec - t1.tv_sec) * 1000000000;
-		elapsed_leaf_search += (t2.tv_nsec - t1.tv_nsec);
-
+		level_ptr = find_next_leaf(t, level_ptr->parent_ptr,
+				level_ptr->p_index, 2);
 		if (level_ptr == NULL) {
 			printf("error\n");
 			return ;
 		}
 		idx = 0;
 	}
+}
+
+int recursive_free_nodes(tree *t, node *parent, unsigned int index,
+		unsigned char height)
+{
+	int i, errval = 0;
+
+	if (height < t->height) {
+		for (i = 0; i < NUM_ENTRY; i++) {
+			/* parent node의 entry에 valid entry가 있을 경우 */
+			if (i != index && parent->entry_ptr[i] != NULL) {
+				parent->entry_ptr[index] = NULL;
+				flush_buffer(&parent->entry_ptr[index], 8, true);
+				return errval;
+			}
+		}
+		errval = recursive_free_nodes(t, parent->parent_ptr, 
+				parent->p_index, height + 1);
+	} else {
+		parent->entry_ptr[index] = NULL;
+		flush_buffer(&parent->entry_ptr[index], 8, true);
+	}
+
+	return errval;
+}
+
+void Delete(tree *t, unsigned long key)
+{
+	node *level_ptr;
+	unsigned char height;
+	unsigned int bit_shift, idx;
+
+	height = t->height;
+	level_ptr = t->root;
+	
+	while (height > 1) {
+		bit_shift = (height - 1) * META_NODE_SHIFT;
+		idx = key >> bit_shift;
+
+		level_ptr = level_ptr->entry_ptr[idx];
+
+		key = key & ((0x1UL << bit_shift) - 1);
+		height--;
+	}
+	bit_shift = (height - 1) * META_NODE_SHIFT;
+	idx = key >> bit_shift;
+
+	level_ptr->entry_ptr[idx] = NULL;
+	flush_buffer(&level_ptr->entry_ptr[idx], 8, true);
+	
+//	recursive_free_nodes(t, level_ptr, idx, 1);
 }

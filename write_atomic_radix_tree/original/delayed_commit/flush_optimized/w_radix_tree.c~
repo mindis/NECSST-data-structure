@@ -7,24 +7,23 @@
 #include "w_radix_tree.h"
 
 #define mfence() asm volatile("mfence":::"memory")
-#define sfence() asm volatile("sfence":::"memory")
 
-void flush_buffer(void *buf, unsigned int len, bool fence)
+void flush_buffer(void *buf, unsigned long len, bool fence)
 {
-	unsigned int i;
+	unsigned long i;
 	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
 	if (fence) {
-//		sfence();
+		mfence();
 		for (i = 0; i < len; i += CACHE_LINE_SIZE)
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
-		sfence();
+		mfence();
 	} else {
 		for (i = 0; i < len; i += CACHE_LINE_SIZE)
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
 	}
 }
 
-node *allocNode(node *parent, unsigned int index)
+node *allocNode(node *parent, unsigned long index)
 {
 	node *new_node = calloc(1, sizeof(node));
 	if (parent != NULL) {
@@ -90,9 +89,9 @@ int recursive_alloc_nodes(node *temp_node, unsigned long key, void *value,
 		unsigned char height)
 {
 	int errval = -1;
-	unsigned int meta_bits = META_NODE_SHIFT, node_bits;
+	unsigned long meta_bits = META_NODE_SHIFT, node_bits;
 	unsigned long next_key;
-	unsigned int index;
+	unsigned long index;
 	
 	node_bits = (height - 1) * meta_bits;
 
@@ -128,9 +127,9 @@ int recursive_search_leaf(node *level_ptr, unsigned long key, void *value,
 		unsigned char height)
 {
 	int errval = -1;
-	unsigned int meta_bits = META_NODE_SHIFT, node_bits;
+	unsigned long meta_bits = META_NODE_SHIFT, node_bits;
 	unsigned long next_key;
-	unsigned int index;
+	unsigned long index;
 //	struct timespec t1, t2;
 
 	node_bits = (height - 1) * meta_bits;
@@ -138,7 +137,6 @@ int recursive_search_leaf(node *level_ptr, unsigned long key, void *value,
 	index = key >> node_bits;
 
 	if (height == 1) {
-		sfence();
 		level_ptr->entry_ptr[index] = value;
 //		entry_count++;
 //		clock_gettime(CLOCK_MONOTONIC, &t1);
@@ -160,7 +158,6 @@ int recursive_search_leaf(node *level_ptr, unsigned long key, void *value,
 			if (errval < 0)
 				goto fail;
 
-			sfence();
 			level_ptr->entry_ptr[index] = tmp_node;
 			flush_buffer(&level_ptr->entry_ptr[index], 8, true);
 			return errval;
@@ -182,7 +179,7 @@ int Insert(tree **t, unsigned long key, void *value)
 	int errval;
 	unsigned long max_keys;
 	unsigned char height;
-	unsigned int blk_shift, meta_bits = META_NODE_SHIFT;
+	unsigned long blk_shift, meta_bits = META_NODE_SHIFT;
 	unsigned long total_keys;
 
 	height = (*t)->height;
@@ -217,7 +214,6 @@ int Insert(tree **t, unsigned long key, void *value)
 		if (errval < 0)
 			goto fail;
 
-		sfence();
 		*t = tmp_t;
 		flush_buffer(*t, 8, true);
 		free(prev_tree);
@@ -236,7 +232,7 @@ void *Update(tree *t, unsigned long key, void *value)
 {
 	node *level_ptr;
 	unsigned char height;
-	unsigned int bit_shift, idx;
+	unsigned long bit_shift, idx;
 
 	height = t->height;
 	level_ptr = t->root;
@@ -263,7 +259,7 @@ void *Lookup(tree *t, unsigned long key)
 {
 	node *level_ptr;
 	unsigned char height;
-	unsigned int bit_shift, idx;
+	unsigned long bit_shift, idx;
 	void *value;
 
 	height = t->height;
@@ -306,7 +302,7 @@ node *search_to_next_leaf(node *next_branch, unsigned char height)
 	}
 }
 
-node *find_next_leaf(tree *t, node *parent, unsigned int index, 
+node *find_next_leaf(tree *t, node *parent, unsigned long index, 
 		unsigned char height)
 {
 	int i;
@@ -333,7 +329,7 @@ void Range_Lookup(tree *t, unsigned long start_key, unsigned long num,
 {
 	node *level_ptr;
 	unsigned char height;
-	unsigned int bit_shift, idx, i;
+	unsigned long bit_shift, idx, i;
 	unsigned long search_count = 0;
 	void *value;
 
@@ -370,7 +366,7 @@ void Range_Lookup(tree *t, unsigned long start_key, unsigned long num,
 	}
 }
 
-int recursive_free_nodes(tree *t, node *parent, unsigned int index,
+int recursive_free_nodes(tree *t, node *parent, unsigned long index,
 		unsigned char height)
 {
 	int i, errval = 0;
@@ -398,7 +394,7 @@ void Delete(tree *t, unsigned long key)
 {
 	node *level_ptr;
 	unsigned char height;
-	unsigned int bit_shift, idx;
+	unsigned long bit_shift, idx;
 
 	height = t->height;
 	level_ptr = t->root;
@@ -414,6 +410,9 @@ void Delete(tree *t, unsigned long key)
 	}
 	bit_shift = (height - 1) * META_NODE_SHIFT;
 	idx = key >> bit_shift;
+
+	level_ptr->entry_ptr[idx] = NULL;
+	flush_buffer(&level_ptr->entry_ptr[idx], 8, true);
 	
-	recursive_free_nodes(t, level_ptr, idx, 1);
+//	recursive_free_nodes(t, level_ptr, idx, 1);
 }

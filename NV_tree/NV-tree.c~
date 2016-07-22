@@ -1,3 +1,6 @@
+/* Developted by Se Kwon Lee in UNIST NECSST Lab
+ * E-mail: sekwonlee90@gmail.com */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,16 +12,16 @@
 #include "NV-tree.h"
 
 #define mfence() asm volatile("mfence":::"memory")
-#define sfence() asm volatile("sfence":::"memory")
 
 void flush_buffer(void *buf, unsigned int len, bool fence)
 {
 	unsigned int i;
 	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
 	if (fence) {
+		mfence();
 		for (i = 0; i < len; i += CACHE_LINE_SIZE)
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
-		sfence();
+		mfence();
 	} else {
 		for (i = 0; i < len; i += CACHE_LINE_SIZE)
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
@@ -169,10 +172,29 @@ fail:
 	return;
 }
 
+void insertion_sort(struct LN_entry *base, int num)
+{
+	unsigned long i, j;
+	struct LN_entry temp;
+
+//	MAX_NUM_ENTRY_LN
+
+	for (i = 1; i < num; i++) {
+		temp = base[i];
+		j = i - 1;
+
+		while (j >= 0 && base[j].key > temp.key) {
+			base[j + 1] = base[j];
+			j = j - 1;
+		}
+		base[j + 1] = temp;
+	}
+}
+
 int Range_Lookup(tree *t, unsigned long start_key, unsigned int num, 
 		unsigned long buf[])
 {
-	int i, j = 0, count = 0, invalid_count = 0;
+	int i, j = 0, count = 0, invalid_count, valid_num;
 	LN *current_LN;
 	unsigned long *invalid_key =
 		malloc(((MAX_NUM_ENTRY_LN)/2 + 1) * sizeof(unsigned long));
@@ -184,6 +206,7 @@ int Range_Lookup(tree *t, unsigned long start_key, unsigned int num,
 		goto fail;
 
 	while (current_LN != NULL && j < num) {
+		valid_num = 0;
 		invalid_count = 0;
 		for (i = 0; i < current_LN->nElements; i++) {
 			if (current_LN->LN_Element[i].flag == false) {
@@ -195,7 +218,7 @@ int Range_Lookup(tree *t, unsigned long start_key, unsigned int num,
 		for (i = 0; i < current_LN->nElements; i++) {
 			if (current_LN->LN_Element[i].flag == false)
 				continue;
-
+	
 			if (invalid_count > 0) {
 				if (current_LN->LN_Element[i].key == invalid_key[count]) {
 					count++;
@@ -203,13 +226,21 @@ int Range_Lookup(tree *t, unsigned long start_key, unsigned int num,
 					continue;
 				}
 			}
-			buf[j] = *(unsigned long *)current_LN->LN_Element[i].value;
+			valid_Element[valid_num] = current_LN->LN_Element[i];
+			valid_num++;
+		}
+
+		insertion_sort(valid_Element, valid_num);
+
+		for (i = 0; i < valid_num; i++) {
+			buf[j] = *(unsigned long *)valid_Element[i].value;
 			j++;
 			if (j == num)
 				break;
 		}
 		current_LN = current_LN->sibling;
 	}
+
 	return 0;
 fail:
 	return -1;
@@ -277,23 +308,6 @@ void quick_sort(struct LN_entry *base, int left, int right)
 	}
 }
 
-void insertion_sort(struct LN_entry *base)
-{
-	unsigned long i, j;
-	struct LN_entry temp;
-
-	for (i = 1; i < MAX_NUM_ENTRY_LN; i++) {
-		temp = base[i];
-		j = i - 1;
-
-		while (j >= 0 && base[j].key > temp.key) {
-			base[j + 1] = base[j];
-			j = j - 1;
-		}
-		base[j + 1] = temp;
-	}
-}
-
 int leaf_scan_divide(tree *t, LN *leaf, LN *split_node1, LN *split_node2)
 {
 	int i, j = 0, count = 0, invalid_count = 0, errval = -1;
@@ -325,7 +339,7 @@ int leaf_scan_divide(tree *t, LN *leaf, LN *split_node1, LN *split_node2)
 	}
 
 //	quick_sort(valid_Element, 0, j - 1);
-	insertion_sort(valid_Element);
+	insertion_sort(valid_Element, j);
 
 	memcpy(split_node1->LN_Element, valid_Element, 
 			sizeof(struct LN_entry) * (j / 2));
@@ -675,7 +689,7 @@ int leaf_split_and_insert(tree *t, LN *leaf, unsigned long key, void *value)
 		insert_entry_to_leaf(new_leaf, key, value, false);
 
 		flush_buffer(split_node1, sizeof(LN), false);
-		flush_buffer(split_node2, sizeof(LN), true);
+		flush_buffer(split_node2, sizeof(LN), false);
 
 		prev_leaf->sibling = split_node1;
 		flush_buffer(&prev_leaf->sibling, sizeof(&prev_leaf->sibling), true);
@@ -719,7 +733,6 @@ int Insert(tree *t, unsigned long key, void *value)
 {
 	int errval = -1;
 	LN *leaf;
-	struct timespec t1, t2;
 
 	if (t->root == NULL) {
 		errval = create_new_tree(t, key, value);
@@ -749,138 +762,253 @@ fail:
 	return errval;
 }
 
-int main(void)
+void update_entry_to_leaf(LN *leaf, unsigned long old_key, void *old_value,
+		unsigned long new_key, void *new_value, bool flush)
 {
-	struct timespec t1, t2;
-	int i;
-	char *dummy;
-	unsigned long *keys;
-	unsigned long elapsed_time;
-	void *ret;
-	FILE *fp;
-	unsigned long *buf;
-	char line[1024];
-	FILE *fp2;
-	unsigned long nVmSize = 0;
-	unsigned long nVmRss = 0;
-	unsigned long max;
-	unsigned long min;
-	unsigned long count = 0;
-
-	if ((fp = fopen("/home/sekwon/Public/input_file/input_10billion.txt","r")) == NULL)
-	{
-		puts("error");
-		exit(0);
+	if (flush == true) {
+		leaf->LN_Element[leaf->nElements].flag = false;
+		leaf->LN_Element[leaf->nElements].key = old_key;
+		leaf->LN_Element[leaf->nElements].value = old_value;
+		leaf->LN_Element[leaf->nElements + 1].flag = true;
+		leaf->LN_Element[leaf->nElements + 1].key = new_key;
+		leaf->LN_Element[leaf->nElements + 1].value = new_value;
+		flush_buffer(&leaf->LN_Element[leaf->nElements], 
+				sizeof(struct LN_entry) * 2, true);
+		leaf->nElements = leaf->nElements + 2;
+		flush_buffer(&leaf->nElements, sizeof(unsigned char), true);
+	} else {
+		leaf->LN_Element[leaf->nElements].flag = false;
+		leaf->LN_Element[leaf->nElements].key = old_key;
+		leaf->LN_Element[leaf->nElements].value = old_value;
+		leaf->LN_Element[leaf->nElements + 1].flag = true;
+		leaf->LN_Element[leaf->nElements + 1].key = new_key;
+		leaf->LN_Element[leaf->nElements + 1].value = new_value;
+		leaf->nElements = leaf->nElements + 2;
 	}
+}
 
-	keys = malloc(sizeof(unsigned long) * 100000100);
-	buf = malloc(sizeof(unsigned long) * 100000100);
-	memset(buf, 0, sizeof(unsigned long) * 100000100);
-	for(i = 0; i < 100000100; i++) {
-//		keys[i] = i;
-		fscanf(fp, "%lu", &keys[i]);
-	}
+int leaf_split_and_update(tree *t, LN *leaf, unsigned long key, void *value,
+		unsigned long new_key, void *new_value)
+{
+	int errval = -1, current_idx;
+	LN *split_node1, *split_node2, *prev_leaf, *new_leaf;
+	PLN *prev_PLN;
 
-	max = keys[0];
-	min = keys[0];
-	for (i = 1; i < 100000100; i++) {
-		if (keys[i] > max)
-			max = keys[i];
-		if (keys[i] < min)
-			min = keys[i];
-		if (keys[i] == 9169820820)
-			count++;
-	}
-	printf("중복값 count = %lu\n", count);
+	split_node1 = allocLNode();
+	split_node2 = allocLNode();
+	split_node1->sibling = split_node2;
+	split_node2->sibling = leaf->sibling;
 
-	tree *t = initTree();
-	dummy = (char *)malloc(15*1024*1024);
-	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
+	if (split_node1 == NULL || split_node2 == NULL)
+		return errval;
 
-//	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 0; i < 100000000; i++) {
-//		printf("insert count = %d\n", i);
-		if (Insert(t, keys[i], &keys[i]) < 0)
-			return 0;
-	}
-//	clock_gettime(CLOCK_MONOTONIC, &t2);
-//	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
-//	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
+	leaf_scan_divide(t, leaf, split_node1, split_node2);
 
-	sprintf(line, "/proc/%d/status", getpid());
-	fp2 = fopen(line, "r");
-	if (fp2 == NULL)
-		return ;
+	if (t->is_leaf != 0) {
+		current_idx = insert_to_PLN(t, leaf->parent_id, split_node1, split_node2);
+		if (current_idx < 0)
+			goto fail;
 
-	while (fgets(line, 1024, fp2) != NULL) {
-		if (strstr(line, "VmSize")) {
-			char tmp[32];
-			char size[32];
-			sscanf(line,"%s%s", tmp, size);
-			nVmSize = atoi(size);
-			printf("nVmSize = %lu KB\n", nVmSize);
+		if (current_idx != 0) {
+			prev_PLN = (PLN *)t->root;
+			prev_leaf = prev_PLN[split_node1->parent_id].entries[current_idx - 1].ptr;
+		} else {
+			if (split_node1->parent_id > t->first_PLN_id) {
+				prev_PLN = (PLN *)t->root;
+				prev_leaf = prev_PLN[split_node1->parent_id - 1].entries[prev_PLN[split_node1->parent_id - 1].nKeys - 1].ptr;
+			} else {
+				t->first_leaf = split_node1;
+				goto end;
+			}
 		}
-		else if (strstr(line, "VmRSS")) {
-			char tmp[32];
-			char size[32];
-			sscanf(line, "%s%s", tmp, size);
-			nVmRss = atoi(size);
-			printf("nVmRSS = %lu KB\n", nVmRss);
-			break;
-		}
+
+		new_leaf = find_leaf(t, key);
+
+		update_entry_to_leaf(new_leaf, key, value, new_key, new_value, false);
+
+		flush_buffer(split_node1, sizeof(LN), false);
+		flush_buffer(split_node2, sizeof(LN), false);
+
+		prev_leaf->sibling = split_node1;
+		flush_buffer(&prev_leaf->sibling, sizeof(&prev_leaf->sibling), true);
+	} else {
+		PLN *new_PLN = (PLN *)allocINode(1);
+
+		split_node1->parent_id = 0;
+		split_node2->parent_id = 0;
+		split_node2->sibling = NULL;
+
+		new_PLN->entries[new_PLN->nKeys].key = 
+			split_node1->LN_Element[split_node1->nElements - 1].key;
+		new_PLN->entries[new_PLN->nKeys].ptr = split_node1;
+		new_PLN->nKeys++;
+		new_PLN->entries[new_PLN->nKeys].key = MAX_KEY;
+		new_PLN->entries[new_PLN->nKeys].ptr = split_node2;
+		new_PLN->nKeys++;
+
+		t->height = 0;
+		t->is_leaf = 1;
+		t->first_PLN_id = 0;
+		t->last_PLN_id = 0;
+		t->root = new_PLN;
+
+		new_leaf = find_leaf(t, key);
+		
+		update_entry_to_leaf(new_leaf, key, value, new_key, new_value, false);
+
+		flush_buffer(split_node1, sizeof(LN), false);
+		flush_buffer(split_node2, sizeof(LN), true);
 	}
-	fclose(fp2);
 
-	printf("sizeof(IN) = %d\n", sizeof(IN));
-	printf("sizeof(PLN) = %d\n", sizeof(PLN));
-	printf("sizeof(LN) = %d\n", sizeof(LN));
-	printf("Bulk load Time = %lu ns\n",elapsed_time);
+end:
+	free(leaf);
+	return 0;
+fail:
+	return current_idx;
+}
 
-	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
+int Update(tree *t, unsigned long key, void *value)
+{
+	int errval = -1, pos, i;
+	unsigned long old_key, new_key;
+	void *old_value, *new_value;
+	LN *current_LN;
+	IN *current_IN = t->root;
 
-//	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 100000000; i < 100000100; i++)
-		Insert(t, keys[i], &keys[i]);
-//	clock_gettime(CLOCK_MONOTONIC, &t2);
-//	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
-//	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
-	printf("Insert Time = %lu ns\n", elapsed_time);
+	current_LN = find_leaf(t, key);
+	if (current_LN == NULL)
+		goto fail;
 
-	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
-
-//	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 0; i < 100000100; i++) {
-		ret = (void *)Lookup(t, keys[i]);		
-		if (ret == NULL) {
-			printf("There is no key[%d] = %lu\n", i, keys[i]);
-			exit(1);
-		}/*
-		else {
-			printf("Search value = %lu\n", *(unsigned long*)ret);
-		//	sleep(1);
-		}*/
+	if (current_LN->nElements < MAX_NUM_ENTRY_LN - 1)
+		update_entry_to_leaf(current_LN, key, NULL, key, value, true);
+	else {
+		/* Insert after split */
+		errval = leaf_split_and_update(t, current_LN, key, NULL, key, value);
+		if (errval < 0)
+			goto fail;
 	}
-//	clock_gettime(CLOCK_MONOTONIC, &t2);
-//	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
-//	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
-	printf("Search Time = %lu ns\n", elapsed_time);
-
-	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
-
-//	clock_gettime(CLOCK_MONOTONIC, &t1);
-	Range_Lookup(t, min, 100000100, buf);
-//	clock_gettime(CLOCK_MONOTONIC, &t2);
-//	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
-//	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
-
-	printf("Range search time = %lu ns\n", elapsed_time);
-
-//	for (i = 0; i < 100000100; i++)
-//		printf("buf[%d] = %lu\n", i, buf[i]);
 
 	return 0;
+fail:
+	return errval;
+}
+
+void delete_entry_to_leaf(LN *leaf, unsigned long key, void *value, bool flush)
+{
+	if (flush == true) {
+		leaf->LN_Element[leaf->nElements].flag = false;
+		leaf->LN_Element[leaf->nElements].key = key;
+		leaf->LN_Element[leaf->nElements].value = value;
+		flush_buffer(&leaf->LN_Element[leaf->nElements], 
+				sizeof(struct LN_entry), true);
+		leaf->nElements++;
+		flush_buffer(&leaf->nElements, sizeof(unsigned char), true);
+	} else {
+		leaf->LN_Element[leaf->nElements].flag = false;
+		leaf->LN_Element[leaf->nElements].key = key;
+		leaf->LN_Element[leaf->nElements].value = value;
+		leaf->nElements++;
+	}
+}
+
+int leaf_split_and_delete(tree *t, LN *leaf, unsigned long key, void *value)
+{
+	int errval = -1, current_idx;
+	LN *split_node1, *split_node2, *prev_leaf, *new_leaf;
+	PLN *prev_PLN;
+
+	split_node1 = allocLNode();
+	split_node2 = allocLNode();
+	split_node1->sibling = split_node2;
+	split_node2->sibling = leaf->sibling;
+
+	if (split_node1 == NULL || split_node2 == NULL)
+		return errval;
+
+	leaf_scan_divide(t, leaf, split_node1, split_node2);
+
+	if (t->is_leaf != 0) {
+		current_idx = insert_to_PLN(t, leaf->parent_id, split_node1, split_node2);
+		if (current_idx < 0)
+			goto fail;
+
+		if (current_idx != 0) {
+			prev_PLN = (PLN *)t->root;
+			prev_leaf = prev_PLN[split_node1->parent_id].entries[current_idx - 1].ptr;
+		} else {
+			if (split_node1->parent_id > t->first_PLN_id) {
+				prev_PLN = (PLN *)t->root;
+				prev_leaf = prev_PLN[split_node1->parent_id - 1].entries[prev_PLN[split_node1->parent_id - 1].nKeys - 1].ptr;
+			} else {
+				t->first_leaf = split_node1;
+				goto end;
+			}
+		}
+
+		new_leaf = find_leaf(t, key);
+
+		delete_entry_to_leaf(new_leaf, key, value, false);
+
+		flush_buffer(split_node1, sizeof(LN), false);
+		flush_buffer(split_node2, sizeof(LN), false);
+
+		prev_leaf->sibling = split_node1;
+		flush_buffer(&prev_leaf->sibling, sizeof(&prev_leaf->sibling), true);
+	} else {
+		PLN *new_PLN = (PLN *)allocINode(1);
+
+		split_node1->parent_id = 0;
+		split_node2->parent_id = 0;
+		split_node2->sibling = NULL;
+
+		new_PLN->entries[new_PLN->nKeys].key = 
+			split_node1->LN_Element[split_node1->nElements - 1].key;
+		new_PLN->entries[new_PLN->nKeys].ptr = split_node1;
+		new_PLN->nKeys++;
+		new_PLN->entries[new_PLN->nKeys].key = MAX_KEY;
+		new_PLN->entries[new_PLN->nKeys].ptr = split_node2;
+		new_PLN->nKeys++;
+
+		t->height = 0;
+		t->is_leaf = 1;
+		t->first_PLN_id = 0;
+		t->last_PLN_id = 0;
+		t->root = new_PLN;
+
+		new_leaf = find_leaf(t, key);
+		
+		delete_entry_to_leaf(new_leaf, key, value, false);
+
+		flush_buffer(split_node1, sizeof(LN), false);
+		flush_buffer(split_node2, sizeof(LN), true);
+	}
+
+end:
+	free(leaf);
+	return 0;
+fail:
+	return current_idx;
+}
+
+int Delete(tree *t, unsigned long key)
+{
+	int errval = -1;
+	LN *leaf;
+
+	leaf = find_leaf(t, key);
+	if (leaf == NULL)
+		goto fail;
+
+	if (leaf->nElements < MAX_NUM_ENTRY_LN)
+		delete_entry_to_leaf(leaf, key, NULL, true);
+	else {
+		/* Delete after split */
+		errval = leaf_split_and_delete(t, leaf, key, NULL);
+		if (errval < 0)
+			goto fail;
+	}
+
+	return 0;
+fail:
+	return errval;
 }

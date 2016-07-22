@@ -1,9 +1,11 @@
 #include <stdbool.h>
+#include <limits.h>
+
 #define CACHE_LINE_SIZE		64
 #define MAX_NUM_ENTRY_IN	509
 #define MAX_NUM_ENTRY_PLN	255
 #define MAX_NUM_ENTRY_LN	169
-#define MAX_KEY 10000000000
+#define MAX_KEY 			ULONG_MAX
 
 typedef struct entry entry;
 typedef struct Internal_Node IN;
