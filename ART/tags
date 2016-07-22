@@ -1,0 +1,102 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Node	ART.cpp	/^   Node(int8_t type) : prefixLength(0),count(0),type(type) {}$/;"	f	struct:Node
+Node	ART.cpp	/^struct Node {$/;"	s	file:
+Node	ARTshort.cpp	/^   Node(int8_t type) : count(0),type(type) {}$/;"	f	struct:Node
+Node	ARTshort.cpp	/^struct Node {$/;"	s	file:
+Node16	ART.cpp	/^   Node16() : Node(NodeType16) {$/;"	f	struct:Node16
+Node16	ART.cpp	/^struct Node16 : Node {$/;"	s	file:
+Node16	ARTshort.cpp	/^   Node16() : Node(NodeType16) {}$/;"	f	struct:Node16
+Node16	ARTshort.cpp	/^struct Node16 : Node {$/;"	s	file:
+Node256	ART.cpp	/^   Node256() : Node(NodeType256) {$/;"	f	struct:Node256
+Node256	ART.cpp	/^struct Node256 : Node {$/;"	s	file:
+Node256	ARTshort.cpp	/^   Node256() : Node(NodeType256) {$/;"	f	struct:Node256
+Node256	ARTshort.cpp	/^struct Node256 : Node {$/;"	s	file:
+Node4	ART.cpp	/^   Node4() : Node(NodeType4) {$/;"	f	struct:Node4
+Node4	ART.cpp	/^struct Node4 : Node {$/;"	s	file:
+Node4	ARTshort.cpp	/^   Node4() : Node(NodeType4) {}$/;"	f	struct:Node4
+Node4	ARTshort.cpp	/^struct Node4 : Node {$/;"	s	file:
+Node48	ART.cpp	/^   Node48() : Node(NodeType48) {$/;"	f	struct:Node48
+Node48	ART.cpp	/^struct Node48 : Node {$/;"	s	file:
+Node48	ARTshort.cpp	/^   Node48() : Node(NodeType48) {$/;"	f	struct:Node48
+Node48	ARTshort.cpp	/^struct Node48 : Node {$/;"	s	file:
+NodeType16	ART.cpp	/^static const int8_t NodeType16=1;$/;"	v	file:
+NodeType16	ARTshort.cpp	/^static const int8_t NodeType16=1;$/;"	v	file:
+NodeType256	ART.cpp	/^static const int8_t NodeType256=3;$/;"	v	file:
+NodeType256	ARTshort.cpp	/^static const int8_t NodeType256=3;$/;"	v	file:
+NodeType4	ART.cpp	/^static const int8_t NodeType4=0;$/;"	v	file:
+NodeType4	ARTshort.cpp	/^static const int8_t NodeType4=0;$/;"	v	file:
+NodeType48	ART.cpp	/^static const int8_t NodeType48=2;$/;"	v	file:
+NodeType48	ARTshort.cpp	/^static const int8_t NodeType48=2;$/;"	v	file:
+child	ART.cpp	/^   Node* child[16];$/;"	m	struct:Node16	file:
+child	ART.cpp	/^   Node* child[256];$/;"	m	struct:Node256	file:
+child	ART.cpp	/^   Node* child[48];$/;"	m	struct:Node48	file:
+child	ART.cpp	/^   Node* child[4];$/;"	m	struct:Node4	file:
+child	ARTshort.cpp	/^   Node* child[16];$/;"	m	struct:Node16	file:
+child	ARTshort.cpp	/^   Node* child[256];$/;"	m	struct:Node256	file:
+child	ARTshort.cpp	/^   Node* child[48];$/;"	m	struct:Node48	file:
+child	ARTshort.cpp	/^   Node* child[4];$/;"	m	struct:Node4	file:
+childIndex	ART.cpp	/^   uint8_t childIndex[256];$/;"	m	struct:Node48	file:
+childIndex	ARTshort.cpp	/^   uint8_t childIndex[256];$/;"	m	struct:Node48	file:
+copyPrefix	ART.cpp	/^void copyPrefix(Node* src,Node* dst) {$/;"	f
+count	ART.cpp	/^   uint16_t count;$/;"	m	struct:Node	file:
+count	ARTshort.cpp	/^   uint16_t count;$/;"	m	struct:Node	file:
+ctz	ART.cpp	/^static inline unsigned ctz(uint16_t x) {$/;"	f	file:
+emptyMarker	ART.cpp	/^static const uint8_t emptyMarker=48;$/;"	v	file:
+emptyMarker	ARTshort.cpp	/^const uint8_t emptyMarker=48;$/;"	v
+erase	ART.cpp	/^void erase(Node* node,Node** nodeRef,uint8_t key[],unsigned keyLength,unsigned depth,unsigned maxKeyLength) {$/;"	f
+eraseNode16	ART.cpp	/^void eraseNode16(Node16* node,Node** nodeRef,Node** leafPlace) {$/;"	f
+eraseNode256	ART.cpp	/^void eraseNode256(Node256* node,Node** nodeRef,uint8_t keyByte) {$/;"	f
+eraseNode4	ART.cpp	/^void eraseNode4(Node4* node,Node** nodeRef,Node** leafPlace) {$/;"	f
+eraseNode48	ART.cpp	/^void eraseNode48(Node48* node,Node** nodeRef,uint8_t keyByte) {$/;"	f
+findChild	ART.cpp	/^Node** findChild(Node* n,uint8_t keyByte) {$/;"	f
+findChildPtr	ARTshort.cpp	/^inline Node** findChildPtr(Node* n,uint8_t keyByte) {$/;"	f
+flipSign	ART.cpp	/^uint8_t flipSign(uint8_t keyByte) {$/;"	f
+flipSign	ARTshort.cpp	/^uint8_t flipSign(uint8_t keyByte) {$/;"	f
+getLeafValue	ART.cpp	/^inline uintptr_t getLeafValue(Node* node) {$/;"	f
+getLeafValue	ARTshort.cpp	/^uintptr_t getLeafValue(Node* node) {$/;"	f
+gettime	ART.cpp	/^static double gettime(void) {$/;"	f	file:
+gettime	ARTshort.cpp	/^static inline double gettime(void) {$/;"	f	file:
+insert	ART.cpp	/^void insert(Node* node,Node** nodeRef,uint8_t key[],unsigned depth,uintptr_t value,unsigned maxKeyLength) {$/;"	f
+insert	ARTshort.cpp	/^void insert(Node* node,Node** nodeRef,uint8_t key[],uintptr_t value,unsigned maxKeyLength,unsigned depth=0) {$/;"	f
+insertNode16	ART.cpp	/^void insertNode16(Node16* node,Node** nodeRef,uint8_t keyByte,Node* child) {$/;"	f
+insertNode16	ARTshort.cpp	/^void insertNode16(Node16* node,Node** nodeRef,uint8_t keyByte,Node* child) {$/;"	f
+insertNode256	ART.cpp	/^void insertNode256(Node256* node,Node** nodeRef,uint8_t keyByte,Node* child) {$/;"	f
+insertNode256	ARTshort.cpp	/^void insertNode256(Node256* node,Node** nodeRef,uint8_t keyByte,Node* child) {$/;"	f
+insertNode4	ART.cpp	/^void insertNode4(Node4* node,Node** nodeRef,uint8_t keyByte,Node* child) {$/;"	f
+insertNode4	ARTshort.cpp	/^void insertNode4(Node4* node,Node** nodeRef,uint8_t keyByte,Node* child) {$/;"	f
+insertNode48	ART.cpp	/^void insertNode48(Node48* node,Node** nodeRef,uint8_t keyByte,Node* child) {$/;"	f
+insertNode48	ARTshort.cpp	/^void insertNode48(Node48* node,Node** nodeRef,uint8_t keyByte,Node* child) {$/;"	f
+isLeaf	ART.cpp	/^inline bool isLeaf(Node* node) {$/;"	f
+isLeaf	ARTshort.cpp	/^bool isLeaf(Node* node) {$/;"	f
+key	ART.cpp	/^   uint8_t key[16];$/;"	m	struct:Node16	file:
+key	ART.cpp	/^   uint8_t key[4];$/;"	m	struct:Node4	file:
+key	ARTshort.cpp	/^   uint8_t key[16];$/;"	m	struct:Node16	file:
+key	ARTshort.cpp	/^   uint8_t key[4];$/;"	m	struct:Node4	file:
+leafMatches	ART.cpp	/^bool leafMatches(Node* leaf,uint8_t key[],unsigned keyLength,unsigned depth,unsigned maxKeyLength) {$/;"	f
+leafMatches	ARTshort.cpp	/^bool leafMatches(Node* leaf,uint8_t key[],unsigned keyLength,unsigned depth,unsigned maxKeyLength) {$/;"	f
+leaves	ARTshort.cpp	/^uint32_t* leaves;$/;"	v
+loadKey	ART.cpp	/^void loadKey(uintptr_t tid,uint8_t key[]) {$/;"	f
+loadKey	ARTshort.cpp	/^inline void loadKey(uintptr_t tid,uint8_t key[]) {$/;"	f
+lookup	ART.cpp	/^Node* lookup(Node* node,uint8_t key[],unsigned keyLength,unsigned depth,unsigned maxKeyLength) {$/;"	f
+lookup	ARTshort.cpp	/^inline Node* lookup(Node* n,uint8_t* key,unsigned keyLength,unsigned maxKeyLength,unsigned depth=0) {$/;"	f
+lookupPessimistic	ART.cpp	/^Node* lookupPessimistic(Node* node,uint8_t key[],unsigned keyLength,unsigned depth,unsigned maxKeyLength) {$/;"	f
+main	ART.cpp	/^int main(int argc,char** argv) {$/;"	f
+main	ARTshort.cpp	/^int main(int argc,char** argv) {$/;"	f
+makeLeaf	ART.cpp	/^inline Node* makeLeaf(uintptr_t tid) {$/;"	f
+makeLeaf	ARTshort.cpp	/^Node* makeLeaf(uintptr_t tid) {$/;"	f
+maxPrefixLength	ART.cpp	/^static const unsigned maxPrefixLength=9;$/;"	v	file:
+maximum	ART.cpp	/^Node* maximum(Node* node) {$/;"	f
+min	ART.cpp	/^unsigned min(unsigned a,unsigned b) {$/;"	f
+minimum	ART.cpp	/^Node* minimum(Node* node) {$/;"	f
+nullNode	ART.cpp	/^Node* nullNode=NULL;$/;"	v
+nullNode	ARTshort.cpp	/^Node* nullNode=NULL;$/;"	v
+prefix	ART.cpp	/^   uint8_t prefix[maxPrefixLength];$/;"	m	struct:Node	file:
+prefixLength	ART.cpp	/^   uint32_t prefixLength;$/;"	m	struct:Node	file:
+prefixMismatch	ART.cpp	/^unsigned prefixMismatch(Node* node,uint8_t key[],unsigned depth,unsigned maxKeyLength) {$/;"	f
+type	ART.cpp	/^   int8_t type;$/;"	m	struct:Node	file:
+type	ARTshort.cpp	/^   int8_t type;$/;"	m	struct:Node	file:
