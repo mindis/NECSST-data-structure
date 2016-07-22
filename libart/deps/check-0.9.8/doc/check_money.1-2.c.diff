@@ -1,0 +1,21 @@
+--- tests/check_money.1.c	2016-07-22 12:28:29.590393223 +0900
++++ tests/check_money.2.c	2016-07-22 12:28:29.590393223 +0900
+@@ -1,3 +1,18 @@
++#include <check.h>
++#include "../src/money.h"
++
++START_TEST (test_money_create)
++{
++  Money *m;
++  m = money_create (5, "USD");
++  fail_unless (money_amount (m) == 5, 
++	       "Amount not set correctly on creation");
++  fail_unless (strcmp (money_currency (m), "USD") == 0,
++	       "Currency not set correctly on creation");
++  money_free (m);
++}
++END_TEST
++
+ int
+ main (void)
+ {

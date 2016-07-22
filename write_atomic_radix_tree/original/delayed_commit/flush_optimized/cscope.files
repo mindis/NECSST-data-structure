@@ -1,3 +1,7 @@
+./test.c
 ./w_radix_tree.h
+./problem_fix/w_radix_tree.h
+./problem_fix/w_radix_tree.c
+./problem_fix/main.c
 ./w_radix_tree.c
 ./main.c

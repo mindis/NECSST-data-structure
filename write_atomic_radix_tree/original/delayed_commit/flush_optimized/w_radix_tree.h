@@ -1,8 +1,8 @@
 #include <stdbool.h>
 
-#define META_NODE_SHIFT 5
+#define META_NODE_SHIFT 3
 #define CACHE_LINE_SIZE 64
-#define NUM_ENTRY	0x1UL << META_NODE_SHIFT
+#define NUM_ENTRY	(0x1UL << META_NODE_SHIFT)
 
 typedef struct Tree tree;
 typedef struct Node node;

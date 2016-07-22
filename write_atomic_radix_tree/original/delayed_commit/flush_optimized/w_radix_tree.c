@@ -185,15 +185,17 @@ int Insert(tree **t, unsigned long key, void *value)
 	height = (*t)->height;
 
 	blk_shift = height * meta_bits;
-
-	max_keys = 0x1UL << blk_shift;
-
-	if (key > max_keys - 1) {
-		/* Radix tree height increases as a result of this allocation */
-		total_keys = key >> blk_shift;
-		while (total_keys > 0) {
-			total_keys = total_keys >> meta_bits;
-			height++;
+	
+	if (blk_shift < 64) {
+		max_keys = 0x1UL << blk_shift;
+	
+		if (key > max_keys - 1) {
+			/* Radix tree height increases as a result of this allocation */
+			total_keys = key >> blk_shift;
+			while (total_keys > 0) {
+				total_keys = total_keys >> meta_bits;
+				height++;
+			}
 		}
 	}
 

@@ -9,9 +9,9 @@
 /**
  * Macros to manipulate pointer tags
  */
-#define IS_LEAF(x) (((uintptr_t)x & 1))
-#define SET_LEAF(x) ((void*)((uintptr_t)x | 1))
-#define LEAF_RAW(x) ((art_leaf*)((void*)((uintptr_t)x & ~1)))
+#define IS_LEAF(x) (((uintptr_t)x & 1))		//check is leaf?
+#define SET_LEAF(x) ((void*)((uintptr_t)x | 1))		//leaf type set
+#define LEAF_RAW(x) ((art_leaf*)((void*)((uintptr_t)x & ~1)))	//leaf type 해제
 
 /**
  * Allocates a node of the given type,
@@ -429,7 +429,6 @@ static void add_child4(art_node4 *n, art_node **ref, unsigned char c, void *chil
         n->keys[idx] = c;
         n->children[idx] = (art_node*)child;
         n->n.num_children++;
-
     } else {
         art_node16 *new_node = (art_node16*)alloc_node(NODE16);
 

@@ -1,0 +1,14 @@
+--- src/money.5.c	2016-07-22 12:28:29.590393223 +0900
++++ src/money.6.c	2016-07-22 12:28:29.590393223 +0900
+@@ -10,6 +10,11 @@
+ Money *
+ money_create (int amount, char *currency)
+ {
++  if (amount < 0)
++    {
++      return NULL;
++    }
++
+   Money *m = malloc (sizeof (Money));
+   if (m == NULL)
+     {
