@@ -1,0 +1,44 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+BIN_DIR	Makefile	/^BIN_DIR = .\/$/;"	m
+CACHE_LINE_SIZE	wart.h	4;"	d
+CFLAGS	Makefile	/^CFLAGS = -c$/;"	m
+CoW_Tree	wart.c	/^tree *CoW_Tree(node_header *changed_root, unsigned long height)$/;"	f
+INPUT_NUM	main.c	8;"	d	file:
+Insert	wart.c	/^int Insert(tree **t, unsigned long key, void *value) $/;"	f
+Lookup	wart.c	/^void *Lookup(tree *t, unsigned long key)$/;"	f
+META_NODE_SHIFT	wart.h	3;"	d
+NUM_ENTRY	wart.h	5;"	d
+Node	wart.h	/^struct Node {$/;"	s
+Node2	wart.h	/^struct Node2 {$/;"	s
+Node_Header	wart.h	/^struct Node_Header {$/;"	s
+Tree	wart.h	/^struct Tree {$/;"	s
+allocNode	wart.c	/^node *allocNode(node *parent, unsigned long index)$/;"	f
+alloc_Node2	wart.c	/^node2 *alloc_Node2(unsigned char group_num)$/;"	f
+alloc_header	wart.c	/^node_header *alloc_header(void *parent, unsigned long index)$/;"	f
+dummy	wart.h	/^	char dummy[48];		\/\/ 3, 4, 5, 6, 7, 8, 9$/;"	m	struct:Node
+entry_ptr	wart.h	/^	void *entry_ptr[NUM_ENTRY \/ 16];$/;"	m	struct:Node2
+entry_ptr	wart.h	/^	void *entry_ptr[NUM_ENTRY];$/;"	m	struct:Node
+flush_buffer	wart.c	/^void flush_buffer(void *buf, unsigned long len, bool fence)$/;"	f
+group_num	wart.h	/^	unsigned char group_num;$/;"	m	struct:Node2
+height	wart.h	/^	unsigned long height;$/;"	m	struct:Tree
+increase_radix_tree_height	wart.c	/^int increase_radix_tree_height(tree **t, unsigned long new_height)$/;"	f
+initTree	wart.c	/^tree *initTree()$/;"	f
+main	main.c	/^int main(void)$/;"	f
+mfence	wart.c	9;"	d	file:
+next_ptr	wart.h	/^	node2 *next_ptr;$/;"	m	struct:Node2
+next_ptr	wart.h	/^	node2 *next_ptr;$/;"	m	struct:Node_Header
+node	wart.h	/^typedef struct Node 		node;$/;"	t	typeref:struct:Node
+node2	wart.h	/^typedef struct Node2		node2;$/;"	t	typeref:struct:Node2
+node_header	wart.h	/^typedef struct Node_Header 	node_header;$/;"	t	typeref:struct:Node_Header
+p_index	wart.h	/^	unsigned long p_index;$/;"	m	struct:Node
+p_index	wart.h	/^	unsigned long p_index;$/;"	m	struct:Node_Header
+parent_ptr	wart.h	/^	node *parent_ptr;$/;"	m	struct:Node
+parent_ptr	wart.h	/^	node_header *parent_ptr;$/;"	m	struct:Node_Header
+recursive_alloc_nodes	wart.c	/^int recursive_alloc_nodes(node_header *header, unsigned long key, void *value,$/;"	f
+root	wart.h	/^	node_header *root;$/;"	m	struct:Tree
+tree	wart.h	/^typedef struct Tree 		tree;$/;"	t	typeref:struct:Tree

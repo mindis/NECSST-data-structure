@@ -4,4 +4,10 @@
 ./problem_fix/w_radix_tree.c
 ./problem_fix/main.c
 ./w_radix_tree.c
+./problem_fix2/version_1/wart.c
+./problem_fix2/version_1/wart.h
+./problem_fix2/version_1/main.c
+./problem_fix2/version_2/wart.c
+./problem_fix2/version_2/wart.h
+./problem_fix2/version_2/main.c
 ./main.c

@@ -28,18 +28,22 @@ void flush_buffer(void *buf, unsigned int len, bool fence)
 
 void add_redo_logentry()
 {
+	/*
 	redo_log_entry *log = malloc(sizeof(redo_log_entry));
 	log->addr = 0;
 	log->new_value = 0;
 	log->type = LE_DATA;
 	flush_buffer(log, sizeof(redo_log_entry), false);
+	*/
 }
 
 void add_commit_entry()
 {
+	/*
 	commit_entry *commit_log = malloc(sizeof(commit_entry));
 	commit_log->type = LE_COMMIT;
 	flush_buffer(commit_log, sizeof(commit_entry), true);
+	*/
 }
 
 node *allocNode()

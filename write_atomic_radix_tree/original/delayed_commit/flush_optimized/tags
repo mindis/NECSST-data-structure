@@ -6,74 +6,151 @@
 !_TAG_PROGRAM_VERSION	5.8	//
 BIN_DIR	Makefile	/^BIN_DIR = .\/$/;"	m
 BIN_DIR	problem_fix/Makefile	/^BIN_DIR = .\/$/;"	m
+BIN_DIR	problem_fix2/version_1/Makefile	/^BIN_DIR = .\/$/;"	m
+BIN_DIR	problem_fix2/version_2/Makefile	/^BIN_DIR = .\/$/;"	m
 CACHE_LINE_SIZE	problem_fix/w_radix_tree.h	4;"	d
+CACHE_LINE_SIZE	problem_fix2/version_1/wart.h	4;"	d
+CACHE_LINE_SIZE	problem_fix2/version_2/wart.h	4;"	d
 CACHE_LINE_SIZE	w_radix_tree.h	4;"	d
 CFLAGS	Makefile	/^CFLAGS = -c$/;"	m
 CFLAGS	problem_fix/Makefile	/^CFLAGS = -c$/;"	m
+CFLAGS	problem_fix2/version_1/Makefile	/^CFLAGS = -c$/;"	m
+CFLAGS	problem_fix2/version_2/Makefile	/^CFLAGS = -c$/;"	m
 CoW_Tree	problem_fix/w_radix_tree.c	/^tree *CoW_Tree(node *changed_root, unsigned char height)$/;"	f
+CoW_Tree	problem_fix2/version_1/wart.c	/^tree *CoW_Tree(node_header *changed_root, unsigned long height)$/;"	f
+CoW_Tree	problem_fix2/version_2/wart.c	/^tree *CoW_Tree(node_header *changed_root, unsigned long height)$/;"	f
 CoW_Tree	w_radix_tree.c	/^tree *CoW_Tree(node *changed_root, unsigned long height)$/;"	f
 Delete	problem_fix/w_radix_tree.c	/^void Delete(tree *t, unsigned long key)$/;"	f
 Delete	w_radix_tree.c	/^void Delete(tree *t, unsigned long key)$/;"	f
 INPUT_NUM	main.c	8;"	d	file:
 INPUT_NUM	problem_fix/main.c	8;"	d	file:
+INPUT_NUM	problem_fix2/version_1/main.c	8;"	d	file:
+INPUT_NUM	problem_fix2/version_2/main.c	8;"	d	file:
 Insert	problem_fix/w_radix_tree.c	/^int Insert(tree **t, unsigned long key, void *value) $/;"	f
+Insert	problem_fix2/version_1/wart.c	/^int Insert(tree **t, unsigned long key, void *value) $/;"	f
+Insert	problem_fix2/version_2/wart.c	/^int Insert(tree **t, unsigned long key, void *value) $/;"	f
 Insert	w_radix_tree.c	/^int Insert(tree **t, unsigned long key, void *value) $/;"	f
 Item	problem_fix/w_radix_tree.h	/^struct Item {$/;"	s
 Lookup	problem_fix/w_radix_tree.c	/^void *Lookup(tree *t, unsigned long key)$/;"	f
+Lookup	problem_fix2/version_1/wart.c	/^void *Lookup(tree *t, unsigned long key)$/;"	f
+Lookup	problem_fix2/version_2/wart.c	/^void *Lookup(tree *t, unsigned long key)$/;"	f
 Lookup	w_radix_tree.c	/^void *Lookup(tree *t, unsigned long key)$/;"	f
 META_NODE_SHIFT	problem_fix/w_radix_tree.h	3;"	d
+META_NODE_SHIFT	problem_fix2/version_1/wart.h	3;"	d
+META_NODE_SHIFT	problem_fix2/version_2/wart.h	3;"	d
 META_NODE_SHIFT	w_radix_tree.h	3;"	d
 NUM_ENTRY	problem_fix/w_radix_tree.h	5;"	d
+NUM_ENTRY	problem_fix2/version_1/wart.h	5;"	d
+NUM_ENTRY	problem_fix2/version_2/wart.h	5;"	d
 NUM_ENTRY	w_radix_tree.h	5;"	d
 Node	problem_fix/w_radix_tree.h	/^struct Node {$/;"	s
+Node	problem_fix2/version_1/wart.h	/^struct Node {$/;"	s
+Node	problem_fix2/version_2/wart.h	/^struct Node {$/;"	s
 Node	w_radix_tree.h	/^struct Node {$/;"	s
+Node2	problem_fix2/version_1/wart.h	/^struct Node2 {$/;"	s
+Node2	problem_fix2/version_2/wart.h	/^struct Node2 {$/;"	s
+Node_Header	problem_fix2/version_1/wart.h	/^struct Node_Header {$/;"	s
+Node_Header	problem_fix2/version_2/wart.h	/^struct Node_Header {$/;"	s
 Range_Lookup	problem_fix/w_radix_tree.c	/^void Range_Lookup(tree *t, unsigned long start_key, unsigned long num,$/;"	f
 Range_Lookup	w_radix_tree.c	/^void Range_Lookup(tree *t, unsigned long start_key, unsigned long num,$/;"	f
 Tree	problem_fix/w_radix_tree.h	/^struct Tree {$/;"	s
+Tree	problem_fix2/version_1/wart.h	/^struct Tree {$/;"	s
+Tree	problem_fix2/version_2/wart.h	/^struct Tree {$/;"	s
 Tree	w_radix_tree.h	/^struct Tree {$/;"	s
 Update	problem_fix/w_radix_tree.c	/^void *Update(tree *t, unsigned long key, void *value)$/;"	f
 Update	w_radix_tree.c	/^void *Update(tree *t, unsigned long key, void *value)$/;"	f
 allocNode	problem_fix/w_radix_tree.c	/^node *allocNode(node *parent, unsigned int index)$/;"	f
+allocNode	problem_fix2/version_1/wart.c	/^node *allocNode(node *parent, unsigned long index)$/;"	f
+allocNode	problem_fix2/version_2/wart.c	/^node *allocNode(node *parent, unsigned long index)$/;"	f
 allocNode	w_radix_tree.c	/^node *allocNode(node *parent, unsigned long index)$/;"	f
+alloc_Node2	problem_fix2/version_1/wart.c	/^node2 *alloc_Node2(unsigned char group_num)$/;"	f
+alloc_Node2	problem_fix2/version_2/wart.c	/^node2 *alloc_Node2(unsigned char index)$/;"	f
+alloc_header	problem_fix2/version_1/wart.c	/^node_header *alloc_header(void *parent, unsigned long index)$/;"	f
+alloc_header	problem_fix2/version_2/wart.c	/^node_header *alloc_header(void *parent, unsigned long index)$/;"	f
 dummy	problem_fix/w_radix_tree.h	/^	char dummy[48];		\/\/ 3, 4, 5, 6, 7, 8, 9$/;"	m	struct:Node
+dummy	problem_fix2/version_1/wart.h	/^	char dummy[48];		\/\/ 3, 4, 5, 6, 7, 8, 9$/;"	m	struct:Node
+dummy	problem_fix2/version_2/wart.h	/^	char dummy[48];		\/\/ 3, 4, 5, 6, 7, 8, 9$/;"	m	struct:Node
+dummy	w_radix_tree.h	/^	char dummy[48];		\/\/ 3, 4, 5, 6, 7, 8, 9$/;"	m	struct:Node
 entry_ptr	problem_fix/w_radix_tree.h	/^	void *entry_ptr[NUM_ENTRY];$/;"	m	struct:Node
+entry_ptr	problem_fix2/version_1/wart.h	/^	void *entry_ptr[NUM_ENTRY \/ 16];$/;"	m	struct:Node2
+entry_ptr	problem_fix2/version_1/wart.h	/^	void *entry_ptr[NUM_ENTRY];$/;"	m	struct:Node
+entry_ptr	problem_fix2/version_2/wart.h	/^	void *entry_ptr;$/;"	m	struct:Node2
+entry_ptr	problem_fix2/version_2/wart.h	/^	void *entry_ptr[NUM_ENTRY];$/;"	m	struct:Node
 entry_ptr	w_radix_tree.h	/^	void *entry_ptr[NUM_ENTRY];$/;"	m	struct:Node
 find_next_leaf	problem_fix/w_radix_tree.c	/^node *find_next_leaf(tree *t, node *parent, unsigned int index, $/;"	f
 find_next_leaf	w_radix_tree.c	/^node *find_next_leaf(tree *t, node *parent, unsigned long index, $/;"	f
 flush_buffer	problem_fix/w_radix_tree.c	/^void flush_buffer(void *buf, unsigned int len, bool fence)$/;"	f
+flush_buffer	problem_fix2/version_1/wart.c	/^void flush_buffer(void *buf, unsigned long len, bool fence)$/;"	f
+flush_buffer	problem_fix2/version_2/wart.c	/^void flush_buffer(void *buf, unsigned long len, bool fence)$/;"	f
 flush_buffer	w_radix_tree.c	/^void flush_buffer(void *buf, unsigned long len, bool fence)$/;"	f
+group_num	problem_fix2/version_1/wart.h	/^	unsigned char group_num;$/;"	m	struct:Node2
 hash	problem_fix/w_radix_tree.c	/^unsigned long hash(unsigned long key)$/;"	f
 height	problem_fix/w_radix_tree.h	/^	unsigned char height;$/;"	m	struct:Tree
+height	problem_fix2/version_1/wart.h	/^	unsigned long height;$/;"	m	struct:Tree
+height	problem_fix2/version_2/wart.h	/^	unsigned long height;$/;"	m	struct:Tree
 height	w_radix_tree.h	/^	unsigned long height;$/;"	m	struct:Tree
 increase_radix_tree_height	problem_fix/w_radix_tree.c	/^int increase_radix_tree_height(tree **t, unsigned char new_height)$/;"	f
+increase_radix_tree_height	problem_fix2/version_1/wart.c	/^int increase_radix_tree_height(tree **t, unsigned long new_height)$/;"	f
+increase_radix_tree_height	problem_fix2/version_2/wart.c	/^int increase_radix_tree_height(tree **t, unsigned long new_height)$/;"	f
 increase_radix_tree_height	w_radix_tree.c	/^int increase_radix_tree_height(tree **t, unsigned long new_height)$/;"	f
+index	problem_fix2/version_2/wart.h	/^	unsigned char index;$/;"	m	struct:Node2
 initTree	problem_fix/w_radix_tree.c	/^tree *initTree()$/;"	f
+initTree	problem_fix2/version_1/wart.c	/^tree *initTree()$/;"	f
+initTree	problem_fix2/version_2/wart.c	/^tree *initTree()$/;"	f
 initTree	w_radix_tree.c	/^tree *initTree()$/;"	f
 item	problem_fix/w_radix_tree.h	/^typedef struct Item item;$/;"	t	typeref:struct:Item
 item	w_radix_tree.h	/^typedef struct item item;$/;"	t	typeref:struct:item
 key	problem_fix/w_radix_tree.h	/^	unsigned long key;$/;"	m	struct:Item
 main	main.c	/^int main(void)$/;"	f
 main	problem_fix/main.c	/^int main(void)$/;"	f
+main	problem_fix2/version_1/main.c	/^int main(void)$/;"	f
+main	problem_fix2/version_2/main.c	/^int main(void)$/;"	f
 main	test.c	/^int main(void)$/;"	f
 mfence	problem_fix/w_radix_tree.c	10;"	d	file:
-mfence	w_radix_tree.c	10;"	d	file:
+mfence	problem_fix2/version_1/wart.c	9;"	d	file:
+mfence	problem_fix2/version_2/wart.c	9;"	d	file:
+mfence	w_radix_tree.c	9;"	d	file:
 next	problem_fix/w_radix_tree.h	/^	item *next;$/;"	m	struct:Item
+next_ptr	problem_fix2/version_1/wart.h	/^	node2 *next_ptr;$/;"	m	struct:Node2
+next_ptr	problem_fix2/version_1/wart.h	/^	void *next_ptr;$/;"	m	struct:Node_Header
+next_ptr	problem_fix2/version_2/wart.h	/^	node2 *next_ptr;$/;"	m	struct:Node2
+next_ptr	problem_fix2/version_2/wart.h	/^	void *next_ptr;$/;"	m	struct:Node_Header
 node	problem_fix/w_radix_tree.h	/^typedef struct Node node;$/;"	t	typeref:struct:Node
+node	problem_fix2/version_1/wart.h	/^typedef struct Node 		node;$/;"	t	typeref:struct:Node
+node	problem_fix2/version_2/wart.h	/^typedef struct Node 		node;$/;"	t	typeref:struct:Node
 node	w_radix_tree.h	/^typedef struct Node node;$/;"	t	typeref:struct:Node
+node2	problem_fix2/version_1/wart.h	/^typedef struct Node2		node2;$/;"	t	typeref:struct:Node2
+node2	problem_fix2/version_2/wart.h	/^typedef struct Node2		node2;$/;"	t	typeref:struct:Node2
+node_header	problem_fix2/version_1/wart.h	/^typedef struct Node_Header 	node_header;$/;"	t	typeref:struct:Node_Header
+node_header	problem_fix2/version_2/wart.h	/^typedef struct Node_Header 	node_header;$/;"	t	typeref:struct:Node_Header
 p_index	problem_fix/w_radix_tree.h	/^	unsigned int p_index;$/;"	m	struct:Node
+p_index	problem_fix2/version_1/wart.h	/^	unsigned long p_index;$/;"	m	struct:Node
+p_index	problem_fix2/version_1/wart.h	/^	unsigned long p_index;$/;"	m	struct:Node_Header
+p_index	problem_fix2/version_2/wart.h	/^	unsigned long p_index;$/;"	m	struct:Node_Header
 p_index	w_radix_tree.h	/^	unsigned long p_index;$/;"	m	struct:Node
 parent_ptr	problem_fix/w_radix_tree.h	/^	node *parent_ptr;$/;"	m	struct:Node
+parent_ptr	problem_fix2/version_1/wart.h	/^	node *parent_ptr;$/;"	m	struct:Node
+parent_ptr	problem_fix2/version_1/wart.h	/^	node_header *parent_ptr;$/;"	m	struct:Node_Header
+parent_ptr	problem_fix2/version_2/wart.h	/^	node_header *parent_ptr;$/;"	m	struct:Node_Header
 parent_ptr	w_radix_tree.h	/^	node *parent_ptr;$/;"	m	struct:Node
 recursive_alloc_nodes	problem_fix/w_radix_tree.c	/^int recursive_alloc_nodes(node *temp_node, unsigned long key, void *value,$/;"	f
+recursive_alloc_nodes	problem_fix2/version_1/wart.c	/^int recursive_alloc_nodes(node_header *header, unsigned long key, void *value,$/;"	f
+recursive_alloc_nodes	problem_fix2/version_2/wart.c	/^int recursive_alloc_nodes(node_header *header, unsigned long key, void *value,$/;"	f
 recursive_alloc_nodes	w_radix_tree.c	/^int recursive_alloc_nodes(node *temp_node, unsigned long key, void *value,$/;"	f
 recursive_free_nodes	problem_fix/w_radix_tree.c	/^int recursive_free_nodes(tree *t, node *parent, unsigned int index,$/;"	f
 recursive_free_nodes	w_radix_tree.c	/^int recursive_free_nodes(tree *t, node *parent, unsigned long index,$/;"	f
 recursive_search_leaf	problem_fix/w_radix_tree.c	/^int recursive_search_leaf(node *level_ptr, unsigned long key, void *value, $/;"	f
 recursive_search_leaf	w_radix_tree.c	/^int recursive_search_leaf(node *level_ptr, unsigned long key, void *value, $/;"	f
 root	problem_fix/w_radix_tree.h	/^	node *root;$/;"	m	struct:Tree
+root	problem_fix2/version_1/wart.h	/^	node_header *root;$/;"	m	struct:Tree
+root	problem_fix2/version_2/wart.h	/^	node_header *root;$/;"	m	struct:Tree
 root	w_radix_tree.h	/^	node *root;$/;"	m	struct:Tree
 search_to_next_leaf	problem_fix/w_radix_tree.c	/^node *search_to_next_leaf(node *next_branch, unsigned char height)$/;"	f
 search_to_next_leaf	w_radix_tree.c	/^node *search_to_next_leaf(node *next_branch, unsigned long height)$/;"	f
 tree	problem_fix/w_radix_tree.h	/^typedef struct Tree tree;$/;"	t	typeref:struct:Tree
+tree	problem_fix2/version_1/wart.h	/^typedef struct Tree 		tree;$/;"	t	typeref:struct:Tree
+tree	problem_fix2/version_2/wart.h	/^typedef struct Tree 		tree;$/;"	t	typeref:struct:Tree
 tree	w_radix_tree.h	/^typedef struct Tree tree;$/;"	t	typeref:struct:Tree
+type	problem_fix2/version_2/wart.h	/^	unsigned char type;$/;"	m	struct:Node
+type	problem_fix2/version_2/wart.h	/^	unsigned char type;$/;"	m	struct:Node2
 value	problem_fix/w_radix_tree.h	/^	void *value;$/;"	m	struct:Item

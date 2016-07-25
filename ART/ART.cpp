@@ -635,18 +635,29 @@ int main(int argc,char** argv) {
 	}
 	uint64_t n=atoi(argv[1]);
 	uint64_t* keys=new uint64_t[n];
+	FILE *fp;
+	uint64_t i;
+
+	if ((fp = fopen("/home/sekwon/Public/input_file/input_sparse_random_100million.txt","r")) == NULL)
+	{
+		puts("error");
+		exit(0);
+	}
 
 	// Generate keys
-	for (uint64_t i=0;i<n;i++)
-		// dense, sorted
-		keys[i]=i+1;
-	if (atoi(argv[2])==1)
-		// dense, random
-		std::random_shuffle(keys,keys+n);
-	if (atoi(argv[2])==2)
-		// "pseudo-sparse" (the most-significant leaf bit gets lost)
-		for (uint64_t i=0;i<n;i++)
-			keys[i]=(static_cast<uint64_t>(rand())<<32) | static_cast<uint64_t>(rand());
+	for (i=0;i<n;i++)
+		fscanf(fp, "%lu", &keys[i]);
+	for (i=0;i<n;i++)
+		keys[i] = (keys[i] >> 1);
+	// dense, sorted
+	//		keys[i]=i+1;
+	//	if (atoi(argv[2])==1)
+	// dense, random
+	//		std::random_shuffle(keys,keys+n);
+	//	if (atoi(argv[2])==2)
+	// "pseudo-sparse" (the most-significant leaf bit gets lost)
+	//		for (uint64_t i=0;i<n;i++)
+	//			keys[i]=(static_cast<uint64_t>(rand())<<32) | static_cast<uint64_t>(rand());
 
 	// Build tree
 	double start = gettime();

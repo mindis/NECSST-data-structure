@@ -56,7 +56,7 @@ int increase_radix_tree_height(tree **t, unsigned long new_height)
 	unsigned long height = (*t)->height;
 	node *root, *prev_root;
 	int errval = 0;
-//	struct timespec t1, t2;
+	//	struct timespec t1, t2;
 
 	prev_root = (*t)->root;
 
@@ -68,12 +68,6 @@ int increase_radix_tree_height(tree **t, unsigned long new_height)
 			return errval;
 		}
 		root->entry_ptr[0] = prev_root;
-//		entry_count++;
-//		clock_gettime(CLOCK_MONOTONIC, &t1);
-//		flush_buffer(root->entry_ptr[0], 8);
-//		clock_gettime(CLOCK_MONOTONIC, &t2);
-//		elapsed_entry_flush += (t2.tv_sec - t1.tv_sec) * 1000000000;
-//		elapsed_entry_flush += (t2.tv_nsec - t1.tv_nsec);
 		prev_root->parent_ptr = root;
 		flush_buffer(prev_root, sizeof(node), false);
 		prev_root = root;
@@ -81,7 +75,7 @@ int increase_radix_tree_height(tree **t, unsigned long new_height)
 	}
 	flush_buffer(prev_root, sizeof(node), false);
 	*t = CoW_Tree(prev_root, height);
-//	flush_buffer(*t, 8);
+	//	flush_buffer(*t, 8);
 	return errval;
 }
 
@@ -92,7 +86,7 @@ int recursive_alloc_nodes(node *temp_node, unsigned long key, void *value,
 	unsigned long meta_bits = META_NODE_SHIFT, node_bits;
 	unsigned long next_key;
 	unsigned long index;
-	
+
 	node_bits = (height - 1) * meta_bits;
 
 	index = key >> node_bits;
@@ -130,7 +124,7 @@ int recursive_search_leaf(node *level_ptr, unsigned long key, void *value,
 	unsigned long meta_bits = META_NODE_SHIFT, node_bits;
 	unsigned long next_key;
 	unsigned long index;
-//	struct timespec t1, t2;
+	//	struct timespec t1, t2;
 
 	node_bits = (height - 1) * meta_bits;
 
@@ -138,12 +132,12 @@ int recursive_search_leaf(node *level_ptr, unsigned long key, void *value,
 
 	if (height == 1) {
 		level_ptr->entry_ptr[index] = value;
-//		entry_count++;
-//		clock_gettime(CLOCK_MONOTONIC, &t1);
+		//		entry_count++;
+		//		clock_gettime(CLOCK_MONOTONIC, &t1);
 		flush_buffer(&level_ptr->entry_ptr[index], 8, true);
-//		clock_gettime(CLOCK_MONOTONIC, &t2);
-//		elapsed_entry_flush += (t2.tv_sec - t1.tv_sec) * 1000000000;
-//		elapsed_entry_flush += (t2.tv_nsec - t1.tv_nsec);
+		//		clock_gettime(CLOCK_MONOTONIC, &t2);
+		//		elapsed_entry_flush += (t2.tv_sec - t1.tv_sec) * 1000000000;
+		//		elapsed_entry_flush += (t2.tv_nsec - t1.tv_nsec);
 		if (level_ptr->entry_ptr[index] == NULL)
 			goto fail;
 	}
@@ -163,9 +157,9 @@ int recursive_search_leaf(node *level_ptr, unsigned long key, void *value,
 			return errval;
 		}
 		next_key = (key & ((0x1UL << node_bits) - 1));
-		
+
 		errval = recursive_search_leaf(level_ptr->entry_ptr[index], next_key, 
-			(void *)value, height - 1);
+				(void *)value, height - 1);
 		if (errval < 0)
 			goto fail;
 	}
@@ -185,10 +179,10 @@ int Insert(tree **t, unsigned long key, void *value)
 	height = (*t)->height;
 
 	blk_shift = height * meta_bits;
-	
+
 	if (blk_shift < 64) {
 		max_keys = 0x1UL << blk_shift;
-	
+
 		if (key > max_keys - 1) {
 			/* Radix tree height increases as a result of this allocation */
 			total_keys = key >> blk_shift;
@@ -238,7 +232,7 @@ void *Update(tree *t, unsigned long key, void *value)
 
 	height = t->height;
 	level_ptr = t->root;
-	
+
 	while (height > 1) {
 		bit_shift = (height - 1) * META_NODE_SHIFT;
 		idx = key >> bit_shift;
@@ -266,7 +260,7 @@ void *Lookup(tree *t, unsigned long key)
 
 	height = t->height;
 	level_ptr = t->root;
-	
+
 	while (height > 1) {
 		bit_shift = (height - 1) * META_NODE_SHIFT;
 		idx = key >> bit_shift;
@@ -400,7 +394,7 @@ void Delete(tree *t, unsigned long key)
 
 	height = t->height;
 	level_ptr = t->root;
-	
+
 	while (height > 1) {
 		bit_shift = (height - 1) * META_NODE_SHIFT;
 		idx = key >> bit_shift;
@@ -415,6 +409,6 @@ void Delete(tree *t, unsigned long key)
 
 	level_ptr->entry_ptr[idx] = NULL;
 	flush_buffer(&level_ptr->entry_ptr[idx], 8, true);
-	
-//	recursive_free_nodes(t, level_ptr, idx, 1);
+
+	//	recursive_free_nodes(t, level_ptr, idx, 1);
 }

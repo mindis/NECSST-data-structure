@@ -5,7 +5,7 @@
 #include <time.h>
 #include "wbtree.h"
 
-#define INPUT_NUM	100000000
+#define INPUT_NUM	1000000000
 
 int main(void)
 {
@@ -24,7 +24,7 @@ int main(void)
 	unsigned long max;
 	unsigned long min;
 
-	if ((fp = fopen("/home/sekwon/Public/input_file/input_dense_100million.txt","r")) == NULL)
+	if ((fp = fopen("/home/sekwon/Public/input_file/input_dense_random_1billion.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
