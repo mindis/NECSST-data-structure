@@ -11,6 +11,8 @@
 #define mfence() asm volatile("mfence":::"memory")
 #define BITOP_WORD(nr)	((nr) / BITS_PER_LONG)
 
+unsigned long node_count = 0;
+
 void flush_buffer(void *buf, unsigned int len, bool fence)
 {
 	unsigned int i;
@@ -28,22 +30,18 @@ void flush_buffer(void *buf, unsigned int len, bool fence)
 
 void add_redo_logentry()
 {
-	/*
 	redo_log_entry *log = malloc(sizeof(redo_log_entry));
 	log->addr = 0;
 	log->new_value = 0;
 	log->type = LE_DATA;
 	flush_buffer(log, sizeof(redo_log_entry), false);
-	*/
 }
 
 void add_commit_entry()
 {
-	/*
 	commit_entry *commit_log = malloc(sizeof(commit_entry));
 	commit_log->type = LE_COMMIT;
 	flush_buffer(commit_log, sizeof(commit_entry), true);
-	*/
 }
 
 node *allocNode()
@@ -52,6 +50,7 @@ node *allocNode()
 	memset(n->slot,0,sizeof(n->slot));
 	n->bitmap = 1;
 	n->isleaf = 1;
+	node_count++;
 	return n;
 }
 

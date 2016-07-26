@@ -13,6 +13,9 @@ typedef struct Parent_Leaf_Node PLN;
 typedef struct Leaf_Node LN;
 typedef struct tree tree;
 
+unsigned long IN_count;
+unsigned long LN_count;
+
 struct PLN_entry {
 	unsigned long key;
 	LN *ptr;

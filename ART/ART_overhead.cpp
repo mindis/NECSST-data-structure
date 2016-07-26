@@ -20,6 +20,11 @@ static const int8_t NodeType16=1;
 static const int8_t NodeType48=2;
 static const int8_t NodeType256=3;
 
+unsigned long node4_count = 0;
+unsigned long node16_count = 0;
+unsigned long node48_count = 0;
+unsigned long node256_count = 0;
+
 // The maximum prefix length for compressed paths stored in the
 // header, if the path is longer it is loaded from the database on
 // demand
@@ -45,6 +50,7 @@ struct Node4 : Node {
 	Node* child[4];
 
 	Node4() : Node(NodeType4) {
+		node4_count++;
 		memset(key,0,sizeof(key));
 		memset(child,0,sizeof(child));
 	}
@@ -56,6 +62,7 @@ struct Node16 : Node {
 	Node* child[16];
 
 	Node16() : Node(NodeType16) {
+		node16_count++;
 		memset(key,0,sizeof(key));
 		memset(child,0,sizeof(child));
 	}
@@ -69,6 +76,7 @@ struct Node48 : Node {
 	Node* child[48];
 
 	Node48() : Node(NodeType48) {
+		node48_count++;
 		memset(childIndex,emptyMarker,sizeof(childIndex));
 		memset(child,0,sizeof(child));
 	}
@@ -79,6 +87,7 @@ struct Node256 : Node {
 	Node* child[256];
 
 	Node256() : Node(NodeType256) {
+		node256_count++;
 		memset(child,0,sizeof(child));
 	}
 };
@@ -638,8 +647,10 @@ int main(int argc,char** argv) {
 	uint64_t* keys=new uint64_t[n];
 	FILE *fp;
 	uint64_t i;
+	struct timespec t1, t2;
+	unsigned long elapsed_time;
 
-	if ((fp = fopen("/home/sekwon/Public/input_file/input_sparse_random_100million.txt","r")) == NULL)
+	if ((fp = fopen("/home/sekwon/Public/input_file/input_random_100K.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
@@ -659,28 +670,33 @@ int main(int argc,char** argv) {
 	//			keys[i]=(static_cast<uint64_t>(rand())<<32) | static_cast<uint64_t>(rand());
 
 	// Build tree
-	double start = gettime();
 	Node* tree=NULL;
+	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for (uint64_t i=0;i<n;i++) {
 		uint8_t key[8];loadKey(keys[i],key);
 		insert(tree,&tree,key,0,keys[i],8);
 	}
-	printf("insert,%ld,%f\n",n,(n/1000000.0)/(gettime()-start));
+	clock_gettime(CLOCK_MONOTONIC, &t2);
+	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
+	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
+	printf("Insertion Time = %lu ns\n", elapsed_time);
+
+	printf("Space overhead = %lu\n", (node4_count *  sizeof(Node4)) +
+			(node16_count * sizeof(Node16)) + (node48_count * sizeof(Node48)) +
+			(node256_count * sizeof(Node256)));
 
 	// Repeat lookup for small trees to get reproducable results
-	uint64_t repeat=10000000/n;
-	if (repeat<1)
-		repeat=1;
-	start = gettime();
-	for (uint64_t r=0;r<repeat;r++) {
-		for (uint64_t i=0;i<n;i++) {
-			uint8_t key[8];loadKey(keys[i],key);
-			Node* leaf=lookup(tree,key,8,0,8);
-			assert(isLeaf(leaf) && getLeafValue(leaf)==keys[i]);
-		}
+	clock_gettime(CLOCK_MONOTONIC, &t1);
+	for (uint64_t i=0;i<n;i++) {
+		uint8_t key[8];loadKey(keys[i],key);
+		Node* leaf=lookup(tree,key,8,0,8);
+		assert(isLeaf(leaf) && getLeafValue(leaf)==keys[i]);
 	}
-	printf("lookup,%ld,%f\n",n,(n*repeat/1000000.0)/(gettime()-start));
-
+	clock_gettime(CLOCK_MONOTONIC, &t2);
+	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
+	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
+	printf("Search Time = %lu ns\n", elapsed_time);
+/*
 	start = gettime();
 	for (uint64_t i=0;i<n;i++) {
 		uint8_t key[8];loadKey(keys[i],key);
@@ -688,6 +704,6 @@ int main(int argc,char** argv) {
 	}
 	printf("erase,%ld,%f\n",n,(n/1000000.0)/(gettime()-start));
 	assert(tree==NULL);
-
+*/
 	return 0;
 }

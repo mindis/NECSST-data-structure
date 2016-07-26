@@ -13,6 +13,9 @@
 
 #define mfence() asm volatile("mfence":::"memory")
 
+unsigned long IN_count = 0;
+unsigned long LN_count = 0;
+
 void flush_buffer(void *buf, unsigned int len, bool fence)
 {
 	unsigned int i;
@@ -32,6 +35,7 @@ void flush_buffer(void *buf, unsigned int len, bool fence)
 void *allocINode(unsigned long num)
 {
 	IN *new_INs = calloc(num, sizeof(IN));
+	IN_count = num;
 	return (void *)new_INs;
 }
 
@@ -40,6 +44,7 @@ LN *allocLNode()
 {
 	LN *new_LN = calloc(1, sizeof(LN));
 	flush_buffer(new_LN, sizeof(LN), false);
+	LN_count++;
 	return new_LN;
 }
 

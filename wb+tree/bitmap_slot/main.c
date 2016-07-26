@@ -17,14 +17,10 @@ int main(void)
 	void *ret;
 	FILE *fp;
 	unsigned long *buf;
-	char line[1024];
-	FILE *fp2;
-	unsigned long nVmSize = 0;
-	unsigned long nVmRss = 0;
 	unsigned long max;
 	unsigned long min;
 
-	if ((fp = fopen("/home/sekwon/Public/input_file/input_dense_random_1billion.txt","r")) == NULL)
+	if ((fp = fopen("/home/sekwon/Public/input_file/input_random_1000M.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
@@ -65,29 +61,8 @@ int main(void)
 	printf("Insertion Time = %lu ns\n",elapsed_time);
 
 	/* Check space overhead */
-	sprintf(line, "/proc/%d/status", getpid());
-	fp2 = fopen(line, "r");
-	if (fp2 == NULL)
-		return ;
-
-	while (fgets(line, 1024, fp2) != NULL) {
-		if (strstr(line, "VmSize")) {
-			char tmp[32];
-			char size[32];
-			sscanf(line,"%s%s", tmp, size);
-			nVmSize = atoi(size);
-			printf("nVmSize = %lu KB\n", nVmSize);
-		}
-		else if (strstr(line, "VmRSS")) {
-			char tmp[32];
-			char size[32];
-			sscanf(line, "%s%s", tmp, size);
-			nVmRss = atoi(size);
-			printf("nVmRSS = %lu KB\n", nVmRss);
-			break;
-		}
-	}
-	fclose(fp2);
+	printf("Total space = %lu byte\n", node_count * sizeof(node));
+	printf("Space efficiency = %lu\n", (node_count * sizeof(node)) / INPUT_NUM);
 
 	/* Lookup */
 	memset(dummy, 0, 15*1024*1024);

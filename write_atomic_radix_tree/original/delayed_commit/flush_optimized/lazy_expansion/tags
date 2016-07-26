@@ -1,0 +1,49 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+BIN_DIR	Makefile	/^BIN_DIR = .\/$/;"	m
+CACHE_LINE_SIZE	w_radix_tree.h	4;"	d
+CFLAGS	Makefile	/^CFLAGS = -c$/;"	m
+Delete	w_radix_tree.c	/^void Delete(tree *t, unsigned long key)$/;"	f
+INPUT_NUM	main.c	8;"	d	file:
+ITEM_LAZY	w_radix_tree.h	7;"	d
+Insert	w_radix_tree.c	/^int Insert(tree **t, unsigned long key, void *value) $/;"	f
+Item	w_radix_tree.h	/^struct Item {$/;"	s
+Lookup	w_radix_tree.c	/^void *Lookup(tree *t, unsigned long key)$/;"	f
+META_NODE_SHIFT	w_radix_tree.h	3;"	d
+NODE_ORIGIN	w_radix_tree.h	6;"	d
+NUM_ENTRY	w_radix_tree.h	5;"	d
+Node	w_radix_tree.h	/^struct Node {$/;"	s
+Range_Lookup	w_radix_tree.c	/^void Range_Lookup(tree *t, unsigned long start_key, unsigned long num,$/;"	f
+Tree	w_radix_tree.h	/^struct Tree {$/;"	s
+Update	w_radix_tree.c	/^void *Update(tree *t, unsigned long key, void *value)$/;"	f
+allocItem	w_radix_tree.c	/^item *allocItem(unsigned long key, void *value)$/;"	f
+allocNode	w_radix_tree.c	/^node *allocNode(node *parent, unsigned long index)$/;"	f
+dummy	w_radix_tree.h	/^	char dummy[48];		\/\/ 3, 4, 5, 6, 7, 8, 9$/;"	m	struct:Node
+entry_ptr	w_radix_tree.h	/^	void *entry_ptr[NUM_ENTRY];$/;"	m	struct:Node
+find_next_leaf	w_radix_tree.c	/^node *find_next_leaf(tree *t, node *parent, unsigned long index, $/;"	f
+flush_buffer	w_radix_tree.c	/^void flush_buffer(void *buf, unsigned long len, bool fence)$/;"	f
+height	w_radix_tree.h	/^	unsigned long height;$/;"	m	struct:Tree
+initTree	w_radix_tree.c	/^tree *initTree()$/;"	f
+item	w_radix_tree.h	/^typedef struct Item item;$/;"	t	typeref:struct:Item
+key	w_radix_tree.h	/^	unsigned long key;$/;"	m	struct:Item
+main	main.c	/^int main(void)$/;"	f
+mfence	w_radix_tree.c	9;"	d	file:
+next_ptr	w_radix_tree.h	/^	item *next_ptr;$/;"	m	struct:Item
+node	w_radix_tree.h	/^typedef struct Node node;$/;"	t	typeref:struct:Node
+node_count	w_radix_tree.c	/^unsigned long node_count = 0;$/;"	v
+node_count	w_radix_tree.h	/^unsigned long node_count;$/;"	v
+p_index	w_radix_tree.h	/^	unsigned long p_index;$/;"	m	struct:Node
+parent_ptr	w_radix_tree.h	/^	node *parent_ptr;$/;"	m	struct:Node
+recursive_free_nodes	w_radix_tree.c	/^int recursive_free_nodes(tree *t, node *parent, unsigned long index,$/;"	f
+recursive_search_leaf	w_radix_tree.c	/^int recursive_search_leaf(tree *t, node *level_ptr, unsigned long key,$/;"	f
+remapping_items	w_radix_tree.c	/^int remapping_items(tree *t, node *level_ptr, item *first_item, $/;"	f
+root	w_radix_tree.h	/^	node *root;$/;"	m	struct:Tree
+search_to_next_leaf	w_radix_tree.c	/^node *search_to_next_leaf(node *next_branch, unsigned long height)$/;"	f
+tree	w_radix_tree.h	/^typedef struct Tree tree;$/;"	t	typeref:struct:Tree
+type	w_radix_tree.h	/^	unsigned char type;$/;"	m	struct:Item
+type	w_radix_tree.h	/^	unsigned char type;$/;"	m	struct:Node
+value	w_radix_tree.h	/^	void *value;$/;"	m	struct:Item

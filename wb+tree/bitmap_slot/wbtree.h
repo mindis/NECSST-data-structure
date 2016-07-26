@@ -16,6 +16,8 @@ typedef struct tree tree;
 typedef struct redo_log_entry redo_log_entry;
 typedef struct commit_entry commit_entry;
 
+unsigned long node_count;
+
 struct redo_log_entry {
 	unsigned long addr;
 	unsigned long new_value;

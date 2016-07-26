@@ -25,9 +25,20 @@ void flush_buffer(void *buf, unsigned long len, bool fence)
 	}
 }
 
+item *allocItem(unsigned long key, void *value)
+{
+	item *new_item = malloc(sizeof(item));
+	new_item->type = ITEM_LAZY;
+	new_item->key = key;
+	new_item->value = value;
+	new_item->next_ptr = NULL;
+	return new_item;
+}
+
 node *allocNode(node *parent, unsigned long index)
 {
 	node *new_node = calloc(1, sizeof(node));
+	new_node->type = NODE_ORIGIN;
 	if (parent != NULL) {
 		new_node->parent_ptr = parent;
 		new_node->p_index = index;
@@ -45,126 +56,77 @@ tree *initTree()
 	return wradix_tree;
 }
 
-tree *CoW_Tree(node *changed_root, unsigned long height)
-{
-	tree *changed_tree = malloc(sizeof(tree));
-	changed_tree->root = changed_root;
-	changed_tree->height = height;
-	flush_buffer(changed_tree, sizeof(tree), false);
-	return changed_tree;
-}
-
-int increase_radix_tree_height(tree **t, unsigned long new_height)
-{
-	unsigned long height = (*t)->height;
-	node *root, *prev_root;
-	int errval = 0;
-	//	struct timespec t1, t2;
-
-	prev_root = (*t)->root;
-
-	while (height < new_height) {
-		/* allocate the tree nodes for increasing height */
-		root = allocNode(NULL, 0);
-		if (root == NULL){
-			errval = 1;
-			return errval;
-		}
-		root->entry_ptr[0] = prev_root;
-		prev_root->parent_ptr = root;
-		flush_buffer(prev_root, sizeof(node), false);
-		prev_root = root;
-		height++;
-	}
-	flush_buffer(prev_root, sizeof(node), false);
-	*t = CoW_Tree(prev_root, height);
-	//	flush_buffer(*t, 8);
-	return errval;
-}
-
-int recursive_alloc_nodes(node *temp_node, unsigned long key, void *value,
+int remapping_items(tree *t, node *level_ptr, item *first_item, 
 		unsigned long height)
 {
 	int errval = -1;
-	unsigned long meta_bits = META_NODE_SHIFT, node_bits;
-	unsigned long next_key;
-	unsigned long index;
+	unsigned long next_key, bit_shift, meta_bits = META_NODE_SHIFT;
+	item *curr_item = first_item;
+	item *new_item;
 
-	node_bits = (height - 1) * meta_bits;
-
-	index = key >> node_bits;
-
-	if (height == 1) {
-		temp_node->entry_ptr[index] = value;
-		flush_buffer(temp_node, sizeof(node), false);
-		if (temp_node->entry_ptr[index] == NULL)
-			goto fail;
+	bit_shift = height * META_NODE_SHIFT;
+	
+	while (curr_item != NULL) {
+		next_key = curr_item->key;
+		next_key = (next_key & ((0x1UL << bit_shift) - 1));
+		new_item = allocItem(curr_item->key, curr_item->value);
+		errval = recursive_search_leaf(t, level_ptr, new_item->key, 
+				next_key, new_item->value, new_item, height);
+		curr_item = curr_item->next_ptr;
 	}
-	else {
-		if (temp_node->entry_ptr[index] == NULL) {
-			temp_node->entry_ptr[index] = allocNode(temp_node, index);
-			flush_buffer(temp_node, sizeof(node), false);
-			if (temp_node->entry_ptr[index] == NULL)
-				goto fail;
-		}
-		next_key = (key & ((0x1UL << node_bits) - 1));
 
-		errval = recursive_alloc_nodes(temp_node->entry_ptr[index], next_key,
-				(void *)value, height - 1);
-		if (errval < 0)
-			goto fail;
-	}
-	errval = 0;
-fail:
 	return errval;
 }
 
-
-int recursive_search_leaf(node *level_ptr, unsigned long key, void *value, 
-		unsigned long height)
+int recursive_search_leaf(tree *t, node *level_ptr, unsigned long key,
+		unsigned long next_key, void *value, item *new_item, unsigned long height)
 {
 	int errval = -1;
-	unsigned long meta_bits = META_NODE_SHIFT, node_bits;
-	unsigned long next_key;
-	unsigned long index;
-	//	struct timespec t1, t2;
+	unsigned long index, node_bits, meta_bits = META_NODE_SHIFT;
 
 	node_bits = (height - 1) * meta_bits;
 
-	index = key >> node_bits;
+	index = next_key >> node_bits;
 
 	if (height == 1) {
 		level_ptr->entry_ptr[index] = value;
-		//		entry_count++;
-		//		clock_gettime(CLOCK_MONOTONIC, &t1);
 		flush_buffer(&level_ptr->entry_ptr[index], 8, true);
-		//		clock_gettime(CLOCK_MONOTONIC, &t2);
-		//		elapsed_entry_flush += (t2.tv_sec - t1.tv_sec) * 1000000000;
-		//		elapsed_entry_flush += (t2.tv_nsec - t1.tv_nsec);
+		free(new_item);
 		if (level_ptr->entry_ptr[index] == NULL)
 			goto fail;
-	}
-	else {
+	} else {
 		if (level_ptr->entry_ptr[index] == NULL) {
-			/* delayed commit */
-			node *tmp_node = allocNode(level_ptr, index);
-			next_key = (key & ((0x1UL << node_bits) - 1));
-			errval = recursive_alloc_nodes(tmp_node, next_key, (void *)value, 
-					height - 1);
+			level_ptr->entry_ptr[index] = new_item;
+		} else {
+			if (((item *)level_ptr->entry_ptr[index])->type == NODE_ORIGIN) {
+				next_key = (next_key & ((0x1UL << node_bits) - 1));
+				errval = recursive_search_leaf(t, level_ptr->entry_ptr[index],
+						key, next_key, value, new_item, height - 1);
+				if (errval < 0)
+					goto fail;
+				return errval;
+			}
 
-			if (errval < 0)
-				goto fail;
+			int level_count = 1;
+			item *next_item = level_ptr->entry_ptr[index];
 
-			level_ptr->entry_ptr[index] = tmp_node;
-			flush_buffer(&level_ptr->entry_ptr[index], 8, true);
-			return errval;
+			while (next_item->next_ptr != NULL) {
+				next_item = next_item->next_ptr;
+				level_count++;
+			}
+			
+			if (level_count == height) {
+				node *temp_node = allocNode(level_ptr, index);
+				next_item->next_ptr = new_item;
+				errval = remapping_items(t, temp_node, 
+						level_ptr->entry_ptr[index], height - 1);
+				level_ptr->entry_ptr[index] = temp_node;
+				
+				if(errval < 0)
+					goto fail;
+			} else
+				next_item->next_ptr = new_item;
 		}
-		next_key = (key & ((0x1UL << node_bits) - 1));
-
-		errval = recursive_search_leaf(level_ptr->entry_ptr[index], next_key, 
-				(void *)value, height - 1);
-		if (errval < 0)
-			goto fail;
 	}
 	errval = 0;
 fail:
@@ -174,10 +136,9 @@ fail:
 int Insert(tree **t, unsigned long key, void *value) 
 {
 	int errval;
-	unsigned long max_keys;
-	unsigned long height;
-	unsigned long blk_shift, meta_bits = META_NODE_SHIFT;
-	unsigned long total_keys;
+	unsigned long max_keys, height, blk_shift, total_keys, level_key;
+	unsigned long meta_bits = META_NODE_SHIFT;
+	item *new_item;
 
 	height = (*t)->height;
 
@@ -199,26 +160,11 @@ int Insert(tree **t, unsigned long key, void *value)
 	if (height == 0)
 		return 0;
 
-	if(height > (*t)->height) {
-		/* delayed commit */
-		tree *tmp_t = *t;
-		tree *prev_tree = *t;
-		errval = increase_radix_tree_height(&tmp_t, height);
-		if(errval) {
-			printf ("Increase radix tree height error!\n");
-			goto fail;
-		}
+	(*t)->height = height;
 
-		errval = recursive_alloc_nodes(tmp_t->root, key, (void *)value, height);
-		if (errval < 0)
-			goto fail;
-
-		*t = tmp_t;
-		flush_buffer(*t, 8, true);
-		free(prev_tree);
-		return 0;
-	}
-	errval = recursive_search_leaf((*t)->root, key, (void *)value, height);
+	new_item = allocItem(key, value);
+	errval = recursive_search_leaf((*t), (*t)->root, key, key,
+			(void *)value, new_item, height);
 	if (errval < 0)
 		goto fail;
 
