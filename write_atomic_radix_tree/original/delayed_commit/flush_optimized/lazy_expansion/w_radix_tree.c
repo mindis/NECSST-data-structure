@@ -9,6 +9,7 @@
 #define mfence() asm volatile("mfence":::"memory")
 
 unsigned long node_count = 0;
+unsigned long item_count = 0;
 
 void flush_buffer(void *buf, unsigned long len, bool fence)
 {
@@ -32,6 +33,8 @@ item *allocItem(unsigned long key, void *value)
 	new_item->key = key;
 	new_item->value = value;
 	new_item->next_ptr = NULL;
+	flush_buffer(new_item, sizeof(item), false);
+	item_count++;
 	return new_item;
 }
 
@@ -51,7 +54,7 @@ tree *initTree()
 {
 	tree *wradix_tree = malloc(sizeof(tree));
 	wradix_tree->root = allocNode(NULL, 0);
-	wradix_tree->height = 1;
+	wradix_tree->height = 6;
 	flush_buffer(wradix_tree, sizeof(tree), true);
 	return wradix_tree;
 }
@@ -61,18 +64,18 @@ int remapping_items(tree *t, node *level_ptr, item *first_item,
 {
 	int errval = -1;
 	unsigned long next_key, bit_shift, meta_bits = META_NODE_SHIFT;
-	item *curr_item = first_item;
+	item *next_item = first_item;
 	item *new_item;
 
 	bit_shift = height * META_NODE_SHIFT;
 	
-	while (curr_item != NULL) {
-		next_key = curr_item->key;
+	while (next_item != NULL) {
+		next_key = next_item->key;
 		next_key = (next_key & ((0x1UL << bit_shift) - 1));
-		new_item = allocItem(curr_item->key, curr_item->value);
-		errval = recursive_search_leaf(t, level_ptr, new_item->key, 
-				next_key, new_item->value, new_item, height);
-		curr_item = curr_item->next_ptr;
+		new_item = allocItem(next_item->key, next_item->value);
+		errval = recursive_search_leaf(t, level_ptr, next_item->key, 
+				next_key, next_item->value, new_item, height);
+		next_item = next_item->next_ptr;
 	}
 
 	return errval;
@@ -203,8 +206,10 @@ void *Update(tree *t, unsigned long key, void *value)
 void *Lookup(tree *t, unsigned long key)
 {
 	node *level_ptr;
+	item *curr_item;
 	unsigned long height;
 	unsigned long bit_shift, idx;
+	unsigned long next_key = key;
 	void *value;
 
 	height = t->height;
@@ -212,17 +217,28 @@ void *Lookup(tree *t, unsigned long key)
 
 	while (height > 1) {
 		bit_shift = (height - 1) * META_NODE_SHIFT;
-		idx = key >> bit_shift;
+		idx = next_key >> bit_shift;
 
-		level_ptr = level_ptr->entry_ptr[idx];
-		if (level_ptr == NULL)
-			return level_ptr;
+		if (((node *)level_ptr->entry_ptr[idx])->type == NODE_ORIGIN) {
+			level_ptr = level_ptr->entry_ptr[idx];
+			if (level_ptr == NULL)
+				return level_ptr;
 
-		key = key & ((0x1UL << bit_shift) - 1);
-		height--;
+			next_key = next_key & ((0x1UL << bit_shift) - 1);
+			height--;
+		} else {
+			curr_item = level_ptr->entry_ptr[idx];
+			while (curr_item != NULL) {
+				if (curr_item->key == key) {
+					value = curr_item->value;
+					return value;
+				}
+				curr_item = curr_item->next_ptr;
+			}
+		}
 	}
 	bit_shift = (height - 1) * META_NODE_SHIFT;
-	idx = key >> bit_shift;
+	idx = next_key >> bit_shift;
 	value = level_ptr->entry_ptr[idx];
 	return value;
 }

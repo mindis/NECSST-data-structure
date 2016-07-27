@@ -11,32 +11,43 @@ Delete	w_radix_tree.c	/^void Delete(tree *t, unsigned long key)$/;"	f
 INPUT_NUM	main.c	8;"	d	file:
 ITEM_LAZY	w_radix_tree.h	7;"	d
 Insert	w_radix_tree.c	/^int Insert(tree **t, unsigned long key, void *value) $/;"	f
+Item	test.c	/^struct Item {$/;"	s	file:
 Item	w_radix_tree.h	/^struct Item {$/;"	s
 Lookup	w_radix_tree.c	/^void *Lookup(tree *t, unsigned long key)$/;"	f
 META_NODE_SHIFT	w_radix_tree.h	3;"	d
 NODE_ORIGIN	w_radix_tree.h	6;"	d
 NUM_ENTRY	w_radix_tree.h	5;"	d
+Node	test.c	/^struct Node {$/;"	s	file:
 Node	w_radix_tree.h	/^struct Node {$/;"	s
 Range_Lookup	w_radix_tree.c	/^void Range_Lookup(tree *t, unsigned long start_key, unsigned long num,$/;"	f
 Tree	w_radix_tree.h	/^struct Tree {$/;"	s
 Update	w_radix_tree.c	/^void *Update(tree *t, unsigned long key, void *value)$/;"	f
 allocItem	w_radix_tree.c	/^item *allocItem(unsigned long key, void *value)$/;"	f
 allocNode	w_radix_tree.c	/^node *allocNode(node *parent, unsigned long index)$/;"	f
+dummy	test.c	/^	char dummy[48];$/;"	m	struct:Node	file:
 dummy	w_radix_tree.h	/^	char dummy[48];		\/\/ 3, 4, 5, 6, 7, 8, 9$/;"	m	struct:Node
+entry_ptr	test.c	/^	void *entry_ptr[256];$/;"	m	struct:Node	file:
 entry_ptr	w_radix_tree.h	/^	void *entry_ptr[NUM_ENTRY];$/;"	m	struct:Node
 find_next_leaf	w_radix_tree.c	/^node *find_next_leaf(tree *t, node *parent, unsigned long index, $/;"	f
 flush_buffer	w_radix_tree.c	/^void flush_buffer(void *buf, unsigned long len, bool fence)$/;"	f
 height	w_radix_tree.h	/^	unsigned long height;$/;"	m	struct:Tree
 initTree	w_radix_tree.c	/^tree *initTree()$/;"	f
 item	w_radix_tree.h	/^typedef struct Item item;$/;"	t	typeref:struct:Item
+item_count	w_radix_tree.c	/^unsigned long item_count = 0;$/;"	v
+item_count	w_radix_tree.h	/^unsigned long item_count;$/;"	v
+key	test.c	/^	unsigned long key;$/;"	m	struct:Item	file:
 key	w_radix_tree.h	/^	unsigned long key;$/;"	m	struct:Item
 main	main.c	/^int main(void)$/;"	f
+main	test.c	/^int main(void)$/;"	f
 mfence	w_radix_tree.c	9;"	d	file:
+next_ptr	test.c	/^	struct Item *next_ptr;$/;"	m	struct:Item	typeref:struct:Item::Item	file:
 next_ptr	w_radix_tree.h	/^	item *next_ptr;$/;"	m	struct:Item
 node	w_radix_tree.h	/^typedef struct Node node;$/;"	t	typeref:struct:Node
 node_count	w_radix_tree.c	/^unsigned long node_count = 0;$/;"	v
 node_count	w_radix_tree.h	/^unsigned long node_count;$/;"	v
+p_index	test.c	/^	unsigned long p_index;$/;"	m	struct:Node	file:
 p_index	w_radix_tree.h	/^	unsigned long p_index;$/;"	m	struct:Node
+parent_ptr	test.c	/^	struct Node *parent_ptr;$/;"	m	struct:Node	typeref:struct:Node::Node	file:
 parent_ptr	w_radix_tree.h	/^	node *parent_ptr;$/;"	m	struct:Node
 recursive_free_nodes	w_radix_tree.c	/^int recursive_free_nodes(tree *t, node *parent, unsigned long index,$/;"	f
 recursive_search_leaf	w_radix_tree.c	/^int recursive_search_leaf(tree *t, node *level_ptr, unsigned long key,$/;"	f
@@ -44,6 +55,9 @@ remapping_items	w_radix_tree.c	/^int remapping_items(tree *t, node *level_ptr, i
 root	w_radix_tree.h	/^	node *root;$/;"	m	struct:Tree
 search_to_next_leaf	w_radix_tree.c	/^node *search_to_next_leaf(node *next_branch, unsigned long height)$/;"	f
 tree	w_radix_tree.h	/^typedef struct Tree tree;$/;"	t	typeref:struct:Tree
+type	test.c	/^	unsigned char type;$/;"	m	struct:Item	file:
+type	test.c	/^	unsigned char type;$/;"	m	struct:Node	file:
 type	w_radix_tree.h	/^	unsigned char type;$/;"	m	struct:Item
 type	w_radix_tree.h	/^	unsigned char type;$/;"	m	struct:Node
+value	test.c	/^	void *value;$/;"	m	struct:Item	file:
 value	w_radix_tree.h	/^	void *value;$/;"	m	struct:Item

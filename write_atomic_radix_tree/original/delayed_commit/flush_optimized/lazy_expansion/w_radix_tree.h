@@ -1,6 +1,6 @@
 #include <stdbool.h>
 
-#define META_NODE_SHIFT 8
+#define META_NODE_SHIFT 5
 #define CACHE_LINE_SIZE 64
 #define NUM_ENTRY	(0x1UL << META_NODE_SHIFT)
 #define NODE_ORIGIN		1
@@ -11,6 +11,7 @@ typedef struct Node node;
 typedef struct Item item;
 
 unsigned long node_count;
+unsigned long item_count;
 
 struct Item {
 	unsigned char type;
@@ -25,7 +26,7 @@ struct Node {
 	void *entry_ptr[NUM_ENTRY];
 	node *parent_ptr;
 //	char dummy[16];		// 2
-//	char dummy[48];		// 3, 4, 5, 6, 7, 8, 9
+	char dummy[48];		// 3, 4, 5, 6, 7, 8, 9
 };
 
 struct Tree {
