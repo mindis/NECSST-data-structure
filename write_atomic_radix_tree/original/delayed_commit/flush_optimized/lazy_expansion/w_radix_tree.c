@@ -378,11 +378,11 @@ void search_entry_in_node(node *level_ptr, unsigned long index, unsigned long he
 		return ;
 
 	if (index == NUM_ENTRY) {
-		search_entry_in_node(level_ptr->parent_ptr, level_ptr->p_index + 1,
-				height + 1, buf, count, num);
+		return search_entry_in_node(level_ptr->parent_ptr, level_ptr->p_index + 1,
+					height + 1, buf, count, num);
 	} else if (level_ptr->entry_ptr[index] == NULL) {
 		next_index = index + 1;
-		search_entry_in_node(level_ptr, next_index, height, buf, count, num);
+		return search_entry_in_node(level_ptr, next_index, height, buf, count, num);
 	} else {
 		if (height == 1) {
 			buf[*count] = *(unsigned long *)level_ptr->entry_ptr[index];
@@ -399,8 +399,8 @@ void search_entry_in_node(node *level_ptr, unsigned long index, unsigned long he
 						return ;
 				}
 			}
-			search_entry_in_node(level_ptr->parent_ptr, level_ptr->p_index + 1,
-					height + 1, buf, count, num);
+			return search_entry_in_node(level_ptr->parent_ptr, level_ptr->p_index + 1,
+						height + 1, buf, count, num);
 		} else {
 			if (((item *)level_ptr->entry_ptr[index])->type == ITEM_LAZY) {
 				entry *item_entry = malloc(MAX_HEIGHT * sizeof(entry));
@@ -424,15 +424,15 @@ void search_entry_in_node(node *level_ptr, unsigned long index, unsigned long he
 
 				next_index = index + 1;
 				if (next_index == NUM_ENTRY)
-					search_entry_in_node(level_ptr->parent_ptr, level_ptr->p_index + 1,
-							height + 1, buf, count, num);
+					return search_entry_in_node(level_ptr->parent_ptr, level_ptr->p_index + 1,
+								height + 1, buf, count, num);
 				else
-					search_entry_in_node(level_ptr, next_index, height, buf, count, num);
+					return search_entry_in_node(level_ptr, next_index, height, buf, count, num);
 			} else 
-				search_entry_in_node(level_ptr->entry_ptr[index], 0, height - 1, buf, count, num);
+				return search_entry_in_node(level_ptr->entry_ptr[index], 0, height - 1, buf, count, num);
 		}
 	}
-	return ;
+//	return ;
 }
 
 void Range_Lookup(tree *t, unsigned long start_key, unsigned long num,

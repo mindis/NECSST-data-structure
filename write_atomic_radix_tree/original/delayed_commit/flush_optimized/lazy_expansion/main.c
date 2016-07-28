@@ -102,8 +102,8 @@ int main(void)
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 	printf("Range scan 0.1% = %lu ns\n", elapsed_time);
 
-//	for (i = 0; i < INPUT_NUM / 1000; i++)
-//		printf("buf[%d] = %lu\n", i, buf[i]);
+	for (i = 0; i < INPUT_NUM / 1000; i++)
+		printf("buf[%d] = %lu\n", i, buf[i]);
 
 	/* Range scan 1% */
 	memset(dummy, 0, 15*1024*1024);
