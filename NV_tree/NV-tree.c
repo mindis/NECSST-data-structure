@@ -176,26 +176,6 @@ void *Lookup(tree *t, unsigned long key)
 fail:
 	return;
 }
-/*
-void insertion_sort(struct LN_entry *base, int num)
-{
-	unsigned long i, j;
-	struct LN_entry temp;
-
-//	MAX_NUM_ENTRY_LN
-
-	for (i = 1; i < num; i++) {
-		temp = base[i];
-		j = i - 1;
-
-		while (j >= 0 && base[j].key > temp.key) {
-			base[j + 1] = base[j];
-			j = j - 1;
-		}
-		base[j + 1] = temp;
-	}
-}
-*/
 
 void insertion_sort(struct LN_entry *base, int num)
 {
@@ -661,8 +641,9 @@ void insert_entry_to_leaf(LN *leaf, unsigned long key, void *value, bool flush)
 		leaf->LN_Element[leaf->nElements].flag = true;
 		leaf->LN_Element[leaf->nElements].key = key;
 		leaf->LN_Element[leaf->nElements].value = value;
+		mfence();
 		flush_buffer(&leaf->LN_Element[leaf->nElements], 
-				sizeof(struct LN_entry), true);
+				sizeof(struct LN_entry), false);
 		leaf->nElements++;
 		flush_buffer(&leaf->nElements, sizeof(unsigned char), true);
 	} else {
@@ -795,8 +776,9 @@ void update_entry_to_leaf(LN *leaf, unsigned long old_key, void *old_value,
 		leaf->LN_Element[leaf->nElements + 1].flag = true;
 		leaf->LN_Element[leaf->nElements + 1].key = new_key;
 		leaf->LN_Element[leaf->nElements + 1].value = new_value;
+		mfence();
 		flush_buffer(&leaf->LN_Element[leaf->nElements], 
-				sizeof(struct LN_entry) * 2, true);
+				sizeof(struct LN_entry) * 2, false);
 		leaf->nElements = leaf->nElements + 2;
 		flush_buffer(&leaf->nElements, sizeof(unsigned char), true);
 	} else {
@@ -922,8 +904,9 @@ void delete_entry_to_leaf(LN *leaf, unsigned long key, void *value, bool flush)
 		leaf->LN_Element[leaf->nElements].flag = false;
 		leaf->LN_Element[leaf->nElements].key = key;
 		leaf->LN_Element[leaf->nElements].value = value;
+		mfence();
 		flush_buffer(&leaf->LN_Element[leaf->nElements], 
-				sizeof(struct LN_entry), true);
+				sizeof(struct LN_entry), false);
 		leaf->nElements++;
 		flush_buffer(&leaf->nElements, sizeof(unsigned char), true);
 	} else {
