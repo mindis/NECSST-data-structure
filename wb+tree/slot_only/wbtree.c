@@ -9,6 +9,7 @@
 #include "wbtree.h"
 
 #define mfence() asm volatile("mfence":::"memory")
+unsigned long node_count = 0;
 
 void flush_buffer(void *buf, unsigned int len, bool fence)
 {
@@ -46,6 +47,7 @@ node *allocNode()
 	node *n = malloc(sizeof(node));
 	memset(n->slot,0,8);
 	n->isleaf = 1;
+	node_count++;
 	return n;
 }
 
@@ -81,25 +83,14 @@ void Range_Lookup(tree *t, unsigned long start_key, unsigned int num,
 	unsigned long elapsed_time;
 	node *curr = t->root;
 
-//	clock_gettime(CLOCK_MONOTONIC, &t1);
 	curr = find_leaf_node(curr, start_key);
 	loc = Search(curr, curr->slot, start_key);
-//	printf("loc = %d\n", loc);
-//	clock_gettime(CLOCK_MONOTONIC, &t2);
-//	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
-//	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
-//	printf("Range lookup 1 = %lu\n", elapsed_time);
 
-//	clock_gettime(CLOCK_MONOTONIC, &t1);
 	while (search_count < num) {
 		for (i = loc; i <= curr->slot[0]; i++) {
 			buf[search_count] = *(unsigned long *)curr->entries[curr->slot[i]].ptr;
 			search_count++;
 			if(search_count == num) {
-//				clock_gettime(CLOCK_MONOTONIC, &t2);
-//				elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
-//				elapsed_time += (t2.tv_nsec - t1.tv_nsec);
-//				printf("Range lookup 2 = %lu\n", elapsed_time);
 				return ;
 			}
 		}
@@ -111,10 +102,6 @@ void Range_Lookup(tree *t, unsigned long start_key, unsigned int num,
 		}
 		loc = 1;
 	}
-//	clock_gettime(CLOCK_MONOTONIC, &t2);
-//	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
-//	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
-//	printf("Range lookup 2 = %lu\n", elapsed_time);
 }
 
 int Append(node *n, unsigned long key, void *value)
@@ -282,7 +269,7 @@ void insert_in_leaf(node *curr, unsigned long key, void *value){
 
 	loc = Append(curr,key,value);
 
-	flush_buffer(&(curr->entries[loc]), sizeof(entry), true);
+	flush_buffer(&(curr->entries[loc]), sizeof(entry), false);
 
 	mid = Search(curr, curr->slot, key);
 
@@ -306,7 +293,7 @@ void insert_in_inner(node *curr, unsigned long key, void *value)
 	char temp[8];
 
 	loc = Append_in_inner(curr, key, value);
-	flush_buffer(&(curr->entries[loc]), sizeof(entry), true);
+	flush_buffer(&(curr->entries[loc]), sizeof(entry), false);
 
 	mid = Search(curr, curr->slot, key);
 

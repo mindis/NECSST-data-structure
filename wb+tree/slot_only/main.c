@@ -1,10 +1,3 @@
-/* *************************************************** */
-// Main for WB-tree (Write Atomic Btree Implemenation //
-// Made by Jihye Seo sjh8763@unist.ac.kr //
-// Modified by Wookhee Kim okie90@unist.ac.kr //
-/* ************************************************** */
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,14 +17,10 @@ int main(void)
 	void *ret;
 	FILE *fp;
 	unsigned long *buf;
-	char line[1024];
-	FILE *fp2;
-	unsigned long nVmSize = 0;
-	unsigned long nVmRss = 0;
 	unsigned long max;
 	unsigned long min;
 
-	if ((fp = fopen("/home/sekwon/Public/input_file/input_dense_100million.txt","r")) == NULL)
+	if ((fp = fopen("/home/sekwon/Public/input_file/input_random_100M.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
@@ -72,29 +61,8 @@ int main(void)
 	printf("Insertion Time = %lu ns\n",elapsed_time);
 
 	/* Check space overhead */
-	sprintf(line, "/proc/%d/status", getpid());
-	fp2 = fopen(line, "r");
-	if (fp2 == NULL)
-		return ;
-
-	while (fgets(line, 1024, fp2) != NULL) {
-		if (strstr(line, "VmSize")) {
-			char tmp[32];
-			char size[32];
-			sscanf(line,"%s%s", tmp, size);
-			nVmSize = atoi(size);
-			printf("nVmSize = %lu KB\n", nVmSize);
-		}
-		else if (strstr(line, "VmRSS")) {
-			char tmp[32];
-			char size[32];
-			sscanf(line, "%s%s", tmp, size);
-			nVmRss = atoi(size);
-			printf("nVmRSS = %lu KB\n", nVmRss);
-			break;
-		}
-	}
-	fclose(fp2);
+	printf("Total space = %lu byte\n", node_count * sizeof(node));
+	printf("Space efficiency = %lu\n", (node_count * sizeof(node)) / INPUT_NUM);
 
 	/* Lookup */
 	memset(dummy, 0, 15*1024*1024);
@@ -169,8 +137,6 @@ int main(void)
 //	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 //	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 //	printf("Delete time = %lu ns\n", elapsed_time);
-
-	/* Update */
 //	for (i = 0; i < 100000100; i++)
 //		printf("buf[%d] = %lu\n", i, buf[i]);
 
