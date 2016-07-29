@@ -281,7 +281,7 @@ void *Update(tree *t, unsigned long key, void *value)
 	bit_shift = (height - 1) * META_NODE_SHIFT;
 	idx = next_key >> bit_shift;
 	level_ptr->entry_ptr[idx] = value;
-	flush_buffer(&curr_item->value, 8, true);
+	flush_buffer(&level_ptr->entry_ptr[idx], 8, true);
 	return level_ptr->entry_ptr[idx];
 }
 
@@ -392,7 +392,7 @@ void search_entry_in_node(node *level_ptr, unsigned long index, unsigned long he
 
 			next_index = index + 1;
 			for (i = next_index; i < NUM_ENTRY; i++) {
-				if (level_ptr->entry_ptr[index] != NULL) {
+				if (level_ptr->entry_ptr[i] != NULL) {
 					buf[*count] = *(unsigned long *)level_ptr->entry_ptr[i];
 					(*count)++;
 					if (*count == num)

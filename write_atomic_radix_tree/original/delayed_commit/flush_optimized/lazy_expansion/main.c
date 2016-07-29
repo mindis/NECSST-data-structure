@@ -5,7 +5,7 @@
 #include <time.h>
 #include "w_radix_tree.h"
 
-#define INPUT_NUM	10000000
+#define INPUT_NUM	100000000
 
 int main(void)
 {
@@ -22,7 +22,7 @@ int main(void)
 
 	printf("sizeof(node) = %d\n", sizeof(node));
 
-	if((fp = fopen("/home/sekwon/Public/input_file/input_random_10M.txt","r")) == NULL)
+	if((fp = fopen("/home/sekwon/Public/input_file/input_random_100M.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
@@ -102,9 +102,6 @@ int main(void)
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 	printf("Range scan 0.1% = %lu ns\n", elapsed_time);
 
-	for (i = 0; i < INPUT_NUM / 1000; i++)
-		printf("buf[%d] = %lu\n", i, buf[i]);
-
 	/* Range scan 1% */
 	memset(dummy, 0, 15*1024*1024);
 	flush_buffer((void *)dummy, 15*1024*1024, true);
@@ -115,9 +112,6 @@ int main(void)
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 	printf("Range scan 1% = %lu ns\n", elapsed_time);
 
-//	for (i = 0; i < INPUT_NUM/100; i++)
-//		printf("buf[%d] = %lu\n", i, buf[i]);
-
 	/* Range scan 10% */
 	memset(dummy, 0, 15*1024*1024);
 	flush_buffer((void *)dummy, 15*1024*1024, true);
@@ -127,9 +121,6 @@ int main(void)
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 	printf("Range scan 10% = %lu ns\n", elapsed_time);
-
-//	for (i = 0; i < INPUT_NUM/10; i++)
-//		printf("buf[%d] = %lu\n", i, buf[i]);
 
 	/* Update */
 	new_value = malloc(sizeof(unsigned long) * INPUT_NUM);
