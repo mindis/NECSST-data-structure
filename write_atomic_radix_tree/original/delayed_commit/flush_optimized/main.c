@@ -5,7 +5,7 @@
 #include <time.h>
 #include "w_radix_tree.h"
 
-#define INPUT_NUM	100000
+#define INPUT_NUM	1000000000
 
 int main(void)
 {
@@ -22,7 +22,7 @@ int main(void)
 
 	printf("sizeof(node) = %d\n", sizeof(node));
 
-	if((fp = fopen("/home/sekwon/Public/input_file/input_random_100K.txt","r")) == NULL)
+	if((fp = fopen("/home/sekwon/Public/input_file/input_random_1000M.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
@@ -45,9 +45,6 @@ int main(void)
 		if (keys[i] < min)
 			min = keys[i];
 	}
-
-	printf("max = %lu\n", max);
-	printf("min = %lu\n", min);
 
 	tree *t = initTree();
 	flush_buffer(t, 8, true);
