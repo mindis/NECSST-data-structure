@@ -28,20 +28,62 @@ void flush_buffer(void *buf, unsigned int len, bool fence)
 	}
 }
 
-void add_redo_logentry()
+void add_log_entry(tree *t, void *addr, unsigned int size, unsigned char type)
 {
-	redo_log_entry *log = malloc(sizeof(redo_log_entry));
-	log->addr = 0;
-	log->new_value = 0;
-	log->type = LE_DATA;
-	flush_buffer(log, sizeof(redo_log_entry), false);
-}
+	log_entry *log;
+	int i, remain_size;
 
-void add_commit_entry()
-{
-	commit_entry *commit_log = malloc(sizeof(commit_entry));
-	commit_log->type = LE_COMMIT;
-	flush_buffer(commit_log, sizeof(commit_entry), true);
+	remain_size = size - ((size / LOG_DATA_SIZE) * LOG_DATA_SIZE);
+
+	if ((char *)t->start_log->next_offset == 
+			(t->start_log->log_data + LOG_AREA_SIZE))
+		t->start_log->next_offset = (log_entry *)t->start_log->log_data;
+
+	if (size <= LOG_DATA_SIZE) {
+		log = t->start_log->next_offset;
+		log->size = size;
+		log->type = type;
+		log->addr = addr;
+		memcpy(log->data, addr, size);
+
+		if (type == LE_DATA)
+			flush_buffer(log, sizeof(log_entry), false);
+		else
+			flush_buffer(log, sizeof(log_entry), true);
+
+		t->start_log->next_offset = t->start_log->next_offset + 1;
+	} else {
+		void *next_addr = addr;
+
+		for (i = 0; i < size / LOG_DATA_SIZE; i++) {
+			log = t->start_log->next_offset;
+			log->size = LOG_DATA_SIZE;
+			log->type = type;
+			log->addr = next_addr;
+			memcpy(log->data, next_addr, LOG_DATA_SIZE);
+
+			flush_buffer(log, sizeof(log_entry), false);
+
+			t->start_log->next_offset = t->start_log->next_offset + 1;
+			if ((char *)t->start_log->next_offset == 
+					(t->start_log->log_data + LOG_AREA_SIZE))
+				t->start_log->next_offset = (log_entry *)t->start_log->log_data;
+
+			next_addr = (char *)next_addr + LOG_DATA_SIZE;
+		}
+
+		if (remain_size > 0) {
+			log = t->start_log->next_offset;
+			log->size = LOG_DATA_SIZE;
+			log->type = type;
+			log->addr = next_addr;
+			memcpy(log->data, next_addr, remain_size);
+
+			flush_buffer(log, sizeof(log_entry), false);
+			
+			t->start_log->next_offset = t->start_log->next_offset + 1;
+		}
+	}
 }
 
 node *allocNode()
@@ -58,7 +100,8 @@ tree *initTree()
 {
 	tree *t =malloc(sizeof(tree)); 
 	t->root = allocNode(); 
-	t->height = 0;
+	t->start_log = malloc(sizeof(log_area));
+	t->start_log->next_offset = (log_entry *)t->start_log->log_data;
 	return t;
 }
 
@@ -163,8 +206,12 @@ found_middle:
 
 int Append(node *n, unsigned long key, void *value)
 {
+	int errval = -1;
 	unsigned long index;
+
 	index = find_next_zero_bit(&n->bitmap, BITMAP_SIZE, 1) - 1;
+	if (index == BITMAP_SIZE - 1)
+		return errval;
 
 	n->entries[index].key = key;
 	n->entries[index].ptr = value;
@@ -173,8 +220,12 @@ int Append(node *n, unsigned long key, void *value)
 
 int Append_in_inner(node *n, unsigned long key, void *value)
 {
+	int errval = -1;
 	unsigned long index;
+
 	index = find_next_zero_bit(&n->bitmap, BITMAP_SIZE, 1) - 1;
+	if (index == BITMAP_SIZE - 1)
+		return errval;
 
 	n->entries[index].key = key;
 	n->entries[index].ptr = value;
@@ -221,7 +272,8 @@ node *find_leaf_node(node *curr, unsigned long key)
 }
 
 
-void Insert(tree *t, unsigned long key, void *value){
+void Insert(tree *t, unsigned long key, void *value)
+{
 	int numEntries;
 	node *curr = t->root;
 	/* Find proper leaf */
@@ -229,7 +281,8 @@ void Insert(tree *t, unsigned long key, void *value){
 
 	/* Check overflow & split */
 	numEntries = curr->slot[0];
-	if(numEntries == NODE_SIZE){
+	if(numEntries == NODE_SIZE) {
+		add_log_entry(t, curr, sizeof(node), LE_DATA);
 		node *splitNode = allocNode();
 		int j, loc, cp = curr->slot[0];
 		splitNode->leftmostPtr = curr->leftmostPtr;
@@ -245,12 +298,9 @@ void Insert(tree *t, unsigned long key, void *value){
 			cp--;
 		}
 
-		add_redo_logentry();
 		curr->slot[0] -= MIN_LIVE_ENTRIES;
 
 		if (splitNode->entries[splitNode->slot[1]].key > key) {
-			add_redo_logentry();	//slot redo logging for insert_in_leaf_noflush
-			add_redo_logentry();
 			loc = insert_in_leaf_noflush(curr, key, value);
 			flush_buffer(&(curr->entries[loc]), sizeof(entry), false);
 		}
@@ -258,9 +308,13 @@ void Insert(tree *t, unsigned long key, void *value){
 			insert_in_leaf_noflush(splitNode, key, value);
 
 		insert_in_parent(t, curr, splitNode->entries[splitNode->slot[1]].key, splitNode);
-		add_redo_logentry();
+
 		curr->leftmostPtr = splitNode;
-		add_commit_entry();
+		
+		flush_buffer(curr->slot, (char *)curr->entries - (char *)curr->slot, false);
+		flush_buffer(&curr->leftmostPtr, 8, false);
+
+		add_log_entry(t, NULL, 0, LE_COMMIT);
 	}
 	else{
 		insert_in_leaf(curr, key, value);
@@ -368,8 +422,9 @@ void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {
 		flush_buffer(root, sizeof(node), false);
 		flush_buffer(splitNode, sizeof(node), false);
 
-		add_redo_logentry();
 		curr->parent = root;
+		flush_buffer(&curr->parent, 8, false);
+
 		t->root = root;
 		return ;
 	}
@@ -379,34 +434,39 @@ void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {
 	if (parent->slot[0] < NODE_SIZE) {
 		int mid, j, loc;
 
-		add_redo_logentry();
+		add_log_entry(t, parent->slot, (char *)parent->entries - (char *)parent->slot, LE_DATA);
+		
 		parent->bitmap = parent->bitmap - 1;
+
 		loc = Append_in_inner(parent, key, splitNode);
 		flush_buffer(&(parent->entries[loc]), sizeof(entry), false);
+
 		splitNode->parent = parent;
 		flush_buffer(splitNode, sizeof(node), false);
 
 		mid = Search(parent, parent->slot, key);
 
-		add_redo_logentry();
 		for (j = parent->slot[0]; j >= mid; j--)
 			parent->slot[j + 1] = parent->slot[j];
 
 		parent->slot[mid] = loc;
-
 		parent->slot[0] = parent->slot[0] + 1;
 
 		parent->bitmap = parent->bitmap + 1 + (0x1UL << (loc + 1));
+		flush_buffer(parent->slot, (char *)parent->entries - (char *)parent->slot, false);
 	} else {
 		int j, loc, cp = parent->slot[0];
 		node *splitParent = allocNode();
 		splitParent->isleaf = 0;
 
+		add_log_entry(t, parent, sizeof(node), LE_DATA);
+
 		for (j = MIN_LIVE_ENTRIES; j > 0; j--) {
 			loc = Append_in_inner(splitParent,parent->entries[parent->slot[cp]].key, parent->entries[parent->slot[cp]].ptr);
 			node *child = parent->entries[parent->slot[cp]].ptr;
-			add_redo_logentry();
+			add_log_entry(t, &child->parent, 8, LE_DATA);
 			child->parent = splitParent;
+			flush_buffer(&child->parent, 8, false);
 			splitParent->slot[j] = loc;
 			splitParent->slot[0]++;
 			splitParent->bitmap = splitParent->bitmap + (0x1UL << (loc + 1));
@@ -414,12 +474,9 @@ void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {
 			cp--;
 		}
 
-		add_redo_logentry();
 		parent->slot[0] -= MIN_LIVE_ENTRIES;
 
 		if (splitParent->entries[splitParent->slot[1]].key > key) {
-			add_redo_logentry();
-			add_redo_logentry();
 			loc = insert_in_inner_noflush(parent, key, splitNode);
 			flush_buffer(&(parent->entries[loc]), sizeof(entry), false);
 			splitNode->parent = parent;
@@ -430,6 +487,8 @@ void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {
 			flush_buffer(splitNode, sizeof(node), false);
 			insert_in_inner_noflush(splitParent, key, splitNode);
 		}
+
+		flush_buffer(parent->slot, (char *)parent->entries - (char *)parent->slot, false);
 
 		insert_in_parent(t, parent, 
 				splitParent->entries[splitParent->slot[1]].key, splitParent);

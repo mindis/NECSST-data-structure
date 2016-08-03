@@ -6,7 +6,7 @@
 #include <malloc.h>
 #include <stdint.h>
 #include <time.h>
-#include "wbtree.h"
+#include "FPTree.h"
 
 #define mfence() asm volatile("mfence":::"memory")
 #define BITOP_WORD(nr)	((nr) / BITS_PER_LONG)
@@ -45,7 +45,7 @@ void add_commit_entry()
 LN *allocLNode()
 {
 	LN *node = malloc(sizeof(LN));
-	node->type = 2;
+	node->type = THIS_LN;
 	node->bitmap = 0;
 	return node;
 }
@@ -53,7 +53,7 @@ LN *allocLNode()
 IN *allocINode()
 {
 	IN *node = malloc(sizeof(IN));
-	node->type = 1;
+	node->type = THIS_IN;
 	node->nKeys = 0;
 	return node;
 }
@@ -61,9 +61,14 @@ IN *allocINode()
 tree *initTree()
 {
 	tree *t =malloc(sizeof(tree)); 
-	t->root = allocNode(); 
+	t->root = allocLNode(); 
 	t->height = 0;
 	return t;
+}
+
+unsigned char hash(unsigned long key) {
+	unsigned char hash_key = key % 256;
+	return hash_key;
 }
 
 void insertion_sort(entry *base, int num)
@@ -83,8 +88,51 @@ void insertion_sort(entry *base, int num)
 	}
 }
 
+/*
+ * Find the next set bit in a memory region.
+ */
+unsigned long find_next_bit(const unsigned long *addr, unsigned long size,
+			    unsigned long offset)
+{
+	const unsigned long *p = addr + BITOP_WORD(offset);
+	unsigned long result = offset & ~(BITS_PER_LONG-1);
+	unsigned long tmp;
 
+	if (offset >= size)
+		return size;
+	size -= result;
+	offset %= BITS_PER_LONG;
+	if (offset) {
+		tmp = *(p++);
+		tmp &= (~0UL << offset);
+		if (size < BITS_PER_LONG)
+			goto found_first;
+		if (tmp)
+			goto found_middle;
+		size -= BITS_PER_LONG;
+		result += BITS_PER_LONG;
+	}
+	while (size & ~(BITS_PER_LONG-1)) {
+		if ((tmp = *(p++)))
+			goto found_middle;
+		result += BITS_PER_LONG;
+		size -= BITS_PER_LONG;
+	}
+	if (!size)
+		return result;
+	tmp = *p;
 
+found_first:
+	tmp &= (~0UL >> (BITS_PER_LONG - size));
+	if (tmp == 0UL)		/* Are any bits set? */
+		return result + size;	/* Nope. */
+found_middle:
+	return result + __ffs(tmp);
+}
+
+/*
+ * Find the next zero bit in a memory region.
+ */
 unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
 		unsigned long offset)
 {
@@ -126,19 +174,26 @@ found_middle:
 
 void *Lookup(tree *t, unsigned long key)
 {
-	node *curr = t->root;
+	unsigned long loc = 0;
+	void *value = NULL;
+	LN *curr = t->root;
 	curr = find_leaf_node(curr, key);
-	int loc = Search(curr, curr->slot, key);
 
-	if (loc > curr->slot[0]) 
-		loc = curr->slot[0];
+	while (loc < NUM_LN_ENTRY) {
+		loc = find_next_bit(&curr->bitmap, BITMAP_SIZE, loc);
+		
+		if (curr->fingerprints[loc] == hash(key) &&
+				curr->entries[loc].key == key) {
+			value = curr->entries[loc].ptr;
+//			printf("value = %lu\n", *(unsigned long *)value);
+			break;
+		}
+		loc++;
+	}
 
-	if (curr->entries[curr->slot[loc]].key != key || loc > curr->slot[0])
-		return NULL;
-
-	return curr->entries[curr->slot[loc]].ptr;
+	return value;
 }
-
+/*
 void Range_Lookup(tree *t, unsigned long start_key, unsigned int num, 
 		unsigned long buf[])
 {
@@ -167,28 +222,7 @@ void Range_Lookup(tree *t, unsigned long start_key, unsigned int num,
 		loc = 1;
 	}
 }
-
-int Append(LN *n, unsigned long key, void *value)
-{
-	unsigned long index;
-	index = find_next_zero_bit(&n->bitmap, BITMAP_SIZE, 0);
-
-	n->entries[index].key = key;
-	n->entries[index].ptr = value;
-	n->fingerprints[index] = hash(key);
-	n->bitmap = n->bitmap + (0x1UL << index);
-	return index;
-}
-
-int Append_in_inner(node *n, unsigned long key, void *value)
-{
-	unsigned long index;
-	index = find_next_zero_bit(&n->bitmap, BITMAP_SIZE, 1) - 1;
-
-	n->entries[index].key = key;
-	n->entries[index].ptr = value;
-	return index;
-}
+*/
 
 int Search(IN *curr, unsigned long key)
 {
@@ -197,9 +231,9 @@ int Search(IN *curr, unsigned long key)
 
 	while (low <= high){
 		mid = (low + high) / 2;
-		if (curr->key[mid] > key)
+		if (curr->keys[mid] > key)
 			high = mid - 1;
-		else if (curr->key[mid] < key)
+		else if (curr->keys[mid] < key)
 			low = mid + 1;
 		else
 			break;
@@ -213,15 +247,15 @@ int Search(IN *curr, unsigned long key)
 
 void *find_leaf_node(void *curr, unsigned long key) 
 {
-	int loc;
+	unsigned long loc;
 
 	if (((LN *)curr)->type == THIS_LN) 
 		return curr;
 	loc = Search(curr, key);
 
 	if (loc > ((IN *)curr)->nKeys - 1) 
-		return find_leaf_node(curr->ptr[loc - 1], key);
-	else if (((IN *)curr)->key[loc] <= key) 
+		return find_leaf_node(((IN *)curr)->ptr[loc - 1], key);
+	else if (((IN *)curr)->keys[loc] <= key) 
 		return find_leaf_node(((IN *)curr)->ptr[loc], key);
 	else if (loc == 0) 
 		return find_leaf_node(((IN *)curr)->leftmostPtr, key);
@@ -232,50 +266,50 @@ void *find_leaf_node(void *curr, unsigned long key)
 
 void Insert(tree *t, unsigned long key, void *value)
 {
-	void *curr = t->root;
+	LN *curr = t->root;
 	/* Find proper leaf */
 	curr = find_leaf_node(curr, key);
 
 	/* Check overflow & split */
-	if(LN->bitmap == IS_FULL) {
-		int num = 0, loc = 0, cp = curr->slot[0];
+	if(curr->bitmap == IS_FULL) {
+		int j, num = 0;
+		unsigned long loc = 0;
 		LN *split_LNode = allocLNode();
 		entry *valid_entry = malloc(NUM_LN_ENTRY * sizeof(entry));
+
 		split_LNode->pNext = curr->pNext;
 
 		while (loc < BITMAP_SIZE) {
 			loc = find_next_bit(&curr->bitmap, BITMAP_SIZE, loc);
 			valid_entry[num] = curr->entries[loc];
 			num++;
+			loc++;
 		}
 
+		insertion_sort(valid_entry, num);
 
-		//overflown node
-		for (j = MIN_LIVE_ENTRIES; j > 0; j--) {
-			loc = Append(splitNode, curr->entries[curr->slot[cp]].key, 
-					curr->entries[curr->slot[cp]].ptr);
-			splitNode->slot[j] = loc;
-			splitNode->slot[0]++;
-			splitNode->bitmap = splitNode->bitmap + (0x1UL << (loc + 1));
-			curr->bitmap = curr->bitmap & (~(0x1UL << (curr->slot[cp] + 1)));
-			cp--;
-		}
+		curr->bitmap = 0;
+		for (j = 0; j < MIN_LN_ENTRIES; j++)
+			insert_in_leaf_noflush(curr, valid_entry[j].key,
+					valid_entry[j].ptr);
 
-		add_redo_logentry();
-		curr->slot[0] -= min_live_entries;
+		for (j = MIN_LN_ENTRIES; j < num; j++)
+			insert_in_leaf_noflush(split_LNode, valid_entry[j].key,
+					valid_entry[j].ptr);
 
-		if (splitNode->entries[splitNode->slot[1]].key > key) {
+		free(valid_entry);
+
+		if (split_LNode->entries[0].key > key) {
 			add_redo_logentry();	//slot redo logging for insert_in_leaf_noflush
 			add_redo_logentry();
 			loc = insert_in_leaf_noflush(curr, key, value);
-			flush_buffer(&(curr->entries[loc]), sizeof(entry), false);
-		}
-		else
-			insert_in_leaf_noflush(splitNode, key, value);
+		//	flush_buffer(&(curr->entries[loc]), sizeof(entry), false);
+		} else
+			insert_in_leaf_noflush(split_LNode, key, value);
 
-		insert_in_parent(t, curr, splitNode->entries[splitNode->slot[1]].key, splitNode);
+		insert_in_parent(t, curr, split_LNode->entries[0].key, split_LNode);
 		add_redo_logentry();
-		curr->leftmostPtr = splitNode;
+		curr->pNext = split_LNode;
 		add_commit_entry();
 	}
 	else{
@@ -306,133 +340,85 @@ void insert_in_leaf(LN *curr, unsigned long key, void *value)
 	curr->bitmap = curr->bitmap + (0x1UL << index);
 }
 
-void insert_in_inner(node *curr, unsigned long key, void *value)
+void insert_in_inner(IN *curr, unsigned long key, void *child)
 {
 	int loc, mid, j;
 
-	curr->bitmap = curr->bitmap - 1;
-	flush_buffer(&curr->bitmap, sizeof(unsigned long), true);
-	loc = Append_in_inner(curr, key, value);
-	flush_buffer(&(curr->entries[loc]), sizeof(entry), false);
+//	mid = Search(curr, key);
 
-	mid = Search(curr, curr->slot, key);
+	for (j = 0; j < curr->nKeys; j++) {
+		if (curr->keys[j] > key) {
+			mid = j;
+			break;
+		}
+	}
 
-	for (j = curr->slot[0]; j >= mid; j--)
-		curr->slot[j + 1] = curr->slot[j];
+	mid = j;
 
-	curr->slot[mid] = loc;
+	for (j = (curr->nKeys - 1); j >= mid; j--) {
+		curr->keys[j + 1] = curr->keys[j];
+		curr->ptr[j + 1] = curr->ptr[j];
+	}
 
-	curr->slot[0] = curr->slot[0] + 1;
-	flush_buffer(curr->slot, sizeof(curr->slot), true);
-	
-	curr->bitmap = curr->bitmap + 1 + (0x1UL << (loc + 1));
-	flush_buffer(&curr->bitmap, sizeof(unsigned long), true);
+	curr->keys[mid] = key;
+	curr->ptr[mid] = child;
+
+	curr->nKeys++;
 }
 
-int insert_in_inner_noflush(node *curr, unsigned long key, void *value)
-{
-	int loc, mid, j;
-
-	curr->bitmap = curr->bitmap - 1;
-	loc = Append_in_inner(curr, key, value);
-
-	mid = Search(curr, curr->slot, key);
-
-	for (j = curr->slot[0]; j >= mid; j--)
-		curr->slot[j + 1] = curr->slot[j];
-
-	curr->slot[mid] = loc;
-
-	curr->slot[0] = curr->slot[0] + 1;
-
-	curr->bitmap = curr->bitmap + 1 + (0x1UL << (loc + 1));
-	return loc;
-}
-
-void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {
+void insert_in_parent(tree *t, void *curr, unsigned long key, void *splitNode) {
 	if (curr == t->root) {
-		node *root = allocNode();
-		root->isleaf = 0;
+		IN *root = allocINode();
 		root->leftmostPtr = curr;
-		root->bitmap = root->bitmap + (0x1UL << 1);
-		root->entries[0].ptr = splitNode;
-		root->entries[0].key = key;
-		splitNode->parent = root;
+		root->keys[0] = key;
+		root->ptr[0] = splitNode;
+		root->nKeys++;
 
-		root->slot[1] = 0;
-		root->slot[0] = 1;
-		flush_buffer(root, sizeof(node), false);
-		flush_buffer(splitNode, sizeof(node), false);
-
-		add_redo_logentry();
-		curr->parent = root;
+		((IN *)splitNode)->parent = root;
+		((IN *)curr)->parent = root;
 		t->root = root;
 		return ;
 	}
 
-	node *parent = curr->parent;
+	IN *parent;
 
-	if (parent->slot[0] < NODE_SIZE) {
-		int mid, j, loc;
+	if (((IN *)curr)->type == THIS_IN)
+		parent = ((IN *)curr)->parent;
+	else
+		parent = ((LN *)curr)->parent;
 
-		add_redo_logentry();
-		parent->bitmap = parent->bitmap - 1;
-		loc = Append_in_inner(parent, key, splitNode);
-		flush_buffer(&(parent->entries[loc]), sizeof(entry), false);
-		splitNode->parent = parent;
-		flush_buffer(splitNode, sizeof(node), false);
-
-		mid = Search(parent, parent->slot, key);
-
-		add_redo_logentry();
-		for (j = parent->slot[0]; j >= mid; j--)
-			parent->slot[j + 1] = parent->slot[j];
-
-		parent->slot[mid] = loc;
-
-		parent->slot[0] = parent->slot[0] + 1;
-
-		add_redo_logentry();
-		parent->bitmap = parent->bitmap + 1 + (0x1UL << (loc + 1));
+	if (parent->nKeys < NUM_IN_ENTRY) {
+		insert_in_inner(parent, key, splitNode);
+		((IN *)splitNode)->parent = parent;
 	} else {
-		int j, loc, cp = parent->slot[0];
-		node *splitParent = allocNode();
-		splitParent->isleaf = 0;
+		int i, j, loc, parent_nKeys;
+		IN *split_INode = allocINode();
+		parent_nKeys = parent->nKeys;
 
-		for (j = min_live_entries ; j > 0; j--) {
-			loc = Append_in_inner(splitParent,parent->entries[parent->slot[cp]].key, parent->entries[parent->slot[cp]].ptr);
-			node *child = parent->entries[parent->slot[cp]].ptr;
-			add_redo_logentry();
-			child->parent = splitParent;
-			splitParent->slot[j] = loc;
-			splitParent->slot[0]++;
-			splitParent->bitmap = splitParent->bitmap + (0x1UL << (loc + 1));
-			parent->bitmap = parent->bitmap & (~(0x1UL << (parent->slot[cp] + 1)));
-			cp--;
+		for (j = MIN_IN_ENTRIES, i = 0; j < parent_nKeys; j++, i++) {
+			split_INode->keys[i] = parent->keys[j];
+			split_INode->ptr[i] = parent->ptr[j];
+			((IN *)split_INode->ptr[i])->parent = split_INode;
+			split_INode->nKeys++;
+			parent->nKeys--;
 		}
 
-		add_redo_logentry();
-		parent->slot[0] -= min_live_entries;
-
-		if (splitParent->entries[splitParent->slot[1]].key > key) {
+		if (split_INode->keys[0] > key) {
 			add_redo_logentry();
 			add_redo_logentry();
-			loc = insert_in_inner_noflush(parent, key, splitNode);
-			flush_buffer(&(parent->entries[loc]), sizeof(entry), false);
-			splitNode->parent = parent;
-			flush_buffer(splitNode, sizeof(node), false);
+			insert_in_inner(parent, key, splitNode);
+			((IN *)splitNode)->parent = parent;
 		}
 		else {
-			splitNode->parent = splitParent;
-			flush_buffer(splitNode, sizeof(node), false);
-			insert_in_inner_noflush(splitParent, key, splitNode);
+			((IN *)splitNode)->parent = split_INode;
+			insert_in_inner(split_INode, key, splitNode);
 		}
 
-		insert_in_parent(t, parent, 
-				splitParent->entries[splitParent->slot[1]].key, splitParent);
+		insert_in_parent(t, parent, split_INode->keys[0], split_INode);
 	}
 }
 
+/*
 void *Update(tree *t, unsigned long key, void *value)
 {
 	node *curr = t->root;
@@ -487,3 +473,4 @@ int Delete(tree *t, unsigned long key)
 
 	return errval;
 }
+*/

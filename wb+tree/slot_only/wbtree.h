@@ -1,29 +1,30 @@
 #include <stdbool.h>
-//#define NODE_SIZE 6
 #define NODE_SIZE 7
 #define MIN_LIVE_ENTRIES 3
 #define CACHE_LINE_SIZE 64
 
-#define LE_DATA		0
-#define LE_COMMIT	1
+#define LOG_DATA_SIZE		48
+#define LOG_AREA_SIZE		4194304
+#define LE_DATA			0
+#define LE_COMMIT		1
 
 typedef struct entry entry;
 typedef struct node node;
 typedef struct tree tree;
-typedef struct redo_log_entry redo_log_entry;
-typedef struct commit_entry commit_entry;
 
 unsigned long node_count;
 
-struct redo_log_entry {
-	unsigned long addr;
-	unsigned long new_value;
+typedef struct {
+	unsigned int size;
 	unsigned char type;
-};
+	void *addr;
+	char data[LOG_DATA_SIZE];
+} log_entry;
 
-struct commit_entry {
-	unsigned char type;
-};
+typedef struct {
+	log_entry *next_offset;
+	char log_data[LOG_AREA_SIZE];
+} log_area;
 
 struct entry {
 	unsigned long key;
@@ -41,7 +42,7 @@ struct node {
 
 struct tree {
 	node *root;
-	int height;
+	log_area *start_log;
 };
 
 void flush_buffer(void *buf, unsigned int len, bool fence);

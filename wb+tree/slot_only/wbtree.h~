@@ -1,16 +1,12 @@
 #include <stdbool.h>
-#define NODE_SIZE 63
-#define SLOT_SIZE NODE_SIZE + 1
-#define MIN_LIVE_ENTRIES NODE_SIZE / 2
+#define NODE_SIZE 7
+#define MIN_LIVE_ENTRIES 3
 #define CACHE_LINE_SIZE 64
 
-#define LOG_DATA_SIZE		48
-#define LOG_AREA_SIZE		4194304
+#define LOG_DATA_SIZE	48
+#define LOG_AREA_SIZE	4194304
 #define LE_DATA			0
 #define LE_COMMIT		1
-
-#define BITS_PER_LONG	64
-#define BITMAP_SIZE		NODE_SIZE + 1
 
 typedef struct entry entry;
 typedef struct node node;
@@ -30,24 +26,21 @@ typedef struct {
 	char log_data[LOG_AREA_SIZE];
 } log_area;
 
-struct entry{
+struct entry {
 	unsigned long key;
 	void *ptr;
 };
 
-struct node{
-	char slot[SLOT_SIZE];
-	unsigned long bitmap;
+struct node {
+	char slot[NODE_SIZE+1];
 	struct entry entries[NODE_SIZE];
 	struct node *leftmostPtr;
-	struct node *parent;
+	struct node* parent;
 	int isleaf;
-//	char dummy[32];		//15
-//	char dummy[16];		//31
-	char dummy[48];		//63
+	char dummy[48];
 };
 
-struct tree{
+struct tree {
 	node *root;
 	log_area *start_log;
 };
@@ -63,17 +56,9 @@ int Search(node *curr, char *temp, unsigned long key);
 node *find_leaf_node(node *curr, unsigned long key);
 void Insert(tree *t, unsigned long key, void *value);
 void *Update(tree *t, unsigned long key, void *value);
+int Delete(tree *t, unsigned long key);
 int insert_in_leaf_noflush(node *curr, unsigned long key, void *value);
 void insert_in_leaf(node *curr, unsigned long key, void *value);
 void insert_in_inner(node *curr, unsigned long key, void *value);
 void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode);
 void printNode(node *n);
-int Delete(tree *t, unsigned long key);
-
-static inline unsigned long ffz(unsigned long word)
-{
-	asm("rep; bsf %1,%0"
-		: "=r" (word)
-		: "r" (~word));
-	return word;
-}

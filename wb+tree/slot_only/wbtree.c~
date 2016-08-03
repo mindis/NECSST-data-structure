@@ -233,7 +233,7 @@ void Insert(tree *t, unsigned long key, void *value)
 	/* Check overflow & split */
 	numEntries = curr->slot[0];
 	if(numEntries == NODE_SIZE){
-		add_log_entry(t, curr, sizeof(node), LE_DATA);
+		add_log_entry(t, curr->slot, sizeof(curr->slot), LE_DATA);
 		node *splitNode = allocNode();
 		int j, loc, cp = curr->slot[0];
 		splitNode->leftmostPtr = curr->leftmostPtr;
@@ -251,17 +251,18 @@ void Insert(tree *t, unsigned long key, void *value)
 
 		if (splitNode->entries[splitNode->slot[1]].key > key) {
 			loc = insert_in_leaf_noflush(curr, key, value);
-			flush_buffer(&curr->entries[loc], sizeof(entry), false);
+//			flush_buffer(curr->slot, sizeof(curr->slot), false);
+//			flush_buffer(&curr->entries[loc], sizeof(entry), false);
 		}
 		else
 			insert_in_leaf_noflush(splitNode, key, value);
 
 		insert_in_parent(t, curr, splitNode->entries[splitNode->slot[1]].key, splitNode);
 
+		add_log_entry(t, &curr->leftmostPtr, 8, LE_DATA);
 		curr->leftmostPtr = splitNode;
-
-		flush_buffer(curr->slot, sizeof(curr->slot), false);
-		flush_buffer(&curr->leftmostPtr, 8, false);
+//		flush_buffer(&curr->leftmostPtr, 8, false);
+		flush_buffer(curr, sizeof(node), false);
 
 		add_log_entry(t, NULL, 0, LE_COMMIT);
 	}
@@ -396,9 +397,8 @@ void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode)
 		flush_buffer(root, sizeof(node), false);
 		flush_buffer(splitNode, sizeof(node), false);
 
+		add_log_entry(t, &curr->parent, 8, LE_DATA);
 		curr->parent = root;
-		flush_buffer(&curr->parent, 8, false);
-
 		t->root = root;
 		return ;
 	}
@@ -406,10 +406,9 @@ void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode)
 	node *parent = curr->parent;
 
 	if (parent->slot[0] < NODE_SIZE) {
+		add_log_entry(t, parent->slot, sizeof(parent->slot), LE_DATA);
 		int mid, j, loc;
 		char temp[8];
-
-		add_log_entry(t, parent->slot, sizeof(parent->slot), LE_DATA);
 
 		loc = Append_in_inner(parent, key, splitNode);
 		flush_buffer(&(parent->entries[loc]), sizeof(entry), false);
@@ -435,14 +434,13 @@ void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode)
 		node *splitParent = allocNode();
 		splitParent->isleaf = 0;
 
-		add_log_entry(t, parent, sizeof(node), LE_DATA);
+		add_log_entry(t, parent->slot, sizeof(parent->slot), false);
 
 		for (j = MIN_LIVE_ENTRIES; j > 0; j--) {
 			loc = Append_in_inner(splitParent,parent->entries[parent->slot[cp]].key, parent->entries[parent->slot[cp]].ptr);
 			node *child = parent->entries[parent->slot[cp]].ptr;
 			add_log_entry(t, &child->parent, 8, LE_DATA);
 			child->parent = splitParent;
-			flush_buffer(&child->parent, 8, false);
 			splitParent->slot[j] = loc;
 			splitParent->slot[0]++;
 			cp--;
