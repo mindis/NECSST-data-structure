@@ -1,7 +1,12 @@
 #include <stdbool.h>
-#define NUM_LN_ENTRY 31
-#define MIN_LIVE_ENTRIES NUM_LN_ENTRY / 2
+#define NUM_LN_ENTRY	8
+#define NUM_IN_ENTRY	256
+#define MIN_IN_ENTRIES (NUM_IN_ENTRY / 2)
+#define MIN_LN_ENTRIES (NUM_LN_ENTRY / 2)
 #define CACHE_LINE_SIZE 64
+#define IS_FULL		((0x1UL << NUM_LN_ENTRY) - 1)
+#define THIS_IN		1
+#define THIS_LN		2
 
 #define LE_DATA		0
 #define LE_COMMIT	1
@@ -32,21 +37,25 @@ struct entry{
 };
 
 struct Internal_Node {
+	unsigned char type;
+	IN *parent;
 	unsigned int nKeys;
 	unsigned long keys[NUM_IN_ENTRY];
-	void *leafmostptr;
+	void *leftmostPtr;
 	void *ptr[NUM_IN_ENTRY];
 };
 
 struct Leaf_Node {
+	unsigned char type;
+	IN *parent;
 	unsigned long bitmap;
-	struct Leaf_Node *pNext;
-	char fingerprints[NUM_LN_ENTRY];
-	struct entry entries[NUM_LN_ENTRY];
+	LN *pNext;
+	unsigned char fingerprints[NUM_LN_ENTRY];
+	entry entries[NUM_LN_ENTRY];
 };
 
 struct tree {
-	node *root;
+	void *root;
 	int height;
 };
 
@@ -55,18 +64,23 @@ tree *initTree();
 void Range_Lookup(tree *t, unsigned long start_key, unsigned int num, 
 		unsigned long buf[]);
 void *Lookup(tree *t, unsigned long key);
-int Append(node *n, unsigned long key, void *value);
-int Append_in_inner(node *n, unsigned long key, void *value);
-int Search(node *curr, char *temp, unsigned long key);
-node *find_leaf_node(node *curr, unsigned long key);
+int Search(IN *curr, unsigned long key);
+void *find_leaf_node(void *curr, unsigned long key);
 void Insert(tree *t, unsigned long key, void *value);
 void *Update(tree *t, unsigned long key, void *value);
-int insert_in_leaf_noflush(node *curr, unsigned long key, void *value);
-void insert_in_leaf(node *curr, unsigned long key, void *value);
-void insert_in_inner(node *curr, unsigned long key, void *value);
-void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode);
-void printNode(node *n);
+int insert_in_leaf_noflush(LN *curr, unsigned long key, void *value);
+void insert_in_leaf(LN *curr, unsigned long key, void *value);
+void insert_in_inner(IN *curr, unsigned long key, void *value);
+void insert_in_parent(tree *t, void *curr, unsigned long key, void *splitNode);
 int Delete(tree *t, unsigned long key);
+
+static inline unsigned long __ffs(unsigned long word)
+{
+	asm("rep; bsf %1,%0"
+		: "=r" (word)
+		: "rm" (word));
+	return word;
+}
 
 static inline unsigned long ffz(unsigned long word)
 {

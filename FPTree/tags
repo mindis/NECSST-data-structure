@@ -4,66 +4,73 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-Append	FPTree.c	/^int Append(node *n, unsigned long key, void *value)$/;"	f
-Append_in_inner	FPTree.c	/^int Append_in_inner(node *n, unsigned long key, void *value)$/;"	f
 BIN_DIR	Makefile	/^BIN_DIR=.\/$/;"	m
-BITMAP_SIZE	FPTree.h	10;"	d
-BITOP_WORD	FPTree.c	13;"	d	file:
-BITS_PER_LONG	FPTree.h	9;"	d
-CACHE_LINE_SIZE	FPTree.h	4;"	d
+BITMAP_SIZE	FPTree.h	15;"	d
+BITOP_WORD	FPTree.c	12;"	d	file:
+BITS_PER_LONG	FPTree.h	14;"	d
+CACHE_LINE_SIZE	FPTree.h	6;"	d
 CFLAGS	Makefile	/^CFLAGS= -c $/;"	m
-Delete	FPTree.c	/^int Delete(tree *t, unsigned long key)$/;"	f
 IN	FPTree.h	/^typedef struct Internal_Node IN;$/;"	t	typeref:struct:Internal_Node
-Insert	FPTree.c	/^void Insert(tree *t, unsigned long key, void *value){$/;"	f
+INPUT_NUM	main.c	8;"	d	file:
+IS_FULL	FPTree.h	7;"	d
+Insert	FPTree.c	/^void Insert(tree *t, unsigned long key, void *value)$/;"	f
 Internal_Node	FPTree.h	/^struct Internal_Node {$/;"	s
-LE_COMMIT	FPTree.h	7;"	d
-LE_DATA	FPTree.h	6;"	d
+LE_COMMIT	FPTree.h	12;"	d
+LE_DATA	FPTree.h	11;"	d
 LN	FPTree.h	/^typedef struct Leaf_Node LN;$/;"	t	typeref:struct:Leaf_Node
 Leaf_Node	FPTree.h	/^struct Leaf_Node {$/;"	s
 Lookup	FPTree.c	/^void *Lookup(tree *t, unsigned long key)$/;"	f
-MIN_LIVE_ENTRIES	FPTree.h	3;"	d
+MIN_IN_ENTRIES	FPTree.h	4;"	d
+MIN_LN_ENTRIES	FPTree.h	5;"	d
+NUM_IN_ENTRY	FPTree.h	3;"	d
 NUM_LN_ENTRY	FPTree.h	2;"	d
-Range_Lookup	FPTree.c	/^void Range_Lookup(tree *t, unsigned long start_key, unsigned int num, $/;"	f
-Search	FPTree.c	/^int Search(node *curr, char *temp, unsigned long key)$/;"	f
-Update	FPTree.c	/^void *Update(tree *t, unsigned long key, void *value)$/;"	f
+Search	FPTree.c	/^int Search(IN *curr, unsigned long key)$/;"	f
+THIS_IN	FPTree.h	8;"	d
+THIS_LN	FPTree.h	9;"	d
+__ffs	FPTree.h	/^static inline unsigned long __ffs(unsigned long word)$/;"	f
 add_commit_entry	FPTree.c	/^void add_commit_entry()$/;"	f
 add_redo_logentry	FPTree.c	/^void add_redo_logentry()$/;"	f
 addr	FPTree.h	/^	unsigned long addr;$/;"	m	struct:redo_log_entry
-allocNode	FPTree.c	/^node *allocNode()$/;"	f
+allocINode	FPTree.c	/^IN *allocINode()$/;"	f
+allocLNode	FPTree.c	/^LN *allocLNode()$/;"	f
 bitmap	FPTree.h	/^	unsigned long bitmap;$/;"	m	struct:Leaf_Node
 commit_entry	FPTree.h	/^struct commit_entry {$/;"	s
 commit_entry	FPTree.h	/^typedef struct commit_entry commit_entry;$/;"	t	typeref:struct:commit_entry
-delete_in_leaf	FPTree.c	/^int delete_in_leaf(node *curr, unsigned long key)$/;"	f
-entries	FPTree.h	/^	struct entry entries[NUM_LN_ENTRY];$/;"	m	struct:Leaf_Node	typeref:struct:Leaf_Node::entry
+entries	FPTree.h	/^	entry entries[NUM_LN_ENTRY];$/;"	m	struct:Leaf_Node
 entry	FPTree.h	/^struct entry{$/;"	s
 entry	FPTree.h	/^typedef struct entry entry;$/;"	t	typeref:struct:entry
 ffz	FPTree.h	/^static inline unsigned long ffz(unsigned long word)$/;"	f
-find_leaf_node	FPTree.c	/^node *find_leaf_node(node *curr, unsigned long key) $/;"	f
+find_leaf_node	FPTree.c	/^void *find_leaf_node(void *curr, unsigned long key) $/;"	f
+find_next_bit	FPTree.c	/^unsigned long find_next_bit(const unsigned long *addr, unsigned long size,$/;"	f
 find_next_zero_bit	FPTree.c	/^unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,$/;"	f
 fingerprints	FPTree.h	/^	char fingerprints[NUM_LN_ENTRY];$/;"	m	struct:Leaf_Node
 flush_buffer	FPTree.c	/^void flush_buffer(void *buf, unsigned int len, bool fence)$/;"	f
+hash	FPTree.c	/^char hash(unsigned long key) {$/;"	f
 height	FPTree.h	/^	int height;$/;"	m	struct:tree
 initTree	FPTree.c	/^tree *initTree()$/;"	f
-insert_in_inner	FPTree.c	/^void insert_in_inner(node *curr, unsigned long key, void *value)$/;"	f
-insert_in_inner_noflush	FPTree.c	/^int insert_in_inner_noflush(node *curr, unsigned long key, void *value)$/;"	f
-insert_in_leaf	FPTree.c	/^void insert_in_leaf(node *curr, unsigned long key, void *value)$/;"	f
-insert_in_leaf_noflush	FPTree.c	/^int insert_in_leaf_noflush(node *curr, unsigned long key, void *value)$/;"	f
-insert_in_parent	FPTree.c	/^void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {$/;"	f
+insert_in_inner	FPTree.c	/^void insert_in_inner(IN *curr, unsigned long key, void *child)$/;"	f
+insert_in_leaf	FPTree.c	/^void insert_in_leaf(LN *curr, unsigned long key, void *value)$/;"	f
+insert_in_leaf_noflush	FPTree.c	/^int insert_in_leaf_noflush(LN *curr, unsigned long key, void *value)$/;"	f
+insert_in_parent	FPTree.c	/^void insert_in_parent(tree *t, void *curr, unsigned long key, void *splitNode) {$/;"	f
+insertion_sort	FPTree.c	/^void insertion_sort(entry *base, int num)$/;"	f
 key	FPTree.h	/^	unsigned long key;$/;"	m	struct:entry
 keys	FPTree.h	/^	unsigned long keys[NUM_IN_ENTRY];$/;"	m	struct:Internal_Node
-leafmostptr	FPTree.h	/^	void *leafmostptr;$/;"	m	struct:Internal_Node
+leftmostPtr	FPTree.h	/^	void *leftmostPtr;$/;"	m	struct:Internal_Node
 main	main.c	/^int main(void)$/;"	f
 mfence	FPTree.c	11;"	d	file:
 nKeys	FPTree.h	/^	unsigned int nKeys;$/;"	m	struct:Internal_Node
 new_value	FPTree.h	/^	unsigned long new_value;$/;"	m	struct:redo_log_entry
-pNext	FPTree.h	/^	struct Leaf_Node *pNext;$/;"	m	struct:Leaf_Node	typeref:struct:Leaf_Node::Leaf_Node
+pNext	FPTree.h	/^	LN *pNext;$/;"	m	struct:Leaf_Node
+parent	FPTree.h	/^	IN *parent;$/;"	m	struct:Internal_Node
+parent	FPTree.h	/^	IN *parent;$/;"	m	struct:Leaf_Node
 ptr	FPTree.h	/^	void *ptr;$/;"	m	struct:entry
 ptr	FPTree.h	/^	void *ptr[NUM_IN_ENTRY];$/;"	m	struct:Internal_Node
 redo_log_entry	FPTree.h	/^struct redo_log_entry {$/;"	s
 redo_log_entry	FPTree.h	/^typedef struct redo_log_entry redo_log_entry;$/;"	t	typeref:struct:redo_log_entry
-root	FPTree.h	/^	node *root;$/;"	m	struct:tree
-sfence	FPTree.c	12;"	d	file:
+root	FPTree.h	/^	void *root;$/;"	m	struct:tree
 tree	FPTree.h	/^struct tree {$/;"	s
 tree	FPTree.h	/^typedef struct tree tree;$/;"	t	typeref:struct:tree
+type	FPTree.h	/^	unsigned char type;$/;"	m	struct:Internal_Node
+type	FPTree.h	/^	unsigned char type;$/;"	m	struct:Leaf_Node
 type	FPTree.h	/^	unsigned char type;$/;"	m	struct:commit_entry
 type	FPTree.h	/^	unsigned char type;$/;"	m	struct:redo_log_entry

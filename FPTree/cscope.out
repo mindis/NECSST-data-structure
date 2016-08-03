@@ -1,4 +1,4 @@
-cscope 15 $HOME/study/data_structures/FPTree               0000303853
+cscope 15 $HOME/study/data_structures/FPTree               0000301041
 	@FPTree.c
 
 1 
@@ -34,7 +34,7 @@ cscope 15 $HOME/study/data_structures/FPTree               0000303853
 >
 
 9 
-	~"wbŒ“.h
+	~"FPT»e.h
 "
 
 11 
@@ -46,14 +46,6 @@ asm
 	)
 
 12 
-	#sãnû
-(è
-asm
- vÞ©že("sãnû":::"memÜy")
-
-	)
-
-13 
 	#BITOP_WORD
 (
 Ä
@@ -63,7 +55,7 @@ BITS_PER_LONG
 
 	)
 
-15 
+14 
 	$æush_bufãr
 (*
 buf
@@ -75,11 +67,11 @@ boÞ
 ãnû
 )
 
-17 
+16 
 i
 ;
 
-18 
+17 
 Ën
  =†’ + (()(
 buf
@@ -87,9 +79,13 @@ buf
 CACHE_LINE_SIZE
  - 1));
 
-19 ià(
+18 ià(
 ãnû
 ) {
+
+19 
+	`mãnû
+();
 
 20 
 i
@@ -108,7 +104,7 @@ i
 )));
 
 22 
-	`sãnû
+	`mãnû
 ();
 
 24 
@@ -212,54 +208,80 @@ comm™_’Œy
 }
 
 45 
-node
+LN
  *
-	$®locNode
+	$®locLNode
 ()
 
 47 
-node
+LN
  *
-n
+node
  = 
 	`m®loc
-((node));
+((LN));
 
 48 
-	`mem£t
-(
-n
+node
 ->
-¦Ù
-,0,(n->slot));
+ty³
+ = 2;
 
 49 
-n
+node
 ->
 b™m­
- = 1;
+ = 0;
 
-50 
-n
-->
-i¦—f
- = 1;
-
-51  
-n
+50  
+node
 ;
 
-52 
+51 
 	}
 }
 
-54 
+53 
+IN
+ *
+	$®locINode
+()
+
+55 
+IN
+ *
+node
+ = 
+	`m®loc
+((IN));
+
+56 
+node
+->
+ty³
+ = 1;
+
+57 
+node
+->
+nKeys
+ = 0;
+
+58  
+node
+;
+
+59 
+	}
+}
+
+61 
 Œ“
  *
 	$š™T»e
 ()
 
-56 
+63 
 Œ“
  *
 t
@@ -267,263 +289,129 @@ t
 	`m®loc
 ((tree));
 
-57 
+64 
 t
 ->
 roÙ
  = 
-	`®locNode
+	`®locLNode
 ();
 
-58 
+65 
 t
 ->
 height
  = 0;
 
-59  
+66  
 t
 ;
 
-60 
+67 
 	}
 }
 
-62 *
-	$Lookup
-(
-Œ“
- *
-t
-, 
+69 
+	$hash
+(
 key
+) {
+
+70 
+hash_key
+ = 
+key
+ % 256;
+
+71  
+hash_key
+;
+
+72 
+	}
+}
+
+74 
+	$š£¹iÚ_sÜt
+(
+’Œy
+ *
+ba£
+, 
+num
 )
 
-64 
-node
- *
-cu¼
- = 
-t
-->
-roÙ
-;
-
-65 
-cu¼
- = 
-	`fšd_Ëaf_node
-(cu¼, 
-key
-);
-
-66 
-loc
- = 
-	`S—rch
-(
-cu¼
-, cu¼->
-¦Ù
-, 
-key
-);
-
-68 ià(
-loc
- > 
-cu¼
-->
-¦Ù
-[0])
-
-69 
-loc
- = 
-cu¼
-->
-¦Ù
-[0];
-
-71 ià(
-cu¼
-->
-’Œ›s
-[cu¼->
-¦Ù
-[
-loc
-]].
-key
- != key ||†oc > curr->slot[0])
-
-72  
-NULL
-;
-
-74  
-cu¼
-->
-’Œ›s
-[cu¼->
-¦Ù
-[
-loc
-]].
-±r
-;
-
-75 
-	}
-}
-
-77 
-	$Rªge_Lookup
-(
-Œ“
- *
-t
-, 
-¡¬t_key
-, 
-num
-,
-
-78 
-buf
-[])
-
-80 
-loc
-, 
+76 
 i
-;
-
-81 
-£¬ch_couÁ
- = 0;
-
-82 
-time¥ec
- 
-t1
 , 
-t2
+j
 ;
 
-83 
-–­£d_time
+77 
+’Œy
+ 
+‹mp
 ;
+
+79 
+i
+ = 1; i < 
+num
+; i++) {
+
+80 
+j
+ = 
+i
+; j > 0; j--) {
+
+81 ià(
+ba£
+[
+j
+ - 1].
+key
+ > base[j].key) {
+
+82 
+‹mp
+ = 
+ba£
+[
+j
+ - 1];
+
+83 
+ba£
+[
+j
+ - 1] = base[j];
 
 84 
-node
- *
-cu¼
- = 
-t
-->
-roÙ
-;
-
-86 
-cu¼
- = 
-	`fšd_Ëaf_node
-(cu¼, 
-¡¬t_key
-);
-
-87 
-loc
- = 
-	`S—rch
-(
-cu¼
-, cu¼->
-¦Ù
-, 
-¡¬t_key
-);
-
-88 
-£¬ch_couÁ
- < 
-num
-) {
-
-89 
-i
- = 
-loc
-; i <ð
-cu¼
-->
-¦Ù
-[0]; i++) {
-
-90 
-buf
+ba£
 [
-£¬ch_couÁ
-] = *(*)
-cu¼
-->
-’Œ›s
-[cu¼->
-¦Ù
-[
-i
-]].
-±r
+j
+] = 
+‹mp
 ;
 
-91 
-£¬ch_couÁ
-++;
-
-92 if(
-£¬ch_couÁ
- =ð
-num
-) {
-
-97 
-cu¼
- = cu¼->
-Ëámo¡PŒ
-;
-
-98 ià(
-cu¼
- =ð
-NULL
-) {
-
-99 
-	`´štf
-("error\n");
-
-102 
-loc
- = 1;
-
-104 
+89 
 	}
 }
 
-106 
-	$fšd_Ãxt_z”o_b™
+94 
+	$fšd_Ãxt_b™
 (cÚ¡ *
 addr
 , 
 size
 ,
 
-107 
+95 
 off£t
 )
 
-109 cÚ¡ *
+97 cÚ¡ *
 p
  = 
 addr
@@ -533,7 +421,189 @@ addr
 off£t
 );
 
-110 
+98 
+»suÉ
+ = 
+off£t
+ & ~(
+BITS_PER_LONG
+-1);
+
+99 
+tmp
+;
+
+101 ià(
+off£t
+ >ð
+size
+)
+
+102  
+size
+;
+
+103 
+size
+ -ð
+»suÉ
+;
+
+104 
+off£t
+ %ð
+BITS_PER_LONG
+;
+
+105 ià(
+off£t
+) {
+
+106 
+tmp
+ = *(
+p
+++);
+
+107 
+tmp
+ &ð(~0UL << 
+off£t
+);
+
+108 ià(
+size
+ < 
+BITS_PER_LONG
+)
+
+109 
+found_fœ¡
+;
+
+110 ià(
+tmp
+)
+
+111 
+found_middË
+;
+
+112 
+size
+ -ð
+BITS_PER_LONG
+;
+
+113 
+»suÉ
+ +ð
+BITS_PER_LONG
+;
+
+115 
+size
+ & ~(
+BITS_PER_LONG
+-1)) {
+
+116 ià((
+tmp
+ = *(
+p
+++)))
+
+117 
+found_middË
+;
+
+118 
+»suÉ
+ +ð
+BITS_PER_LONG
+;
+
+119 
+size
+ -ð
+BITS_PER_LONG
+;
+
+121 ià(!
+size
+)
+
+122  
+»suÉ
+;
+
+123 
+tmp
+ = *
+p
+;
+
+125 
+found_fœ¡
+:
+
+126 
+tmp
+ &ð(~0UL >> (
+BITS_PER_LONG
+ - 
+size
+));
+
+127 ià(
+tmp
+ == 0UL)
+
+128  
+»suÉ
+ + 
+size
+;
+
+129 
+found_middË
+:
+
+130  
+»suÉ
+ + 
+	`__ffs
+(
+tmp
+);
+
+131 
+	}
+}
+
+136 
+	$fšd_Ãxt_z”o_b™
+(cÚ¡ *
+addr
+, 
+size
+,
+
+137 
+off£t
+)
+
+139 cÚ¡ *
+p
+ = 
+addr
+ + 
+	`BITOP_WORD
+(
+off£t
+);
+
+140 
 »suÉ
  = 
 off£t
@@ -541,43 +611,43 @@ off£t
 BITS_PER_LONG
  - 1);
 
-111 
+141 
 tmp
 ;
 
-113 ià(
+143 ià(
 off£t
  >ð
 size
 )
 
-114  
+144  
 size
 ;
 
-115 
+145 
 size
  -ð
 »suÉ
 ;
 
-116 
+146 
 off£t
  %ð
 BITS_PER_LONG
 ;
 
-117 ià(
+147 ià(
 off£t
 ) {
 
-118 
+148 
 tmp
  = *(
 p
 ++);
 
-119 
+149 
 tmp
  |ð~0UL >> (
 BITS_PER_LONG
@@ -585,103 +655,103 @@ BITS_PER_LONG
 off£t
 );
 
-120 ià(
+150 ià(
 size
  < 
 BITS_PER_LONG
 )
 
-121 
+151 
 found_fœ¡
 ;
 
-122 ià(~
+152 ià(~
 tmp
 )
 
-123 
+153 
 found_middË
 ;
 
-124 
+154 
 size
  -ð
 BITS_PER_LONG
 ;
 
-125 
+155 
 »suÉ
  +ð
 BITS_PER_LONG
 ;
 
-127 
+157 
 size
  & ~(
 BITS_PER_LONG
  - 1)) {
 
-128 ià(~(
+158 ià(~(
 tmp
  = *(
 p
 ++)))
 
-129 
+159 
 found_middË
 ;
 
-130 
+160 
 »suÉ
  +ð
 BITS_PER_LONG
 ;
 
-131 
+161 
 size
  -ð
 BITS_PER_LONG
 ;
 
-133 ià(!
+163 ià(!
 size
 )
 
-134  
+164  
 »suÉ
 ;
 
-135 
+165 
 tmp
  = *
 p
 ;
 
-137 
+167 
 found_fœ¡
 :
 
-138 
+168 
 tmp
  |ð~0UL << 
 size
 ;
 
-139 ià(
+169 ià(
 tmp
  == ~0UL)
 
-140  
+170  
 »suÉ
  + 
 size
 ;
 
-141 
+171 
 found_middË
 :
 
-142  
+172  
 »suÉ
  + 
 	`ffz
@@ -689,157 +759,143 @@ found_middË
 tmp
 );
 
-143 
+173 
 	}
 }
 
-145 
-	$Aµ’d
+175 *
+	$Lookup
 (
-node
+Œ“
  *
-n
+t
 , 
 key
-, *
-v®ue
 )
 
-147 
-šdex
-;
+177 
+loc
+ = 0;
 
-148 
-šdex
- = 
-	`fšd_Ãxt_z”o_b™
-(&
-n
-->
-b™m­
-, 
-BITMAP_SIZE
-, 1) - 1;
-
-150 
-n
-->
-’Œ›s
-[
-šdex
-].
-key
- = key;
-
-151 
-n
-->
-’Œ›s
-[
-šdex
-].
-±r
- = 
+178 *
 v®ue
-;
-
-152  
-šdex
-;
-
-153 
-	}
-}
-
-155 
-	$Aµ’d_š_šÃr
-(
-node
- *
-n
-, 
-key
-, *
-v®ue
-)
-
-157 
-šdex
-;
-
-158 
-šdex
  = 
-	`fšd_Ãxt_z”o_b™
-(&
-n
-->
-b™m­
-, 
-BITMAP_SIZE
-, 1) - 1;
-
-160 
-n
-->
-’Œ›s
-[
-šdex
-].
-key
- = key;
-
-161 
-n
-->
-’Œ›s
-[
-šdex
-].
-±r
- = 
-v®ue
+NULL
 ;
 
-162  
-šdex
-;
-
-163 
-	}
-}
-
-165 
-	$S—rch
-(
-node
+179 
+LN
  *
 cu¼
-, *
-‹mp
+ = 
+t
+->
+roÙ
+;
+
+180 
+cu¼
+ = 
+	`fšd_Ëaf_node
+(cu¼, 
+key
+);
+
+182 
+loc
+ < 
+NUM_LN_ENTRY
+) {
+
+183 
+loc
+ = 
+	`fšd_Ãxt_b™
+(&
+cu¼
+->
+b™m­
+, 
+BITMAP_SIZE
+,†oc);
+
+185 ià(
+cu¼
+->
+fšg”´šts
+[
+loc
+] =ð
+	`hash
+(
+key
+) &&
+
+186 
+cu¼
+->
+’Œ›s
+[
+loc
+].
+key
+ == key) {
+
+187 
+v®ue
+ = 
+cu¼
+->
+’Œ›s
+[
+loc
+].
+±r
+;
+
+191 
+loc
+++;
+
+194  
+v®ue
+;
+
+195 
+	}
+}
+
+227 
+	$S—rch
+(
+IN
+ *
+cu¼
 , 
 key
 )
 
-167 
+229 
 low
- = 1, 
+ = 0, 
 mid
- = 1;
+ = 0;
 
-168 
+230 
 high
  = 
-‹mp
-[0];
+cu¼
+->
+nKeys
+ - 1;
 
-170 
+232 
 low
  <ð
 high
 ){
 
-171 
+233 
 mid
  = (
 low
@@ -847,187 +903,179 @@ low
 high
 ) / 2;
 
-172 ià(
+234 ià(
 cu¼
 ->
-’Œ›s
-[
-‹mp
+keys
 [
 mid
-]].
+] > 
 key
- > key)
+)
 
-173 
+235 
 high
  = 
 mid
  - 1;
 
-174 ià(
+236 ià(
 cu¼
 ->
-’Œ›s
-[
-‹mp
+keys
 [
 mid
-]].
+] < 
 key
- < key)
+)
 
-175 
+237 
 low
  = 
 mid
  + 1;
 
-180 ià(
+242 ià(
 low
  > 
 mid
 )
 
-181 
+243 
 mid
  = 
 low
 ;
 
-183  
+245  
 mid
 ;
 
-184 
+246 
 	}
 }
 
-186 
-node
- *
+248 *
 	$fšd_Ëaf_node
-(
-node
- *
+(*
 cu¼
 , 
 key
 )
 
-188 
+250 
 loc
 ;
 
-190 ià(
+252 ià(((
+LN
+ *)
 cu¼
-->
-i¦—f
+)->
+ty³
+ =ð
+THIS_LN
 )
 
-191  
+253  
 cu¼
 ;
 
-192 
+254 
 loc
  = 
 	`S—rch
 (
 cu¼
-, cu¼->
-¦Ù
 , 
 key
 );
 
-194 ià(
+256 ià(
 loc
- > 
+ > ((
+IN
+ *)
 cu¼
-->
-¦Ù
-[0])
+)->
+nKeys
+ - 1)
 
-195  
+257  
 	`fšd_Ëaf_node
-(
+(((
+IN
+ *)
 cu¼
-->
-’Œ›s
-[cu¼->
-¦Ù
-[
-loc
- - 1]].
+)->
 ±r
-, 
+[
+loc
+ - 1], 
 key
 );
 
-196 ià(
+258 ià(((
+IN
+ *)
 cu¼
-->
-’Œ›s
-[cu¼->
-¦Ù
+)->
+keys
 [
 loc
-]].
+] <ð
 key
- <= key)
+)
 
-197  
+259  
 	`fšd_Ëaf_node
-(
+(((
+IN
+ *)
 cu¼
-->
-’Œ›s
-[cu¼->
-¦Ù
-[
-loc
-]].
+)->
 ±r
-, 
+[
+loc
+], 
 key
 );
 
-198 ià(
+260 ià(
 loc
- == 1)
+ == 0)
 
-199  
+261  
 	`fšd_Ëaf_node
-(
+(((
+IN
+ *)
 cu¼
-->
+)->
 Ëámo¡PŒ
 , 
 key
 );
 
-201  
+263  
 	`fšd_Ëaf_node
-(
+(((
+IN
+ *)
 cu¼
-->
-’Œ›s
-[cu¼->
-¦Ù
+)->
+±r
 [
 loc
- - 1]].
-±r
-, 
+ - 1], 
 key
 );
 
-202 
+264 
 	}
 }
 
-205 
+267 
 	$In£¹
 (
 Œ“
@@ -1037,14 +1085,10 @@ t
 key
 , *
 v®ue
-){
+)
 
-206 
-numEÁr›s
-;
-
-207 
-node
+269 
+LN
  *
 cu¼
  = 
@@ -1053,7 +1097,7 @@ t
 roÙ
 ;
 
-209 
+271 
 cu¼
  = 
 	`fšd_Ëaf_node
@@ -1061,153 +1105,173 @@ cu¼
 key
 );
 
-212 
-numEÁr›s
- = 
+274 if(
 cu¼
 ->
-¦Ù
-[0];
-
-213 if(
-numEÁr›s
+b™m­
  =ð
-NODE_SIZE
-){
+IS_FULL
+) {
 
-214 
-node
+275 
+j
+, 
+num
+ = 0;
+
+276 
+loc
+ = 0;
+
+277 
+LN
  *
-¥l™Node
+¥l™_LNode
  = 
-	`®locNode
+	`®locLNode
 ();
 
-215 
-j
-, 
-loc
-, 
-ý
+278 
+’Œy
+ *
+v®id_’Œy
  = 
-cu¼
-->
-¦Ù
-[0];
-
-216 
-¥l™Node
-->
-Ëámo¡PŒ
- = 
-cu¼
-->leftmostPtr;
-
-219 
-j
- = 
-mš_live_’Œ›s
-; j > 0; j--) {
-
-220 
-loc
- = 
-	`Aµ’d
+	`m®loc
 (
-¥l™Node
+NUM_LN_ENTRY
+ * (entry));
+
+280 
+¥l™_LNode
+->
+pNext
+ = 
+cu¼
+->pNext;
+
+282 
+loc
+ < 
+BITMAP_SIZE
+) {
+
+283 
+loc
+ = 
+	`fšd_Ãxt_b™
+(&
+cu¼
+->
+b™m­
 , 
+BITMAP_SIZE
+,†oc);
+
+284 
+v®id_’Œy
+[
+num
+] = 
 cu¼
 ->
 ’Œ›s
-[cu¼->
-¦Ù
 [
-ý
-]].
+loc
+];
+
+285 
+num
+++;
+
+286 
+loc
+++;
+
+289 
+	`š£¹iÚ_sÜt
+(
+v®id_’Œy
+, 
+num
+);
+
+291 
+cu¼
+->
+b™m­
+ = 0;
+
+292 
+j
+ = 0; j < 
+MIN_LN_ENTRIES
+; j++)
+
+293 
+	`š£¹_š_Ëaf_noæush
+(
+cu¼
+, 
+v®id_’Œy
+[
+j
+].
 key
 ,
 
-221 
-cu¼
-->
-’Œ›s
-[cu¼->
-¦Ù
+294 
+v®id_’Œy
 [
-ý
-]].
+j
+].
 ±r
 );
 
-222 
-¥l™Node
-->
-¦Ù
+296 
+j
+ = 
+MIN_LN_ENTRIES
+; j < 
+num
+; j++)
+
+297 
+	`š£¹_š_Ëaf_noæush
+(
+¥l™_LNode
+, 
+v®id_’Œy
 [
 j
-] = 
-loc
-;
+].
+key
+,
 
-223 
-¥l™Node
-->
-¦Ù
-[0]++;
-
-224 
-¥l™Node
-->
-b™m­
- = s¶™Node->b™m­ + (0x1UL << (
-loc
- + 1));
-
-225 
-cu¼
-->
-b™m­
- = cu¼->b™m­ & (~(0x1UL << (cu¼->
-¦Ù
+298 
+v®id_’Œy
 [
-ý
-] + 1)));
+j
+].
+±r
+);
 
-226 
-ý
---;
-
-229 
-	`add_»do_log’Œy
-();
-
-230 
-cu¼
-->
-¦Ù
-[0] -ð
-mš_live_’Œ›s
-;
-
-232 ià(
-¥l™Node
+300 ià(
+¥l™_LNode
 ->
 ’Œ›s
-[¥l™Node->
-¦Ù
-[1]].
+[0].
 key
  > key) {
 
-233 
+301 
 	`add_»do_log’Œy
 ();
 
-234 
+302 
 	`add_»do_log’Œy
 ();
 
-235 
+303 
 loc
  = 
 	`š£¹_š_Ëaf_noæush
@@ -1219,67 +1283,47 @@ key
 v®ue
 );
 
-236 
-	`æush_bufãr
-(&(
-cu¼
-->
-’Œ›s
-[
-loc
-]), (
-’Œy
-), 
-çl£
-);
-
-239 
+307 
 	`š£¹_š_Ëaf_noæush
 (
-¥l™Node
+¥l™_LNode
 , 
 key
 , 
 v®ue
 );
 
-241 
+309 
 	`š£¹_š_·»Á
 (
 t
 , 
 cu¼
 , 
-¥l™Node
+¥l™_LNode
 ->
 ’Œ›s
-[¥l™Node->
-¦Ù
-[1]].
+[0].
 key
-, splitNode);
+, split_LNode);
 
-242 
+310 
 	`add_»do_log’Œy
 ();
 
-243 
+311 
 cu¼
 ->
-Ëámo¡PŒ
+pNext
  = 
-¥l™Node
+¥l™_LNode
 ;
 
-244 
-	`sãnû
-();
-
-245 
+312 
 	`add_comm™_’Œy
 ();
 
-248 
+315 
 	`š£¹_š_Ëaf
 (
 cu¼
@@ -1289,14 +1333,14 @@ key
 v®ue
 );
 
-250 
+317 
 	}
 }
 
-252 
+319 
 	$š£¹_š_Ëaf_noæush
 (
-node
+LN
  *
 cu¼
 , 
@@ -1305,491 +1349,247 @@ key
 v®ue
 )
 
-254 
-loc
-, 
-mid
-, 
-j
-;
-
-256 
-cu¼
-->
-b™m­
- = curr->bitmap - 1;
-
-257 
-loc
- = 
-	`Aµ’d
-(
-cu¼
-, 
-key
-, 
-v®ue
-);
-
-259 
-mid
- = 
-	`S—rch
-(
-cu¼
-, cu¼->
-¦Ù
-, 
-key
-);
-
-261 
-j
- = 
-cu¼
-->
-¦Ù
-[0]; j >ð
-mid
-; j--)
-
-262 
-cu¼
-->
-¦Ù
-[
-j
- + 1] = curr->slot[j];
-
-264 
-cu¼
-->
-¦Ù
-[
-mid
-] = 
-loc
-;
-
-266 
-cu¼
-->
-¦Ù
-[0] = curr->slot[0] + 1;
-
-268 
-cu¼
-->
-b™m­
- = cu¼->b™m­ + 1 + (0x1UL << (
-loc
- + 1));
-
-269  
-loc
-;
-
-270 
-	}
-}
-
-272 
-	$š£¹_š_Ëaf
-(
-node
- *
-cu¼
-, 
-key
-, *
-v®ue
-)
-
-274 
-loc
-, 
-mid
-, 
-j
-;
-
-276 
-cu¼
-->
-b™m­
- = curr->bitmap - 1;
-
-277 
-	`æush_bufãr
-(&
-cu¼
-->
-b™m­
-, (), 
-Œue
-);
-
-278 
-loc
- = 
-	`Aµ’d
-(
-cu¼
-, 
-key
-, 
-v®ue
-);
-
-279 
-	`æush_bufãr
-(&(
-cu¼
-->
-’Œ›s
-[
-loc
-]), (
-’Œy
-), 
-çl£
-);
-
-281 
-mid
- = 
-	`S—rch
-(
-cu¼
-, cu¼->
-¦Ù
-, 
-key
-);
-
-283 
-j
- = 
-cu¼
-->
-¦Ù
-[0]; j >ð
-mid
-; j--)
-
-284 
-cu¼
-->
-¦Ù
-[
-j
- + 1] = curr->slot[j];
-
-286 
-cu¼
-->
-¦Ù
-[
-mid
-] = 
-loc
-;
-
-288 
-cu¼
-->
-¦Ù
-[0] = curr->slot[0] + 1;
-
-289 
-	`æush_bufãr
-(
-cu¼
-->
-¦Ù
-, (cu¼->¦Ù), 
-Œue
-);
-
-291 
-cu¼
-->
-b™m­
- = cu¼->b™m­ + 1 + (0x1UL << (
-loc
- + 1));
-
-292 
-	`æush_bufãr
-(&
-cu¼
-->
-b™m­
-, (), 
-Œue
-);
-
-293 
-	}
-}
-
-295 
-	$š£¹_š_šÃr
-(
-node
- *
-cu¼
-, 
-key
-, *
-v®ue
-)
-
-297 
-loc
-, 
-mid
-, 
-j
-;
-
-299 
-cu¼
-->
-b™m­
- = curr->bitmap - 1;
-
-300 
-	`æush_bufãr
-(&
-cu¼
-->
-b™m­
-, (), 
-Œue
-);
-
-301 
-loc
- = 
-	`Aµ’d_š_šÃr
-(
-cu¼
-, 
-key
-, 
-v®ue
-);
-
-302 
-	`æush_bufãr
-(&(
-cu¼
-->
-’Œ›s
-[
-loc
-]), (
-’Œy
-), 
-çl£
-);
-
-304 
-mid
- = 
-	`S—rch
-(
-cu¼
-, cu¼->
-¦Ù
-, 
-key
-);
-
-306 
-j
- = 
-cu¼
-->
-¦Ù
-[0]; j >ð
-mid
-; j--)
-
-307 
-cu¼
-->
-¦Ù
-[
-j
- + 1] = curr->slot[j];
-
-309 
-cu¼
-->
-¦Ù
-[
-mid
-] = 
-loc
-;
-
-311 
-cu¼
-->
-¦Ù
-[0] = curr->slot[0] + 1;
-
-312 
-	`æush_bufãr
-(
-cu¼
-->
-¦Ù
-, (cu¼->¦Ù), 
-Œue
-);
-
-314 
-cu¼
-->
-b™m­
- = cu¼->b™m­ + 1 + (0x1UL << (
-loc
- + 1));
-
-315 
-	`æush_bufãr
-(&
-cu¼
-->
-b™m­
-, (), 
-Œue
-);
-
-316 
-	}
-}
-
-318 
-	$š£¹_š_šÃr_noæush
-(
-node
- *
-cu¼
-, 
-key
-, *
-v®ue
-)
-
-320 
-loc
-, 
-mid
-, 
-j
+321 
+šdex
 ;
 
 322 
+šdex
+ = 
+	`fšd_Ãxt_z”o_b™
+(&
 cu¼
 ->
 b™m­
- = curr->bitmap - 1;
+, 
+BITMAP_SIZE
+, 0);
 
-323 
-loc
- = 
-	`Aµ’d_š_šÃr
-(
+324 
 cu¼
-, 
+->
+’Œ›s
+[
+šdex
+].
 key
-, 
-v®ue
-);
+ = key;
 
 325 
+cu¼
+->
+’Œ›s
+[
+šdex
+].
+±r
+ = 
+v®ue
+;
+
+326 
+cu¼
+->
+fšg”´šts
+[
+šdex
+] = 
+	`hash
+(
+key
+);
+
+327 
+cu¼
+->
+b™m­
+ = cu¼->b™m­ + (0x1UL << 
+šdex
+);
+
+328  
+šdex
+;
+
+329 
+	}
+}
+
+331 
+	$š£¹_š_Ëaf
+(
+LN
+ *
+cu¼
+, 
+key
+, *
+v®ue
+)
+
+333 
+šdex
+;
+
+334 
+šdex
+ = 
+	`fšd_Ãxt_z”o_b™
+(&
+cu¼
+->
+b™m­
+, 
+BITMAP_SIZE
+, 0);
+
+336 
+cu¼
+->
+’Œ›s
+[
+šdex
+].
+key
+ = key;
+
+337 
+cu¼
+->
+’Œ›s
+[
+šdex
+].
+±r
+ = 
+v®ue
+;
+
+338 
+cu¼
+->
+fšg”´šts
+[
+šdex
+] = 
+	`hash
+(
+key
+);
+
+339 
+cu¼
+->
+b™m­
+ = cu¼->b™m­ + (0x1UL << 
+šdex
+);
+
+340 
+	}
+}
+
+342 
+	$š£¹_š_šÃr
+(
+IN
+ *
+cu¼
+, 
+key
+, *
+chžd
+)
+
+344 
+loc
+, 
+mid
+, 
+j
+;
+
+346 
 mid
  = 
 	`S—rch
 (
 cu¼
-, cu¼->
-¦Ù
 , 
 key
 );
 
-327 
+348 
 j
- = 
+ = (
 cu¼
 ->
-¦Ù
-[0]; j >ð
+nKeys
+ - 1); j >ð
 mid
-; j--)
+; j--) {
 
-328 
+349 
 cu¼
 ->
-¦Ù
+keys
 [
 j
- + 1] = curr->slot[j];
+ + 1] = curr->keys[j];
 
-330 
+350 
 cu¼
 ->
-¦Ù
+±r
+[
+j
+ + 1] = curr->ptr[j];
+
+353 
+cu¼
+->
+keys
 [
 mid
 ] = 
-loc
+key
 ;
 
-332 
+354 
 cu¼
 ->
-¦Ù
-[0] = curr->slot[0] + 1;
-
-334 
-cu¼
-->
-b™m­
- = cu¼->b™m­ + 1 + (0x1UL << (
-loc
- + 1));
-
-335  
-loc
+±r
+[
+mid
+] = 
+chžd
 ;
 
-336 
+356 
+cu¼
+->
+nKeys
+++;
+
+357 
 	}
 }
 
-338 
+359 
 	$š£¹_š_·»Á
 (
 Œ“
  *
 t
-, 
-node
- *
+, *
 cu¼
 , 
 key
-,‚od*
+, *
 ¥l™Node
 ) {
 
-339 ià(
+360 ià(
 cu¼
  =ð
 t
@@ -1797,21 +1597,15 @@ t
 roÙ
 ) {
 
-340 
-node
+361 
+IN
  *
 roÙ
  = 
-	`®locNode
+	`®locINode
 ();
 
-341 
-roÙ
-->
-i¦—f
- = 0;
-
-342 
+362 
 roÙ
 ->
 Ëámo¡PŒ
@@ -1819,126 +1613,96 @@ roÙ
 cu¼
 ;
 
-343 
+363 
 roÙ
 ->
-b™m­
- =„oot->bitmap + (0x1UL << 1);
-
-344 
-roÙ
-->
-’Œ›s
-[0].
-±r
- = 
-¥l™Node
-;
-
-345 
-roÙ
-->
-’Œ›s
-[0].
+keys
+[0] = 
 key
- = key;
+;
 
-346 
-¥l™Node
+364 
+roÙ
 ->
+±r
+[0] = 
+¥l™Node
+;
+
+365 
+roÙ
+->
+nKeys
+++;
+
+367 ((
+IN
+ *)
+¥l™Node
+)->
 ·»Á
  = 
 roÙ
 ;
 
-348 
-roÙ
-->
-¦Ù
-[1] = 0;
-
-349 
-roÙ
-->
-¦Ù
-[0] = 1;
-
-350 
-	`æush_bufãr
-(
-roÙ
-, (
-node
-), 
-çl£
-);
-
-351 
-	`æush_bufãr
-(
-¥l™Node
-, (
-node
-), 
-çl£
-);
-
-353 
-	`add_»do_log’Œy
-();
-
-354 
+368 ((
+IN
+ *)
 cu¼
-->
+)->
 ·»Á
  = 
 roÙ
 ;
 
-355 
+369 
 t
 ->
 roÙ
  =„oot;
 
-359 
-node
+373 
+IN
  *
 ·»Á
- = 
-cu¼
-->parent;
+;
 
-361 ià(
+375 ià(((
+IN
+ *)
+cu¼
+)->
+ty³
+ =ð
+THIS_IN
+)
+
+376 
+·»Á
+ = ((
+IN
+ *)
+cu¼
+)->parent;
+
+378 
+·»Á
+ = ((
+LN
+ *)
+cu¼
+)->parent;
+
+380 ià(
 ·»Á
 ->
-¦Ù
-[0] < 
-NODE_SIZE
+nKeys
+ < 
+NUM_IN_ENTRY
 ) {
 
-362 
-mid
-, 
-j
-, 
-loc
-;
-
-364 
-	`add_»do_log’Œy
-();
-
-365 
-·»Á
-->
-b™m­
- =…arent->bitmap - 1;
-
-366 
-loc
- = 
-	`Aµ’d_š_šÃr
+381 
+	`š£¹_š_šÃr
 (
 ·»Á
 , 
@@ -1947,250 +1711,96 @@ key
 ¥l™Node
 );
 
-367 
-	`æush_bufãr
-(&(
-·»Á
-->
-’Œ›s
-[
-loc
-]), (
-’Œy
-), 
-çl£
-);
-
-368 
+382 ((
+IN
+ *)
 ¥l™Node
-->
+)->
 ·»Á
  =…arent;
-
-369 
-	`æush_bufãr
-(
-¥l™Node
-, (
-node
-), 
-çl£
-);
-
-371 
-mid
- = 
-	`S—rch
-(
-·»Á
-,…¬’t->
-¦Ù
-, 
-key
-);
-
-373 
-	`add_»do_log’Œy
-();
-
-374 
-j
- = 
-·»Á
-->
-¦Ù
-[0]; j >ð
-mid
-; j--)
-
-375 
-·»Á
-->
-¦Ù
-[
-j
- + 1] =…arent->slot[j];
-
-377 
-·»Á
-->
-¦Ù
-[
-mid
-] = 
-loc
-;
-
-379 
-·»Á
-->
-¦Ù
-[0] =…arent->slot[0] + 1;
-
-381 
-	`add_»do_log’Œy
-();
-
-382 
-·»Á
-->
-b™m­
- =…¬’t->b™m­ + 1 + (0x1UL << (
-loc
- + 1));
 
 384 
+i
+, 
 j
 , 
 loc
-, 
-ý
- = 
-·»Á
-->
-¦Ù
-[0];
+;
 
 385 
-node
+IN
  *
-¥l™P¬’t
+¥l™_INode
  = 
-	`®locNode
+	`®locINode
 ();
 
-386 
-¥l™P¬’t
-->
-i¦—f
- = 0;
-
-388 
+387 
 j
  = 
-mš_live_’Œ›s
- ; j > 0; j--) {
+MIN_IN_ENTRIES
+, 
+i
+ = 0; j < 
+·»Á
+->
+nKeys
+; j++, i++) {
+
+388 
+¥l™_INode
+->
+keys
+[
+i
+] = 
+·»Á
+->keys[
+j
+];
 
 389 
-loc
- = 
-	`Aµ’d_š_šÃr
-(
-¥l™P¬’t
-,
-·»Á
+¥l™_INode
 ->
-’Œ›s
-[·»Á->
-¦Ù
-[
-ý
-]].
-key
-,…¬’t->’Œ›s[·»Á->¦Ù[ý]].
 ±r
-);
+[
+i
+] = 
+·»Á
+->±r[
+j
+];
 
 390 
-node
- *
-chžd
- = 
-·»Á
+¥l™_INode
 ->
-’Œ›s
-[·»Á->
-¦Ù
-[
-ý
-]].
-±r
-;
+nKeys
+++;
 
 391 
-	`add_»do_log’Œy
-();
-
-392 
-chžd
-->
-·»Á
- = 
-¥l™P¬’t
-;
-
-393 
-¥l™P¬’t
-->
-¦Ù
-[
-j
-] = 
-loc
-;
-
-394 
-¥l™P¬’t
-->
-¦Ù
-[0]++;
-
-395 
-¥l™P¬’t
-->
-b™m­
- = s¶™P¬’t->b™m­ + (0x1UL << (
-loc
- + 1));
-
-396 
 ·»Á
 ->
-b™m­
- =…¬’t->b™m­ & (~(0x1UL << (·»Á->
-¦Ù
-[
-ý
-] + 1)));
-
-397 
-ý
+nKeys
 --;
 
-400 
-	`add_»do_log’Œy
-();
-
-401 
-·»Á
+394 ià(
+¥l™_INode
 ->
-¦Ù
-[0] -ð
-mš_live_’Œ›s
-;
-
-403 ià(
-¥l™P¬’t
-->
-’Œ›s
-[¥l™P¬’t->
-¦Ù
-[1]].
+keys
+[0] > 
 key
- > key) {
+) {
 
-404 
+395 
 	`add_»do_log’Œy
 ();
 
-405 
+396 
 	`add_»do_log’Œy
 ();
 
-406 
-loc
- = 
-	`š£¹_š_šÃr_noæush
+397 
+	`š£¹_š_šÃr
 (
 ·»Á
 , 
@@ -2199,371 +1809,47 @@ key
 ¥l™Node
 );
 
-407 
-	`æush_bufãr
-(&(
-·»Á
-->
-’Œ›s
-[
-loc
-]), (
-’Œy
-), 
-çl£
-);
-
-408 
+398 ((
+IN
+ *)
 ¥l™Node
-->
+)->
 ·»Á
  =…arent;
 
-409 
-	`æush_bufãr
-(
+401 ((
+IN
+ *)
 ¥l™Node
-, (
-node
-), 
-çl£
-);
-
-412 
-¥l™Node
-->
+)->
 ·»Á
  = 
-¥l™P¬’t
+¥l™_INode
 ;
 
-413 
-	`æush_bufãr
+402 
+	`š£¹_š_šÃr
 (
-¥l™Node
-, (
-node
-), 
-çl£
-);
-
-414 
-	`š£¹_š_šÃr_noæush
-(
-¥l™P¬’t
+¥l™_INode
 , 
 key
 , 
 ¥l™Node
 );
 
-417 
+405 
 	`š£¹_š_·»Á
 (
 t
 , 
 ·»Á
-,
-
-418 
-¥l™P¬’t
-->
-’Œ›s
-[¥l™P¬’t->
-¦Ù
-[1]].
-key
-, splitParent);
-
-420 
-	}
-}
-
-422 *
-	$Upd©e
-(
-Œ“
- *
-t
-, 
-key
-, *
-v®ue
-)
-
-424 
-node
- *
-cu¼
- = 
-t
-->
-roÙ
-;
-
-425 
-cu¼
- = 
-	`fšd_Ëaf_node
-(cu¼, 
-key
-);
-
-426 
-loc
- = 
-	`S—rch
-(
-cu¼
-, cu¼->
-¦Ù
 , 
-key
-);
-
-428 ià(
-loc
- > 
-cu¼
+¥l™_INode
 ->
-¦Ù
-[0])
+keys
+[0], split_INode);
 
-429 
-loc
- = 
-cu¼
-->
-¦Ù
-[0];
-
-431 ià(
-cu¼
-->
-’Œ›s
-[cu¼->
-¦Ù
-[
-loc
-]].
-key
- != key ||†oc > curr->slot[0])
-
-432  
-NULL
-;
-
-434 
-cu¼
-->
-’Œ›s
-[cu¼->
-¦Ù
-[
-loc
-]].
-±r
- = 
-v®ue
-;
-
-435 
-	`æush_bufãr
-(&
-cu¼
-->
-’Œ›s
-[cu¼->
-¦Ù
-[
-loc
-]].
-±r
-, 8, 
-Œue
-);
-
-437  
-cu¼
-->
-’Œ›s
-[cu¼->
-¦Ù
-[
-loc
-]].
-±r
-;
-
-438 
-	}
-}
-
-440 
-	$d–‘e_š_Ëaf
-(
-node
- *
-cu¼
-, 
-key
-)
-
-442 
-mid
-, 
-j
-;
-
-444 
-cu¼
-->
-b™m­
- = curr->bitmap - 1;
-
-445 
-	`æush_bufãr
-(&
-cu¼
-->
-b™m­
-, (), 
-Œue
-);
-
-447 
-mid
- = 
-	`S—rch
-(
-cu¼
-, cu¼->
-¦Ù
-, 
-key
-);
-
-449 
-j
- = 
-cu¼
-->
-¦Ù
-[0]; j > 
-mid
-; j--)
-
-450 
-cu¼
-->
-¦Ù
-[
-j
- - 1] = curr->slot[j];
-
-452 
-cu¼
-->
-¦Ù
-[0] = curr->slot[0] - 1;
-
-454 
-	`æush_bufãr
-(
-cu¼
-->
-¦Ù
-, (cu¼->¦Ù), 
-Œue
-);
-
-456 
-cu¼
-->
-b™m­
- = cu¼->b™m­ + 1 - (0x1UL << (
-mid
- + 1));
-
-457 
-	`æush_bufãr
-(&
-cu¼
-->
-b™m­
-, (), 
-Œue
-);
-
-459 
-	}
-}
-
-461 
-	$D–‘e
-(
-Œ“
- *
-t
-, 
-key
-)
-
-463 
-numEÁr›s
-, 
-”rv®
- = 0;
-
-464 
-node
- *
-cu¼
- = 
-t
-->
-roÙ
-;
-
-466 
-cu¼
- = 
-	`fšd_Ëaf_node
-(cu¼, 
-key
-);
-
-468 
-numEÁr›s
- = 
-cu¼
-->
-¦Ù
-[0];
-
-469 ià(
-numEÁr›s
- <= 1)
-
-470 
-”rv®
- = -1;
-
-472 
-”rv®
- = 
-	`d–‘e_š_Ëaf
-(
-cu¼
-, 
-key
-);
-
-474  
-”rv®
-;
-
-475 
+407 
 	}
 }
 
@@ -2575,43 +1861,77 @@ key
 
 2 
 	#NUM_LN_ENTRY
- 31
+ 8
 
 	)
 
 3 
-	#MIN_LIVE_ENTRIES
- 
-NUM_LN_ENTRY
- / 2
+	#NUM_IN_ENTRY
+ 16
 
 	)
 
 4 
+	#MIN_IN_ENTRIES
+ (
+NUM_IN_ENTRY
+ / 2)
+
+	)
+
+5 
+	#MIN_LN_ENTRIES
+ (
+NUM_LN_ENTRY
+ / 2)
+
+	)
+
+6 
 	#CACHE_LINE_SIZE
  64
 
 	)
 
-6 
-	#LE_DATA
- 0
+7 
+	#IS_FULL
+ ((0x1UL << 
+NUM_LN_ENTRY
+è- 1)
 
 	)
 
-7 
-	#LE_COMMIT
+8 
+	#THIS_IN
  1
 
 	)
 
 9 
+	#THIS_LN
+ 2
+
+	)
+
+11 
+	#LE_DATA
+ 0
+
+	)
+
+12 
+	#LE_COMMIT
+ 1
+
+	)
+
+14 
 	#BITS_PER_LONG
  64
 
 	)
 
-10 
+15 
 	#BITMAP_SIZE
  
 NUM_LN_ENTRY
@@ -2619,123 +1939,143 @@ NUM_LN_ENTRY
 
 	)
 
-12 
+17 
 ’Œy
  
 	t’Œy
 ;
 
-13 
+18 
 IÁ”Çl_Node
  
 	tIN
 ;
 
-14 
+19 
 L—f_Node
  
 	tLN
 ;
 
-15 
+20 
 Œ“
  
 	tŒ“
 ;
 
-16 
+21 
 »do_log_’Œy
  
 	t»do_log_’Œy
 ;
 
-17 
+22 
 comm™_’Œy
  
 	tcomm™_’Œy
 ;
 
-19 
+24 
 	s»do_log_’Œy
  {
 
-20 
+25 
 	maddr
 ;
 
-21 
+26 
 	mÃw_v®ue
 ;
 
-22 
+27 
 	mty³
 ;
 
-25 
+30 
 	scomm™_’Œy
  {
 
-26 
+31 
 	mty³
 ;
 
-29 
+34 
 	s’Œy
 {
 
-30 
+35 
 	mkey
 ;
 
-31 *
+36 *
 	m±r
 ;
 
-34 
+39 
 	sIÁ”Çl_Node
  {
 
-35 
+40 
+	mty³
+;
+
+41 
+IN
+ *
+	m·»Á
+;
+
+42 
 	mnKeys
 ;
 
-36 
+43 
 	mkeys
 [
 NUM_IN_ENTRY
 ];
 
-37 *
-	mËafmo¡±r
+44 *
+	mËámo¡PŒ
 ;
 
-38 *
+45 *
 	m±r
 [
 NUM_IN_ENTRY
 ];
 
-41 
+48 
 	sL—f_Node
  {
 
-42 
+49 
+	mty³
+;
+
+50 
+IN
+ *
+	m·»Á
+;
+
+51 
 	mb™m­
 ;
 
-43 
-L—f_Node
+52 
+LN
  *
 	mpNext
 ;
 
-44 
+53 
 	mfšg”´šts
 [
 NUM_LN_ENTRY
 ];
 
-45 
+54 
 ’Œy
  
 	m’Œ›s
@@ -2743,21 +2083,19 @@ NUM_LN_ENTRY
 NUM_LN_ENTRY
 ];
 
-48 
+57 
 	sŒ“
  {
 
-49 
-node
- *
+58 *
 	mroÙ
 ;
 
-50 
+59 
 	mheight
 ;
 
-53 
+62 
 æush_bufãr
 (*
 buf
@@ -2769,13 +2107,13 @@ boÞ
 ãnû
 );
 
-54 
+63 
 Œ“
  *
 š™T»e
 ();
 
-55 
+64 
 Rªge_Lookup
 (
 Œ“
@@ -2787,11 +2125,11 @@ t
 num
 ,
 
-56 
+65 
 buf
 []);
 
-57 *
+66 *
 Lookup
 (
 Œ“
@@ -2801,53 +2139,25 @@ t
 key
 );
 
-58 
-Aµ’d
-(
-node
- *
-n
-, 
-key
-, *
-v®ue
-);
-
-59 
-Aµ’d_š_šÃr
-(
-node
- *
-n
-, 
-key
-, *
-v®ue
-);
-
-60 
+67 
 S—rch
 (
-node
+IN
  *
 cu¼
-, *
-‹mp
 , 
 key
 );
 
-61 
-node
- *
+68 *
 fšd_Ëaf_node
-Òod*
+(*
 cu¼
 , 
 key
 );
 
-62 
+69 
 In£¹
 (
 Œ“
@@ -2859,7 +2169,7 @@ key
 v®ue
 );
 
-63 *
+70 *
 Upd©e
 (
 Œ“
@@ -2871,10 +2181,10 @@ key
 v®ue
 );
 
-64 
+71 
 š£¹_š_Ëaf_noæush
 (
-node
+LN
  *
 cu¼
 , 
@@ -2883,10 +2193,10 @@ key
 v®ue
 );
 
-65 
+72 
 š£¹_š_Ëaf
 (
-node
+LN
  *
 cu¼
 , 
@@ -2895,10 +2205,10 @@ key
 v®ue
 );
 
-66 
+73 
 š£¹_š_šÃr
 (
-node
+IN
  *
 cu¼
 , 
@@ -2907,31 +2217,21 @@ key
 v®ue
 );
 
-67 
+74 
 š£¹_š_·»Á
 (
 Œ“
  *
 t
-, 
-node
- *
+, *
 cu¼
 , 
 key
-,‚od*
+, *
 ¥l™Node
 );
 
-68 
-´štNode
-(
-node
- *
-n
-);
-
-69 
+75 
 D–‘e
 (
 Œ“
@@ -2941,7 +2241,35 @@ t
 key
 );
 
-71 
+77 
+šlše
+ 
+	$__ffs
+(
+wÜd
+)
+
+79 
+	`asm
+("rep; bsf %1,%0"
+
+80 : "ô" (
+wÜd
+)
+
+81 : "rm" (
+wÜd
+));
+
+82  
+wÜd
+;
+
+83 
+	}
+}
+
+85 
 šlše
  
 	$ffz
@@ -2949,23 +2277,23 @@ key
 wÜd
 )
 
-73 
+87 
 	`asm
 ("rep; bsf %1,%0"
 
-74 : "ô" (
+88 : "ô" (
 wÜd
 )
 
-75 : "r" (~
+89 : "r" (~
 wÜd
 ));
 
-76  
+90  
 wÜd
 ;
 
-77 
+91 
 	}
 }
 
@@ -2992,14 +2320,20 @@ wÜd
 >
 
 6 
-	~"wbŒ“.h
+	~"FPT»e.h
 "
 
-8 
+8 
+	#INPUT_NUM
+ 100
+
+	)
+
+10 
 	$maš
 ()
 
-10 
+12 
 time¥ec
  
 t1
@@ -3007,101 +2341,105 @@ t1
 t2
 ;
 
-11 
+13 
 i
 ;
 
-12 *
+14 *
 dummy
 ;
 
-13 *
+15 *
 keys
+, *
+Ãw_v®ue
 ;
 
-14 
+16 
 –­£d_time
 ;
 
-15 *
+17 *
 »t
 ;
 
-16 
+18 
 FILE
  *
 å
 ;
 
-17 *
+19 *
 buf
-;
-
-18 
-lše
-[1024];
-
-19 
-FILE
- *
-å2
 ;
 
 20 
-nVmSize
- = 0;
-
-21 
-nVmRss
- = 0;
-
-22 
 max
 ;
 
-23 
+21 
 mš
 ;
 
-25 ià((
+23 ià((
 å
  = 
 	`fÝ’
-("/home/£kwÚ/Public/šput_fže/šput_2bžliÚ.txt","r")è=ð
+("/home/£kwÚ/Public/šput_fže/šput_¿ndom_100K.txt","r")è=ð
 NULL
 )
 
-27 
+25 
 	`puts
 ("error");
 
-28 
+26 
 	`ex™
 (0);
 
-31 
+29 
+	`´štf
+("sizeof(LNèð%d\n", (
+LN
+));
+
+30 
+	`´štf
+("sizeof(INèð%d\n", (
+IN
+));
+
+32 
 keys
  = 
 	`m®loc
-(() * 100000100);
+((è* 
+INPUT_NUM
+);
 
-32 
+33 
 buf
  = 
 	`m®loc
-(() * 100000100);
+((è* 
+INPUT_NUM
+);
 
-33 
+34 
 	`mem£t
 (
 buf
-, 0, () * 100000100);
+, 0, (è* 
+INPUT_NUM
+);
 
-34 
+35 
 i
- = 0; i < 100000100; i++) {
+ = 0; i < 
+INPUT_NUM
+; i++) {
 
-36 
+37 
 	`fsÿnf
 (
 å
@@ -3112,22 +2450,30 @@ i
 ]);
 
 39 
+	`fþo£
+(
+å
+);
+
+41 
 max
  = 
 keys
 [0];
 
-40 
+42 
 mš
  = 
 keys
 [0];
 
-41 
+43 
 i
- = 1; i < 100000100; i++) {
+ = 1; i < 
+INPUT_NUM
+; i++) {
 
-42 ià(
+44 ià(
 keys
 [
 i
@@ -3135,7 +2481,7 @@ i
 max
 )
 
-43 
+45 
 max
  = 
 keys
@@ -3143,7 +2489,7 @@ keys
 i
 ];
 
-44 ià(
+46 ià(
 keys
 [
 i
@@ -3151,7 +2497,7 @@ i
 mš
 )
 
-45 
+47 
 mš
  = 
 keys
@@ -3159,7 +2505,7 @@ keys
 i
 ];
 
-48 
+50 
 Œ“
  *
 t
@@ -3167,229 +2513,41 @@ t
 	`š™T»e
 ();
 
-49 
+53 
 dummy
  = (*)
 	`m®loc
 (15*1024*1024);
 
-50 
+54 
 	`mem£t
 (
 dummy
 , 0, 15*1024*1024);
 
-51 
+55 
 	`æush_bufãr
 ((*)
 dummy
 , 15*1024*1024, 
 Œue
 );
-
-53 
-	`þock_g‘time
-(
-CLOCK_MONOTONIC
-, &
-t1
-);
-
-54 
-i
- = 0; i < 100000000; i++)
-
-55 
-	`In£¹
-(
-t
-, 
-keys
-[
-i
-], &keys[i]);
 
 56 
 	`þock_g‘time
 (
 CLOCK_MONOTONIC
 , &
-t2
-);
-
-57 
-–­£d_time
- = (
-t2
-.
-tv_£c
- - 
-t1
-.tv_sec) * 1000000000;
-
-58 
-–­£d_time
- +ð(
-t2
-.
-tv_n£c
- - 
-t1
-.tv_nsec);
-
-60 
-	`¥rštf
-(
-lše
-, "/´oc/%d/¡©us", 
-	`g‘pid
-());
-
-61 
-å2
- = 
-	`fÝ’
-(
-lše
-, "r");
-
-62 ià(
-å2
- =ð
-NULL
-)
-
-65 
-	`fg‘s
-(
-lše
-, 1024, 
-å2
-è!ð
-NULL
-) {
-
-66 ià(
-	`¡r¡r
-(
-lše
-, "VmSize")) {
-
-67 
-tmp
-[32];
-
-68 
-size
-[32];
-
-69 
-	`ssÿnf
-(
-lše
-,"%s%s", 
-tmp
-, 
-size
-);
-
-70 
-nVmSize
- = 
-	`©oi
-(
-size
-);
-
-71 
-	`´štf
-("nVmSizð%lu KB\n", 
-nVmSize
-);
-
-73 ià(
-	`¡r¡r
-(
-lše
-, "VmRSS")) {
-
-74 
-tmp
-[32];
-
-75 
-size
-[32];
-
-76 
-	`ssÿnf
-(
-lše
-, "%s%s", 
-tmp
-, 
-size
-);
-
-77 
-nVmRss
- = 
-	`©oi
-(
-size
-);
-
-78 
-	`´štf
-("nVmRSS = %lu KB\n", 
-nVmRss
-);
-
-82 
-	`fþo£
-(
-å2
-);
-
-84 
-	`´štf
-("sizeofÒodeèð%d\n", (
-node
-));
-
-85 
-	`´štf
-("Bulk†ßd Timð%lu‚s\n",
-–­£d_time
-);
-
-87 
-	`mem£t
-(
-dummy
-, 0, 15*1024*1024);
-
-88 
-	`æush_bufãr
-((*)
-dummy
-, 15*1024*1024, 
-Œue
-);
-
-90 
-	`þock_g‘time
-(
-CLOCK_MONOTONIC
-, &
 t1
 );
 
-91 
+57 
 i
- = 100000000; i < 100000100; i++)
+ = 0; i < 
+INPUT_NUM
+; i++) {
 
-92 
+59 
 	`In£¹
 (
 t
@@ -3399,7 +2557,7 @@ keys
 i
 ], &keys[i]);
 
-93 
+61 
 	`þock_g‘time
 (
 CLOCK_MONOTONIC
@@ -3407,7 +2565,7 @@ CLOCK_MONOTONIC
 t2
 );
 
-94 
+62 
 –­£d_time
  = (
 t2
@@ -3417,7 +2575,7 @@ tv_£c
 t1
 .tv_sec) * 1000000000;
 
-95 
+63 
 –­£d_time
  +ð(
 t2
@@ -3427,19 +2585,19 @@ tv_n£c
 t1
 .tv_nsec);
 
-96 
+64 
 	`´štf
-("In£¹ Timð%lu‚s\n", 
+("In£¹iÚ Timð%lu‚s\n",
 –­£d_time
 );
 
-98 
+71 
 	`mem£t
 (
 dummy
 , 0, 15*1024*1024);
 
-99 
+72 
 	`æush_bufãr
 ((*)
 dummy
@@ -3447,7 +2605,7 @@ dummy
 Œue
 );
 
-101 
+73 
 	`þock_g‘time
 (
 CLOCK_MONOTONIC
@@ -3455,13 +2613,15 @@ CLOCK_MONOTONIC
 t1
 );
 
-102 
+74 
 i
- = 0; i < 100000100; i++) {
+ = 0; i < 
+INPUT_NUM
+; i++) {
 
-103 
+75 
 »t
- = (*)
+ = 
 	`Lookup
 (
 t
@@ -3471,13 +2631,13 @@ keys
 i
 ]);
 
-104 ià(
+76 ià(
 »t
  =ð
 NULL
 ) {
 
-105 
+77 
 	`´štf
 ("Th”i nØkey[%d] = %lu\n", 
 i
@@ -3485,11 +2645,17 @@ i
 keys
 [i]);
 
-106 
+78 
 	`ex™
 (1);
 
-112 
+81 
+	`´štf
+("S—rch v®uð%lu\n", *(*)
+»t
+);
+
+84 
 	`þock_g‘time
 (
 CLOCK_MONOTONIC
@@ -3497,7 +2663,7 @@ CLOCK_MONOTONIC
 t2
 );
 
-113 
+85 
 –­£d_time
  = (
 t2
@@ -3507,7 +2673,7 @@ tv_£c
 t1
 .tv_sec) * 1000000000;
 
-114 
+86 
 –­£d_time
  +ð(
 t2
@@ -3517,19 +2683,23 @@ tv_n£c
 t1
 .tv_nsec);
 
-115 
+87 
 	`´štf
 ("S—rch Timð%lu‚s\n", 
 –­£d_time
 );
 
-117 
+88 #ifdeà
+£kwÚ
+
+
+90 
 	`mem£t
 (
 dummy
 , 0, 15*1024*1024);
 
-118 
+91 
 	`æush_bufãr
 ((*)
 dummy
@@ -3537,7 +2707,7 @@ dummy
 Œue
 );
 
-120 
+92 
 	`þock_g‘time
 (
 CLOCK_MONOTONIC
@@ -3545,17 +2715,19 @@ CLOCK_MONOTONIC
 t1
 );
 
-121 
+93 
 	`Rªge_Lookup
 (
 t
 , 
 mš
-, 100000100, 
+, 
+INPUT_NUM
+ / 1000, 
 buf
 );
 
-122 
+94 
 	`þock_g‘time
 (
 CLOCK_MONOTONIC
@@ -3563,7 +2735,7 @@ CLOCK_MONOTONIC
 t2
 );
 
-123 
+95 
 –­£d_time
  = (
 t2
@@ -3573,7 +2745,7 @@ tv_£c
 t1
 .tv_sec) * 1000000000;
 
-124 
+96 
 –­£d_time
  +ð(
 t2
@@ -3583,13 +2755,243 @@ tv_n£c
 t1
 .tv_nsec);
 
-126 
+97 
 	`´štf
-("Rªg£¬chimð%lu‚s\n", 
+("RªgsÿÀ0.1% = %lu‚s\n", 
 –­£d_time
 );
 
-132 
+100 
+	`mem£t
+(
+dummy
+, 0, 15*1024*1024);
+
+101 
+	`æush_bufãr
+((*)
+dummy
+, 15*1024*1024, 
+Œue
+);
+
+102 
+	`þock_g‘time
+(
+CLOCK_MONOTONIC
+, &
+t1
+);
+
+103 
+	`Rªge_Lookup
+(
+t
+, 
+mš
+, 
+INPUT_NUM
+ / 100, 
+buf
+);
+
+104 
+	`þock_g‘time
+(
+CLOCK_MONOTONIC
+, &
+t2
+);
+
+105 
+–­£d_time
+ = (
+t2
+.
+tv_£c
+ - 
+t1
+.tv_sec) * 1000000000;
+
+106 
+–­£d_time
+ +ð(
+t2
+.
+tv_n£c
+ - 
+t1
+.tv_nsec);
+
+107 
+	`´štf
+("RªgsÿÀ1% = %lu‚s\n", 
+–­£d_time
+);
+
+110 
+	`mem£t
+(
+dummy
+, 0, 15*1024*1024);
+
+111 
+	`æush_bufãr
+((*)
+dummy
+, 15*1024*1024, 
+Œue
+);
+
+112 
+	`þock_g‘time
+(
+CLOCK_MONOTONIC
+, &
+t1
+);
+
+113 
+	`Rªge_Lookup
+(
+t
+, 
+mš
+, 
+INPUT_NUM
+ / 10, 
+buf
+);
+
+114 
+	`þock_g‘time
+(
+CLOCK_MONOTONIC
+, &
+t2
+);
+
+115 
+–­£d_time
+ = (
+t2
+.
+tv_£c
+ - 
+t1
+.tv_sec) * 1000000000;
+
+116 
+–­£d_time
+ +ð(
+t2
+.
+tv_n£c
+ - 
+t1
+.tv_nsec);
+
+117 
+	`´štf
+("RªgsÿÀ10% = %lu‚s\n", 
+–­£d_time
+);
+
+120 
+Ãw_v®ue
+ = 
+	`m®loc
+((è* 
+INPUT_NUM
+);
+
+121 
+i
+ = 0; i < 
+INPUT_NUM
+; i++)
+
+122 
+Ãw_v®ue
+[
+i
+] = i;
+
+123 
+	`mem£t
+(
+dummy
+, 0, 15*1024*1024);
+
+124 
+	`æush_bufãr
+((*)
+dummy
+, 15*1024*1024, 
+Œue
+);
+
+125 
+	`þock_g‘time
+(
+CLOCK_MONOTONIC
+, &
+t1
+);
+
+126 
+i
+ = 0; i < 
+INPUT_NUM
+; i++)
+
+127 
+	`Upd©e
+(
+t
+, 
+keys
+[
+i
+], &
+Ãw_v®ue
+[i]);
+
+128 
+	`þock_g‘time
+(
+CLOCK_MONOTONIC
+, &
+t2
+);
+
+129 
+–­£d_time
+ = (
+t2
+.
+tv_£c
+ - 
+t1
+.tv_sec) * 1000000000;
+
+130 
+–­£d_time
+ +ð(
+t2
+.
+tv_n£c
+ - 
+t1
+.tv_nsec);
+
+131 
+	`´štf
+("Upd©timð%lu‚s\n", 
+–­£d_time
+);
+
+147 
 	}
 }
 

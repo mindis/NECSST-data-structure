@@ -13,6 +13,7 @@ BITS_PER_LONG	wbtree.h	10;"	d
 CACHE_LINE_SIZE	wbtree.h	5;"	d
 CFLAGS	Makefile	/^CFLAGS= -c $/;"	m
 Delete	wbtree.c	/^int Delete(tree *t, unsigned long key)$/;"	f
+INPUT_NUM	main.c	8;"	d	file:
 Insert	wbtree.c	/^void Insert(tree *t, unsigned long key, void *value){$/;"	f
 LE_COMMIT	wbtree.h	8;"	d
 LE_DATA	wbtree.h	7;"	d
@@ -54,6 +55,8 @@ mfence	wbtree.c	11;"	d	file:
 new_value	wbtree.h	/^	unsigned long new_value;$/;"	m	struct:redo_log_entry
 node	wbtree.h	/^struct node{$/;"	s
 node	wbtree.h	/^typedef struct node node;$/;"	t	typeref:struct:node
+node_count	wbtree.c	/^unsigned long node_count = 0;$/;"	v
+node_count	wbtree.h	/^unsigned long node_count;$/;"	v
 parent	wbtree.h	/^	struct node *parent;$/;"	m	struct:node	typeref:struct:node::node
 ptr	wbtree.h	/^	void *ptr;$/;"	m	struct:entry
 redo_log_entry	wbtree.h	/^struct redo_log_entry {$/;"	s

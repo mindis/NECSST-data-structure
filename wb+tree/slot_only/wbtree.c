@@ -169,13 +169,13 @@ node *find_leaf_node(node *curr, unsigned long key)
 		return curr;
 	loc = Search(curr, curr->slot, key);
 
-	if (loc > curr->slot[0]) 
+	if (loc > curr->slot[0])
 		return find_leaf_node(curr->entries[curr->slot[loc - 1]].ptr, key);
-	else if (curr->entries[curr->slot[loc]].key <= key) 
+	else if (curr->entries[curr->slot[loc]].key <= key)
 		return find_leaf_node(curr->entries[curr->slot[loc]].ptr, key);
-	else if (loc == 1) 
+	else if (loc == 1)
 		return find_leaf_node(curr->leftmostPtr, key);
-	else 
+	else
 		return find_leaf_node(curr->entries[curr->slot[loc - 1]].ptr, key);
 }
 

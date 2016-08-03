@@ -5,7 +5,7 @@
 #include <time.h>
 #include "w_radix_tree.h"
 
-#define INPUT_NUM	100000000
+#define INPUT_NUM	100000
 
 int main(void)
 {
@@ -22,7 +22,7 @@ int main(void)
 
 	printf("sizeof(node) = %d\n", sizeof(node));
 
-	if((fp = fopen("/home/sekwon/Public/input_file/input_random_100M.txt","r")) == NULL)
+	if((fp = fopen("/home/sekwon/Public/input_file/input_random_100K.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
