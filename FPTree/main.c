@@ -5,7 +5,7 @@
 #include <time.h>
 #include "FPTree.h"
 
-#define INPUT_NUM	1000000
+#define INPUT_NUM	1000000000
 
 int main(void)
 {
@@ -20,7 +20,7 @@ int main(void)
 	unsigned long max;
 	unsigned long min;
 
-	if ((fp = fopen("/home/sekwon/Public/input_file/input_random_1M.txt","r")) == NULL)
+	if ((fp = fopen("/home/sekwon/Public/input_file/input_random_1000M.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
@@ -117,9 +117,6 @@ int main(void)
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 	printf("Range scan 10% = %lu ns\n", elapsed_time);
-
-	for (i = 0; i < INPUT_NUM / 10; i++)
-		printf("buf[%d] = %lu\n", i, buf[i]);
 
 	/* Update */
 	new_value = malloc(sizeof(unsigned long) * INPUT_NUM);

@@ -29,13 +29,13 @@ struct LN_entry {
 
 struct Internal_Node {
 	unsigned int nKeys;
-	unsigned long key[509];
+	unsigned long key[MAX_NUM_ENTRY_IN];
 	char dummy[16];
 };
 
 struct Parent_Leaf_Node {
 	unsigned int nKeys;
-	struct PLN_entry entries[255];
+	struct PLN_entry entries[MAX_NUM_ENTRY_PLN];
 	char dummy[8];
 };
 
@@ -43,7 +43,7 @@ struct Leaf_Node {
 	unsigned char nElements;
 	LN *sibling;
 	unsigned long parent_id;
-	struct LN_entry LN_Element[169];
+	struct LN_entry LN_Element[MAX_NUM_ENTRY_LN];
 	char dummy[16];
 };
 

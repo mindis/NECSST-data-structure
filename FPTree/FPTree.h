@@ -1,5 +1,5 @@
 #include <stdbool.h>
-#define NUM_LN_ENTRY	4
+#define NUM_LN_ENTRY	63
 #define NUM_IN_ENTRY	254
 #define MIN_IN_ENTRIES (NUM_IN_ENTRY / 2)
 #define MIN_LN_ENTRIES (NUM_LN_ENTRY / 2)

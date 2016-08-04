@@ -121,6 +121,8 @@ int recursive_alloc_nodes(tree *t, node *level_ptr, unsigned long key,
 			}
 
 			if (level_count == height) {
+//			if (level_count == ((sizeof(node) / sizeof(item)) / 2)) {
+//			if (level_count == 20) {
 				node *temp_node = allocNode(level_ptr, index);
 				next_item->next_ptr = new_item;
 				errval = remapping_items(t, temp_node, 
@@ -183,6 +185,8 @@ int recursive_search_leaf(tree *t, node *level_ptr, unsigned long key,
 			}
 
 			if (level_count == height) {
+//			if (level_count == ((sizeof(node) / sizeof(item)) / 2)) {
+//			if (level_count == 20) {
 				node *temp_node = allocNode(level_ptr, index);
 				next_item->next_ptr = new_item;
 				errval = remapping_items(t, temp_node, 
