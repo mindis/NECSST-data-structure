@@ -8,6 +8,7 @@ int main(void)
 	(*b)++;
 
 	printf("*b = %d\n", *b);
+	printf("necsst\n");
 
 	return 0;
 }
