@@ -23,7 +23,7 @@ int main(void)
 	printf("sizeof(node) = %d\n", sizeof(node));
 	printf("sizeof(item) = %d\n", sizeof(item));
 
-	if((fp = fopen("/home/sekwon/Public/input_file/input_random_sparse_1024M.txt","r")) == NULL)
+	if((fp = fopen("/home/sekwon/Public/input_file/input_random_dense_1024M.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);

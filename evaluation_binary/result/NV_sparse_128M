@@ -1,0 +1,11 @@
+sizeof(IN) = 4096
+sizeof(PLN) = 4096
+sizeof(LN) = 4096
+Insertion Time = 399847671563 ns
+Total space = 8958021632 byte
+Space efficiency = 69
+Search Time = 117327664838 ns
+Range scan 0.1% = 7242824 ns
+Range scan 1% = 67828506 ns
+Range scan 10% = 672447195 ns
+Update time = 1619672736648 ns

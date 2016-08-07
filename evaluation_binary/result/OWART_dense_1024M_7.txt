@@ -1,0 +1,9 @@
+sizeof(node) = 1088
+Insertion Time = 501172231142 ns
+Total space = 8772539648 byte
+Space efficiency = 8
+Search Time = 170431352696 ns
+Range scan 0.1% = 18406525 ns
+Range scan 1% = 184898458 ns
+Range scan 10% = 1851801974 ns
+Update Time = 388662277542 ns
