@@ -3,7 +3,8 @@
 #include <string.h>
 #include <malloc.h>
 #include <time.h>
-#include "w_radix_tree.h"
+#include <byteswap.h>
+#include "art.h"
 
 #define INPUT_NUM	128000000
 
@@ -20,8 +21,7 @@ int main(void)
 	unsigned long max;
 	unsigned long min;
 
-	printf("sizeof(node) = %d\n", sizeof(node));
-	printf("sizeof(item) = %d\n", sizeof(item));
+//	printf("sizeof(node) = %d\n", sizeof(node));
 
 	if((fp = fopen("/home/sekwon/Public/input_file/input_random_sparse_128M.txt","r")) == NULL)
 	{
@@ -35,6 +35,7 @@ int main(void)
 	for (i = 0; i < INPUT_NUM; i++) {
 //		keys[i] = i;
 		fscanf(fp, "%lu", &keys[i]);
+		keys[i] = __bswap_64(keys[i]);
 	}
 	fclose(fp);
 
@@ -47,22 +48,23 @@ int main(void)
 			min = keys[i];
 	}
 
-	printf("max = %lu\n", max);
-	printf("min = %lu\n", min);
-	
-	tree *t = initTree();
-	flush_buffer(t, 8, true);
+	art_tree *t = malloc(sizeof(art_tree));
+	if (art_tree_init(t)) {
+		printf("art_tree_init fails!\n");
+	}
+//	flush_buffer(t, sizeof(art_tree), true);
+//	flush_buffer(&t, sizeof(art_tree *), true);	// [kh] t -> &t
 
 	/* Insertion */
-	dummy = (char *)malloc(15*1024*1024);
+	dummy = (char *)malloc(15*1024*1024);	// [kh] CPU cache size is 15M?
 	memset(dummy, 0, 15*1024*1024);
 	flush_buffer((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for(i = 0; i < INPUT_NUM; i++) {
-		if (Insert(&t, keys[i], &keys[i]) < 0) {
-			printf("Insert error!\n");
-			exit(1);
-		}
+		art_insert(t, (unsigned char *)&keys[i], sizeof(keys[i]), &keys[i]);// < 0) {
+		//	printf("Insert error!\n");
+		//	exit(1);
+	//	}
 	}
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
@@ -70,29 +72,29 @@ int main(void)
 	printf("Insertion Time = %lu ns\n", elapsed_time);
 
 	/* Check space overhead */
-	printf("Total space = %lu byte\n", (node_count * sizeof(node)) + (item_count * sizeof(item)));
-	printf("Space efficiency = %lu\n", ((node_count * sizeof(node)) + (item_count * sizeof(item))) / INPUT_NUM);
+//	printf("Total space = %lu byte\n", node_count * sizeof(node));
+//	printf("Space efficiency = %lu\n", (node_count * sizeof(node)) / INPUT_NUM);
 
 	/* Lookup */
 	memset(dummy, 0, 15*1024*1024);
 	flush_buffer((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for (i = 0; i < INPUT_NUM; i++) {
-		ret = Lookup(t, keys[i]);	
-		if (ret == NULL) {
-			printf("There is no key[%d] = %lu\n", i, keys[i]);
-			exit(1);
-		}
-//		else {
-//			printf("Search value = %lu	count = %lu\n", *(unsigned long *)ret, i);
-//			sleep(1);
-//		}
+		ret = art_search(t, (unsigned char*)&keys[i], sizeof(keys[i]));	
+	//	if (ret == NULL) {
+	//		printf("There is no key[%d] = %lu\n", i, keys[i]);
+	//		exit(1);
+	//	} /*
+	//	else {
+	//		printf("Search value = %lu	count = %lu\n", *(unsigned long *)ret, i);
+	//		sleep(1);
+	//	}
 	}
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);	
 	printf("Search Time = %lu ns\n", elapsed_time);
-
+#ifdef sekwon
 	/* Range scan 0.1% */
 	memset(dummy, 0, 15*1024*1024);
 	flush_buffer((void *)dummy, 15*1024*1024, true);
@@ -136,7 +138,7 @@ int main(void)
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);	
 	printf("Update Time = %lu ns\n", elapsed_time);
-
+#endif
 	/* Delete */
 //	memset(dummy, 0, 15*1024*1024);
 //	flush_buffer((void *)dummy, 15*1024*1024, true);

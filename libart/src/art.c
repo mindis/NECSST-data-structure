@@ -4,7 +4,84 @@
 #include <stdio.h>
 #include <emmintrin.h>
 #include <assert.h>
+#include <x86intrin.h>
 #include "art.h"
+
+log_area *start_log;
+
+#define mfence() asm volatile("mfence":::"memory")
+
+void flush_buffer(void *buf, unsigned long len, bool fence)
+{
+	unsigned int i;
+	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
+	if (fence) {
+		mfence();
+		for (i = 0; i < len; i += CACHE_LINE_SIZE)
+			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
+		mfence();
+	} else {
+		for (i = 0; i < len; i += CACHE_LINE_SIZE)
+			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
+	}
+}
+
+void add_log_entry(log_area *LA, void *addr, unsigned int size, unsigned char type)
+{
+	log_entry *log;
+	int i, remain_size;
+
+	remain_size = size - ((size / LOG_DATA_SIZE) * LOG_DATA_SIZE);
+
+	if ((char *)LA->next_offset == (LA->log_data + LOG_AREA_SIZE))
+		LA->next_offset = (log_entry *)LA->log_data;
+
+	if (size <= LOG_DATA_SIZE) {
+		log = LA->next_offset;
+		log->size = size;
+		log->type = type;
+		log->addr = addr;
+		memcpy(log->data, addr, size);
+
+		if (type == LE_DATA)
+			flush_buffer(log, sizeof(log_entry), false);
+		else
+			flush_buffer(log, sizeof(log_entry), true);
+
+		LA->next_offset = LA->next_offset + 1;
+	} else {
+		void *next_addr = addr;
+
+		for (i = 0; i < size / LOG_DATA_SIZE; i++) {
+			log = LA->next_offset;
+			log->size = LOG_DATA_SIZE;
+			log->type = type;
+			log->addr = next_addr;
+			memcpy(log->data, next_addr, LOG_DATA_SIZE);
+
+			flush_buffer(log, sizeof(log_entry), false);
+
+			LA->next_offset = LA->next_offset + 1;
+			if ((char *)LA->next_offset == 
+					(LA->log_data + LOG_AREA_SIZE))
+				LA->next_offset = (log_entry *)LA->log_data;
+
+			next_addr = (char *)next_addr + LOG_DATA_SIZE;
+		}
+
+		if (remain_size > 0) {
+			log = LA->next_offset;
+			log->size = LOG_DATA_SIZE;
+			log->type = type;
+			log->addr = next_addr;
+			memcpy(log->data, next_addr, remain_size);
+
+			flush_buffer(log, sizeof(log_entry), false);
+			
+			LA->next_offset = LA->next_offset + 1;
+		}
+	}
+}
 
 /**
  * Macros to manipulate pointer tags
@@ -46,6 +123,8 @@ static art_node* alloc_node(uint8_t type) {
 int art_tree_init(art_tree *t) {
     t->root = NULL;
     t->size = 0;
+	start_log = malloc(sizeof(log_area));
+	start_log->next_offset = (log_entry *)start_log->log_data;
     return 0;
 }
 
@@ -357,8 +436,9 @@ static void add_child48(art_node48 *n, art_node **ref, unsigned char c, void *ch
         n->keys[c] = pos + 1;
         n->n.num_children++;
     } else {
+		int i;
         art_node256 *new_node = (art_node256*)alloc_node(NODE256);
-        for (int i=0;i<256;i++) {
+        for (i=0;i<256;i++) {
             if (n->keys[i]) {
                 new_node->children[i] = n->children[n->keys[i] - 1];
             }
@@ -398,12 +478,13 @@ static void add_child16(art_node16 *n, art_node **ref, unsigned char c, void *ch
         n->n.num_children++;
 
     } else {
+		int i;
         art_node48 *new_node = (art_node48*)alloc_node(NODE48);
 
         // Copy the child pointers and populate the key map
         memcpy(new_node->children, n->children,
                 sizeof(void*)*n->n.num_children);
-        for (int i=0;i<n->n.num_children;i++) {
+        for (i=0;i<n->n.num_children;i++) {
             new_node->keys[n->keys[i]] = i + 1;
         }
         copy_header((art_node*)new_node, (art_node*)n);
@@ -487,6 +568,8 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned char *
     // If we are at a NULL node, inject a leaf
     if (!n) {
         *ref = (art_node*)SET_LEAF(make_leaf(key, key_len, value));
+		flush_buffer(*ref, sizeof(art_leaf), false);
+		flush_buffer(ref, 8, true);
         return NULL;
     }
 
@@ -499,6 +582,7 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned char *
             *old = 1;
             void *old_val = l->value;
             l->value = value;
+			flush_buffer(&l->value, 8, true);
             return old_val;
         }
 
@@ -516,6 +600,11 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned char *
         *ref = (art_node*)new_node;
         add_child4(new_node, ref, l->key[depth+longest_prefix], SET_LEAF(l));
         add_child4(new_node, ref, l2->key[depth+longest_prefix], SET_LEAF(l2));
+
+		flush_buffer(l2, sizeof(art_leaf), false);
+		flush_buffer(new_node, sizeof(art_node4), false);
+		flush_buffer(ref, 8, true);
+
         return NULL;
     }
 
@@ -551,6 +640,11 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned char *
         // Insert the new leaf
         art_leaf *l = make_leaf(key, key_len, value);
         add_child4(new_node, ref, key[depth+prefix_diff], SET_LEAF(l));
+
+		flush_buffer(l, sizeof(art_leaf), false);
+		flush_buffer(new_node, sizeof(art_node4), false);
+		flush_buffer(ref, 8, true);
+
         return NULL;
     }
 
@@ -561,10 +655,35 @@ RECURSE_SEARCH:;
     if (child) {
         return recursive_insert(*child, child, key, key_len, value, depth+1, old);
     }
+/*
+	if (n->type == NODE4)
+		add_log_entry(start_log, n, sizeof(art_node4), LE_DATA);
+	else if (n->type == NODE16)
+		add_log_entry(start_log, n, sizeof(art_node16), LE_DATA);
+	else if (n->type == NODE48)
+		add_log_entry(start_log, n, sizeof(art_node48), LE_DATA);
+	else
+		add_log_entry(start_log, n, sizeof(art_node256), LE_DATA);
 
+	add_log_entry(start_log, ref, 8, LE_DATA);
+*/
     // No child, node goes within us
     art_leaf *l = make_leaf(key, key_len, value);
     add_child(n, ref, key[depth], SET_LEAF(l));
+	
+	flush_buffer(l, sizeof(art_leaf), false);
+	if ((*ref)->type == NODE4)
+		flush_buffer(*ref, sizeof(art_node4), false);
+	else if ((*ref)->type == NODE16)
+		flush_buffer(*ref, sizeof(art_node16), false);
+	else if ((*ref)->type == NODE48)
+		flush_buffer(*ref, sizeof(art_node48), false);
+	else
+		flush_buffer(*ref, sizeof(art_node256), false);
+	flush_buffer(ref, 8, true);
+
+//	add_log_entry(start_log, NULL, 0, LE_COMMIT);
+
     return NULL;
 }
 
@@ -595,8 +714,8 @@ static void remove_child256(art_node256 *n, art_node **ref, unsigned char c) {
         *ref = (art_node*)new_node;
         copy_header((art_node*)new_node, (art_node*)n);
 
-        int pos = 0;
-        for (int i=0;i<256;i++) {
+        int i, pos = 0;
+        for (i=0;i<256;i++) {
             if (n->children[i]) {
                 new_node->children[pos] = n->children[i];
                 new_node->keys[i] = pos + 1;
@@ -618,8 +737,8 @@ static void remove_child48(art_node48 *n, art_node **ref, unsigned char c) {
         *ref = (art_node*)new_node;
         copy_header((art_node*)new_node, (art_node*)n);
 
-        int child = 0;
-        for (int i=0;i<256;i++) {
+        int i, child = 0;
+        for (i=0;i<256;i++) {
             pos = n->keys[i];
             if (pos) {
                 new_node->keys[child] = i;
@@ -763,24 +882,24 @@ static int recursive_iter(art_node *n, art_callback cb, void *data) {
         return cb(data, (const unsigned char*)l->key, l->key_len, l->value);
     }
 
-    int idx, res;
+    int i, idx, res;
     switch (n->type) {
         case NODE4:
-            for (int i=0; i < n->num_children; i++) {
+            for (i=0; i < n->num_children; i++) {
                 res = recursive_iter(((art_node4*)n)->children[i], cb, data);
                 if (res) return res;
             }
             break;
 
         case NODE16:
-            for (int i=0; i < n->num_children; i++) {
+            for (i=0; i < n->num_children; i++) {
                 res = recursive_iter(((art_node16*)n)->children[i], cb, data);
                 if (res) return res;
             }
             break;
 
         case NODE48:
-            for (int i=0; i < 256; i++) {
+            for (i=0; i < 256; i++) {
                 idx = ((art_node48*)n)->keys[i];
                 if (!idx) continue;
 
@@ -790,7 +909,7 @@ static int recursive_iter(art_node *n, art_callback cb, void *data) {
             break;
 
         case NODE256:
-            for (int i=0; i < 256; i++) {
+            for (i=0; i < 256; i++) {
                 if (!((art_node256*)n)->children[i]) continue;
                 res = recursive_iter(((art_node256*)n)->children[i], cb, data);
                 if (res) return res;
