@@ -1,0 +1,12 @@
+sizeof(node) = 576
+sizeof(item) = 32
+max = 128000000
+min = 1
+Insertion Time = 66603910707 ns
+Total space = 1170286880 byte
+Space efficiency = 9
+Search Time = 15764326510 ns
+Range scan 0.1% = 2063252 ns
+Range scan 1% = 20816495 ns
+Range scan 10% = 218996934 ns
+Update Time = 52442073818 ns
