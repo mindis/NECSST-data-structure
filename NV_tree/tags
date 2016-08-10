@@ -10,10 +10,14 @@ CFLAGS	Makefile	/^CFLAGS= -c $/;"	m
 Delete	NV-tree.c	/^int Delete(tree *t, unsigned long key)$/;"	f
 IN	NV-tree.h	/^typedef struct Internal_Node IN;$/;"	t	typeref:struct:Internal_Node
 INPUT_NUM	main.c	8;"	d	file:
+IN_count	NV-tree.c	/^unsigned long IN_count = 0;$/;"	v
+IN_count	NV-tree.h	/^unsigned long IN_count;$/;"	v
 Insert	NV-tree.c	/^int Insert(tree *t, unsigned long key, void *value)$/;"	f
 Internal_Node	NV-tree.h	/^struct Internal_Node {$/;"	s
 LN	NV-tree.h	/^typedef struct Leaf_Node LN;$/;"	t	typeref:struct:Leaf_Node
-LN_Element	NV-tree.h	/^	struct LN_entry LN_Element[169];$/;"	m	struct:Leaf_Node	typeref:struct:Leaf_Node::LN_entry
+LN_Element	NV-tree.h	/^	struct LN_entry LN_Element[MAX_NUM_ENTRY_LN];$/;"	m	struct:Leaf_Node	typeref:struct:Leaf_Node::LN_entry
+LN_count	NV-tree.c	/^unsigned long LN_count = 0;$/;"	v
+LN_count	NV-tree.h	/^unsigned long LN_count;$/;"	v
 LN_entry	NV-tree.h	/^struct LN_entry {$/;"	s
 Leaf_Node	NV-tree.h	/^struct Leaf_Node {$/;"	s
 Lookup	NV-tree.c	/^void *Lookup(tree *t, unsigned long key)$/;"	f
@@ -35,7 +39,7 @@ delete_entry_to_leaf	NV-tree.c	/^void delete_entry_to_leaf(LN *leaf, unsigned lo
 dummy	NV-tree.h	/^	char dummy[16];$/;"	m	struct:Internal_Node
 dummy	NV-tree.h	/^	char dummy[16];$/;"	m	struct:Leaf_Node
 dummy	NV-tree.h	/^	char dummy[8];$/;"	m	struct:Parent_Leaf_Node
-entries	NV-tree.h	/^	struct PLN_entry entries[255];$/;"	m	struct:Parent_Leaf_Node	typeref:struct:Parent_Leaf_Node::PLN_entry
+entries	NV-tree.h	/^	struct PLN_entry entries[MAX_NUM_ENTRY_PLN];$/;"	m	struct:Parent_Leaf_Node	typeref:struct:Parent_Leaf_Node::PLN_entry
 entry	NV-tree.h	/^typedef struct entry entry;$/;"	t	typeref:struct:entry
 find_leaf	NV-tree.c	/^LN *find_leaf(tree *t, unsigned long key)$/;"	f
 first_PLN_id	NV-tree.h	/^	unsigned long first_PLN_id;$/;"	m	struct:tree
@@ -51,7 +55,7 @@ insertion_sort	NV-tree.c	/^void insertion_sort(struct LN_entry *base, int num)$/
 is_leaf	NV-tree.h	/^	unsigned char is_leaf;	\/\/ 0.LN 1.PLN 2.IN$/;"	m	struct:tree
 key	NV-tree.h	/^	unsigned long key;$/;"	m	struct:LN_entry
 key	NV-tree.h	/^	unsigned long key;$/;"	m	struct:PLN_entry
-key	NV-tree.h	/^	unsigned long key[509];$/;"	m	struct:Internal_Node
+key	NV-tree.h	/^	unsigned long key[MAX_NUM_ENTRY_IN];$/;"	m	struct:Internal_Node
 last_PLN_id	NV-tree.h	/^	unsigned long last_PLN_id;$/;"	m	struct:tree
 leaf_scan_divide	NV-tree.c	/^int leaf_scan_divide(tree *t, LN *leaf, LN *split_node1, LN *split_node2)$/;"	f
 leaf_split_and_delete	NV-tree.c	/^int leaf_split_and_delete(tree *t, LN *leaf, unsigned long key, void *value)$/;"	f

@@ -58,16 +58,30 @@
 #./WART_dense_1024M_8 > ./result/WART_dense_1024M_8.txt
 
 #WART one item workload
-./LWART_dense_16M > ./result/LWART_dense_16M.txt
-./LWART_dense_128M > ./result/LWART_dense_128M.txt
-./LWART_sparse_16M > ./result/LWART_sparse_16M.txt
-./LWART_sparse_128M > ./result/LWART_sparse_128M.txt
-./LWART_dense_1024M > ./result/LWART_dense_1024M.txt
-./LWART_sparse_1024M > ./result/LWART_sparse_1024M.txt
+#./LWART_dense_16M > ./result/LWART_dense_16M.txt
+#./LWART_dense_128M > ./result/LWART_dense_128M.txt
+#./LWART_sparse_16M > ./result/LWART_sparse_16M.txt
+#./LWART_sparse_128M > ./result/LWART_sparse_128M.txt
+#./LWART_dense_1024M > ./result/LWART_dense_1024M.txt
+#./LWART_sparse_1024M > ./result/LWART_sparse_1024M.txt
 
-./LWART_dense_16M_noflush > ./result/LWART_dense_16M_noflush.txt
-./LWART_dense_128M_noflush > ./result/LWART_dense_128M_noflush.txt
-./LWART_sparse_16M_noflush > ./result/LWART_sparse_16M_noflush.txt
-./LWART_sparse_128M_noflush > ./result/LWART_sparse_128M_noflush.txt
-./LWART_dense_1024M_noflush > ./result/LWART_dense_1024M_noflush.txt
-./LWART_sparse_1024M_noflush > ./result/LWART_sparse_1024M_noflush.txt
+#./LWART_dense_16M_noflush > ./result/LWART_dense_16M_noflush.txt
+#./LWART_dense_128M_noflush > ./result/LWART_dense_128M_noflush.txt
+#./LWART_sparse_16M_noflush > ./result/LWART_sparse_16M_noflush.txt
+#./LWART_sparse_128M_noflush > ./result/LWART_sparse_128M_noflush.txt
+#./LWART_dense_1024M_noflush > ./result/LWART_dense_1024M_noflush.txt
+#./LWART_sparse_1024M_noflush > ./result/LWART_sparse_1024M_noflush.txt
+
+#WART six item workload
+./WART_tail6_dense_16M > ./result/WART_tail6_dense_16M.txt
+./WART_tail6_dense_128M > ./result/WART_tail6_dense_128M.txt
+
+./WART_tail6_sparse_16M > ./result/WART_tail6_sparse_16M.txt
+./WART_tail6_sparse_128M > ./result/WART_tail6_sparse_128M.txt
+
+./WART_tail6_sparse_1024M > ./result/WART_tail6_sparse_1024M.txt
+./WART_tail6_dense_1024M > ./result/WART_tail6_dense_1024M.txt
+./WART_tail6_synthetic_1024M > ./result/WART_tail6_synthetic_1024M.txt
+
+./NV_dense_1024M > ./result/NV_dense_1024M.txt
+./NV_sparse_1024M > ./result/NV_sparse_1024M.txt

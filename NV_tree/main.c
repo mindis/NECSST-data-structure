@@ -118,7 +118,7 @@ int main(void)
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 	printf("Range scan 10% = %lu ns\n", elapsed_time);
-
+	return 0;
 	/* Update */
 	new_value = malloc(sizeof(unsigned long) * INPUT_NUM);
 	for (i = 0; i < INPUT_NUM; i++)
