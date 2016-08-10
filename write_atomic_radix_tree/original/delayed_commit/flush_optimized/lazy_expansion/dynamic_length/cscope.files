@@ -1,4 +1,3 @@
-./test.c
 ./w_radix_tree.h
 ./w_radix_tree.c
 ./main.c

@@ -71,25 +71,18 @@ int remapping_items(tree *t, node *level_ptr, item *first_item,
 	while (next_item != NULL) {
 		next_key = next_item->key;
 		next_key = (next_key & ((0x1UL << bit_shift) - 1));
-		new_item = allocItem(next_item->key, next_item->value);
 		errval = recursive_alloc_nodes(t, level_ptr, next_item->key, 
-				next_key, next_item->value, new_item, height);
+				next_key, next_item->value, next_item, height);
 		next_item = next_item->next_ptr;
 	}
 
 	if (height != 1) {
 		for (i = 0; i < NUM_ENTRY; i++) {
 			if (level_ptr->entry_ptr[i] != NULL 
-					&& ((item *)level_ptr->entry_ptr[i])->type == ITEM_LAZY) {
-				next_item = level_ptr->entry_ptr[i];
-				while (next_item != NULL) {
-					flush_buffer(next_item, sizeof(item), false);
-					next_item = next_item->next_ptr;
-				}
-			}
+					&& ((item *)level_ptr->entry_ptr[i])->type == ITEM_LAZY)
+					flush_buffer(level_ptr->entry_ptr[i], sizeof(item), false);
 		}
 	}
-
 	return errval;
 }
 
@@ -124,42 +117,19 @@ int recursive_alloc_nodes(tree *t, node *level_ptr, unsigned long key,
 				return errval;
 			}
 
-			int level_count = 1;
 			item *next_item = level_ptr->entry_ptr[index];
 
-			while (next_item->next_ptr != NULL) {
-				next_item = next_item->next_ptr;
-				level_count++;
-			}
+			node *temp_node = allocNode(level_ptr, index);
+			next_item->next_ptr = new_item;
+			errval = remapping_items(t, temp_node, 
+					level_ptr->entry_ptr[index], height - 1);
 
-			if (level_count == height) {
-				item *curr_item;
-				node *temp_node = allocNode(level_ptr, index);
-				next_item->next_ptr = new_item;
-				errval = remapping_items(t, temp_node, 
-						level_ptr->entry_ptr[index], height - 1);
+			level_ptr->entry_ptr[index] = temp_node;
 
-				curr_item = level_ptr->entry_ptr[index];
-				level_ptr->entry_ptr[index] = temp_node;
+			flush_buffer(temp_node, sizeof(node), false);
 
-				next_item = curr_item->next_ptr;
-				while (curr_item != NULL) {
-					free(curr_item);
-					curr_item = next_item;
-					if (next_item != NULL)
-						next_item = curr_item->next_ptr;
-					item_count--;
-				}
-
-				flush_buffer(temp_node, sizeof(node), false);
-
-				if(errval < 0)
-					goto fail;
-			} else {
-				next_item->next_ptr = new_item;
-				if (next_item->next_ptr == NULL)
-					goto fail;
-			}
+			if(errval < 0)
+				goto fail;
 		}
 	}
 	errval = 0;
@@ -199,43 +169,17 @@ int recursive_search_leaf(tree *t, node *level_ptr, unsigned long key,
 				return errval;
 			}
 
-			int level_count = 1;
 			item *next_item = level_ptr->entry_ptr[index];
+			node *temp_node = allocNode(level_ptr, index);
+			next_item->next_ptr = new_item;
+			errval = remapping_items(t, temp_node, next_item, height - 1);
 
-			while (next_item->next_ptr != NULL) {
-				next_item = next_item->next_ptr;
-				level_count++;
-			}
+			level_ptr->entry_ptr[index] = temp_node;
+			flush_buffer(temp_node, sizeof(node), false);
+			flush_buffer(&level_ptr->entry_ptr[index], 8, true);
 
-			if (level_count == height) {
-				item *curr_item;
-				node *temp_node = allocNode(level_ptr, index);
-				next_item->next_ptr = new_item;
-				errval = remapping_items(t, temp_node, 
-						level_ptr->entry_ptr[index], height - 1);
-
-				curr_item = level_ptr->entry_ptr[index];
-				level_ptr->entry_ptr[index] = temp_node;
-
-				next_item = curr_item->next_ptr;
-				while (curr_item != NULL) {
-					free(curr_item);
-					curr_item = next_item;
-					if (next_item != NULL)
-						next_item = curr_item->next_ptr;
-					item_count--;
-				}
-
-				flush_buffer(temp_node, sizeof(node), false);
-				flush_buffer(&level_ptr->entry_ptr[index], 8, true);
-
-				if(errval < 0)
-					goto fail;
-			} else {
-				next_item->next_ptr = new_item;
-				flush_buffer(new_item, sizeof(item), false);
-				flush_buffer(&next_item->next_ptr, 8, true);
-			}
+			if(errval < 0)
+				goto fail;
 		}
 	}
 	errval = 0;
@@ -307,14 +251,9 @@ void *Update(tree *t, unsigned long key, void *value)
 			height--;
 		} else {
 			curr_item = level_ptr->entry_ptr[idx];
-			while (curr_item != NULL) {
-				if (curr_item->key == key) {
-					curr_item->value = value;
-					flush_buffer(&curr_item->value, 8, true);
-					return curr_item->value;
-				}
-				curr_item = curr_item->next_ptr;
-			}
+			curr_item->value = value;
+			flush_buffer(&curr_item->value, 8, true);
+			return curr_item->value;
 		}
 	}
 	bit_shift = (height - 1) * META_NODE_SHIFT;
@@ -349,36 +288,14 @@ void *Lookup(tree *t, unsigned long key)
 			height--;
 		} else {
 			curr_item = level_ptr->entry_ptr[idx];
-			while (curr_item != NULL) {
-				if (curr_item->key == key) {
-					value = curr_item->value;
-					return value;
-				}
-				curr_item = curr_item->next_ptr;
-			}
+			value = curr_item->value;
+			return value;
 		}
 	}
 	bit_shift = (height - 1) * META_NODE_SHIFT;
 	idx = next_key >> bit_shift;
 	value = level_ptr->entry_ptr[idx];
 	return value;
-}
-
-void insertion_sort(entry *base, int num)
-{
-	int i, j;
-	entry temp;
-
-	for (i = 1; i < num; i++) {
-		for (j = i; j > 0; j--) {
-			if (base[j - 1].key > base[j].key) {
-				temp = base[j - 1];
-				base[j - 1] = base[j];
-				base[j] = temp;
-			} else
-				break;
-		}
-	}
 }
 
 void find_next_leaf(node *curr_node, unsigned long index, unsigned long height,
@@ -410,7 +327,7 @@ void find_next_leaf(node *curr_node, unsigned long index, unsigned long height,
 void search_entry_in_node(node *level_ptr, unsigned long index, unsigned long height,
 		unsigned long buf[], unsigned long *count, unsigned long num)
 {
-	int i, item_num;
+	int i;
 	unsigned long next_index;
 
 	if (*count == num || height > MAX_HEIGHT || level_ptr == NULL)
@@ -418,7 +335,7 @@ void search_entry_in_node(node *level_ptr, unsigned long index, unsigned long he
 
 	if (index == NUM_ENTRY) {
 		return search_entry_in_node(level_ptr->parent_ptr, level_ptr->p_index + 1,
-					height + 1, buf, count, num);
+				height + 1, buf, count, num);
 	} else if (level_ptr->entry_ptr[index] == NULL) {
 		next_index = index + 1;
 		return search_entry_in_node(level_ptr, next_index, height, buf, count, num);
@@ -439,39 +356,25 @@ void search_entry_in_node(node *level_ptr, unsigned long index, unsigned long he
 				}
 			}
 			return search_entry_in_node(level_ptr->parent_ptr, level_ptr->p_index + 1,
-						height + 1, buf, count, num);
+					height + 1, buf, count, num);
 		} else {
 			if (((item *)level_ptr->entry_ptr[index])->type == ITEM_LAZY) {
-				entry *item_entry = malloc(MAX_HEIGHT * sizeof(entry));
 				item *next_item = level_ptr->entry_ptr[index];
-				for (i = 0; next_item != NULL; i++) {
-					item_entry[i].key = next_item->key;
-					item_entry[i].value = next_item->value;
-					next_item = next_item->next_ptr;
-				}
-
-				item_num = i;
-				insertion_sort(item_entry, item_num);
-
-				for (i = 0; i < item_num; i++) {
-					buf[*count] = *(unsigned long *)item_entry[i].value;
-					(*count)++;
-					if (*count == num)
-						return ;
-				}
-				free(item_entry);
+				buf[*count] = *(unsigned long *)next_item->value;
+				(*count)++;
+				if (*count == num)
+					return ;
 
 				next_index = index + 1;
 				if (next_index == NUM_ENTRY)
 					return search_entry_in_node(level_ptr->parent_ptr, level_ptr->p_index + 1,
-								height + 1, buf, count, num);
+							height + 1, buf, count, num);
 				else
 					return search_entry_in_node(level_ptr, next_index, height, buf, count, num);
 			} else 
 				return search_entry_in_node(level_ptr->entry_ptr[index], 0, height - 1, buf, count, num);
 		}
 	}
-//	return ;
 }
 
 void Range_Lookup(tree *t, unsigned long start_key, unsigned long num,

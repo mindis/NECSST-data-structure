@@ -38,7 +38,6 @@ item_count	w_radix_tree.h	/^unsigned long item_count;$/;"	v
 key	w_radix_tree.h	/^	unsigned long key;$/;"	m	struct:Entry
 key	w_radix_tree.h	/^	unsigned long key;$/;"	m	struct:Item
 main	main.c	/^int main(void)$/;"	f
-main	test.c	/^int main(void)$/;"	f
 mfence	w_radix_tree.c	9;"	d	file:
 next_ptr	w_radix_tree.h	/^	item *next_ptr;$/;"	m	struct:Item
 node	w_radix_tree.h	/^typedef struct Node node;$/;"	t	typeref:struct:Node
