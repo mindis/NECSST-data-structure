@@ -1,7 +1,7 @@
 #include <stdbool.h>
 
-#define META_NODE_SHIFT 	4
-#define MAX_HEIGHT			16
+#define META_NODE_SHIFT 	8
+#define MAX_HEIGHT			8
 #define CACHE_LINE_SIZE 	64
 #define NUM_ENTRY			(0x1UL << META_NODE_SHIFT)
 #define NODE_ORIGIN			1

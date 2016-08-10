@@ -134,8 +134,6 @@ int recursive_alloc_nodes(tree *t, node *level_ptr, unsigned long key,
 			
 			item_height = (sizeof(node) / sizeof(item));
 
-	//		if (level_count == height) {
-	//		if (level_count == 1) {
 			if (level_count == item_height) {
 				item *curr_item;
 				node *temp_node = allocNode(level_ptr, index);
@@ -212,10 +210,8 @@ int recursive_search_leaf(tree *t, node *level_ptr, unsigned long key,
 				level_count++;
 			}
 			
-			item_height = (sizeof(node) / sizeof(item));
+			item_height = (sizeof(node) / sizeof(item));	//item 높이 바꿀때 item_height 값 변경
 				
-//			if (level_count == height) {
-//			if (level_count == 1) {
 			if (level_count == item_height) {
 				item *curr_item;
 				node *temp_node = allocNode(level_ptr, index);
@@ -480,7 +476,6 @@ void search_entry_in_node(node *level_ptr, unsigned long index, unsigned long he
 				return search_entry_in_node(level_ptr->entry_ptr[index], 0, height - 1, buf, count, num);
 		}
 	}
-//	return ;
 }
 
 void Range_Lookup(tree *t, unsigned long start_key, unsigned long num,

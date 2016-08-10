@@ -1,7 +1,7 @@
 #include <stdbool.h>
 
-#define META_NODE_SHIFT 	4
-#define MAX_HEIGHT			16
+#define META_NODE_SHIFT 	4		//entry 개수 결정 (2의 승수배)
+#define MAX_HEIGHT			16		//최대 키 길이에 대한 높이
 #define CACHE_LINE_SIZE 	64
 #define NUM_ENTRY			(0x1UL << META_NODE_SHIFT)
 #define NODE_ORIGIN			1
