@@ -641,7 +641,6 @@ void insert_entry_to_leaf(LN *leaf, unsigned long key, void *value, bool flush)
 		leaf->LN_Element[leaf->nElements].flag = true;
 		leaf->LN_Element[leaf->nElements].key = key;
 		leaf->LN_Element[leaf->nElements].value = value;
-		mfence();
 		flush_buffer(&leaf->LN_Element[leaf->nElements], 
 				sizeof(struct LN_entry), false);
 		leaf->nElements++;
@@ -776,7 +775,6 @@ void update_entry_to_leaf(LN *leaf, unsigned long old_key, void *old_value,
 		leaf->LN_Element[leaf->nElements + 1].flag = true;
 		leaf->LN_Element[leaf->nElements + 1].key = new_key;
 		leaf->LN_Element[leaf->nElements + 1].value = new_value;
-		mfence();
 		flush_buffer(&leaf->LN_Element[leaf->nElements], 
 				sizeof(struct LN_entry) * 2, false);
 		leaf->nElements = leaf->nElements + 2;
@@ -904,7 +902,6 @@ void delete_entry_to_leaf(LN *leaf, unsigned long key, void *value, bool flush)
 		leaf->LN_Element[leaf->nElements].flag = false;
 		leaf->LN_Element[leaf->nElements].key = key;
 		leaf->LN_Element[leaf->nElements].value = value;
-		mfence();
 		flush_buffer(&leaf->LN_Element[leaf->nElements], 
 				sizeof(struct LN_entry), false);
 		leaf->nElements++;
