@@ -15,6 +15,7 @@ int main(void)
 	tag_bit *bit = malloc(2 * sizeof(tag_bit));
 	bit = (tag_bit *)&sor;
 
+	printf("%d\n", sizeof(long double));
 	printf("%d\n", bit[0].a);
 	printf("%d\n", bit[1].a);
 

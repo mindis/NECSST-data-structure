@@ -14,7 +14,7 @@ int main(void)
 	int i, j;
 	char *dummy;
 	unsigned long *keys, *new_value;
-	unsigned long long *_keys;
+	long double *_keys;
 	unsigned long elapsed_time;
 	void *ret;
 	FILE *fp;
@@ -32,7 +32,7 @@ int main(void)
 		exit(0);
 	}
 
-	_keys = malloc(sizeof(unsigned long long) * INPUT_NUM);
+	_keys = malloc(sizeof(long double) * INPUT_NUM);
 	keys = malloc(sizeof(unsigned long) * INPUT_NUM);
 	buf = malloc(sizeof(unsigned long) * INPUT_NUM);
 	memset(buf, 0, sizeof(unsigned long) * INPUT_NUM);
@@ -41,13 +41,13 @@ int main(void)
 //		keys[i] = i;
 		fscanf(fp, "%lu", &keys[i]);
 		keys[i] = __bswap_64(keys[i]);
-		memcpy((unsigned char *)temp, &keys[i], 8);
+		memcpy(temp, &keys[i], 8);
 
 		for (j = 7; j >= 0; j--) {
 			_temp[(j * 2)] = (temp[j] & LOW_BIT_MASK);
 			_temp[(j * 2) + 1] = (temp[j] >> 4);
 		}
-		memcpy((unsigned char *)&_keys[i], _temp, 16);
+		memcpy(&_keys[i], _temp, 16);
 	}
 
 	fclose(fp);
@@ -74,7 +74,7 @@ int main(void)
 	flush_buffer((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for(i = 0; i < INPUT_NUM; i++) {
-		art_insert(t, (unsigned char *)&_keys[i], sizeof(_keys[i]), &_keys[i]);// < 0) {
+		art_insert(t, (unsigned char *)&_keys[i], sizeof(long double), &_keys[i]);// < 0) {
 		//	printf("Insert error!\n");
 		//	exit(1);
 	//	}
@@ -97,7 +97,7 @@ int main(void)
 	flush_buffer((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for (i = 0; i < INPUT_NUM; i++) {
-		ret = art_search(t, (unsigned char*)&_keys[i], sizeof(_keys[i]));	
+		ret = art_search(t, (unsigned char*)&_keys[i], sizeof(long double));	
 	//	if (ret == NULL) {
 	//		printf("There is no key[%d] = %lu\n", i, keys[i]);
 	//		exit(1);
