@@ -61,7 +61,7 @@ int main(void)
 	flush_buffer((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for(i = 0; i < INPUT_NUM; i++) {
-		art_insert(t, (unsigned char *)&keys[i], sizeof(keys[i]), &keys[i]);// < 0) {
+		art_insert(t, (unsigned char *)&keys[i], sizeof(keys[i]) * 2, &keys[i]);// < 0) {
 		//	printf("Insert error!\n");
 		//	exit(1);
 	//	}
@@ -80,7 +80,7 @@ int main(void)
 	flush_buffer((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for (i = 0; i < INPUT_NUM; i++) {
-		ret = art_search(t, (unsigned char*)&keys[i], sizeof(keys[i]));	
+		ret = art_search(t, (unsigned char*)&keys[i], sizeof(keys[i]) * 2);	
 	//	if (ret == NULL) {
 	//		printf("There is no key[%d] = %lu\n", i, keys[i]);
 	//		exit(1);

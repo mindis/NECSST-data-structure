@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdbool.h>
 #ifndef ART_H
 #define ART_H
 
@@ -6,6 +7,14 @@
 extern "C" {
 #endif
 
+unsigned long node_count;
+unsigned long leaf_count;
+
+#define CACHE_LINE_SIZE 64
+#define LOW_BIT_MASK	((0x1UL << 4) - 1)
+#define HIGH_BIT_MASK	(((0x1UL << 8) - 1) ^ LOW_BIT_MASK)
+
+#define WNODE	0
 #define NODE4   1
 #define NODE16  2
 #define NODE48  3
@@ -70,7 +79,8 @@ typedef struct {
  */
 typedef struct {
     art_node n;
-    art_node *children[256];
+//    art_node *children[256];
+	art_node *children[16];
 } art_node256;
 
 /**
@@ -119,7 +129,7 @@ int art_tree_destroy(art_tree *t);
 
 /**
  * Returns the size of the ART tree.
- */
+
 #ifdef BROKEN_GCC_C99_INLINE
 # define art_size(t) ((t)->size)
 #else
@@ -127,6 +137,7 @@ inline uint64_t art_size(art_tree *t) {
     return t->size;
 }
 #endif
+*/
 
 /**
  * Inserts a new value into the ART tree
@@ -196,6 +207,8 @@ int art_iter(art_tree *t, art_callback cb, void *data);
  * @return 0 on success, or the return of the callback.
  */
 int art_iter_prefix(art_tree *t, const unsigned char *prefix, int prefix_len, art_callback cb, void *data);
+
+void flush_buffer(void *buf, unsigned long len, bool fence);
 
 #ifdef __cplusplus
 }

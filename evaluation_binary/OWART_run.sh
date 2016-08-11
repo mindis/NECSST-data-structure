@@ -73,15 +73,19 @@
 #./LWART_sparse_1024M_noflush > ./result/LWART_sparse_1024M_noflush.txt
 
 #WART six item workload
-./WART_tail6_dense_16M > ./result/WART_tail6_dense_16M.txt
-./WART_tail6_dense_128M > ./result/WART_tail6_dense_128M.txt
+#./WART_tail6_dense_16M > ./result/WART_tail6_dense_16M.txt
+#./WART_tail6_dense_128M > ./result/WART_tail6_dense_128M.txt
 
-./WART_tail6_sparse_16M > ./result/WART_tail6_sparse_16M.txt
-./WART_tail6_sparse_128M > ./result/WART_tail6_sparse_128M.txt
+#./WART_tail6_sparse_16M > ./result/WART_tail6_sparse_16M.txt
+#./WART_tail6_sparse_128M > ./result/WART_tail6_sparse_128M.txt
 
-./WART_tail6_sparse_1024M > ./result/WART_tail6_sparse_1024M.txt
-./WART_tail6_dense_1024M > ./result/WART_tail6_dense_1024M.txt
-./WART_tail6_synthetic_1024M > ./result/WART_tail6_synthetic_1024M.txt
+#./WART_tail6_sparse_1024M > ./result/WART_tail6_sparse_1024M.txt
+#./WART_tail6_dense_1024M > ./result/WART_tail6_dense_1024M.txt
 
-./NV_dense_1024M > ./result/NV_dense_1024M.txt
-./NV_sparse_1024M > ./result/NV_sparse_1024M.txt
+#./NV_dense_1024M > ./result/NV_dense_1024M.txt
+#./NV_sparse_1024M > ./result/NV_sparse_1024M.txt
+
+#Synthetic workload
+#./WART_tail6_synthetic_1024M > ./result/WART_tail6_synthetic_1024M.txt
+./wbtree_synthetic_1024M_4 > ./result/wbtree_synthetic_1024M_4.txt
+./FPTree_synthetic_1024M > ./result/FPTree_synthetic_1024M.txt

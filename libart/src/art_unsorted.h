@@ -1,10 +1,30 @@
 #include <stdint.h>
+#include <stdbool.h>
 #ifndef ART_H
 #define ART_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define CACHE_LINE_SIZE	64
+
+#define LOG_DATA_SIZE		48
+#define LOG_AREA_SIZE		4194304
+#define LE_DATA			0
+#define LE_COMMIT		1
+
+typedef struct {
+	unsigned int size;
+	unsigned char type;
+	void *addr;
+	char data[LOG_DATA_SIZE];
+} log_entry;
+
+typedef struct {
+	log_entry *next_offset;
+	char log_data[LOG_AREA_SIZE];
+} log_area;
 
 #define NODE4   1
 #define NODE16  2
@@ -119,7 +139,7 @@ int art_tree_destroy(art_tree *t);
 
 /**
  * Returns the size of the ART tree.
- */
+
 #ifdef BROKEN_GCC_C99_INLINE
 # define art_size(t) ((t)->size)
 #else
@@ -127,7 +147,7 @@ inline uint64_t art_size(art_tree *t) {
     return t->size;
 }
 #endif
-
+*/
 /**
  * Inserts a new value into the ART tree
  * @arg t The tree
@@ -196,6 +216,8 @@ int art_iter(art_tree *t, art_callback cb, void *data);
  * @return 0 on success, or the return of the callback.
  */
 int art_iter_prefix(art_tree *t, const unsigned char *prefix, int prefix_len, art_callback cb, void *data);
+
+void flush_buffer(void *buf, unsigned long len, bool fence);
 
 #ifdef __cplusplus
 }

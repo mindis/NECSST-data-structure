@@ -604,11 +604,13 @@ int insert_to_PLN(tree *t, unsigned long parent_id,
 	PLN *parent = (PLN *)t->root;
 
 	if (parent[parent_id].nKeys == MAX_NUM_ENTRY_PLN) {
+		/* PLN split */
 		entry_index = reconstruct_PLN(t, parent_id, insert_key, 
 				split_max_key, split_node1, split_node2);
 		if (entry_index < 0)
 			goto fail;
 	} else if (split_max_key <= parent[parent_id].entries[parent[parent_id].nKeys - 1].key) {
+		/* Not PLN split */
 		for (entry_index = 0; entry_index < parent[parent_id].nKeys; entry_index++) {
 			if (split_max_key <= parent[parent_id].entries[entry_index].key) {
 

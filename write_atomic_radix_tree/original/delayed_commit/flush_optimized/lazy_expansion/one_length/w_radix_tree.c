@@ -99,7 +99,7 @@ int recursive_alloc_nodes(tree *t, node *level_ptr, unsigned long key,
 	if (height == 1) {
 		level_ptr->entry_ptr[index] = value;
 		free(new_item);
-		item_count--;
+	//	item_count--;
 		if (level_ptr->entry_ptr[index] == NULL)
 			goto fail;
 	} else {
@@ -151,7 +151,7 @@ int recursive_search_leaf(tree *t, node *level_ptr, unsigned long key,
 		level_ptr->entry_ptr[index] = value;
 		flush_buffer(&level_ptr->entry_ptr[index], 8, true);
 		free(new_item);
-		item_count--;
+	//	item_count--;
 		if (level_ptr->entry_ptr[index] == NULL)
 			goto fail;
 	} else {
