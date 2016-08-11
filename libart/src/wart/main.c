@@ -44,8 +44,8 @@ int main(void)
 		memcpy((unsigned char *)temp, &keys[i], 8);
 
 		for (j = 7; j >= 0; j--) {
-			_temp[j * 2] = (temp[j] & LOW_BIT_MASK);
-			_temp[(j * 2) + 1] = (temp[j] >> 4);
+			_temp[(j * 2) + 1] = (temp[j] & LOW_BIT_MASK);
+			_temp[(j * 2)] = (temp[j] >> 4);
 		}
 		memcpy((unsigned char *)&_keys[i], _temp, 16);
 	}

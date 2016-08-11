@@ -517,8 +517,6 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned char *
 		return NULL;
 	}
 
-	printf("depth = %d\n", depth);
-
 	// If we are at a leaf, we need to replace it with a node
 	if (IS_LEAF(n)) {
 		art_leaf *l = LEAF_RAW(n);
