@@ -87,5 +87,15 @@
 
 #Synthetic workload
 #./WART_tail6_synthetic_1024M > ./result/WART_tail6_synthetic_1024M.txt
-./wbtree_synthetic_1024M_4 > ./result/wbtree_synthetic_1024M_4.txt
-./FPTree_synthetic_1024M > ./result/FPTree_synthetic_1024M.txt
+#./wbtree_synthetic_1024M_4 > ./result/wbtree_synthetic_1024M_4.txt
+#./FPTree_synthetic_1024M > ./result/FPTree_synthetic_1024M.txt
+
+#ART_LP test
+./ART_LP_dense_16M > ./result/ART_LP_dense_16M.txt
+./ART_LP_dense_128M > ./result/ART_LP_dense_128M.txt
+./ART_LP_sparse_16M > ./result/ART_LP_sparse_16M.txt
+./ART_LP_sparse_128M > ./result/ART_LP_sparse_128M.txt
+
+./ART_LP_dense_1024M > ./result/ART_LP_dense_1024M.txt
+./ART_LP_sparse_1024M > ./result/ART_LP_sparse_1024M.txt
+./ART_LP_synthetic_1024M > ./result/ART_LP_synthetic_1024M.txt
