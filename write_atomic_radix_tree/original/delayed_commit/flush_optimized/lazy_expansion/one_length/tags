@@ -31,7 +31,6 @@ find_next_leaf	w_radix_tree.c	/^void find_next_leaf(node *curr_node, unsigned lo
 flush_buffer	w_radix_tree.c	/^void flush_buffer(void *buf, unsigned long len, bool fence)$/;"	f
 height	w_radix_tree.h	/^	unsigned long height;$/;"	m	struct:Tree
 initTree	w_radix_tree.c	/^tree *initTree()$/;"	f
-insertion_sort	w_radix_tree.c	/^void insertion_sort(entry *base, int num)$/;"	f
 item	w_radix_tree.h	/^typedef struct Item item;$/;"	t	typeref:struct:Item
 item_count	w_radix_tree.c	/^unsigned long item_count = 0;$/;"	v
 item_count	w_radix_tree.h	/^unsigned long item_count;$/;"	v

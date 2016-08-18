@@ -1,0 +1,83 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ART_H	art.h	3;"	d
+BROKEN_GCC_C99_INLINE	art.h	23;"	d
+IS_LEAF	art.c	12;"	d	file:
+LEAF_RAW	art.c	14;"	d	file:
+MAX_PREFIX_LEN	art.h	14;"	d
+NODE16	art.h	10;"	d
+NODE256	art.h	12;"	d
+NODE4	art.h	9;"	d
+NODE48	art.h	11;"	d
+SET_LEAF	art.c	13;"	d	file:
+add_child	art.c	/^static void add_child(art_node *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+add_child16	art.c	/^static void add_child16(art_node16 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+add_child256	art.c	/^static void add_child256(art_node256 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+add_child4	art.c	/^static void add_child4(art_node4 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+add_child48	art.c	/^static void add_child48(art_node48 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+alloc_node	art.c	/^static art_node* alloc_node(uint8_t type) {$/;"	f	file:
+art_callback	art.h	/^typedef int(*art_callback)(void *data, const unsigned char *key, uint32_t key_len, void *value);$/;"	t
+art_delete	art.c	/^void* art_delete(art_tree *t, const unsigned char *key, int key_len) {$/;"	f
+art_insert	art.c	/^void* art_insert(art_tree *t, const unsigned char *key, int key_len, void *value) {$/;"	f
+art_iter	art.c	/^int art_iter(art_tree *t, art_callback cb, void *data) {$/;"	f
+art_iter_prefix	art.c	/^int art_iter_prefix(art_tree *t, const unsigned char *key, int key_len, art_callback cb, void *data) {$/;"	f
+art_leaf	art.h	/^} art_leaf;$/;"	t	typeref:struct:__anon6
+art_maximum	art.c	/^art_leaf* art_maximum(art_tree *t) {$/;"	f
+art_minimum	art.c	/^art_leaf* art_minimum(art_tree *t) {$/;"	f
+art_node	art.h	/^} art_node;$/;"	t	typeref:struct:__anon1
+art_node16	art.h	/^} art_node16;$/;"	t	typeref:struct:__anon3
+art_node256	art.h	/^} art_node256;$/;"	t	typeref:struct:__anon5
+art_node4	art.h	/^} art_node4;$/;"	t	typeref:struct:__anon2
+art_node48	art.h	/^} art_node48;$/;"	t	typeref:struct:__anon4
+art_search	art.c	/^void* art_search(const art_tree *t, const unsigned char *key, int key_len) {$/;"	f
+art_size	art.h	/^inline uint64_t art_size(art_tree *t) {$/;"	f
+art_size	art.h	124;"	d
+art_tree	art.h	/^} art_tree;$/;"	t	typeref:struct:__anon7
+art_tree_destroy	art.c	/^int art_tree_destroy(art_tree *t) {$/;"	f
+art_tree_init	art.c	/^int art_tree_init(art_tree *t) {$/;"	f
+check_prefix	art.c	/^static int check_prefix(const art_node *n, const unsigned char *key, int key_len, int depth) {$/;"	f	file:
+children	art.h	/^    art_node *children[16];$/;"	m	struct:__anon3
+children	art.h	/^    art_node *children[256];$/;"	m	struct:__anon5
+children	art.h	/^    art_node *children[48];$/;"	m	struct:__anon4
+children	art.h	/^    art_node *children[4];$/;"	m	struct:__anon2
+copy_header	art.c	/^static void copy_header(art_node *dest, art_node *src) {$/;"	f	file:
+destroy_art_tree	art.h	118;"	d
+destroy_node	art.c	/^static void destroy_node(art_node *n) {$/;"	f	file:
+find_child	art.c	/^static art_node** find_child(art_node *n, unsigned char c) {$/;"	f	file:
+init_art_tree	art.h	105;"	d
+key	art.h	/^    unsigned char key[];$/;"	m	struct:__anon6
+key_len	art.h	/^    uint32_t key_len;$/;"	m	struct:__anon6
+keys	art.h	/^    unsigned char keys[16];$/;"	m	struct:__anon3
+keys	art.h	/^    unsigned char keys[256];$/;"	m	struct:__anon4
+keys	art.h	/^    unsigned char keys[4];$/;"	m	struct:__anon2
+leaf_matches	art.c	/^static int leaf_matches(const art_leaf *n, const unsigned char *key, int key_len, int depth) {$/;"	f	file:
+leaf_prefix_matches	art.c	/^static int leaf_prefix_matches(const art_leaf *n, const unsigned char *prefix, int prefix_len) {$/;"	f	file:
+longest_common_prefix	art.c	/^static int longest_common_prefix(art_leaf *l1, art_leaf *l2, int depth) {$/;"	f	file:
+make_leaf	art.c	/^static art_leaf* make_leaf(const unsigned char *key, int key_len, void *value) {$/;"	f	file:
+maximum	art.c	/^static art_leaf* maximum(const art_node *n) {$/;"	f	file:
+min	art.c	/^static inline int min(int a, int b) {$/;"	f	file:
+minimum	art.c	/^static art_leaf* minimum(const art_node *n) {$/;"	f	file:
+n	art.h	/^    art_node n;$/;"	m	struct:__anon2
+n	art.h	/^    art_node n;$/;"	m	struct:__anon3
+n	art.h	/^    art_node n;$/;"	m	struct:__anon4
+n	art.h	/^    art_node n;$/;"	m	struct:__anon5
+num_children	art.h	/^    uint8_t num_children;$/;"	m	struct:__anon1
+partial	art.h	/^    unsigned char partial[MAX_PREFIX_LEN];$/;"	m	struct:__anon1
+partial_len	art.h	/^    uint32_t partial_len;$/;"	m	struct:__anon1
+prefix_mismatch	art.c	/^static int prefix_mismatch(const art_node *n, const unsigned char *key, int key_len, int depth) {$/;"	f	file:
+recursive_delete	art.c	/^static art_leaf* recursive_delete(art_node *n, art_node **ref, const unsigned char *key, int key_len, int depth) {$/;"	f	file:
+recursive_insert	art.c	/^static void* recursive_insert(art_node *n, art_node **ref, const unsigned char *key, int key_len, void *value, int depth, int *old) {$/;"	f	file:
+recursive_iter	art.c	/^static int recursive_iter(art_node *n, art_callback cb, void *data) {$/;"	f	file:
+remove_child	art.c	/^static void remove_child(art_node *n, art_node **ref, unsigned char c, art_node **l) {$/;"	f	file:
+remove_child16	art.c	/^static void remove_child16(art_node16 *n, art_node **ref, art_node **l) {$/;"	f	file:
+remove_child256	art.c	/^static void remove_child256(art_node256 *n, art_node **ref, unsigned char c) {$/;"	f	file:
+remove_child4	art.c	/^static void remove_child4(art_node4 *n, art_node **ref, art_node **l) {$/;"	f	file:
+remove_child48	art.c	/^static void remove_child48(art_node48 *n, art_node **ref, unsigned char c) {$/;"	f	file:
+root	art.h	/^    art_node *root;$/;"	m	struct:__anon7
+size	art.h	/^    uint64_t size;$/;"	m	struct:__anon7
+type	art.h	/^    uint8_t type;$/;"	m	struct:__anon1
+value	art.h	/^    void *value;$/;"	m	struct:__anon6

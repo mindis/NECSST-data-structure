@@ -1,0 +1,41 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+BIN_DIR	Makefile	/^BIN_DIR = .\/$/;"	m
+CACHE_LINE_SIZE	art_d.h	4;"	d
+CFLAGS	Makefile	/^CFLAGS = -c$/;"	m
+CoW_Tree	art_d.c	/^tree *CoW_Tree(node *changed_root, unsigned long height)$/;"	f
+Delete	art_d.c	/^void Delete(tree *t, unsigned long key)$/;"	f
+INPUT_NUM	main.c	8;"	d	file:
+Insert	art_d.c	/^int Insert(tree **t, unsigned long key, void *value) $/;"	f
+Lookup	art_d.c	/^void *Lookup(tree *t, unsigned long key)$/;"	f
+META_NODE_SHIFT	art_d.h	3;"	d
+NUM_ENTRY	art_d.h	5;"	d
+Node	art_d.h	/^struct Node {$/;"	s
+Range_Lookup	art_d.c	/^void Range_Lookup(tree *t, unsigned long start_key, unsigned long num,$/;"	f
+Tree	art_d.h	/^struct Tree {$/;"	s
+Update	art_d.c	/^void *Update(tree *t, unsigned long key, void *value)$/;"	f
+allocNode	art_d.c	/^node *allocNode(node *parent, unsigned long index)$/;"	f
+dummy	art_d.h	/^	char dummy[48];		\/\/ 3, 4, 5, 6, 7, 8, 9$/;"	m	struct:Node
+entry_ptr	art_d.h	/^	void *entry_ptr[NUM_ENTRY];$/;"	m	struct:Node
+find_next_leaf	art_d.c	/^node *find_next_leaf(tree *t, node *parent, unsigned long index, $/;"	f
+flush_buffer	art_d.c	/^void flush_buffer(void *buf, unsigned long len, bool fence)$/;"	f
+height	art_d.h	/^	unsigned long height;$/;"	m	struct:Tree
+increase_radix_tree_height	art_d.c	/^int increase_radix_tree_height(tree **t, unsigned long new_height)$/;"	f
+initTree	art_d.c	/^tree *initTree()$/;"	f
+main	main.c	/^int main(void)$/;"	f
+mfence	art_d.c	9;"	d	file:
+node	art_d.h	/^typedef struct Node node;$/;"	t	typeref:struct:Node
+node_count	art_d.c	/^unsigned long node_count = 0;$/;"	v
+node_count	art_d.h	/^unsigned long node_count;$/;"	v
+p_index	art_d.h	/^	unsigned long p_index;$/;"	m	struct:Node
+parent_ptr	art_d.h	/^	node *parent_ptr;$/;"	m	struct:Node
+recursive_alloc_nodes	art_d.c	/^int recursive_alloc_nodes(node *temp_node, unsigned long key, void *value,$/;"	f
+recursive_free_nodes	art_d.c	/^int recursive_free_nodes(tree *t, node *parent, unsigned long index,$/;"	f
+recursive_search_leaf	art_d.c	/^int recursive_search_leaf(node *level_ptr, unsigned long key, void *value, $/;"	f
+root	art_d.h	/^	node *root;$/;"	m	struct:Tree
+search_to_next_leaf	art_d.c	/^node *search_to_next_leaf(node *next_branch, unsigned long height)$/;"	f
+tree	art_d.h	/^typedef struct Tree tree;$/;"	t	typeref:struct:Tree

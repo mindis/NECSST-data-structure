@@ -92,7 +92,7 @@ int main(void)
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);	
 	printf("Search Time = %lu ns\n", elapsed_time);
-
+	return 0;
 	/* Range scan 0.1% */
 	memset(dummy, 0, 15*1024*1024);
 	flush_buffer((void *)dummy, 15*1024*1024, true);

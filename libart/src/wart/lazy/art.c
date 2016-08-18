@@ -153,6 +153,12 @@ static art_node** find_child(art_node *n, unsigned char c) {
 		art_node48 *p3;
 		art_node256 *p4;
 	} p;
+
+	p.p4 = (art_node256*)n;
+	if (p.p4->children[c])
+		return &p.p4->children[c];
+
+/*
 	switch (n->type) {
 		case NODE4:
 			p.p1 = (art_node4*)n;
@@ -175,11 +181,11 @@ static art_node** find_child(art_node *n, unsigned char c) {
 				mask = (1 << n->num_children) - 1;
 				bitfield = _mm_movemask_epi8(cmp) & mask;
 
-				/*
-				 * If we have a match (any bit set) then we can
-				 * return the pointer match using ctz to get
-				 * the index.
-				 */
+				
+				// * If we have a match (any bit set) then we can
+				// * return the pointer match using ctz to get
+				// * the index.
+				 
 				if (bitfield)
 					return &p.p2->children[__builtin_ctz(bitfield)];
 				break;
@@ -201,6 +207,7 @@ static art_node** find_child(art_node *n, unsigned char c) {
 		default:
 			abort();
 	}
+*/
 	return NULL;
 }
 
@@ -233,7 +240,8 @@ static int leaf_matches(const art_leaf *n, const unsigned char *key, int key_len
 	if (n->key_len != (uint32_t)key_len) return 1;
 
 	// Compare the keys starting at the depth
-	return memcmp(n->key, key, key_len);
+//	return memcmp(n->key, key, key_len);
+	return 0;
 }
 
 /**
@@ -261,12 +269,14 @@ void* art_search(const art_tree *t, const unsigned char *key, int key_len) {
 		}
 
 		// Bail if the prefix does not match
+		/*
 		if (n->partial_len) {
 			prefix_len = check_prefix(n, key, key_len, depth);
 			if (prefix_len != min(MAX_PREFIX_LEN, n->partial_len))
 				return NULL;
 			depth = depth + n->partial_len;
 		}
+		*/
 
 		// Recursively search
 		child = find_child(n, key[depth]);
@@ -369,7 +379,7 @@ static void copy_header(art_node *dest, art_node *src) {
 
 static void add_child256(art_node256 *n, art_node **ref, unsigned char c, void *child) {
 	(void)ref;
-	n->n.num_children++;
+//	n->n.num_children++;
 	n->children[c] = (art_node*)child;
 }
 
@@ -524,13 +534,13 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned char *
 		art_leaf *l = LEAF_RAW(n);
 
 		// Check if we are updating an existing value
-		if (!leaf_matches(l, key, key_len, depth)) {
-			*old = 1;
-			void *old_val = l->value;
-			l->value = value;
-			flush_buffer(&l->value, 8, true);
-			return old_val;
-		}
+//		if (!leaf_matches(l, key, key_len, depth)) {
+//			*old = 1;
+//			void *old_val = l->value;
+//			l->value = value;
+//			flush_buffer(&l->value, 8, true);
+//			return old_val;
+//		}
 
 		// New value, we must split the leaf into a node4
 		art_node256 *new_node = (art_node256*)alloc_node(NODE256);
@@ -540,13 +550,15 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned char *
 		art_leaf *l2 = make_leaf(key, key_len, value);
 
 		// Determine longest prefix
-		int longest_prefix = longest_common_prefix(l, l2, depth);
-		new_node->n.partial_len = longest_prefix;
-		memcpy(new_node->n.partial, key+depth, min(MAX_PREFIX_LEN, longest_prefix));
+//		int longest_prefix = longest_common_prefix(l, l2, depth);
+//		new_node->n.partial_len = longest_prefix;
+//		memcpy(new_node->n.partial, key+depth, min(MAX_PREFIX_LEN, longest_prefix));
 		// Add the leafs to the new node4
 		*ref = (art_node*)new_node;
-		add_child256(new_node, ref, l->key[depth+longest_prefix], SET_LEAF(l));
-		add_child256(new_node, ref, l2->key[depth+longest_prefix], SET_LEAF(l2));
+		add_child256(new_node, ref, l->key[depth], SET_LEAF(l));
+		add_child256(new_node, ref, l2->key[depth], SET_LEAF(l2));
+//		add_child256(new_node, ref, l->key[depth+longest_prefix], SET_LEAF(l));
+//		add_child256(new_node, ref, l2->key[depth+longest_prefix], SET_LEAF(l2));
 
 		flush_buffer(new_node, sizeof(art_node256), false);
 		flush_buffer(l2, sizeof(art_leaf) + key_len, false);
@@ -555,7 +567,7 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned char *
 //		add_child4(new_node, ref, l2->key[depth+longest_prefix], SET_LEAF(l2));
 		return NULL;
 	}
-
+/*
 	// Check if given node has a prefix
 	if (n->partial_len) {
 		// Determine if the prefixes differ, since we need to split
@@ -603,7 +615,7 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned char *
 	}
 
 RECURSE_SEARCH:;
-
+*/
 	// Find a child to recurse to
 	art_node **child = find_child(n, key[depth]);
 	if (child) {
@@ -637,7 +649,7 @@ void* art_insert(art_tree *t, const unsigned char *key, int key_len, void *value
 
 static void remove_child256(art_node256 *n, art_node **ref, unsigned char c) {
 	n->children[c] = NULL;
-	n->n.num_children--;
+//	n->n.num_children--;
 
 	// Resize to a node48 on underflow, not immediately to prevent
 	// trashing if we sit on the 48/49 boundary

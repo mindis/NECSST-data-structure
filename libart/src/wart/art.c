@@ -560,11 +560,11 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned char *
 	if (n->partial_len) {
 		// Determine if the prefixes differ, since we need to split
 		int prefix_diff = prefix_mismatch(n, key, key_len, depth);
-		if ((uint32_t)prefix_diff >= n->partial_len) {
+		if ((uint32_t)prefix_diff >= n->partial_len) {  //[kh] no split
 			depth += n->partial_len;
 			goto RECURSE_SEARCH;
 		}
-
+		//[kh] split
 		art_node *copy_node = (art_node *)malloc(sizeof(art_node256));
 		memcpy(copy_node, n, sizeof(art_node256));
 		// Create a new node
@@ -575,13 +575,13 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned char *
 		memcpy(new_node->n.partial, copy_node->partial, min(MAX_PREFIX_LEN, prefix_diff));
 
 		// Adjust the prefix of the old node
-		if (copy_node->partial_len <= MAX_PREFIX_LEN) {
+		if (copy_node->partial_len <= MAX_PREFIX_LEN) { //[kh] real part split
 //			add_child4(new_node, ref, n->partial[prefix_diff], n);
 			add_child256(new_node, ref, copy_node->partial[prefix_diff], copy_node);
 			copy_node->partial_len -= (prefix_diff+1);
 			memmove(copy_node->partial, copy_node->partial+prefix_diff+1,
 					min(MAX_PREFIX_LEN, copy_node->partial_len));
-		} else {
+		} else {	//[kh] virtual part split
 			copy_node->partial_len -= (prefix_diff+1);
 			art_leaf *l = minimum(copy_node);
 			add_child256(new_node, ref, l->key[depth+prefix_diff], copy_node);
