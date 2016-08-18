@@ -49,10 +49,9 @@ static int get_index(unsigned long key, int depth)
  * Allocates a node of the given type,
  * initializes to zero and sets the type.
  */
-static art_node* alloc_node(int index) {
-	art_node* n;
-	n = (art_node*)calloc(1, sizeof(art_node16));
-	n->p_index = index;
+static art_node16* alloc_node() {
+	art_node16 * n;
+	n = (art_node16 *)calloc(1, sizeof(art_node16));
 	node_count++;
 	return n;
 }
@@ -144,10 +143,10 @@ free(n);
 extern inline uint64_t art_size(art_tree *t);
 #endif
 
-static art_node** find_child(art_node *n, unsigned char c) {
+static art_node16** find_child(art_node16 *n, unsigned char c) {
 	art_node16 *p;
 
-	p = (art_node16 *)n;
+	p = n;
 	if (p->children[c])
 		return &p->children[c];
 
@@ -198,14 +197,14 @@ static int leaf_matches(const art_leaf *n, unsigned long key, int key_len, int d
  * the value pointer is returned.
  */
 void* art_search(const art_tree *t, const unsigned long key, int key_len) {
-	art_node **child;
-	art_node *n = t->root;
+	art_node16 **child;
+	art_node16 *n = t->root;
 	int depth = 0;
 
 	while (n) {
 		// Might be a leaf
 		if (IS_LEAF(n)) {
-			n = (art_node*)LEAF_RAW(n);
+			n = (art_node16*)LEAF_RAW(n);
 			// Check if the expanded path matches
 			if (!leaf_matches((art_leaf*)n, key, key_len, depth)) {
 				return ((art_leaf*)n)->value;
@@ -222,7 +221,7 @@ void* art_search(const art_tree *t, const unsigned long key, int key_len) {
 }
 
 // Find the minimum leaf under a node
-static art_leaf* minimum(const art_node *n) {
+static art_leaf* minimum(const art_node16 *n) {
 	// Handle base cases
 	if (!n) return NULL;
 	if (IS_LEAF(n)) return LEAF_RAW(n);
@@ -307,23 +306,22 @@ static int longest_common_prefix(art_leaf *l1, art_leaf *l2, int depth) {
    }
    */
 
-static void add_child(art_node16 *n, art_node **ref, unsigned char c, void *child) {
+static void add_child(art_node16 *n, art_node16 **ref, unsigned char c, void *child) {
 	(void)ref;
-	n->children[c] = (art_node*)child;
+	n->children[c] = (art_node16*)child;
 }
 
 /**
  * Calculates the index at which the prefixes mismatch
- */
 static int prefix_mismatch(const art_node *n, const unsigned long key, int key_len, int depth, art_leaf **l) {
-	/*
+	
 	   int max_cmp = min(min(MAX_PREFIX_LEN, n->partial_len), (key_len * INDEX_BITS) - depth);
 	   int idx;
 	   for (idx=0; idx < max_cmp; idx++) {
 	   if (n->partial[idx] != get_index(key, depth + idx))
 	   return idx;
 	   }
-	   */
+
 	int max_cmp;
 	int idx;
 	// If the prefix is short we can avoid finding a leaf
@@ -338,13 +336,14 @@ static int prefix_mismatch(const art_node *n, const unsigned long key, int key_l
 	//}
 	return idx;
 }
+*/
 
-static void* recursive_insert(art_node *n, art_node **ref, const unsigned long key,
+static void* recursive_insert(art_node16 *n, art_node16 **ref, const unsigned long key,
 		int key_len, void *value, int depth, int *old)
 {
 	// If we are at a NULL node, inject a leaf
 	if (!n) {
-		*ref = (art_node*)SET_LEAF(make_leaf(key, key_len, value));
+		*ref = (art_node16 *)SET_LEAF(make_leaf(key, key_len, value));
 		flush_buffer(*ref, sizeof(art_leaf), false);
 		flush_buffer(ref, 8, true);
 		return NULL;
@@ -364,7 +363,7 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned long k
 		}
 
 		// New value, we must split the leaf into a node4
-		art_node16 *new_node = (art_node16 *)alloc_node(get_index(key, depth - 1));
+		art_node16 *new_node = alloc_node();
 
 		// Create a new leaf
 		art_leaf *l2 = make_leaf(key, key_len, value);
@@ -374,13 +373,13 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned long k
 			int l_index, l2_index;
 			depth++;
 			art_node16 *parent_node = new_node;
-			art_node16 *next_node = (art_node16 *)alloc_node(get_index(l->key, depth - 1));
+			art_node16 *next_node = alloc_node();
 			
 			while(next_node) {
 				l_index = get_index(l->key, depth);
 				l2_index = get_index(l2->key, depth);
 
-				parent_node->children[get_index(l->key, depth - 1)] = (art_node *)next_node;
+				parent_node->children[get_index(l->key, depth - 1)] = next_node;
 				flush_buffer(parent_node, sizeof(art_node16), false);
 
 				if (l_index != l2_index) {
@@ -389,19 +388,19 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned long k
 					break;
 				} else {
 					parent_node = next_node;
-					next_node = (art_node16 *)alloc_node(l_index);
+					next_node = alloc_node();
 					depth++;
 				}
 			}
 
-			*ref = (art_node *)new_node;
+			*ref = new_node;
 			flush_buffer(l2, sizeof(art_leaf), false);
 			flush_buffer(ref, 8, true);
 			return NULL;
 		}
 
 		// Add the leafs to the new node4
-		*ref = (art_node*)new_node;
+		*ref = new_node;
 		add_child(new_node, ref, get_index(l->key, depth), SET_LEAF(l));
 		add_child(new_node, ref, get_index(l2->key, depth), SET_LEAF(l2));
 
@@ -412,17 +411,17 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned long k
 	}
 
 	// Find a child to recurse to
-	art_node **child = find_child(n, get_index(key, depth));
+	art_node16 **child = find_child(n, get_index(key, depth));
 	if (child) {
 		return recursive_insert(*child, child, key, key_len, value, depth + 1, old);
 	}
 
 	// No child, node goes within us
 	art_leaf *l = make_leaf(key, key_len, value);
-	add_child((art_node16 *)n, ref, get_index(key, depth), SET_LEAF(l));
+	add_child(n, ref, get_index(key, depth), SET_LEAF(l));
 
 	flush_buffer(l, sizeof(art_leaf), false);
-	flush_buffer(&((art_node16 *)n)->children[get_index(key, depth)], 8, true);
+	flush_buffer(&n->children[get_index(key, depth)], 8, true);
 	return NULL;
 }
 

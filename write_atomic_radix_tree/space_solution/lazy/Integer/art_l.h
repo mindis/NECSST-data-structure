@@ -40,17 +40,18 @@ typedef int(*art_callback)(void *data, const unsigned char *key, uint32_t key_le
  */
 typedef struct {
 	int p_index;
-//    uint32_t partial_len;
-//    unsigned char partial[MAX_PREFIX_LEN];
+    uint32_t partial_len;
+    unsigned char partial[MAX_PREFIX_LEN];
 } art_node;
 
 /**
  * Full node with 16 children
  */
-typedef struct {
-    art_node n;
-	art_node *children[NUM_NODE_ENTRIES];
-} art_node16;
+typedef struct art_node16 art_node16;
+struct art_node16 {
+   // art_node n;
+	art_node16 *children[NUM_NODE_ENTRIES];
+};
 
 /**
  * Represents a leaf. These are
@@ -66,7 +67,7 @@ typedef struct {
  * Main struct, points to root.
  */
 typedef struct {
-    art_node *root;
+    art_node16 *root;
     uint64_t size;
 } art_tree;
 

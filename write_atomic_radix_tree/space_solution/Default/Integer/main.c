@@ -89,7 +89,7 @@ int main(void)
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);	
 	printf("Search Time = %lu ns\n", elapsed_time);
-
+#ifdef sekwon
 	/* Range scan 0.1% */
 	memset(dummy, 0, 15*1024*1024);
 	flush_buffer((void *)dummy, 15*1024*1024, true);
@@ -147,6 +147,6 @@ int main(void)
 
 //	for (i = 0; i < 50000100; i++)
 //		printf("buf[%d] = %lu\n", i, buf[i]);
-
+#endif
 	return 0;
 }

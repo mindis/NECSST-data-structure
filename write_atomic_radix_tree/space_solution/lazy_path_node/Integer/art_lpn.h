@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdbool.h>
 #ifndef ART_H
 #define ART_H
 
@@ -6,12 +7,26 @@
 extern "C" {
 #endif
 
+unsigned long node4_count;
+unsigned long node16_count;
+unsigned long node48_count;
+unsigned long node256_count;
+unsigned long leaf_count;
+
 #define NODE4   1
 #define NODE16  2
 #define NODE48  3
 #define NODE256 4
 
-#define MAX_PREFIX_LEN 10
+#define CACHE_LINE_SIZE		64
+
+#define NODE_BITS			8
+#define MAX_DEPTH			((64 / NODE_BITS) - 1)
+#define NUM_NODE_ENTRIES	(0x1UL << NODE_BITS)
+#define LOW_BIT_MASK		((0x1UL << NODE_BITS) - 1)
+#define INDEX_BITS			(8 / NODE_BITS)
+
+#define MAX_PREFIX_LEN		(64 / NODE_BITS)
 
 #if defined(__GNUC__) && !defined(__clang__)
 # if __STDC_VERSION__ >= 199901L && 402 == (__GNUC__ * 100 + __GNUC_MINOR__)
@@ -80,7 +95,8 @@ typedef struct {
 typedef struct {
     void *value;
     uint32_t key_len;
-    unsigned char key[];
+//    unsigned char key[];
+	unsigned long key;
 } art_leaf;
 
 /**
@@ -119,7 +135,6 @@ int art_tree_destroy(art_tree *t);
 
 /**
  * Returns the size of the ART tree.
- */
 #ifdef BROKEN_GCC_C99_INLINE
 # define art_size(t) ((t)->size)
 #else
@@ -127,6 +142,7 @@ inline uint64_t art_size(art_tree *t) {
     return t->size;
 }
 #endif
+*/
 
 /**
  * Inserts a new value into the ART tree
@@ -137,7 +153,7 @@ inline uint64_t art_size(art_tree *t) {
  * @return NULL if the item was newly inserted, otherwise
  * the old value pointer is returned.
  */
-void* art_insert(art_tree *t, const unsigned char *key, int key_len, void *value);
+void* art_insert(art_tree *t, const unsigned long key, int key_len, void *value);
 
 /**
  * Deletes a value from the ART tree
@@ -157,7 +173,7 @@ void* art_delete(art_tree *t, const unsigned char *key, int key_len);
  * @return NULL if the item was not found, otherwise
  * the value pointer is returned.
  */
-void* art_search(const art_tree *t, const unsigned char *key, int key_len);
+void* art_search(const art_tree *t, const unsigned long key, int key_len);
 
 /**
  * Returns the minimum valued leaf
@@ -196,6 +212,8 @@ int art_iter(art_tree *t, art_callback cb, void *data);
  * @return 0 on success, or the return of the callback.
  */
 int art_iter_prefix(art_tree *t, const unsigned char *prefix, int prefix_len, art_callback cb, void *data);
+
+void flush_buffer(void *buf, unsigned long len, bool fence);
 
 #ifdef __cplusplus
 }

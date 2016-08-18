@@ -5,7 +5,7 @@
 #include <time.h>
 #include "art_lpn.h"
 
-#define INPUT_NUM	16000000
+#define INPUT_NUM	128000000
 
 int main(void)
 {
@@ -22,7 +22,7 @@ int main(void)
 
 //	printf("sizeof(node) = %d\n", sizeof(node));
 
-	if((fp = fopen("/home/sekwon/Public/input_file/input_random_dense_16M.txt","r")) == NULL)
+	if((fp = fopen("/home/sekwon/Public/input_file/input_random_sparse_128M.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
@@ -72,12 +72,19 @@ int main(void)
 	printf("Insertion Time = %lu ns\n", elapsed_time);
 
 	/* Check space overhead */
-//	printf("Node count = %lu\n", node_count);
-//	printf("Leaf count = %lu\n", leaf_count);
+	printf("sizeof(art_node4) = %lu\n", sizeof(art_node4));
 	printf("sizeof(art_node16) = %lu\n", sizeof(art_node16));
+	printf("sizeof(art_node48) = %lu\n", sizeof(art_node48));
+	printf("sizeof(art_node256) = %lu\n", sizeof(art_node256));
 	printf("sizeof(art_leaf) = %lu\n", sizeof(art_leaf));
-	printf("Total space = %lu byte\n", (node_count * sizeof(art_node16) + leaf_count * sizeof(art_leaf)));
-	printf("Space efficiency = %lu\n", (node_count * sizeof(art_node16) + leaf_count * sizeof(art_leaf)) / INPUT_NUM);
+	printf("Total space = %lu byte\n",
+			(node4_count * sizeof(art_node4) + node16_count * sizeof(art_node16)
+			 + node48_count * sizeof(art_node48) + node256_count * sizeof(art_node256)
+			 + leaf_count * sizeof(art_leaf)));
+	printf("Space efficiency = %lu\n", 
+			(node4_count * sizeof(art_node4) + node16_count * sizeof(art_node16)
+			 + node48_count * sizeof(art_node48) + node256_count * sizeof(art_node256)
+			 + leaf_count * sizeof(art_leaf)) / INPUT_NUM);
 
 	/* Lookup */
 	memset(dummy, 0, 15*1024*1024);

@@ -49,10 +49,9 @@ static int get_index(unsigned long key, int depth)
  * Allocates a node of the given type,
  * initializes to zero and sets the type.
  */
-static art_node* alloc_node(int index) {
+static art_node* alloc_node() {
 	art_node* n;
 	n = (art_node*)calloc(1, sizeof(art_node16));
-	n->p_index = index;
 	node_count++;
 	return n;
 }
@@ -374,7 +373,7 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned long k
 		}
 
 		// New value, we must split the leaf into a node4
-		art_node16 *new_node = (art_node16 *)alloc_node(get_index(key, depth - 1));
+		art_node16 *new_node = (art_node16 *)alloc_node();
 
 		// Create a new leaf
 		art_leaf *l2 = make_leaf(key, key_len, value);
@@ -410,9 +409,8 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned long k
 
 		// Create a new node
 		//		art_node4 *new_node = (art_node4*)alloc_node(NODE4);
-		int i, index = get_index(key, depth - 1);
-		art_node16 *new_node = (art_node16 *)alloc_node(index);
-		art_node *copy_node = (art_node *)alloc_node(-1);
+		art_node16 *new_node = (art_node16 *)alloc_node();
+		art_node *copy_node = (art_node *)alloc_node();
 		memcpy(copy_node, n, sizeof(art_node16));
 		*ref = (art_node*)new_node;
 		new_node->n.partial_len = prefix_diff;
@@ -431,7 +429,6 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned long k
 		*/
 		copy_node->partial_len -= (prefix_diff + 1);
 		add_child(new_node, ref, get_index(l->key, depth + prefix_diff), copy_node);
-		copy_node->p_index = get_index(l->key, depth + prefix_diff);
 		/*
 		   for (i = 0; i < min(MAX_PREFIX_LEN, copy_node->partial_len); i++)
 		   copy_node->partial[i] = get_index(l->key, depth + prefix_diff + 1 + i);a
@@ -448,6 +445,9 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned long k
 		flush_buffer(l, sizeof(art_leaf), false);
 		flush_buffer(copy_node, sizeof(art_node16), false);
 		flush_buffer(ref, 8, true);
+
+		node_count--;
+		free(n);
 		//		add_child4(new_node, ref, key[depth+prefix_diff], SET_LEAF(l));
 		return NULL;
 	}
