@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdbool.h>
+#include <byteswap.h>
 #ifndef ART_H
 #define ART_H
 
@@ -9,17 +10,21 @@ extern "C" {
 
 unsigned long node_count;
 unsigned long leaf_count;
+unsigned long mfence_count;
+unsigned long clflush_count;
 
-#define CACHE_LINE_SIZE 64
-#define LOW_BIT_MASK	((0x1UL << 4) - 1)
-#define HIGH_BIT_MASK	(((0x1UL << 8) - 1) ^ LOW_BIT_MASK)
+#define CACHE_LINE_SIZE 	64
 
-#define NODE4   1
-#define NODE16  2
-#define NODE48  3
-#define NODE256 4
+/* If you want to change the number of entries, 
+ * change the values of NODE_BITS & MAX_DEPTH */
+#define NODE_BITS			5
+#define MAX_DEPTH			12
+#define NUM_NODE_ENTRIES 	(0x1UL << NODE_BITS)
+#define LOW_BIT_MASK		((0x1UL << NODE_BITS) - 1)
+#define INPUT_CHAR_NUM		8
 
-#define MAX_PREFIX_LEN 16
+#define MAX_PREFIX_LEN		(MAX_DEPTH + 1)
+#define MAX_HEIGHT			(MAX_DEPTH + 1)
 
 #if defined(__GNUC__) && !defined(__clang__)
 # if __STDC_VERSION__ >= 199901L && 402 == (__GNUC__ * 100 + __GNUC_MINOR__)
@@ -39,50 +44,17 @@ typedef int(*art_callback)(void *data, const unsigned char *key, uint32_t key_le
  * of all the various node sizes
  */
 typedef struct {
-    uint8_t type;
-    uint8_t num_children;
     uint32_t partial_len;
     unsigned char partial[MAX_PREFIX_LEN];
-	void *parent;
-	uint32_t p_index;
 } art_node;
 
 /**
- * Small node with only 4 children
+ * Full node with 16 children
  */
 typedef struct {
     art_node n;
-    unsigned char keys[4];
-    art_node *children[4];
-} art_node4;
-
-/**
- * Node with 16 children
- */
-typedef struct {
-    art_node n;
-    unsigned char keys[16];
-    art_node *children[16];
+	art_node *children[NUM_NODE_ENTRIES];
 } art_node16;
-
-/**
- * Node with 48 children, but
- * a full 256 byte field.
- */
-typedef struct {
-    art_node n;
-    unsigned char keys[256];
-    art_node *children[48];
-} art_node48;
-
-/**
- * Full node with 256 children
- */
-typedef struct {
-    art_node n;
-//    art_node *children[256];
-	art_node *children[16];
-} art_node256;
 
 /**
  * Represents a leaf. These are
@@ -90,8 +62,8 @@ typedef struct {
  */
 typedef struct {
     void *value;
-    uint32_t key_len;
-    unsigned char key[];
+    uint32_t key_len;	
+	unsigned long key[];
 } art_leaf;
 
 /**
@@ -209,7 +181,7 @@ int art_iter(art_tree *t, art_callback cb, void *data);
  */
 int art_iter_prefix(art_tree *t, const unsigned char *prefix, int prefix_len, art_callback cb, void *data);
 
-void flush_buffer(void *buf, unsigned long len, bool fence);
+void flush_buffer_nocount(void *buf, unsigned long len, bool fence);
 
 #ifdef __cplusplus
 }
