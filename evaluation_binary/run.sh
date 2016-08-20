@@ -1,92 +1,100 @@
 #!/bin/sh
 
-#sparse 16M
-./WART_sparse_16M_4 > ./result/WART_sparse_16M_4
-./WART_sparse_16M_5 > ./result/WART_sparse_16M_5
-./WART_sparse_16M_6 > ./result/WART_sparse_16M_6
-./WART_sparse_16M_7 > ./result/WART_sparse_16M_7
-./WART_sparse_16M_8 > ./result/WART_sparse_16M_8
+#16M
+./ART_L_sparse_16M > ./result/ART_L_sparse_16M.txt
+./ART_L_dense_16M > ./result/ART_L_dense_16M.txt
+./ART_L_synthetic_16M > ./result/ART_L_synthetic_16M.txt
 
-./wbtree_sparse_16M_1 > ./result/wbtree_sparse_16M_1
-./wbtree_sparse_16M_2 > ./result/wbtree_sparse_16M_2
-./wbtree_sparse_16M_3 > ./result/wbtree_sparse_16M_3
-./wbtree_sparse_16M_4 > ./result/wbtree_sparse_16M_4
+./ART_L_sparse_16M_noflush > ./result/ART_L_sparse_16M_noflush.txt
+./ART_L_dense_16M_noflush > ./result/ART_L_dense_16M_noflush.txt
+./ART_L_synthetic_16M_noflush > ./result/ART_L_synthetic_16M_noflush.txt
 
-./FPTree_sparse_16M > ./result/FPTree_sparse_16M
-./NV_sparse_16M > ./result/NV_sparse_16M
+./ART_LP_sparse_16M > ./result/ART_LP_sparse_16M.txt
+./ART_LP_dense_16M > ./result/ART_LP_dense_16M.txt
+./ART_LP_synthetic_16M > ./result/ART_LP_synthetic_16M.txt
 
-#sparse 128M
-./WART_sparse_128M_4 > ./result/WART_sparse_128M_4
-./WART_sparse_128M_5 > ./result/WART_sparse_128M_5
-./WART_sparse_128M_6 > ./result/WART_sparse_128M_6
-./WART_sparse_128M_7 > ./result/WART_sparse_128M_7
-./WART_sparse_128M_8 > ./result/WART_sparse_128M_8
+./ART_LP_sparse_16M_noflush > ./result/ART_LP_sparse_16M_noflush.txt
+./ART_LP_dense_16M_noflush > ./result/ART_LP_dense_16M_noflush.txt
+./ART_LP_synthetic_16M_noflush > ./result/ART_LP_synthetic_16M_noflush.txt
 
-./wbtree_sparse_128M_1 > ./result/wbtree_sparse_128M_1
-./wbtree_sparse_128M_2 > ./result/wbtree_sparse_128M_2
-./wbtree_sparse_128M_3 > ./result/wbtree_sparse_128M_3
-./wbtree_sparse_128M_4 > ./result/wbtree_sparse_128M_4
+./ART_LPN_sparse_16M > ./result/ART_LPN_sparse_16M.txt
+./ART_LPN_dense_16M > ./result/ART_LPN_dense_16M.txt
+./ART_LPN_synthetic_16M > ./result/ART_LPN_synthetic_16M.txt
 
-./FPTree_sparse_128M > ./result/FPTree_sparse_128M
-./NV_sparse_128M > ./result/NV_sparse_128M
+./ART_LPN_sparse_16M_noflush > ./result/ART_LPN_sparse_16M_noflush.txt
+./ART_LPN_dense_16M_noflush > ./result/ART_LPN_dense_16M_noflush.txt
+./ART_LPN_synthetic_16M_noflush > ./result/ART_LPN_synthetic_16M_noflush.txt
 
-#dense 16M
-./WART_dense_16M_4 > ./result/WART_dense_16M_4
-./WART_dense_16M_5 > ./result/WART_dense_16M_5
-./WART_dense_16M_6 > ./result/WART_dense_16M_6
-./WART_dense_16M_7 > ./result/WART_dense_16M_7
-./WART_dense_16M_8 > ./result/WART_dense_16M_8
+./ART_LPO_sparse_16M > ./result/ART_LPO_sparse_16M.txt
+./ART_LPO_dense_16M > ./result/ART_LPO_dense_16M.txt
+./ART_LPO_synthetic_16M > ./result/ART_LPO_synthetic_16M.txt
 
-./wbtree_dense_16M_1 > ./result/wbtree_dense_16M_1
-./wbtree_dense_16M_2 > ./result/wbtree_dense_16M_2
-./wbtree_dense_16M_3 > ./result/wbtree_dense_16M_3
-./wbtree_dense_16M_4 > ./result/wbtree_dense_16M_4
+./ART_LPO_sparse_16M_noflush > ./result/ART_LPO_sparse_16M_noflush.txt
+./ART_LPO_dense_16M_noflush > ./result/ART_LPO_dense_16M_noflush.txt
+./ART_LPO_synthetic_16M_noflush > ./result/ART_LPO_synthetic_16M_noflush.txt
 
-./FPTree_dense_16M > ./result/FPTree_dense_16M
-./NV_dense_16M > ./result/NV_dense_16M
+#128M
+./ART_L_sparse_128M > ./result/ART_L_sparse_128M.txt
+./ART_L_dense_128M > ./result/ART_L_dense_128M.txt
+./ART_L_synthetic_128M > ./result/ART_L_synthetic_128M.txt
 
-#dense 128M
-./WART_dense_128M_4 > ./result/WART_dense_128M_4
-./WART_dense_128M_5 > ./result/WART_dense_128M_5
-./WART_dense_128M_6 > ./result/WART_dense_128M_6
-./WART_dense_128M_7 > ./result/WART_dense_128M_7
-./WART_dense_128M_8 > ./result/WART_dense_128M_8
+./ART_L_sparse_128M_noflush > ./result/ART_L_sparse_128M_noflush.txt
+./ART_L_dense_128M_noflush > ./result/ART_L_dense_128M_noflush.txt
+./ART_L_synthetic_128M_noflush > ./result/ART_L_synthetic_128M_noflush.txt
 
-./wbtree_dense_128M_1 > ./result/wbtree_dense_128M_1
-./wbtree_dense_128M_2 > ./result/wbtree_dense_128M_2
-./wbtree_dense_128M_3 > ./result/wbtree_dense_128M_3
-./wbtree_dense_128M_4 > ./result/wbtree_dense_128M_4
+./ART_LP_sparse_128M > ./result/ART_LP_sparse_128M.txt
+./ART_LP_dense_128M > ./result/ART_LP_dense_128M.txt
+./ART_LP_synthetic_128M > ./result/ART_LP_synthetic_128M.txt
 
-./FPTree_dense_128M > ./result/FPTree_dense_128M
-./NV_dense_128M > ./result/NV_dense_128M
+./ART_LP_sparse_128M_noflush > ./result/ART_LP_sparse_128M_noflush.txt
+./ART_LP_dense_128M_noflush > ./result/ART_LP_dense_128M_noflush.txt
+./ART_LP_synthetic_128M_noflush > ./result/ART_LP_synthetic_128M_noflush.txt
 
-#sparse 1024M
-./WART_sparse_1024M_4 > ./result/WART_sparse_1024M_4
-./WART_sparse_1024M_5 > ./result/WART_sparse_1024M_5
-./WART_sparse_1024M_6 > ./result/WART_sparse_1024M_6
-./WART_sparse_1024M_7 > ./result/WART_sparse_1024M_7
-./WART_sparse_1024M_8 > ./result/WART_sparse_1024M_8
+./ART_LPN_sparse_128M > ./result/ART_LPN_sparse_128M.txt
+./ART_LPN_dense_128M > ./result/ART_LPN_dense_128M.txt
+./ART_LPN_synthetic_128M > ./result/ART_LPN_synthetic_128M.txt
 
-./wbtree_sparse_1024M_1 > ./result/wbtree_sparse_1024M_1
-./wbtree_sparse_1024M_2 > ./result/wbtree_sparse_1024M_2
-./wbtree_sparse_1024M_3 > ./result/wbtree_sparse_1024M_3
-./wbtree_sparse_1024M_4 > ./result/wbtree_sparse_1024M_4
+./ART_LPN_sparse_128M_noflush > ./result/ART_LPN_sparse_128M_noflush.txt
+./ART_LPN_dense_128M_noflush > ./result/ART_LPN_dense_128M_noflush.txt
+./ART_LPN_synthetic_128M_noflush > ./result/ART_LPN_synthetic_128M_noflush.txt
 
-./FPTree_sparse_1024M > ./result/FPTree_sparse_1024M
+./ART_LPO_sparse_128M > ./result/ART_LPO_sparse_128M.txt
+./ART_LPO_dense_128M > ./result/ART_LPO_dense_128M.txt
+./ART_LPO_synthetic_128M > ./result/ART_LPO_synthetic_128M.txt
 
-#dense 1024M
-./WART_dense_1024M_4 > ./result/WART_dense_1024M_4
-./WART_dense_1024M_5 > ./result/WART_dense_1024M_5
-./WART_dense_1024M_6 > ./result/WART_dense_1024M_6
-./WART_dense_1024M_7 > ./result/WART_dense_1024M_7
-./WART_dense_1024M_8 > ./result/WART_dense_1024M_8
+./ART_LPO_sparse_128M_noflush > ./result/ART_LPO_sparse_128M_noflush.txt
+./ART_LPO_dense_128M_noflush > ./result/ART_LPO_dense_128M_noflush.txt
+./ART_LPO_synthetic_128M_noflush > ./result/ART_LPO_synthetic_128M_noflush.txt
 
-./wbtree_dense_1024M_1 > ./result/wbtree_dense_1024M_1
-./wbtree_dense_1024M_2 > ./result/wbtree_dense_1024M_2
-./wbtree_dense_1024M_3 > ./result/wbtree_dense_1024M_3
-./wbtree_dense_1024M_4 > ./result/wbtree_dense_1024M_4
+#1024M
+./ART_L_sparse_1024M > ./result/ART_L_sparse_1024M.txt
+./ART_L_dense_1024M > ./result/ART_L_dense_1024M.txt
+./ART_L_synthetic_1024M > ./result/ART_L_synthetic_1024M.txt
 
-./FPTree_dense_1024M > ./result/FPTree_dense_1024M
+./ART_L_sparse_1024M_noflush > ./result/ART_L_sparse_1024M_noflush.txt
+./ART_L_dense_1024M_noflush > ./result/ART_L_dense_1024M_noflush.txt
+./ART_L_synthetic_1024M_noflush > ./result/ART_L_synthetic_1024M_noflush.txt
 
-./NV_sparse_1024M > ./result/NV_sparse_1024M
-./NV_dense_1024M > ./result/NV_dense_1024M
+./ART_LP_sparse_1024M > ./result/ART_LP_sparse_1024M.txt
+./ART_LP_dense_1024M > ./result/ART_LP_dense_1024M.txt
+./ART_LP_synthetic_1024M > ./result/ART_LP_synthetic_1024M.txt
+
+./ART_LP_sparse_1024M_noflush > ./result/ART_LP_sparse_1024M_noflush.txt
+./ART_LP_dense_1024M_noflush > ./result/ART_LP_dense_1024M_noflush.txt
+./ART_LP_synthetic_1024M_noflush > ./result/ART_LP_synthetic_1024M_noflush.txt
+
+./ART_LPN_sparse_1024M > ./result/ART_LPN_sparse_1024M.txt
+./ART_LPN_dense_1024M > ./result/ART_LPN_dense_1024M.txt
+./ART_LPN_synthetic_1024M > ./result/ART_LPN_synthetic_1024M.txt
+
+./ART_LPN_sparse_1024M_noflush > ./result/ART_LPN_sparse_1024M_noflush.txt
+./ART_LPN_dense_1024M_noflush > ./result/ART_LPN_dense_1024M_noflush.txt
+./ART_LPN_synthetic_1024M_noflush > ./result/ART_LPN_synthetic_1024M_noflush.txt
+
+./ART_LPO_sparse_1024M > ./result/ART_LPO_sparse_1024M.txt
+./ART_LPO_dense_1024M > ./result/ART_LPO_dense_1024M.txt
+./ART_LPO_synthetic_1024M > ./result/ART_LPO_synthetic_1024M.txt
+
+./ART_LPO_sparse_1024M_noflush > ./result/ART_LPO_sparse_1024M_noflush.txt
+./ART_LPO_dense_1024M_noflush > ./result/ART_LPO_dense_1024M_noflush.txt
+./ART_LPO_synthetic_1024M_noflush > ./result/ART_LPO_synthetic_1024M_noflush.txt

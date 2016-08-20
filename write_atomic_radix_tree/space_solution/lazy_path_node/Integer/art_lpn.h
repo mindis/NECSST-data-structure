@@ -12,6 +12,8 @@ unsigned long node16_count;
 unsigned long node48_count;
 unsigned long node256_count;
 unsigned long leaf_count;
+unsigned long clflush_count;
+unsigned long mfence_count;
 
 #define NODE4   1
 #define NODE16  2
@@ -213,7 +215,7 @@ int art_iter(art_tree *t, art_callback cb, void *data);
  */
 int art_iter_prefix(art_tree *t, const unsigned char *prefix, int prefix_len, art_callback cb, void *data);
 
-void flush_buffer(void *buf, unsigned long len, bool fence);
+void flush_buffer_nocount(void *buf, unsigned long len, bool fence);
 
 #ifdef __cplusplus
 }

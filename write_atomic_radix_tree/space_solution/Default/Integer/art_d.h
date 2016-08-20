@@ -8,6 +8,8 @@ typedef struct Tree tree;
 typedef struct Node node;
 
 unsigned long node_count;
+unsigned long clflush_count;
+unsigned long mfence_count;
 
 struct Node {
 	unsigned long p_index;
@@ -22,7 +24,7 @@ struct Tree {
 	node *root;
 };
 
-void flush_buffer(void *buf, unsigned long len, bool fence);
+void flush_buffer_nocount(void *buf, unsigned long len, bool fence);
 tree *initTree();
 int Insert(tree **t, unsigned long key, void *value);
 void *Update(tree *t, unsigned long key, void *value);

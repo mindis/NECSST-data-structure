@@ -52,13 +52,13 @@ int main(void)
 	if (art_tree_init(t)) {
 		printf("art_tree_init fails!\n");
 	}
-	flush_buffer(t, sizeof(art_tree), true);
+	flush_buffer_nocount(t, sizeof(art_tree), true);
 //	flush_buffer(&t, sizeof(art_tree *), true);	// [kh] t -> &t
 
 	/* Insertion */
 	dummy = (char *)malloc(15*1024*1024);	// [kh] CPU cache size is 15M?
 	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
+	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for(i = 0; i < INPUT_NUM; i++) {
 		art_insert(t, keys[i], sizeof(unsigned long), &keys[i]);
@@ -85,10 +85,12 @@ int main(void)
 			(node4_count * sizeof(art_node4) + node16_count * sizeof(art_node16)
 			 + node48_count * sizeof(art_node48) + node256_count * sizeof(art_node256)
 			 + leaf_count * sizeof(art_leaf)) / INPUT_NUM);
+	printf("clflush count = %lu\n", clflush_count);
+	printf("mfence count = %lu\n", mfence_count);
 
 	/* Lookup */
 	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
+	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for (i = 0; i < INPUT_NUM; i++) {
 		ret = art_search(t, keys[i], sizeof(unsigned long));
@@ -109,7 +111,7 @@ int main(void)
 #ifdef sekwon
 	/* Range scan 0.1% */
 	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
+	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	Range_Lookup(t, min, INPUT_NUM / 1000, buf);
 	clock_gettime(CLOCK_MONOTONIC, &t2);
@@ -119,7 +121,7 @@ int main(void)
 
 	/* Range scan 1% */
 	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
+	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	Range_Lookup(t, min, INPUT_NUM / 100, buf);
 	clock_gettime(CLOCK_MONOTONIC, &t2);
@@ -129,7 +131,7 @@ int main(void)
 
 	/* Range scan 10% */
 	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
+	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	Range_Lookup(t, min, INPUT_NUM / 10, buf);
 	clock_gettime(CLOCK_MONOTONIC, &t2);
@@ -142,7 +144,7 @@ int main(void)
 	for (i = 0; i < INPUT_NUM; i++)
 		new_value[i] = i;
 	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
+	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for (i = 0; i < INPUT_NUM; i++)
 		Update(t, keys[i], &new_value[i]);
