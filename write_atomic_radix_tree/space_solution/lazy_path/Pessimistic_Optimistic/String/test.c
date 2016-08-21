@@ -1,32 +1,21 @@
 #include <stdio.h>
-#include <limits.h>
+#include <string.h>
 
-typedef struct bit_array {
-	unsigned char a : 4;
-	unsigned char b : 4;
-	unsigned char c : 4;
-	unsigned char d : 4;
-	unsigned char e : 4;
-	unsigned char f : 4;
-	unsigned char g : 4;
-	unsigned char h : 4;
-	unsigned char i : 4;
-	unsigned char j : 4;
-	unsigned char k : 4;
-	unsigned char l : 4;
-	unsigned char m : 4;
-	unsigned char n : 4;
-	unsigned char o : 4;
-	unsigned char p : 4;
-} bit_array;
+int main(void)
+{
+	char buf[512];
+	int len;
+	FILE *f = fopen("/home/sekwon/Public/input_file/uuid.txt", "r");
+	if (f == NULL) {
+		printf("open fail\n");
+		return 0;
+	}
 
-int main(void) {
-	unsigned long a = 999999999;
-	unsigned char b = 1;
-
-	a = b;
-
-	printf("%lu\n", a);
-
+	while (fgets(buf, sizeof(buf), f)) {
+		len = strlen(buf);
+		buf[len - 1] = '\0';
+		printf("%s\n", buf);
+		printf("len = %d\n", len);
+	}
 	return 0;
 }

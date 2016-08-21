@@ -5,46 +5,21 @@
 #include <time.h>
 #include "art_lp.h"
 
-#define INPUT_NUM	16000000
-
 int main(void)
 {
 	struct timespec t1, t2;
-	int i, j;
+	int i, len;
 	char *dummy;
-	unsigned long *keys, *new_value;
-	unsigned long elapsed_time;
+	unsigned long *new_value;
+	char buf[512];
+	unsigned long elapsed_time, total_elapsed_time, input_count = 0;
 	void *ret;
 	FILE *fp;
-	unsigned long *buf;
-	unsigned long max;
-	unsigned long min;
 
-	if((fp = fopen("/home/sekwon/Public/input_file/input_random_sparse_16M.txt","r")) == NULL)
+	if((fp = fopen("/home/sekwon/Public/input_file/uuid.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
-	}
-
-	keys = malloc(sizeof(unsigned long) * INPUT_NUM);
-	buf = malloc(sizeof(unsigned long) * INPUT_NUM);
-	memset(buf, 0, sizeof(unsigned long) * INPUT_NUM);
-
-	for (i = 0; i < INPUT_NUM; i++) {
-//		keys[i] = i;
-		fscanf(fp, "%lu", &keys[i]);
-		keys[i] = __bswap_64(keys[i]);
-	}
-
-	fclose(fp);
-
-	max = keys[0];
-	min = keys[0];
-	for (i = 1; i < INPUT_NUM; i++) {
-		if (keys[i] > max)
-			max = keys[i];
-		if (keys[i] < min)
-			min = keys[i];
 	}
 
 	art_tree *t = malloc(sizeof(art_tree));
@@ -52,54 +27,54 @@ int main(void)
 		printf("art_tree_init fails!\n");
 	}
 	flush_buffer_nocount(t, sizeof(art_tree), true);
-//	flush_buffer(&t, sizeof(art_tree *), true);	// [kh] t -> &t
 
 	/* Insertion */
 	dummy = (char *)malloc(15*1024*1024);	// [kh] CPU cache size is 15M?
 	memset(dummy, 0, 15*1024*1024);
 	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
-	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 0; i < INPUT_NUM; i++) {
-		art_insert(t, (unsigned char *)&keys[i], sizeof(unsigned long), &keys[i]);
-	//	art_insert(t, (unsigned char *)&keys[i], sizeof(unsigned long), &keys[i]);
-		//	printf("Insert error!\n");
-		//	exit(1);
+	total_elapsed_time = 0;
+	while (fgets(buf, sizeof(buf), fp)) {
+		len = strlen(buf);
+		buf[len - 1] = '\0';
+		clock_gettime(CLOCK_MONOTONIC, &t1);
+		art_insert(t, (unsigned char *)buf, len, (void *)buf);
+		clock_gettime(CLOCK_MONOTONIC, &t2);
+		elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
+		elapsed_time += (t2.tv_nsec - t1.tv_nsec);
+		total_elapsed_time += elapsed_time;
+		input_count++;
 	}
-	clock_gettime(CLOCK_MONOTONIC, &t2);
-	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
-	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
-	printf("Insertion Time = %lu ns\n", elapsed_time);
+	printf("Insertion Time = %lu ns\n", total_elapsed_time);
 
 	/* Check space overhead */
-//	printf("Node count = %lu\n", node_count);
-//	printf("Leaf count = %lu\n", leaf_count);
 	printf("sizeof(art_node16) = %lu\n", sizeof(art_node16));
-	printf("sizeof(art_leaf) = %lu\n", sizeof(art_leaf) + sizeof(unsigned long));
-	printf("Total space = %lu byte\n", (node_count * sizeof(art_node16) + leaf_count * (sizeof(art_leaf) + sizeof(unsigned long))));
-	printf("Space efficiency = %lu\n", (node_count * sizeof(art_node16) + leaf_count * (sizeof(art_leaf) + sizeof(unsigned long))) / INPUT_NUM);
+	printf("sizeof(art_leaf) = %lu\n", sizeof(art_leaf) + len);
+	printf("Total space = %lu byte\n", (node_count * sizeof(art_node16) + leaf_count * (sizeof(art_leaf) + len)));
+	printf("Space efficiency = %lu\n", (node_count * sizeof(art_node16) + leaf_count * (sizeof(art_leaf) + len)) / input_count);
 	printf("clflush count = %lu\n", clflush_count);
 	printf("mfence count = %lu\n", mfence_count);
+
+	fseek(fp, 0, SEEK_SET);	
 
 	/* Lookup */
 	memset(dummy, 0, 15*1024*1024);
 	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
-	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for (i = 0; i < INPUT_NUM; i++) {
-		ret = art_search(t, (unsigned char *)&keys[i], sizeof(unsigned long));
-	//	ret = art_search(t, (unsigned char*)&keys[i], sizeof(unsigned long));
+	while (fgets(buf, sizeof(buf), fp)) {
+		len = strlen(buf);
+		buf[len - 1] = '\0';
+		clock_gettime(CLOCK_MONOTONIC, &t1);
+		ret = art_search(t, (unsigned char *)buf, len);
 		if (ret == NULL) {
-			printf("There is no key[%d] = %lu\n", i, keys[i]);
+			printf("There is no key = %s\n", buf);
 			exit(1);
 		}
-	//	else {
-	//		printf("Search value = %lu	count = %lu\n", *(unsigned long *)ret, i);
-	//		sleep(1);
-	//	}
+		clock_gettime(CLOCK_MONOTONIC, &t2);
+		elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
+		elapsed_time += (t2.tv_nsec - t1.tv_nsec);
+		total_elapsed_time += elapsed_time;
 	}
-	clock_gettime(CLOCK_MONOTONIC, &t2);
-	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
-	elapsed_time += (t2.tv_nsec - t1.tv_nsec);	
-	printf("Search Time = %lu ns\n", elapsed_time);
+	printf("Search Time = %lu ns\n", total_elapsed_time);
+	fclose(fp);
 #ifdef sekwon
 	/* Range scan 0.1% */
 	memset(dummy, 0, 15*1024*1024);

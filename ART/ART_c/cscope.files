@@ -1,2 +1,10 @@
 ./art.h
 ./art.c
+./optimistic/art.h
+./optimistic/art.c
+./optimistic/test.c
+./optimistic/main.c
+./optimistic/sekwon/art.h
+./optimistic/sekwon/art.c
+./optimistic/sekwon/test.c
+./optimistic/sekwon/main.c

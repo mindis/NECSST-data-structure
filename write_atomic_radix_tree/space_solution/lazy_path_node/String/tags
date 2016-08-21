@@ -1,0 +1,101 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ART_H	art_lpn.h	4;"	d
+BIN_DIR	Makefile	/^BIN_DIR = .\/$/;"	m
+BROKEN_GCC_C99_INLINE	art_lpn.h	34;"	d
+CACHE_LINE_SIZE	art_lpn.h	23;"	d
+CFLAGS	Makefile	/^CFLAGS = -c$/;"	m
+CPU_FREQ_MHZ	art_lpn.c	28;"	d	file:
+IS_LEAF	art_lpn.c	23;"	d	file:
+LATENCY	art_lpn.c	27;"	d	file:
+LEAF_RAW	art_lpn.c	25;"	d	file:
+MAX_PREFIX_LEN	art_lpn.h	25;"	d
+NODE16	art_lpn.h	19;"	d
+NODE256	art_lpn.h	21;"	d
+NODE4	art_lpn.h	18;"	d
+NODE48	art_lpn.h	20;"	d
+SET_LEAF	art_lpn.c	24;"	d	file:
+add_child	art_lpn.c	/^static void add_child(art_node *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+add_child16	art_lpn.c	/^static void add_child16(art_node16 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+add_child256	art_lpn.c	/^static void add_child256(art_node256 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+add_child4	art_lpn.c	/^static void add_child4(art_node4 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+add_child48	art_lpn.c	/^static void add_child48(art_node48 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+add_child4_noflush	art_lpn.c	/^static void add_child4_noflush(art_node4 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+alloc_node	art_lpn.c	/^static art_node* alloc_node(uint8_t type) {$/;"	f	file:
+art_callback	art_lpn.h	/^typedef int(*art_callback)(void *data, const unsigned char *key, uint32_t key_len, void *value);$/;"	t
+art_insert	art_lpn.c	/^void* art_insert(art_tree *t, const unsigned char *key, int key_len, void *value) {$/;"	f
+art_leaf	art_lpn.h	/^} art_leaf;$/;"	t	typeref:struct:__anon6
+art_maximum	art_lpn.c	/^art_leaf* art_maximum(art_tree *t) {$/;"	f
+art_minimum	art_lpn.c	/^art_leaf* art_minimum(art_tree *t) {$/;"	f
+art_node	art_lpn.h	/^} art_node;$/;"	t	typeref:struct:__anon1
+art_node16	art_lpn.h	/^} art_node16;$/;"	t	typeref:struct:__anon3
+art_node256	art_lpn.h	/^} art_node256;$/;"	t	typeref:struct:__anon5
+art_node4	art_lpn.h	/^} art_node4;$/;"	t	typeref:struct:__anon2
+art_node48	art_lpn.h	/^} art_node48;$/;"	t	typeref:struct:__anon4
+art_search	art_lpn.c	/^void* art_search(const art_tree *t, const unsigned long key, int key_len) {$/;"	f
+art_tree	art_lpn.h	/^} art_tree;$/;"	t	typeref:struct:__anon7
+art_tree_destroy	art_lpn.c	/^int art_tree_destroy(art_tree *t) {$/;"	f
+art_tree_init	art_lpn.c	/^int art_tree_init(art_tree *t) {$/;"	f
+check_prefix	art_lpn.c	/^static int check_prefix(const art_node *n, const unsigned long key, int key_len, int depth) {$/;"	f	file:
+children	art_lpn.h	/^    art_node *children[16];$/;"	m	struct:__anon3
+children	art_lpn.h	/^    art_node *children[256];$/;"	m	struct:__anon5
+children	art_lpn.h	/^    art_node *children[48];$/;"	m	struct:__anon4
+children	art_lpn.h	/^    art_node *children[4];$/;"	m	struct:__anon2
+clflush_count	art_lpn.c	/^unsigned long clflush_count = 0;$/;"	v
+clflush_count	art_lpn.h	/^unsigned long clflush_count;$/;"	v
+copy_header	art_lpn.c	/^static void copy_header(art_node *dest, art_node *src) {$/;"	f	file:
+cpu_pause	art_lpn.c	/^static inline void cpu_pause()$/;"	f	file:
+destroy_art_tree	art_lpn.h	129;"	d
+destroy_node	art_lpn.c	/^static void destroy_node(art_node *n) {$/;"	f	file:
+find_child	art_lpn.c	/^static art_node** find_child(art_node *n, unsigned char c) {$/;"	f	file:
+flush_buffer	art_lpn.c	/^void flush_buffer(void *buf, unsigned long len, bool fence)$/;"	f
+flush_buffer_nocount	art_lpn.c	/^void flush_buffer_nocount(void *buf, unsigned long len, bool fence)$/;"	f
+init_art_tree	art_lpn.h	116;"	d
+key	art_lpn.h	/^    unsigned char key[];$/;"	m	struct:__anon6
+key_len	art_lpn.h	/^    uint32_t key_len;$/;"	m	struct:__anon6
+keys	art_lpn.h	/^    unsigned char keys[16];$/;"	m	struct:__anon3
+keys	art_lpn.h	/^    unsigned char keys[256];$/;"	m	struct:__anon4
+keys	art_lpn.h	/^    unsigned char keys[4];$/;"	m	struct:__anon2
+leaf_count	art_lpn.c	/^unsigned long leaf_count = 0;$/;"	v
+leaf_count	art_lpn.h	/^unsigned long leaf_count;$/;"	v
+leaf_matches	art_lpn.c	/^static int leaf_matches(const art_leaf *n, const unsigned char *key, int key_len, int depth) {$/;"	f	file:
+longest_common_prefix	art_lpn.c	/^static int longest_common_prefix(art_leaf *l1, art_leaf *l2, int depth) {$/;"	f	file:
+main	main.c	/^int main(void)$/;"	f
+make_leaf	art_lpn.c	/^static art_leaf* make_leaf(const unsigned char *key, int key_len, void *value) {$/;"	f	file:
+maximum	art_lpn.c	/^static art_leaf* maximum(const art_node *n) {$/;"	f	file:
+mfence	art_lpn.c	10;"	d	file:
+mfence_count	art_lpn.c	/^unsigned long mfence_count = 0;$/;"	v
+mfence_count	art_lpn.h	/^unsigned long mfence_count;$/;"	v
+min	art_lpn.c	/^static inline int min(int a, int b) {$/;"	f	file:
+minimum	art_lpn.c	/^static art_leaf* minimum(const art_node *n) {$/;"	f	file:
+n	art_lpn.h	/^    art_node n;$/;"	m	struct:__anon2
+n	art_lpn.h	/^    art_node n;$/;"	m	struct:__anon3
+n	art_lpn.h	/^    art_node n;$/;"	m	struct:__anon4
+n	art_lpn.h	/^    art_node n;$/;"	m	struct:__anon5
+node16_count	art_lpn.c	/^unsigned long node16_count = 0;$/;"	v
+node16_count	art_lpn.h	/^unsigned long node16_count;$/;"	v
+node256_count	art_lpn.c	/^unsigned long node256_count = 0;$/;"	v
+node256_count	art_lpn.h	/^unsigned long node256_count;$/;"	v
+node48_count	art_lpn.c	/^unsigned long node48_count = 0;$/;"	v
+node48_count	art_lpn.h	/^unsigned long node48_count;$/;"	v
+node4_count	art_lpn.c	/^unsigned long node4_count = 0;$/;"	v
+node4_count	art_lpn.h	/^unsigned long node4_count;$/;"	v
+num_children	art_lpn.h	/^    uint8_t num_children;$/;"	m	struct:__anon1
+partial	art_lpn.h	/^    unsigned char partial[MAX_PREFIX_LEN];$/;"	m	struct:__anon1
+partial_len	art_lpn.h	/^    uint32_t partial_len;$/;"	m	struct:__anon1
+prefix_mismatch	art_lpn.c	/^static int prefix_mismatch(const art_node *n, const unsigned char *key, int key_len, int depth, art_leaf **l) {$/;"	f	file:
+read_tsc	art_lpn.c	/^static inline unsigned long read_tsc(void)$/;"	f	file:
+recursive_insert	art_lpn.c	/^static void* recursive_insert(art_node *n, art_node **ref, const unsigned char *key, int key_len, void *value, int depth, int *old) {$/;"	f	file:
+remove_child	art_lpn.c	/^static void remove_child(art_node *n, art_node **ref, unsigned char c, art_node **l) {$/;"	f	file:
+remove_child16	art_lpn.c	/^static void remove_child16(art_node16 *n, art_node **ref, art_node **l) {$/;"	f	file:
+remove_child256	art_lpn.c	/^static void remove_child256(art_node256 *n, art_node **ref, unsigned char c) {$/;"	f	file:
+remove_child4	art_lpn.c	/^static void remove_child4(art_node4 *n, art_node **ref, art_node **l) {$/;"	f	file:
+remove_child48	art_lpn.c	/^static void remove_child48(art_node48 *n, art_node **ref, unsigned char c) {$/;"	f	file:
+root	art_lpn.h	/^    art_node *root;$/;"	m	struct:__anon7
+size	art_lpn.h	/^    uint64_t size;$/;"	m	struct:__anon7
+type	art_lpn.h	/^    uint8_t type;$/;"	m	struct:__anon1
+value	art_lpn.h	/^    void *value;$/;"	m	struct:__anon6

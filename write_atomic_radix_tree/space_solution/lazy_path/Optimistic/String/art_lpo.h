@@ -10,8 +10,8 @@ extern "C" {
 
 unsigned long node_count;
 unsigned long leaf_count;
-unsigned long mfence_count;
 unsigned long clflush_count;
+unsigned long mfence_count;
 
 #define CACHE_LINE_SIZE 	64
 
@@ -19,8 +19,6 @@ unsigned long clflush_count;
  * change the values of NODE_BITS & MAX_DEPTH */
 #define NODE_BITS			7
 #define NUM_NODE_ENTRIES 	(0x1UL << NODE_BITS)
-
-#define MAX_PREFIX_LEN		24
 
 #if defined(__GNUC__) && !defined(__clang__)
 # if __STDC_VERSION__ >= 199901L && 402 == (__GNUC__ * 100 + __GNUC_MINOR__)
@@ -41,7 +39,7 @@ typedef int(*art_callback)(void *data, const unsigned char *key, uint32_t key_le
  */
 typedef struct {
     uint32_t partial_len;
-    unsigned char partial[MAX_PREFIX_LEN];
+//    unsigned char partial[MAX_PREFIX_LEN];
 } art_node;
 
 /**
