@@ -52,8 +52,12 @@ void bit_array_shift(void *dest_arr, void *src_arr, uint arr_size, int shift)
 int main(void)
 {
 	unsigned char *a = "abcde";
-	unsigned char *b = malloc(sizeof(unsigned char) * 5);
+	unsigned long *b = malloc(sizeof(unsigned char) * 5);
+	b = (unsigned long *)a;
 
+	printf("%lx\n", a);
+	printf("%lx\n",b[0]);
+/*
 	bit_array_shift(b, a, 5, -10);
 
 	printf("%s\n", a);
@@ -68,6 +72,6 @@ int main(void)
 	printf("%d\n", b[2]);
 	printf("%d\n", b[3]);
 	printf("%d\n", b[4]);
-
+*/
 	return 0;
 }

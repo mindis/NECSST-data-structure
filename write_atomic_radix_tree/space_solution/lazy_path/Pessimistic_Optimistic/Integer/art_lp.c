@@ -83,13 +83,10 @@ void flush_buffer_nocount(void *buf, unsigned long len, bool fence)
 
 static int get_index(unsigned long key, int depth) 
 {
-	int index  = -1;
+	int index;
 
-	if (depth >= 0) {
-		index = ((key >> ((MAX_DEPTH - depth) * NODE_BITS)) & LOW_BIT_MASK);
-		return index;
-	} else
-		return index;
+	index = ((key >> ((MAX_DEPTH - depth) * NODE_BITS)) & LOW_BIT_MASK);
+	return index;
 }
 
 /**

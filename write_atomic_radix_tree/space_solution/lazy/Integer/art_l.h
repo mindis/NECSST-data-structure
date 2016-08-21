@@ -15,8 +15,8 @@ unsigned long mfence_count;
 
 #define CACHE_LINE_SIZE 	64
 
-#define NODE_BITS			6
-#define MAX_DEPTH			10
+#define NODE_BITS			4
+#define MAX_DEPTH			15
 #define NUM_NODE_ENTRIES 	(0x1UL << NODE_BITS)
 #define LOW_BIT_MASK		((0x1UL << NODE_BITS) - 1)
 #define INDEX_BITS			(8 / NODE_BITS)

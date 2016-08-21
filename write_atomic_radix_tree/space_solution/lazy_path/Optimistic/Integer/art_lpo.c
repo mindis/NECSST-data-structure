@@ -83,13 +83,10 @@ void flush_buffer_nocount(void *buf, unsigned long len, bool fence)
 
 static int get_index(unsigned long key, int depth) 
 {
-	int index  = -1;
+	int index;
 
-	if (depth >= 0) {
-		index = ((key >> ((MAX_DEPTH - depth) * NODE_BITS)) & LOW_BIT_MASK);
-		return index;
-	} else
-		return index;
+	index = ((key >> ((MAX_DEPTH - depth) * NODE_BITS)) & LOW_BIT_MASK);
+	return index;
 }
 
 /**
@@ -280,12 +277,16 @@ void* art_search(const art_tree *t, const unsigned long key, int key_len) {
 // Find the minimum leaf under a node
 static art_leaf* minimum(const art_node *n) {
 	// Handle base cases
-	if (!n) return NULL;
-	if (IS_LEAF(n)) return LEAF_RAW(n);
+	if (!n)
+		return NULL;
+	if (IS_LEAF(n))
+		return LEAF_RAW(n);
 
 	int idx = 0;
 
-	while (!((art_node16 *)n)->children[idx]) idx++;
+	while (!((art_node16 *)n)->children[idx]) 
+		idx++;
+
 	return minimum(((art_node16 *)n)->children[idx]);
 }
 

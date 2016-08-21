@@ -22,7 +22,7 @@ int main(void)
 
 //	printf("sizeof(node) = %d\n", sizeof(node));
 
-	if((fp = fopen("/home/sekwon/Public/input_file/input_random_synthetic_16M.txt","r")) == NULL)
+	if((fp = fopen("/home/sekwon/Public/input_file/input_sequential_dense_16M.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);

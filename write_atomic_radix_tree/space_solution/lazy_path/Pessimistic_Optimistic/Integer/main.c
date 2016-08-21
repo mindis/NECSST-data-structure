@@ -5,7 +5,7 @@
 #include <time.h>
 #include "art_lp.h"
 
-#define INPUT_NUM	128000000
+#define INPUT_NUM	1024000000
 
 int main(void)
 {
@@ -20,7 +20,7 @@ int main(void)
 	unsigned long max;
 	unsigned long min;
 
-	if((fp = fopen("/home/sekwon/Public/input_file/input_random_sparse_128M.txt","r")) == NULL)
+	if((fp = fopen("/home/sekwon/Public/input_file/input_random_sparse_1024M.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
