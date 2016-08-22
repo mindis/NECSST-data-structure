@@ -54,7 +54,7 @@ struct tree{
 	log_area *start_log;
 };
 
-void flush_buffer_nocount(void *buf, unsigned int len, bool fence);
+void flush_buffer_nocount(void *buf, unsigned long len, bool fence);
 tree *initTree();
 void Range_Lookup(tree *t, unsigned long start_key, unsigned int num, 
 		unsigned long buf[]);
