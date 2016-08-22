@@ -5,7 +5,7 @@
 #include <time.h>
 #include "art_lpn.h"
 
-#define INPUT_NUM	128000000
+#define INPUT_NUM	10000000
 
 int main(void)
 {
@@ -22,7 +22,7 @@ int main(void)
 
 //	printf("sizeof(node) = %d\n", sizeof(node));
 
-	if((fp = fopen("/home/sekwon/Public/input_file/input_random_sparse_128M.txt","r")) == NULL)
+	if((fp = fopen("/home/sekwon/Public/input_file/input_random_sparse_1024M.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);

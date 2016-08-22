@@ -3,7 +3,7 @@
 #include <string.h>
 #include <malloc.h>
 #include <time.h>
-#include "wbtree.h"
+#include "FPTree.h"
 
 #define INPUT_NUM	1024000000
 
@@ -26,7 +26,8 @@ int main(void)
 		exit(0);
 	}
 
-	printf("sizeof(node) = %d\n", sizeof(node));
+	printf("sizeof(LN) = %d\n", sizeof(LN));
+	printf("sizeof(IN) = %d\n", sizeof(IN));
 
 	keys = malloc(sizeof(unsigned long) * INPUT_NUM);
 	buf = malloc(sizeof(unsigned long) * INPUT_NUM);
@@ -51,32 +52,40 @@ int main(void)
 	/* Insertion */
 	dummy = (char *)malloc(15*1024*1024);
 	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
+	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 0; i < INPUT_NUM; i++)
+	for(i = 0; i < INPUT_NUM; i++) {
+//		printf("count = %d\n", i);
 		Insert(t, keys[i], &keys[i]);
+	}
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 	printf("Insertion Time = %lu ns\n",elapsed_time);
 
 	/* Check space overhead */
-	printf("Total space = %lu byte\n", node_count * sizeof(node));
-	printf("Space efficiency = %lu\n", (node_count * sizeof(node)) / INPUT_NUM);
+	printf("Total space = %lu byte\n", 
+			(IN_count * sizeof(IN)) + (LN_count * sizeof(LN)));
+	printf("Space efficiency = %lu\n", 
+			((IN_count * sizeof(IN)) + (LN_count * sizeof(LN))) / INPUT_NUM);
+	printf("IN count = %lu\n", IN_count);
+	printf("LN count = %lu\n", LN_count);
+	printf("clflush count = %lu\n", clflush_count);
+	printf("mfence count = %lu\n", mfence_count);
 
 	/* Lookup */
 	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
+	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for(i = 0; i < INPUT_NUM; i++) {
-		ret = (void *)Lookup(t, keys[i]);		
+		ret = Lookup(t, keys[i]);
 		if (ret == NULL) {
 			printf("There is no key[%d] = %lu\n", i, keys[i]);
 			exit(1);
-		}/*
-		else {
-			printf("Search value = %lu\n", *(unsigned long*)ret);
-		}*/
+		}
+//		else {
+//			printf("Search value = %lu\n", *(unsigned long*)ret);
+//		}
 	}
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
@@ -85,7 +94,7 @@ int main(void)
 
 	/* Range scan 0.1% */
 	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
+	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	Range_Lookup(t, min, INPUT_NUM / 1000, buf);
 	clock_gettime(CLOCK_MONOTONIC, &t2);
@@ -95,7 +104,7 @@ int main(void)
 
 	/* Range scan 1% */
 	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
+	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	Range_Lookup(t, min, INPUT_NUM / 100, buf);
 	clock_gettime(CLOCK_MONOTONIC, &t2);
@@ -105,7 +114,7 @@ int main(void)
 
 	/* Range scan 10% */
 	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
+	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	Range_Lookup(t, min, INPUT_NUM / 10, buf);
 	clock_gettime(CLOCK_MONOTONIC, &t2);
@@ -118,7 +127,7 @@ int main(void)
 	for (i = 0; i < INPUT_NUM; i++)
 		new_value[i] = i;
 	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
+	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for (i = 0; i < INPUT_NUM; i++)
 		Update(t, keys[i], &new_value[i]);
@@ -129,7 +138,7 @@ int main(void)
 
 	/* Delete */
 //	memset(dummy, 0, 15*1024*1024);
-//	flush_buffer((void *)dummy, 15*1024*1024, true);
+//	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
 //	clock_gettime(CLOCK_MONOTONIC, &t1);
 //	for (i = 0; i < 100; i++)
 //		Delete(t, keys[i]);

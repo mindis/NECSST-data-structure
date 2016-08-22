@@ -12,10 +12,57 @@
 #define BITOP_WORD(nr)	((nr) / BITS_PER_LONG)
 
 unsigned long node_count = 0;
+unsigned long mfence_count = 0;
+unsigned long clflush_count = 0;
 
-void flush_buffer(void *buf, unsigned int len, bool fence)
+#define LATENCY			200
+#define CPU_FREQ_MHZ	2400
+
+static inline void cpu_pause()
 {
-	unsigned int i;
+	__asm__ volatile ("pause" ::: "memory");
+}
+
+static inline unsigned long read_tsc(void)
+{
+	unsigned long var;
+	unsigned int hi, lo;
+
+	asm volatile ("rdtsc" : "=a" (lo), "=d" (hi));
+	var = ((unsigned long long int) hi << 32) | lo;
+
+	return var;
+}
+
+void flush_buffer(void *buf, unsigned long len, bool fence)
+{
+	unsigned long i, etsc;
+	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
+	if (fence) {
+		mfence();
+		for (i = 0; i < len; i += CACHE_LINE_SIZE) {
+			clflush_count++;
+//			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
+			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
+//			while (read_tsc() < etsc)
+//				cpu_pause();
+		}
+		mfence();
+		mfence_count = mfence_count + 2;
+	} else {
+		for (i = 0; i < len; i += CACHE_LINE_SIZE) {
+			clflush_count++;
+//			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
+			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
+//			while (read_tsc() < etsc)
+//				cpu_pause();
+		}
+	}
+}
+
+void flush_buffer_nocount(void *buf, unsigned long len, bool fence)
+{
+	unsigned long i;
 	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
 	if (fence) {
 		mfence();
@@ -206,8 +253,12 @@ found_middle:
 
 int Append(node *n, unsigned long key, void *value)
 {
+	int errval = -1;
 	unsigned long index;
+
 	index = find_next_zero_bit(&n->bitmap, BITMAP_SIZE, 1) - 1;
+	if (index == BITMAP_SIZE - 1)
+		return errval;
 
 	n->entries[index].key = key;
 	n->entries[index].ptr = value;
@@ -216,8 +267,12 @@ int Append(node *n, unsigned long key, void *value)
 
 int Append_in_inner(node *n, unsigned long key, void *value)
 {
+	int errval = -1;
 	unsigned long index;
+
 	index = find_next_zero_bit(&n->bitmap, BITMAP_SIZE, 1) - 1;
+	if (index == BITMAP_SIZE - 1)
+		return errval;
 
 	n->entries[index].key = key;
 	n->entries[index].ptr = value;
@@ -274,7 +329,7 @@ void Insert(tree *t, unsigned long key, void *value)
 	/* Check overflow & split */
 	numEntries = curr->slot[0];
 	if(numEntries == NODE_SIZE) {
-		add_log_entry(t, curr->slot, (char *)curr->entries - (char *)curr->slot, LE_DATA);
+		add_log_entry(t, curr, sizeof(node), LE_DATA);
 		node *splitNode = allocNode();
 		int j, loc, cp = curr->slot[0];
 		splitNode->leftmostPtr = curr->leftmostPtr;
@@ -294,18 +349,17 @@ void Insert(tree *t, unsigned long key, void *value)
 
 		if (splitNode->entries[splitNode->slot[1]].key > key) {
 			loc = insert_in_leaf_noflush(curr, key, value);
-//			flush_buffer(curr->slot, (char *)curr->entries - (char *)curr->slot, false);
-//			flush_buffer(&(curr->entries[loc]), sizeof(entry), false);
+			flush_buffer(&(curr->entries[loc]), sizeof(entry), false);
 		}
 		else
 			insert_in_leaf_noflush(splitNode, key, value);
 
 		insert_in_parent(t, curr, splitNode->entries[splitNode->slot[1]].key, splitNode);
 
-		add_log_entry(t, &curr->leftmostPtr, 8, LE_DATA);
 		curr->leftmostPtr = splitNode;
-//		flush_buffer(&curr->leftmostPtr, 8, false);
-		flush_buffer(curr, sizeof(node), false);
+		
+		flush_buffer(curr->slot, (char *)curr->entries - (char *)curr->slot, false);
+		flush_buffer(&curr->leftmostPtr, 8, false);
 
 		add_log_entry(t, NULL, 0, LE_COMMIT);
 	}
@@ -415,8 +469,9 @@ void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {
 		flush_buffer(root, sizeof(node), false);
 		flush_buffer(splitNode, sizeof(node), false);
 
-		add_log_entry(t, &curr->parent, 8, LE_DATA);
 		curr->parent = root;
+		flush_buffer(&curr->parent, 8, false);
+
 		t->root = root;
 		return ;
 	}
@@ -451,13 +506,14 @@ void insert_in_parent(tree *t, node *curr, unsigned long key, node *splitNode) {
 		node *splitParent = allocNode();
 		splitParent->isleaf = 0;
 
-		add_log_entry(t, parent->slot, (char *)parent->entries - (char *)parent->slot, LE_DATA);
+		add_log_entry(t, parent, sizeof(node), LE_DATA);
 
 		for (j = MIN_LIVE_ENTRIES; j > 0; j--) {
 			loc = Append_in_inner(splitParent,parent->entries[parent->slot[cp]].key, parent->entries[parent->slot[cp]].ptr);
 			node *child = parent->entries[parent->slot[cp]].ptr;
 			add_log_entry(t, &child->parent, 8, LE_DATA);
 			child->parent = splitParent;
+			flush_buffer(&child->parent, 8, false);
 			splitParent->slot[j] = loc;
 			splitParent->slot[0]++;
 			splitParent->bitmap = splitParent->bitmap + (0x1UL << (loc + 1));

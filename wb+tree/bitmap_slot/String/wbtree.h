@@ -1,8 +1,8 @@
 #include <stdbool.h>
-#define NODE_SIZE 63
-#define SLOT_SIZE NODE_SIZE + 1
-#define MIN_LIVE_ENTRIES NODE_SIZE / 2
-#define CACHE_LINE_SIZE 64
+#define NODE_SIZE 			63
+#define SLOT_SIZE 			NODE_SIZE + 1
+#define MIN_LIVE_ENTRIES 	NODE_SIZE / 2
+#define CACHE_LINE_SIZE 	64
 
 #define LOG_DATA_SIZE		48
 #define LOG_AREA_SIZE		4194304
@@ -30,8 +30,13 @@ typedef struct {
 	char log_data[LOG_AREA_SIZE];
 } log_area;
 
+typedef struct {
+	int key_len;
+	unsigned char key[];
+} key_item;
+
 struct entry{
-	unsigned long key;
+	key_item *key;
 	void *ptr;
 };
 

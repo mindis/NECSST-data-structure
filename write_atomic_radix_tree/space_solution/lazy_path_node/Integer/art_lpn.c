@@ -839,6 +839,7 @@ void* art_insert(art_tree *t, const unsigned long key, int key_len, void *value)
     return old;
 }
 
+/*
 static void remove_child256(art_node256 *n, art_node **ref, unsigned char c) {
     n->children[c] = NULL;
     n->n.num_children--;
@@ -947,6 +948,7 @@ static void remove_child(art_node *n, art_node **ref, unsigned char c, art_node 
             abort();
     }
 }
+*/
 /*
 static art_leaf* recursive_delete(art_node *n, art_node **ref, const unsigned char *key, int key_len, int depth) {
     // Search terminated

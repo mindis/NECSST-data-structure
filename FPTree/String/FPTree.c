@@ -13,10 +13,57 @@
 
 unsigned long IN_count = 0;
 unsigned long LN_count = 0;
+unsigned long clflush_count = 0;
+unsigned long mfence_count = 0;
 
-void flush_buffer(void *buf, unsigned int len, bool fence)
+#define LATENCY			200
+#define CPU_FREQ_MHZ	2400
+
+static inline void cpu_pause()
 {
-	unsigned int i;
+	__asm__ volatile ("pause" ::: "memory");
+}
+
+static inline unsigned long read_tsc(void)
+{
+	unsigned long var;
+	unsigned int hi, lo;
+
+	asm volatile ("rdtsc" : "=a" (lo), "=d" (hi));
+	var = ((unsigned long long int) hi << 32) | lo;
+
+	return var;
+}
+
+void flush_buffer(void *buf, unsigned long len, bool fence)
+{
+	unsigned long i, etsc;
+	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
+	if (fence) {
+		mfence();
+		for (i = 0; i < len; i += CACHE_LINE_SIZE) {
+			clflush_count++;
+//			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
+			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
+//			while (read_tsc() < etsc)
+//				cpu_pause();
+		}
+		mfence();
+		mfence_count = mfence_count + 2;
+	} else {
+		for (i = 0; i < len; i += CACHE_LINE_SIZE) {
+			clflush_count++;
+//			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
+			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
+//			while (read_tsc() < etsc)
+//				cpu_pause();
+		}
+	}
+}
+
+void flush_buffer_nocount(void *buf, unsigned long len, bool fence)
+{
+	unsigned long i;
 	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
 	if (fence) {
 		mfence();

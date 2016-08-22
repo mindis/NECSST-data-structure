@@ -11,9 +11,59 @@
 #define mfence() asm volatile("mfence":::"memory")
 #define BITOP_WORD(nr)	((nr) / BITS_PER_LONG)
 
-void flush_buffer(void *buf, unsigned int len, bool fence)
+unsigned long IN_count = 0;
+unsigned long LN_count = 0;
+unsigned long clflush_count = 0;
+unsigned long mfence_count = 0;
+
+#define LATENCY			200
+#define CPU_FREQ_MHZ	2400
+
+static inline void cpu_pause()
 {
-	unsigned int i;
+	__asm__ volatile ("pause" ::: "memory");
+}
+
+static inline unsigned long read_tsc(void)
+{
+	unsigned long var;
+	unsigned int hi, lo;
+
+	asm volatile ("rdtsc" : "=a" (lo), "=d" (hi));
+	var = ((unsigned long long int) hi << 32) | lo;
+
+	return var;
+}
+
+void flush_buffer(void *buf, unsigned long len, bool fence)
+{
+	unsigned long i, etsc;
+	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
+	if (fence) {
+		mfence();
+		for (i = 0; i < len; i += CACHE_LINE_SIZE) {
+			clflush_count++;
+//			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
+			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
+//			while (read_tsc() < etsc)
+//				cpu_pause();
+		}
+		mfence();
+		mfence_count = mfence_count + 2;
+	} else {
+		for (i = 0; i < len; i += CACHE_LINE_SIZE) {
+			clflush_count++;
+//			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
+			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
+//			while (read_tsc() < etsc)
+//				cpu_pause();
+		}
+	}
+}
+
+void flush_buffer_nocount(void *buf, unsigned long len, bool fence)
+{
+	unsigned long i;
 	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
 	if (fence) {
 		mfence();
@@ -26,20 +76,62 @@ void flush_buffer(void *buf, unsigned int len, bool fence)
 	}
 }
 
-void add_redo_logentry()
+void add_log_entry(tree *t, void *addr, unsigned int size, unsigned char type)
 {
-	redo_log_entry *log = malloc(sizeof(redo_log_entry));
-	log->addr = 0;
-	log->new_value = 0;
-	log->type = LE_DATA;
-	flush_buffer(log, sizeof(redo_log_entry), false);
-}
+	log_entry *log;
+	int i, remain_size;
 
-void add_commit_entry()
-{
-	commit_entry *commit_log = malloc(sizeof(commit_entry));
-	commit_log->type = LE_COMMIT;
-	flush_buffer(commit_log, sizeof(commit_entry), true);
+	remain_size = size - ((size / LOG_DATA_SIZE) * LOG_DATA_SIZE);
+
+	if ((char *)t->start_log->next_offset == 
+			(t->start_log->log_data + LOG_AREA_SIZE))
+		t->start_log->next_offset = (log_entry *)t->start_log->log_data;
+
+	if (size <= LOG_DATA_SIZE) {
+		log = t->start_log->next_offset;
+		log->size = size;
+		log->type = type;
+		log->addr = addr;
+		memcpy(log->data, addr, size);
+
+		if (type == LE_DATA)
+			flush_buffer(log, sizeof(log_entry), false);
+		else
+			flush_buffer(log, sizeof(log_entry), true);
+
+		t->start_log->next_offset = t->start_log->next_offset + 1;
+	} else {
+		void *next_addr = addr;
+
+		for (i = 0; i < size / LOG_DATA_SIZE; i++) {
+			log = t->start_log->next_offset;
+			log->size = LOG_DATA_SIZE;
+			log->type = type;
+			log->addr = next_addr;
+			memcpy(log->data, next_addr, LOG_DATA_SIZE);
+
+			flush_buffer(log, sizeof(log_entry), false);
+
+			t->start_log->next_offset = t->start_log->next_offset + 1;
+			if ((char *)t->start_log->next_offset == 
+					(t->start_log->log_data + LOG_AREA_SIZE))
+				t->start_log->next_offset = (log_entry *)t->start_log->log_data;
+
+			next_addr = (char *)next_addr + LOG_DATA_SIZE;
+		}
+
+		if (remain_size > 0) {
+			log = t->start_log->next_offset;
+			log->size = LOG_DATA_SIZE;
+			log->type = type;
+			log->addr = next_addr;
+			memcpy(log->data, next_addr, remain_size);
+
+			flush_buffer(log, sizeof(log_entry), false);
+			
+			t->start_log->next_offset = t->start_log->next_offset + 1;
+		}
+	}
 }
 
 LN *allocLNode()
@@ -47,6 +139,7 @@ LN *allocLNode()
 	LN *node = malloc(sizeof(LN));
 	node->type = THIS_LN;
 	node->bitmap = 0;
+	LN_count++;
 	return node;
 }
 
@@ -55,14 +148,17 @@ IN *allocINode()
 	IN *node = malloc(sizeof(IN));
 	node->type = THIS_IN;
 	node->nKeys = 0;
+	IN_count++;
 	return node;
 }
 
 tree *initTree()
 {
 	tree *t =malloc(sizeof(tree)); 
-	t->root = allocLNode(); 
-	t->height = 0;
+	t->root = allocLNode();
+	((LN *)t->root)->pNext = NULL;
+	t->start_log = malloc(sizeof(log_area));
+	t->start_log->next_offset = (log_entry *)t->start_log->log_data;
 	return t;
 }
 
@@ -181,11 +277,12 @@ void *Lookup(tree *t, unsigned long key)
 
 	while (loc < NUM_LN_ENTRY) {
 		loc = find_next_bit(&curr->bitmap, BITMAP_SIZE, loc);
+		if (loc == BITMAP_SIZE)
+			break;
 		
 		if (curr->fingerprints[loc] == hash(key) &&
 				curr->entries[loc].key == key) {
 			value = curr->entries[loc].ptr;
-//			printf("value = %lu\n", *(unsigned long *)value);
 			break;
 		}
 		loc++;
@@ -193,36 +290,39 @@ void *Lookup(tree *t, unsigned long key)
 
 	return value;
 }
-/*
+
 void Range_Lookup(tree *t, unsigned long start_key, unsigned int num, 
 		unsigned long buf[])
 {
-	int loc, i;
-	unsigned long search_count = 0;
-	struct timespec t1, t2;
-	unsigned long elapsed_time;
-	node *curr = t->root;
-
+	unsigned long i, entry_num, loc, search_count = 0;
+	LN *curr = t->root;
+	entry *sorted_entry = malloc(NUM_LN_ENTRY * sizeof(entry));
 	curr = find_leaf_node(curr, start_key);
-	loc = Search(curr, curr->slot, start_key);
-	while (search_count < num) {
-		for (i = loc; i <= curr->slot[0]; i++) {
-			buf[search_count] = *(unsigned long *)curr->entries[curr->slot[i]].ptr;
-			search_count++;
-			if(search_count == num) {
-				return ;
-			}
-		}
 
-		curr = curr->leftmostPtr;
-		if (curr == NULL) {
-			printf("error\n");
-			return ;
+	while (curr != NULL) {
+		loc = 0;
+		entry_num = 0;
+
+		while (loc < NUM_LN_ENTRY) {
+			loc = find_next_bit(&curr->bitmap, BITMAP_SIZE, loc);
+			if (loc == BITMAP_SIZE)
+				break;
+
+			sorted_entry[entry_num] = curr->entries[loc];
+			loc++;
+			entry_num++;
 		}
-		loc = 1;
+		insertion_sort(sorted_entry, entry_num);
+
+		for (i = 0; i < entry_num; i++) {
+			buf[search_count] = *(unsigned long *)sorted_entry[i].ptr;
+			search_count++;
+			if (search_count == num)
+				return ;
+		}
+		curr = curr->pNext;
 	}
 }
-*/
 
 int Search(IN *curr, unsigned long key)
 {
@@ -272,45 +372,43 @@ void Insert(tree *t, unsigned long key, void *value)
 
 	/* Check overflow & split */
 	if(curr->bitmap == IS_FULL) {
-		int j, num = 0;
-		unsigned long loc = 0;
+		int j;
 		LN *split_LNode = allocLNode();
 		entry *valid_entry = malloc(NUM_LN_ENTRY * sizeof(entry));
 
+		add_log_entry(t, curr, sizeof(LN), LE_DATA);
+
 		split_LNode->pNext = curr->pNext;
 
-		while (loc < BITMAP_SIZE) {
-			loc = find_next_bit(&curr->bitmap, BITMAP_SIZE, loc);
-			valid_entry[num] = curr->entries[loc];
-			num++;
-			loc++;
-		}
+		for (j = 0; j < NUM_LN_ENTRY; j++)
+			valid_entry[j] = curr->entries[j];
 
-		insertion_sort(valid_entry, num);
+		insertion_sort(valid_entry, NUM_LN_ENTRY);
 
 		curr->bitmap = 0;
 		for (j = 0; j < MIN_LN_ENTRIES; j++)
 			insert_in_leaf_noflush(curr, valid_entry[j].key,
 					valid_entry[j].ptr);
 
-		for (j = MIN_LN_ENTRIES; j < num; j++)
+		for (j = MIN_LN_ENTRIES; j < NUM_LN_ENTRY; j++)
 			insert_in_leaf_noflush(split_LNode, valid_entry[j].key,
 					valid_entry[j].ptr);
 
 		free(valid_entry);
 
 		if (split_LNode->entries[0].key > key) {
-			add_redo_logentry();	//slot redo logging for insert_in_leaf_noflush
-			add_redo_logentry();
-			loc = insert_in_leaf_noflush(curr, key, value);
-		//	flush_buffer(&(curr->entries[loc]), sizeof(entry), false);
+			insert_in_leaf_noflush(curr, key, value);
 		} else
 			insert_in_leaf_noflush(split_LNode, key, value);
 
 		insert_in_parent(t, curr, split_LNode->entries[0].key, split_LNode);
-		add_redo_logentry();
+
 		curr->pNext = split_LNode;
-		add_commit_entry();
+
+		flush_buffer(curr, sizeof(LN), false);
+		flush_buffer(split_LNode, sizeof(LN), false);
+
+		add_log_entry(t, NULL, 0, LE_COMMIT);
 	}
 	else{
 		insert_in_leaf(curr, key, value);
@@ -319,8 +417,11 @@ void Insert(tree *t, unsigned long key, void *value)
 
 int insert_in_leaf_noflush(LN *curr, unsigned long key, void *value)
 {
+	int errval = -1;
 	unsigned long index;
 	index = find_next_zero_bit(&curr->bitmap, BITMAP_SIZE, 0);
+	if (index == BITMAP_SIZE)
+		return errval;
 
 	curr->entries[index].key = key;
 	curr->entries[index].ptr = value;
@@ -333,27 +434,24 @@ void insert_in_leaf(LN *curr, unsigned long key, void *value)
 {
 	unsigned long index;
 	index = find_next_zero_bit(&curr->bitmap, BITMAP_SIZE, 0);
+	if (index == BITMAP_SIZE)
+		return ;
 
 	curr->entries[index].key = key;
 	curr->entries[index].ptr = value;
 	curr->fingerprints[index] = hash(key);
 	curr->bitmap = curr->bitmap + (0x1UL << index);
+
+	flush_buffer(&curr->entries[index], sizeof(entry), false);
+	flush_buffer(&curr->fingerprints[index], sizeof(unsigned char), false);
+	flush_buffer(&curr->bitmap, sizeof(unsigned long), true);
 }
 
 void insert_in_inner(IN *curr, unsigned long key, void *child)
 {
 	int loc, mid, j;
 
-//	mid = Search(curr, key);
-
-	for (j = 0; j < curr->nKeys; j++) {
-		if (curr->keys[j] > key) {
-			mid = j;
-			break;
-		}
-	}
-
-	mid = j;
+	mid = Search(curr, key);
 
 	for (j = (curr->nKeys - 1); j >= mid; j--) {
 		curr->keys[j + 1] = curr->keys[j];
@@ -404,8 +502,6 @@ void insert_in_parent(tree *t, void *curr, unsigned long key, void *splitNode) {
 		}
 
 		if (split_INode->keys[0] > key) {
-			add_redo_logentry();
-			add_redo_logentry();
 			insert_in_inner(parent, key, splitNode);
 			((IN *)splitNode)->parent = parent;
 		}
@@ -418,25 +514,31 @@ void insert_in_parent(tree *t, void *curr, unsigned long key, void *splitNode) {
 	}
 }
 
-/*
+
 void *Update(tree *t, unsigned long key, void *value)
 {
-	node *curr = t->root;
+	unsigned long loc = 0;
+	LN *curr = t->root;
 	curr = find_leaf_node(curr, key);
-	int loc = Search(curr, curr->slot, key);
 
-	if (loc > curr->slot[0]) 
-		loc = curr->slot[0];
+	while (loc < NUM_LN_ENTRY) {
+		loc = find_next_bit(&curr->bitmap, BITMAP_SIZE, loc);
+		if (loc == BITMAP_SIZE)
+			break;
+		
+		if (curr->fingerprints[loc] == hash(key) &&
+				curr->entries[loc].key == key) {
+			curr->entries[loc].ptr = value;
+			flush_buffer(&curr->entries[loc].ptr, 8, true);
+			return curr->entries[loc].ptr;
+		}
+		loc++;
+	}
 
-	if (curr->entries[curr->slot[loc]].key != key || loc > curr->slot[0])
-		return NULL;
-
-	curr->entries[curr->slot[loc]].ptr = value;
-	flush_buffer(&curr->entries[curr->slot[loc]].ptr, 8, true);
-
-	return curr->entries[curr->slot[loc]].ptr;
+	return NULL;
 }
 
+/*
 int delete_in_leaf(node *curr, unsigned long key)
 {
 	int mid, j;

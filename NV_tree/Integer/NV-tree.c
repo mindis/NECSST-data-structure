@@ -13,9 +13,59 @@
 
 #define mfence() asm volatile("mfence":::"memory")
 
-void flush_buffer(void *buf, unsigned int len, bool fence)
+unsigned long IN_count = 0;
+unsigned long LN_count = 0;
+unsigned long clflush_count = 0;
+unsigned long mfence_count = 0;
+
+#define LATENCY			200
+#define CPU_FREQ_MHZ	2400
+
+static inline void cpu_pause()
 {
-	unsigned int i;
+	__asm__ volatile ("pause" ::: "memory");
+}
+
+static inline unsigned long read_tsc(void)
+{
+	unsigned long var;
+	unsigned int hi, lo;
+
+	asm volatile ("rdtsc" : "=a" (lo), "=d" (hi));
+	var = ((unsigned long long int) hi << 32) | lo;
+
+	return var;
+}
+
+void flush_buffer(void *buf, unsigned long len, bool fence)
+{
+	unsigned long i, etsc;
+	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
+	if (fence) {
+		mfence();
+		for (i = 0; i < len; i += CACHE_LINE_SIZE) {
+			clflush_count++;
+//			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
+			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
+//			while (read_tsc() < etsc)
+//				cpu_pause();
+		}
+		mfence();
+		mfence_count = mfence_count + 2;
+	} else {
+		for (i = 0; i < len; i += CACHE_LINE_SIZE) {
+			clflush_count++;
+//			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
+			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
+//			while (read_tsc() < etsc)
+//				cpu_pause();
+		}
+	}
+}
+
+void flush_buffer_nocount(void *buf, unsigned long len, bool fence)
+{
+	unsigned long i;
 	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
 	if (fence) {
 		mfence();
@@ -32,6 +82,7 @@ void flush_buffer(void *buf, unsigned int len, bool fence)
 void *allocINode(unsigned long num)
 {
 	IN *new_INs = calloc(num, sizeof(IN));
+	IN_count = num;
 	return (void *)new_INs;
 }
 
@@ -40,6 +91,7 @@ LN *allocLNode()
 {
 	LN *new_LN = calloc(1, sizeof(LN));
 	flush_buffer(new_LN, sizeof(LN), false);
+	LN_count++;
 	return new_LN;
 }
 
@@ -174,20 +226,18 @@ fail:
 
 void insertion_sort(struct LN_entry *base, int num)
 {
-	unsigned long i, j;
+	int i, j;
 	struct LN_entry temp;
 
-//	MAX_NUM_ENTRY_LN
-
 	for (i = 1; i < num; i++) {
-		temp = base[i];
-		j = i - 1;
-
-		while (j >= 0 && base[j].key > temp.key) {
-			base[j + 1] = base[j];
-			j = j - 1;
+		for (j = i; j > 0; j--) {
+			if (base[j - 1].key > base[j].key) {
+				temp = base[j - 1];
+				base[j - 1] = base[j];
+				base[j] = temp;
+			} else
+				break;
 		}
-		base[j + 1] = temp;
 	}
 }
 
@@ -232,7 +282,7 @@ int Range_Lookup(tree *t, unsigned long start_key, unsigned int num,
 
 		insertion_sort(valid_Element, valid_num);
 
-		for (i = 0; i < valid_num; i++) {
+		for (i = 0; i < current_LN->nElements; i++) {
 			buf[j] = *(unsigned long *)valid_Element[i].value;
 			j++;
 			if (j == num)
@@ -601,11 +651,13 @@ int insert_to_PLN(tree *t, unsigned long parent_id,
 	PLN *parent = (PLN *)t->root;
 
 	if (parent[parent_id].nKeys == MAX_NUM_ENTRY_PLN) {
+		/* PLN split */
 		entry_index = reconstruct_PLN(t, parent_id, insert_key, 
 				split_max_key, split_node1, split_node2);
 		if (entry_index < 0)
 			goto fail;
 	} else if (split_max_key <= parent[parent_id].entries[parent[parent_id].nKeys - 1].key) {
+		/* Not PLN split */
 		for (entry_index = 0; entry_index < parent[parent_id].nKeys; entry_index++) {
 			if (split_max_key <= parent[parent_id].entries[entry_index].key) {
 
@@ -639,7 +691,7 @@ void insert_entry_to_leaf(LN *leaf, unsigned long key, void *value, bool flush)
 		leaf->LN_Element[leaf->nElements].key = key;
 		leaf->LN_Element[leaf->nElements].value = value;
 		flush_buffer(&leaf->LN_Element[leaf->nElements], 
-				sizeof(struct LN_entry), true);
+				sizeof(struct LN_entry), false);
 		leaf->nElements++;
 		flush_buffer(&leaf->nElements, sizeof(unsigned char), true);
 	} else {
@@ -773,7 +825,7 @@ void update_entry_to_leaf(LN *leaf, unsigned long old_key, void *old_value,
 		leaf->LN_Element[leaf->nElements + 1].key = new_key;
 		leaf->LN_Element[leaf->nElements + 1].value = new_value;
 		flush_buffer(&leaf->LN_Element[leaf->nElements], 
-				sizeof(struct LN_entry) * 2, true);
+				sizeof(struct LN_entry) * 2, false);
 		leaf->nElements = leaf->nElements + 2;
 		flush_buffer(&leaf->nElements, sizeof(unsigned char), true);
 	} else {
@@ -900,7 +952,7 @@ void delete_entry_to_leaf(LN *leaf, unsigned long key, void *value, bool flush)
 		leaf->LN_Element[leaf->nElements].key = key;
 		leaf->LN_Element[leaf->nElements].value = value;
 		flush_buffer(&leaf->LN_Element[leaf->nElements], 
-				sizeof(struct LN_entry), true);
+				sizeof(struct LN_entry), false);
 		leaf->nElements++;
 		flush_buffer(&leaf->nElements, sizeof(unsigned char), true);
 	} else {

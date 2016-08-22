@@ -51,7 +51,7 @@ int main(void)
 	/* Insertion */
 	dummy = (char *)malloc(15*1024*1024);
 	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
+	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for(i = 0; i < INPUT_NUM; i++)
 		Insert(t, keys[i], &keys[i]);
@@ -63,10 +63,13 @@ int main(void)
 	/* Check space overhead */
 	printf("Total space = %lu byte\n", node_count * sizeof(node));
 	printf("Space efficiency = %lu\n", (node_count * sizeof(node)) / INPUT_NUM);
+	printf("node count = %lu\n", node_count);
+	printf("clflush count = %lu\n", clflush_count);
+	printf("mfence count = %lu\n", mfence_count);
 
 	/* Lookup */
 	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
+	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for(i = 0; i < INPUT_NUM; i++) {
 		ret = (void *)Lookup(t, keys[i]);		
@@ -85,7 +88,7 @@ int main(void)
 
 	/* Range scan 0.1% */
 	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
+	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	Range_Lookup(t, min, INPUT_NUM / 1000, buf);
 	clock_gettime(CLOCK_MONOTONIC, &t2);
@@ -95,7 +98,7 @@ int main(void)
 
 	/* Range scan 1% */
 	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
+	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	Range_Lookup(t, min, INPUT_NUM / 100, buf);
 	clock_gettime(CLOCK_MONOTONIC, &t2);
@@ -105,7 +108,7 @@ int main(void)
 
 	/* Range scan 10% */
 	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
+	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	Range_Lookup(t, min, INPUT_NUM / 10, buf);
 	clock_gettime(CLOCK_MONOTONIC, &t2);
@@ -118,7 +121,7 @@ int main(void)
 	for (i = 0; i < INPUT_NUM; i++)
 		new_value[i] = i;
 	memset(dummy, 0, 15*1024*1024);
-	flush_buffer((void *)dummy, 15*1024*1024, true);
+	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for (i = 0; i < INPUT_NUM; i++)
 		Update(t, keys[i], &new_value[i]);

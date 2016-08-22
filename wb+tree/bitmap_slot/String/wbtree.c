@@ -12,10 +12,57 @@
 #define BITOP_WORD(nr)	((nr) / BITS_PER_LONG)
 
 unsigned long node_count = 0;
+unsigned long mfence_count = 0;
+unsigned long clflush_count = 0;
 
-void flush_buffer(void *buf, unsigned int len, bool fence)
+#define LATENCY			200
+#define CPU_FREQ_MHZ	2400
+
+static inline void cpu_pause()
 {
-	unsigned int i;
+	__asm__ volatile ("pause" ::: "memory");
+}
+
+static inline unsigned long read_tsc(void)
+{
+	unsigned long var;
+	unsigned int hi, lo;
+
+	asm volatile ("rdtsc" : "=a" (lo), "=d" (hi));
+	var = ((unsigned long long int) hi << 32) | lo;
+
+	return var;
+}
+
+void flush_buffer(void *buf, unsigned long len, bool fence)
+{
+	unsigned long i, etsc;
+	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
+	if (fence) {
+		mfence();
+		for (i = 0; i < len; i += CACHE_LINE_SIZE) {
+			clflush_count++;
+//			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
+			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
+//			while (read_tsc() < etsc)
+//				cpu_pause();
+		}
+		mfence();
+		mfence_count = mfence_count + 2;
+	} else {
+		for (i = 0; i < len; i += CACHE_LINE_SIZE) {
+			clflush_count++;
+//			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
+			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
+//			while (read_tsc() < etsc)
+//				cpu_pause();
+		}
+	}
+}
+
+void flush_buffer_nocount(void *buf, unsigned long len, bool fence)
+{
+	unsigned long i;
 	len = len + ((unsigned long)(buf) & (CACHE_LINE_SIZE - 1));
 	if (fence) {
 		mfence();
@@ -26,6 +73,10 @@ void flush_buffer(void *buf, unsigned int len, bool fence)
 		for (i = 0; i < len; i += CACHE_LINE_SIZE)
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
 	}
+}
+
+static inline int min(int a, int b) {
+	return (a < b) ? a : b;
 }
 
 void add_log_entry(tree *t, void *addr, unsigned int size, unsigned char type)
@@ -84,6 +135,15 @@ void add_log_entry(tree *t, void *addr, unsigned int size, unsigned char type)
 			t->start_log->next_offset = t->start_log->next_offset + 1;
 		}
 	}
+}
+
+key_item *make_key_item(unsigned char *key, int key_len)
+{
+	key_item *new_key = malloc(sizeof(key_item) + key_len);
+	new_key->key_len = key_len;
+	memcpy(new_key->key, key, key_len);
+
+	return new_key;
 }
 
 node *allocNode()
@@ -204,7 +264,7 @@ found_middle:
 	return result + ffz(tmp);
 }
 
-int Append(node *n, unsigned long key, void *value)
+int Append(node *n, unsigned char *key, int key_len, void *value)
 {
 	int errval = -1;
 	unsigned long index;
@@ -213,7 +273,9 @@ int Append(node *n, unsigned long key, void *value)
 	if (index == BITMAP_SIZE - 1)
 		return errval;
 
-	n->entries[index].key = key;
+	key_item *new_item = make_key_item(key, key_len);
+
+	n->entries[index].key = new_item;
 	n->entries[index].ptr = value;
 	return index;
 }
@@ -232,52 +294,56 @@ int Append_in_inner(node *n, unsigned long key, void *value)
 	return index;
 }
 
-int Search(node *curr, char *temp, unsigned long key)
+int Search(node *curr, char *temp, unsigned char *key, int key_len)
 {
 	int low = 1, mid = 1;
 	int high = temp[0];
+	int len, decision;
 
 	while (low <= high){
 		mid = (low + high) / 2;
-		if (curr->entries[temp[mid]].key > key)
+		len = min((curr->entries[temp[mid]].key)->key_len, key_len);
+		decision = memcmp((curr->entries[temp[mid]].key)->key, key, len);
+		if (decision > 0)
 			high = mid - 1;
-		else if (curr->entries[temp[mid]].key < key)
+		else if (decision < 0)
 			low = mid + 1;
 		else
 			break;
 	}
 
-	if (low > mid) 
+	if (low > mid)
 		mid = low;
 
 	return mid;
 }
 
-node *find_leaf_node(node *curr, unsigned long key) 
+node *find_leaf_node(node *curr, unsigned char *key, int key_len) 
 {
-	int loc;
+	int loc, len, decision;
 
 	if (curr->isleaf) 
 		return curr;
-	loc = Search(curr, curr->slot, key);
+	loc = Search(curr, curr->slot, key, key_len);
+
+	len = min((curr->entries[curr->slot[loc]].key)->key_len, key_len);
 
 	if (loc > curr->slot[0]) 
-		return find_leaf_node(curr->entries[curr->slot[loc - 1]].ptr, key);
-	else if (curr->entries[curr->slot[loc]].key <= key) 
-		return find_leaf_node(curr->entries[curr->slot[loc]].ptr, key);
+		return find_leaf_node(curr->entries[curr->slot[loc - 1]].ptr, key, key_len);
+	else if (memcmp((curr->entries[curr->slot[loc]].key)->key, key, len) <= 0) 
+		return find_leaf_node(curr->entries[curr->slot[loc]].ptr, key, key_len);
 	else if (loc == 1) 
-		return find_leaf_node(curr->leftmostPtr, key);
+		return find_leaf_node(curr->leftmostPtr, key, key_len);
 	else 
-		return find_leaf_node(curr->entries[curr->slot[loc - 1]].ptr, key);
+		return find_leaf_node(curr->entries[curr->slot[loc - 1]].ptr, key, key_len);
 }
 
-
-void Insert(tree *t, unsigned long key, void *value)
+void Insert(tree *t, unsigned char *key, int key_len, void *value)
 {
 	int numEntries;
 	node *curr = t->root;
 	/* Find proper leaf */
-	curr = find_leaf_node(curr, key);
+	curr = find_leaf_node(curr, key, key_len);
 
 	/* Check overflow & split */
 	numEntries = curr->slot[0];
@@ -317,7 +383,7 @@ void Insert(tree *t, unsigned long key, void *value)
 		add_log_entry(t, NULL, 0, LE_COMMIT);
 	}
 	else{
-		insert_in_leaf(curr, key, value);
+		insert_in_leaf(curr, key, key_len, value);
 	}
 }
 
@@ -341,16 +407,17 @@ int insert_in_leaf_noflush(node *curr, unsigned long key, void *value)
 	return loc;
 }
 
-void insert_in_leaf(node *curr, unsigned long key, void *value)
+void insert_in_leaf(node *curr, unsigned char *key, int key_len, void *value)
 {
 	int loc, mid, j;
 
 	curr->bitmap = curr->bitmap - 1;
 	flush_buffer(&curr->bitmap, sizeof(unsigned long), true);
-	loc = Append(curr, key, value);
+	loc = Append(curr, key, key_len, value);
 	flush_buffer(&(curr->entries[loc]), sizeof(entry), false);
+	flush_buffer(curr->entries[loc].key, sizeof(key_item) + key_len, false);
 
-	mid = Search(curr, curr->slot, key);
+	mid = Search(curr, curr->slot, key, key_len);
 
 	for (j = curr->slot[0]; j >= mid; j--)
 		curr->slot[j + 1] = curr->slot[j];

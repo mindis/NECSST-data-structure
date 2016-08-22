@@ -1,6 +1,6 @@
 #include <stdbool.h>
-#define NUM_LN_ENTRY	8
-#define NUM_IN_ENTRY	256
+#define NUM_LN_ENTRY	63
+#define NUM_IN_ENTRY	254
 #define MIN_IN_ENTRIES (NUM_IN_ENTRY / 2)
 #define MIN_LN_ENTRIES (NUM_LN_ENTRY / 2)
 #define CACHE_LINE_SIZE 64
@@ -8,8 +8,10 @@
 #define THIS_IN		1
 #define THIS_LN		2
 
-#define LE_DATA		0
-#define LE_COMMIT	1
+#define LOG_DATA_SIZE		48
+#define LOG_AREA_SIZE		4194304
+#define LE_DATA			0
+#define LE_COMMIT		1
 
 #define BITS_PER_LONG	64
 #define BITMAP_SIZE		NUM_LN_ENTRY
@@ -18,18 +20,23 @@ typedef struct entry entry;
 typedef struct Internal_Node IN;
 typedef struct Leaf_Node LN;
 typedef struct tree tree;
-typedef struct redo_log_entry redo_log_entry;
-typedef struct commit_entry commit_entry;
 
-struct redo_log_entry {
-	unsigned long addr;
-	unsigned long new_value;
-	unsigned char type;
-};
+unsigned long IN_count;
+unsigned long LN_count;
+unsigned long clflush_count;
+unsigned long mfence_count;
 
-struct commit_entry {
+typedef struct {
+	unsigned int size;
 	unsigned char type;
-};
+	void *addr;
+	char data[LOG_DATA_SIZE];
+} log_entry;
+
+typedef struct {
+	log_entry *next_offset;
+	char log_data[LOG_AREA_SIZE];
+} log_area;
 
 struct entry{
 	unsigned long key;
@@ -56,10 +63,10 @@ struct Leaf_Node {
 
 struct tree {
 	void *root;
-	int height;
+	log_area *start_log;
 };
 
-void flush_buffer(void *buf, unsigned int len, bool fence);
+void flush_buffer_nocount(void *buf, unsigned int len, bool fence);
 tree *initTree();
 void Range_Lookup(tree *t, unsigned long start_key, unsigned int num, 
 		unsigned long buf[]);

@@ -23,6 +23,8 @@ typedef struct tree tree;
 
 unsigned long IN_count;
 unsigned long LN_count;
+unsigned long clflush_count;
+unsigned long mfence_count;
 
 typedef struct {
 	unsigned int size;
@@ -64,7 +66,7 @@ struct tree {
 	log_area *start_log;
 };
 
-void flush_buffer(void *buf, unsigned int len, bool fence);
+void flush_buffer_nocount(void *buf, unsigned int len, bool fence);
 tree *initTree();
 void Range_Lookup(tree *t, unsigned long start_key, unsigned int num, 
 		unsigned long buf[]);
