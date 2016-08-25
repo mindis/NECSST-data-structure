@@ -1,0 +1,9 @@
+Insertion Time = 22597527915 ns
+sizeof(art_node16) = 528
+sizeof(art_leaf) = 24
+Total space = 2633745168 byte
+Space efficiency = 164
+node count = 4260881
+leaf count = 16000000
+clflush count = 78357167
+mfence count = 32000000
