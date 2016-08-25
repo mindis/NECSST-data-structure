@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdbool.h>
+#include <byteswap.h>
 #ifndef ART_H
 #define ART_H
 
@@ -9,26 +10,29 @@ extern "C" {
 
 unsigned long node4_count;
 unsigned long node16_count;
-unsigned long node48_count;
-unsigned long node256_count;
+unsigned long node32_count;
+unsigned long node128_count;
 unsigned long leaf_count;
-unsigned long clflush_count;
 unsigned long mfence_count;
+unsigned long clflush_count;
 
-#define NODE4   1
-#define NODE16  2
-#define NODE48  3
-#define NODE256 4
+#define NODE4	1
+#define NODE16	2
+#define NODE32	3
+#define NODE128	4
 
-#define CACHE_LINE_SIZE		64
+#define BITS_PER_LONG		64
+#define CACHE_LINE_SIZE 	64
 
-#define NODE_BITS			8
-#define MAX_DEPTH			((64 / NODE_BITS) - 1)
-#define NUM_NODE_ENTRIES	(0x1UL << NODE_BITS)
+/* If you want to change the number of entries, 
+ * change the values of NODE_BITS & MAX_DEPTH */
+#define NODE_BITS			7
+#define MAX_DEPTH			9
+#define NUM_NODE_ENTRIES 	(0x1UL << NODE_BITS)
 #define LOW_BIT_MASK		((0x1UL << NODE_BITS) - 1)
-#define INDEX_BITS			(8 / NODE_BITS)
 
-#define MAX_PREFIX_LEN		(64 / NODE_BITS)
+#define MAX_PREFIX_LEN		(MAX_DEPTH + 1)
+#define MAX_HEIGHT			(MAX_DEPTH + 1)
 
 #if defined(__GNUC__) && !defined(__clang__)
 # if __STDC_VERSION__ >= 199901L && 402 == (__GNUC__ * 100 + __GNUC_MINOR__)
@@ -40,6 +44,14 @@ unsigned long mfence_count;
 #  define BROKEN_GCC_C99_INLINE
 # endif
 #endif
+
+static inline unsigned long ffz(unsigned long word)
+{
+	asm("rep; bsf %1,%0"
+		: "=r" (word)
+		: "r" (~word));
+	return word;
+}
 
 typedef int(*art_callback)(void *data, const unsigned char *key, uint32_t key_len, void *value);
 
@@ -80,7 +92,7 @@ typedef struct {
 } art_node16;
 
 /**
- * Node with 64 children, but
+ * Node with 32 children, but
  * a full 128 byte field.
  */
 typedef struct {
@@ -104,8 +116,7 @@ typedef struct {
  */
 typedef struct {
     void *value;
-    uint32_t key_len;
-//    unsigned char key[];
+    uint32_t key_len;	
 	unsigned long key;
 } art_leaf;
 
@@ -145,6 +156,7 @@ int art_tree_destroy(art_tree *t);
 
 /**
  * Returns the size of the ART tree.
+
 #ifdef BROKEN_GCC_C99_INLINE
 # define art_size(t) ((t)->size)
 #else
