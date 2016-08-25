@@ -26,8 +26,6 @@ int main(void)
 		exit(0);
 	}
 
-	printf("sizeof(node) = %d\n", sizeof(node));
-
 	keys = malloc(sizeof(unsigned long) * INPUT_NUM);
 	buf = malloc(sizeof(unsigned long) * INPUT_NUM);
 	memset(buf, 0, sizeof(unsigned long) * INPUT_NUM);
@@ -61,6 +59,7 @@ int main(void)
 	printf("Insertion Time = %lu ns\n",elapsed_time);
 
 	/* Check space overhead */
+	printf("sizeof(node) = %d\n", sizeof(node));
 	printf("Total space = %lu byte\n", node_count * sizeof(node));
 	printf("Space efficiency = %lu\n", (node_count * sizeof(node)) / INPUT_NUM);
 	printf("node count = %lu\n", node_count);
@@ -85,7 +84,7 @@ int main(void)
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 	printf("Search Time = %lu ns\n", elapsed_time);
-
+#ifdef sekwon
 	/* Range scan 0.1% */
 	memset(dummy, 0, 15*1024*1024);
 	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
@@ -129,7 +128,7 @@ int main(void)
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 	printf("Update time = %lu ns\n", elapsed_time);
-
+#endif
 	/* Delete */
 //	memset(dummy, 0, 15*1024*1024);
 //	flush_buffer((void *)dummy, 15*1024*1024, true);

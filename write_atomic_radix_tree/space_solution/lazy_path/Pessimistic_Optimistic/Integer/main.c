@@ -5,7 +5,7 @@
 #include <time.h>
 #include "art_lp.h"
 
-#define INPUT_NUM	10000000
+#define INPUT_NUM	1024000000
 
 int main(void)
 {
@@ -20,7 +20,7 @@ int main(void)
 	unsigned long max;
 	unsigned long min;
 
-	if((fp = fopen("/home/sekwon/Public/input_file/input_random_sparse_1024M.txt","r")) == NULL)
+	if((fp = fopen("/home/sekwon/Public/input_file/input_random_synthetic_1024M.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
@@ -76,6 +76,8 @@ int main(void)
 	printf("sizeof(art_leaf) = %lu\n", sizeof(art_leaf));
 	printf("Total space = %lu byte\n", (node_count * sizeof(art_node16) + leaf_count * sizeof(art_leaf)));
 	printf("Space efficiency = %lu\n", (node_count * sizeof(art_node16) + leaf_count * sizeof(art_leaf)) / INPUT_NUM);
+	printf("node count = %lu\n", node_count);
+	printf("leaf count = %lu\n", leaf_count);
 	printf("clflush count = %lu\n", clflush_count);
 	printf("mfence count = %lu\n", mfence_count);
 

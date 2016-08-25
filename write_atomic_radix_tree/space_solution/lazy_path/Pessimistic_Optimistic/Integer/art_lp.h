@@ -17,8 +17,8 @@ unsigned long clflush_count;
 
 /* If you want to change the number of entries, 
  * change the values of NODE_BITS & MAX_DEPTH */
-#define NODE_BITS			5
-#define MAX_DEPTH			12
+#define NODE_BITS			7
+#define MAX_DEPTH			9
 #define NUM_NODE_ENTRIES 	(0x1UL << NODE_BITS)
 #define LOW_BIT_MASK		((0x1UL << NODE_BITS) - 1)
 

@@ -1,9 +1,0 @@
-Insertion Time = 9608265284 ns
-sizeof(art_node4) = 56
-sizeof(art_node16) = 160
-sizeof(art_node48) = 656
-sizeof(art_node256) = 2064
-sizeof(art_leaf) = 24
-Total space = 888168904 byte
-Space efficiency = 55
-Search Time = 4158434224 ns
