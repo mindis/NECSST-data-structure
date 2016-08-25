@@ -1,13 +1,13 @@
 #!/bin/sh
 
-./FPTree_sparse_16M > ./result/FPTree_sparse_16M.txt
-./FPTree_dense_16M > ./result/FPTree_dense_16M.txt
-./FPTree_synthetic_16M > ./result/FPTree_synthetic_16M.txt
+./200_latency/ART_LP_I6_sparse_16M_200 > ./result/200_latency/ART_LP_I6_sparse_16M_200.txt
+./200_latency/ART_LP_I6_dense_16M_200 > ./result/200_latency/ART_LP_I6_dense_16M_200.txt
+./200_latency/ART_LP_I6_synthetic_16M_200 > ./result/200_latency/ART_LP_I6_synthetic_16M_200.txt
 
-./FPTree_sparse_128M > ./result/FPTree_sparse_128M.txt
-./FPTree_dense_128M > ./result/FPTree_dense_128M.txt
-./FPTree_synthetic_128M > ./result/FPTree_synthetic_128M.txt
+./200_latency/ART_LP_I6_sparse_128M_200 > ./result/200_latency/ART_LP_I6_sparse_128M_200.txt
+./200_latency/ART_LP_I6_dense_128M_200 > ./result/200_latency/ART_LP_I6_dense_128M_200.txt
+./200_latency/ART_LP_I6_synthetic_128M_200 > ./result/200_latency/ART_LP_I6_synthetic_128M_200.txt
 
-./FPTree_sparse_1024M > ./result/FPTree_sparse_1024M.txt
-./FPTree_dense_1024M > ./result/FPTree_dense_1024M.txt
-./FPTree_synthetic_1024M > ./result/FPTree_synthetic_1024M.txt
+./200_latency/ART_LP_I6_sparse_1024M_200 > ./result/200_latency/ART_LP_I6_sparse_1024M_200.txt
+./200_latency/ART_LP_I6_dense_1024M_200 > ./result/200_latency/ART_LP_I6_dense_1024M_200.txt
+./200_latency/ART_LP_I6_synthetic_1024M_200 > ./result/200_latency/ART_LP_I6_synthetic_1024M_200.txt
