@@ -262,7 +262,7 @@ static art_node** find_child(art_node *n, unsigned char c) {
 			break;
 		case NODE16:
 			p.p2 = (art_node16 *)n;
-			if(p.p2->bitmap[c / 32][0] & (0x1UL << (c % 32)))
+			if(p.p2->bitmap[c / 32][0] & (0x1U << (c % 32)))
 				return &p.p2->children[p.p2->keys[c]];
 			break;
 		case NODE128:
@@ -457,16 +457,20 @@ static void add_child16(art_node16 *n, art_node **ref, unsigned char c, void *ch
 	unsigned int p_bitmap = 0;
 	p_bitmap = n->bitmap[0][1] + n->bitmap[1][1] + n->bitmap[2][1] + n->bitmap[3][1];
 
-	if (p_bitmap != ((0x1UL << 16) - 1)) {
+	if (p_bitmap != ((0x1U << 16) - 1)) {
 		int idx;
 
 		idx = find_next_zero_bit(&p_bitmap, 16, 0);
+		if (idx == 16) {
+			printf("find next zero bit error\n");
+			abort();
+		}
 
 		n->keys[c] = idx;
 		n->children[idx] = child;
 		
-		n->bitmap[c / 32][0] = n->bitmap[c / 32][0] + (0x1UL << (c % 32));
-		n->bitmap[c / 32][1] = n->bitmap[c / 32][1] + (0x1UL << idx);
+		n->bitmap[c / 32][0] = n->bitmap[c / 32][0] + (0x1U << (c % 32));
+		n->bitmap[c / 32][1] = n->bitmap[c / 32][1] + (0x1U << idx);
 	} else {
 		int i, j;
 		art_node128 *new_node = (art_node128 *)alloc_node(NODE128);
@@ -521,8 +525,8 @@ static void add_child4(art_node4 *n, art_node **ref, unsigned char c, void *chil
 		art_node16 *new_node = (art_node16 *)alloc_node(NODE16);
 
 		for (idx = 0; idx < 4; idx++) {
-			new_node->bitmap[n->slot[idx].key / 32][0] = 0x1UL << (n->slot[idx].key % 32);
-			new_node->bitmap[n->slot[idx].key / 32][1] = 0x1UL << (n->slot[idx].i_ptr);
+			new_node->bitmap[n->slot[idx].key / 32][0] = (0x1U << (n->slot[idx].key % 32));
+			new_node->bitmap[n->slot[idx].key / 32][1] = (0x1U << (n->slot[idx].i_ptr));
 			new_node->keys[n->slot[idx].key] = n->slot[idx].i_ptr;
 			new_node->children[n->slot[idx].i_ptr] = n->children[n->slot[idx].i_ptr];
 		}
