@@ -10,7 +10,6 @@ extern "C" {
 
 unsigned long node4_count;
 unsigned long node16_count;
-unsigned long node32_count;
 unsigned long node128_count;
 unsigned long leaf_count;
 unsigned long mfence_count;
@@ -45,6 +44,14 @@ unsigned long clflush_count;
 # endif
 #endif
 
+static inline unsigned long __ffs(unsigned long word)
+{
+	asm("rep; bsf %1,%0"
+		: "=r" (word)
+		: "rm" (word));
+	return word;
+}
+
 static inline unsigned long ffz(unsigned long word)
 {
 	asm("rep; bsf %1,%0"
@@ -66,8 +73,8 @@ typedef struct {
 } art_node;
 
 typedef struct {
-	unsigned char key;
-	unsigned char i_ptr;
+	char key;
+	char i_ptr;
 } slot_array;
 
 /**

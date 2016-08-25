@@ -10,7 +10,9 @@
 #define mfence() asm volatile("mfence":::"memory")
 #define BITOP_WORD(nr)	((nr) / BITS_PER_LONG)
 
-unsigned long node_count = 0;
+unsigned long node4_count = 0;
+unsigned long node16_count = 0;
+unsigned long node128_count = 0;
 unsigned long leaf_count = 0;
 unsigned long clflush_count = 0;
 unsigned long mfence_count = 0;
@@ -90,6 +92,51 @@ static int get_index(unsigned long key, int depth)
 	return index;
 }
 
+/*
+ * Find the next set bit in a memory region.
+ */
+unsigned long find_next_bit(const unsigned long *addr, unsigned long size,
+			    unsigned long offset)
+{
+	const unsigned long *p = addr + BITOP_WORD(offset);
+	unsigned long result = offset & ~(BITS_PER_LONG-1);
+	unsigned long tmp;
+
+	if (offset >= size)
+		return size;
+	size -= result;
+	offset %= BITS_PER_LONG;
+	if (offset) {
+		tmp = *(p++);
+		tmp &= (~0UL << offset);
+		if (size < BITS_PER_LONG)
+			goto found_first;
+		if (tmp)
+			goto found_middle;
+		size -= BITS_PER_LONG;
+		result += BITS_PER_LONG;
+	}
+	while (size & ~(BITS_PER_LONG-1)) {
+		if ((tmp = *(p++)))
+			goto found_middle;
+		result += BITS_PER_LONG;
+		size -= BITS_PER_LONG;
+	}
+	if (!size)
+		return result;
+	tmp = *p;
+
+found_first:
+	tmp &= (~0UL >> (BITS_PER_LONG - size));
+	if (tmp == 0UL)		/* Are any bits set? */
+		return result + size;	/* Nope. */
+found_middle:
+	return result + __ffs(tmp);
+}
+
+/*
+ * Find the next zero bit in a memory region
+ */
 unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
 		unsigned long offset)
 {
@@ -363,7 +410,7 @@ static art_leaf* minimum(const art_node *n) {
 		case NODE16:
 			for (i = 0; i < 4; i++) {
 				for (j = 0; j < 32; j++) { 
-					j = find_next_zero_bit(&((art_node16 *)n)->bitmap[i][0], 32, j);
+					j = find_next_bit((unsigned long *)&((art_node16 *)n)->bitmap[i][0], 32, j);
 					if (j < 32)
 						return minimum(((art_node16 *)n)->children[((art_node16 *)n)->keys[j + (i * 32)]]);
 				}
@@ -460,9 +507,9 @@ static void add_child16(art_node16 *n, art_node **ref, unsigned char c, void *ch
 	if (p_bitmap != ((0x1U << 16) - 1)) {
 		int idx;
 
-		idx = find_next_zero_bit(&p_bitmap, 16, 0);
+		idx = find_next_zero_bit((unsigned long *)&p_bitmap, 16, 0);
 		if (idx == 16) {
-			printf("find next zero bit error\n");
+			printf("find next zero bit error in child 16\n");
 			abort();
 		}
 
@@ -477,7 +524,7 @@ static void add_child16(art_node16 *n, art_node **ref, unsigned char c, void *ch
 
 		for (i = 0; i < 4; i++) {
 			for (j = 0; j < 32; j++) { 
-				j = find_next_zero_bit(&n->bitmap[i][0], 32, j);
+				j = find_next_bit((unsigned long *)&n->bitmap[i][0], 32, j);
 				if (j < 32)
 					new_node->children[j + (i * 32)] = n->children[n->keys[j + (i * 32)]];
 			}
@@ -503,12 +550,22 @@ static void add_child4(art_node4 *n, art_node **ref, unsigned char c, void *chil
 		if (mid == -1)
 			mid = idx;
 
-		p_idx = find_next_zero_bit(&p_idx, 4, 0);
+		p_idx = find_next_zero_bit((unsigned long *)&p_idx, 4, 0);
+		if (p_idx == 4) {
+			printf("find next zero bit error in child4\n");
+			abort();
+		}
+
 		n->children[p_idx] = child;
 
 		for (i = idx - 1; i >= mid; i--) {
 			temp_slot[i + 1].key = n->slot[i].key;
 			temp_slot[i + 1].i_ptr = n->slot[i].i_ptr;
+		}
+
+		if (idx < 3) {
+			for (i = idx + 1; i < 4; i++)
+				temp_slot[i].key = -1;
 		}
 
 		temp_slot[mid].key = c;
@@ -525,8 +582,12 @@ static void add_child4(art_node4 *n, art_node **ref, unsigned char c, void *chil
 		art_node16 *new_node = (art_node16 *)alloc_node(NODE16);
 
 		for (idx = 0; idx < 4; idx++) {
-			new_node->bitmap[n->slot[idx].key / 32][0] = (0x1U << (n->slot[idx].key % 32));
-			new_node->bitmap[n->slot[idx].key / 32][1] = (0x1U << (n->slot[idx].i_ptr));
+			new_node->bitmap[n->slot[idx].key / 32][0] = 
+				new_node->bitmap[n->slot[idx].key / 32][0] + 
+				(0x1U << (n->slot[idx].key % 32));
+			new_node->bitmap[n->slot[idx].key / 32][1] = 
+				new_node->bitmap[n->slot[idx].key / 32][1] + 
+				(0x1U << (n->slot[idx].i_ptr));
 			new_node->keys[n->slot[idx].key] = n->slot[idx].i_ptr;
 			new_node->children[n->slot[idx].i_ptr] = n->children[n->slot[idx].i_ptr];
 		}

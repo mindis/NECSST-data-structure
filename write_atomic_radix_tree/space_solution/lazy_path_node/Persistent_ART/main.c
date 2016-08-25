@@ -5,7 +5,7 @@
 #include <time.h>
 #include "PART.h"
 
-#define INPUT_NUM	16000000
+#define INPUT_NUM	128000000
 
 int main(void)
 {
@@ -20,7 +20,7 @@ int main(void)
 	unsigned long max;
 	unsigned long min;
 
-	if((fp = fopen("/home/sekwon/Public/input_file/input_random_synthetic_16M.txt","r")) == NULL)
+	if((fp = fopen("/home/sekwon/Public/input_file/input_random_synthetic_128M.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
@@ -60,6 +60,7 @@ int main(void)
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	for(i = 0; i < INPUT_NUM; i++) {
 		art_insert(t, keys[i], sizeof(unsigned long), &keys[i]);
+//		printf("%d\n", i);
 	//	art_insert(t, (unsigned char *)&keys[i], sizeof(unsigned long), &keys[i]);
 		//	printf("Insert error!\n");
 		//	exit(1);
