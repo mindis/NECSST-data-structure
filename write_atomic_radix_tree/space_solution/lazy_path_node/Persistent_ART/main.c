@@ -5,7 +5,7 @@
 #include <time.h>
 #include "PART.h"
 
-#define INPUT_NUM	128000000
+#define INPUT_NUM	1024000000
 
 int main(void)
 {
@@ -20,7 +20,7 @@ int main(void)
 	unsigned long max;
 	unsigned long min;
 
-	if((fp = fopen("/home/sekwon/Public/input_file/input_random_synthetic_128M.txt","r")) == NULL)
+	if((fp = fopen("/home/sekwon/Public/input_file/input_random_synthetic_1024M.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
@@ -71,16 +71,20 @@ int main(void)
 	printf("Insertion Time = %lu ns\n", elapsed_time);
 
 	/* Check space overhead */
-//	printf("Node count = %lu\n", node_count);
-//	printf("Leaf count = %lu\n", leaf_count);
-//	printf("sizeof(art_node16) = %lu\n", sizeof(art_node16));
-//	printf("sizeof(art_leaf) = %lu\n", sizeof(art_leaf));
-//	printf("Total space = %lu byte\n", (node_count * sizeof(art_node16) + leaf_count * sizeof(art_leaf)));
-//	printf("Space efficiency = %lu\n", (node_count * sizeof(art_node16) + leaf_count * sizeof(art_leaf)) / INPUT_NUM);
-//	printf("node count = %lu\n", node_count);
-//	printf("leaf count = %lu\n", leaf_count);
-//	printf("clflush count = %lu\n", clflush_count);
-//	printf("mfence count = %lu\n", mfence_count);
+	printf("sizeof(art_node4) = %lu\n", sizeof(art_node4));
+	printf("sizeof(art_node16) = %lu\n", sizeof(art_node16));
+	printf("sizeof(art_node128) = %lu\n", sizeof(art_node128));
+	printf("sizeof(art_leaf) = %lu\n", sizeof(art_leaf));
+	printf("Total space = %lu byte\n", (node4_count * sizeof(art_node4) + node16_count * sizeof(art_node16) 
+				+ node128_count * sizeof(art_node128) + leaf_count * sizeof(art_leaf)));
+	printf("Space efficiency = %lu\n", (node4_count * sizeof(art_node4) + node16_count * sizeof(art_node16) 
+				+ node128_count * sizeof(art_node128) + leaf_count * sizeof(art_leaf)) / INPUT_NUM);
+	printf("node4_count = %lu\n", node4_count);
+	printf("node16_count = %lu\n", node16_count);
+	printf("node128_count = %lu\n", node128_count);
+	printf("leaf count = %lu\n", leaf_count);
+	printf("clflush count = %lu\n", clflush_count);
+	printf("mfence count = %lu\n", mfence_count);
 
 	/* Lookup */
 	memset(dummy, 0, 15*1024*1024);

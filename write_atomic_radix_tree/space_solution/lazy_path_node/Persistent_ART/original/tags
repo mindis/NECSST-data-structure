@@ -31,11 +31,8 @@ __ffs	PART.h	/^static inline unsigned long __ffs(unsigned long word)$/;"	f
 a	test.c	/^	unsigned char a : 4;$/;"	m	struct:bit_array	file:
 add_child	PART.c	/^static void add_child(art_node *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
 add_child128	PART.c	/^static void add_child128(art_node128 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
-add_child128_noflush	PART.c	/^static void add_child128_noflush(art_node128 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
 add_child16	PART.c	/^static void add_child16(art_node16 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
-add_child16_noflush	PART.c	/^static void add_child16_noflush(art_node16 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
 add_child4	PART.c	/^static void add_child4(art_node4 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
-add_child4_noflush	PART.c	/^static void add_child4_noflush(art_node4 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
 alloc_node	PART.c	/^static art_node* alloc_node(uint8_t type) {$/;"	f	file:
 art_callback	PART.h	/^typedef int(*art_callback)(void *data, const unsigned char *key, uint32_t key_len, void *value);$/;"	t
 art_insert	PART.c	/^void* art_insert(art_tree *t, const unsigned long key, int key_len, void *value) {$/;"	f
