@@ -36,11 +36,11 @@ art_node16	art_lpn.h	/^} art_node16;$/;"	t	typeref:struct:__anon3
 art_node256	art_lpn.h	/^} art_node256;$/;"	t	typeref:struct:__anon5
 art_node4	art_lpn.h	/^} art_node4;$/;"	t	typeref:struct:__anon2
 art_node48	art_lpn.h	/^} art_node48;$/;"	t	typeref:struct:__anon4
-art_search	art_lpn.c	/^void* art_search(const art_tree *t, const unsigned long key, int key_len) {$/;"	f
+art_search	art_lpn.c	/^void* art_search(const art_tree *t, const unsigned char *key, int key_len) {$/;"	f
 art_tree	art_lpn.h	/^} art_tree;$/;"	t	typeref:struct:__anon7
 art_tree_destroy	art_lpn.c	/^int art_tree_destroy(art_tree *t) {$/;"	f
 art_tree_init	art_lpn.c	/^int art_tree_init(art_tree *t) {$/;"	f
-check_prefix	art_lpn.c	/^static int check_prefix(const art_node *n, const unsigned long key, int key_len, int depth) {$/;"	f	file:
+check_prefix	art_lpn.c	/^static int check_prefix(const art_node *n, const unsigned char *key, int key_len, int depth) {$/;"	f	file:
 children	art_lpn.h	/^    art_node *children[16];$/;"	m	struct:__anon3
 children	art_lpn.h	/^    art_node *children[256];$/;"	m	struct:__anon5
 children	art_lpn.h	/^    art_node *children[48];$/;"	m	struct:__anon4

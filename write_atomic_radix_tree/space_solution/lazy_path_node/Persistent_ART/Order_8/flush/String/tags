@@ -1,0 +1,107 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ART_H	PART.h	5;"	d
+BIN_DIR	Makefile	/^BIN_DIR = .\/$/;"	m
+BITOP_WORD	PART.c	11;"	d	file:
+BITS_PER_LONG	PART.h	24;"	d
+BROKEN_GCC_C99_INLINE	PART.h	35;"	d
+CACHE_LINE_SIZE	PART.h	25;"	d
+CFLAGS	Makefile	/^CFLAGS = -c$/;"	m
+CPU_FREQ_MHZ	PART.c	29;"	d	file:
+IS_LEAF	PART.c	24;"	d	file:
+LATENCY	PART.c	28;"	d	file:
+LEAF_RAW	PART.c	26;"	d	file:
+MAX_PREFIX_LEN	PART.h	26;"	d
+NODE16	PART.h	20;"	d
+NODE256	PART.h	22;"	d
+NODE4	PART.h	19;"	d
+NODE48	PART.h	21;"	d
+SET_LEAF	PART.c	25;"	d	file:
+__ffs	PART.h	/^static inline unsigned long __ffs(unsigned long word)$/;"	f
+add_child	PART.c	/^static void add_child(art_node *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+add_child16	PART.c	/^static void add_child16(art_node16 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+add_child16_noflush	PART.c	/^static void add_child16_noflush(art_node16 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+add_child256	PART.c	/^static void add_child256(art_node256 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+add_child256_noflush	PART.c	/^static void add_child256_noflush(art_node256 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+add_child4	PART.c	/^static void add_child4(art_node4 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+add_child48	PART.c	/^static void add_child48(art_node48 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+add_child48_noflush	PART.c	/^static void add_child48_noflush(art_node48 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+add_child4_noflush	PART.c	/^static void add_child4_noflush(art_node4 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+alloc_node	PART.c	/^static art_node* alloc_node(uint8_t type) {$/;"	f	file:
+art_callback	PART.h	/^typedef int(*art_callback)(void *data, const unsigned char *key, uint32_t key_len, void *value);$/;"	t
+art_insert	PART.c	/^void* art_insert(art_tree *t, const unsigned long key, int key_len, void *value) {$/;"	f
+art_leaf	PART.h	/^} art_leaf;$/;"	t	typeref:struct:__anon8
+art_node	PART.h	/^} art_node;$/;"	t	typeref:struct:__anon1
+art_node16	PART.h	/^} art_node16;$/;"	t	typeref:struct:__anon5
+art_node256	PART.h	/^} art_node256;$/;"	t	typeref:struct:__anon7
+art_node4	PART.h	/^} art_node4;$/;"	t	typeref:struct:__anon4
+art_node48	PART.h	/^} art_node48;$/;"	t	typeref:struct:__anon6
+art_search	PART.c	/^void* art_search(const art_tree *t, const unsigned char *key, int key_len) {$/;"	f
+art_tree	PART.h	/^} art_tree;$/;"	t	typeref:struct:__anon9
+art_tree_init	PART.c	/^int art_tree_init(art_tree *t) {$/;"	f
+bitmap	PART.h	/^	unsigned long bitmap;$/;"	m	struct:__anon5
+bits_arr	PART.h	/^	node48_bitmap bits_arr[16];$/;"	m	struct:__anon6
+check_prefix	PART.c	/^static int check_prefix(const art_node *n, const unsigned char *key, int key_len, int depth) {$/;"	f	file:
+children	PART.h	/^    art_node *children[16];$/;"	m	struct:__anon5
+children	PART.h	/^    art_node *children[256];$/;"	m	struct:__anon7
+children	PART.h	/^    art_node *children[48];$/;"	m	struct:__anon6
+children	PART.h	/^    art_node *children[4];$/;"	m	struct:__anon4
+clflush_count	PART.c	/^unsigned long clflush_count = 0;$/;"	v
+clflush_count	PART.h	/^unsigned long clflush_count;$/;"	v
+copy_header	PART.c	/^static void copy_header(art_node *dest, art_node *src) {$/;"	f	file:
+cpu_pause	PART.c	/^static inline void cpu_pause()$/;"	f	file:
+destroy_art_tree	PART.h	160;"	d
+ffz	PART.h	/^static inline unsigned long ffz(unsigned long word)$/;"	f
+find_child	PART.c	/^static art_node** find_child(art_node *n, unsigned char c) {$/;"	f	file:
+find_next_bit	PART.c	/^unsigned long find_next_bit(const unsigned long *addr, unsigned long size,$/;"	f
+find_next_zero_bit	PART.c	/^unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,$/;"	f
+flush_buffer	PART.c	/^void flush_buffer(void *buf, unsigned long len, bool fence)$/;"	f
+flush_buffer_nocount	PART.c	/^void flush_buffer_nocount(void *buf, unsigned long len, bool fence)$/;"	f
+i_ptr	PART.h	/^	char i_ptr;$/;"	m	struct:__anon2
+init_art_tree	PART.h	147;"	d
+k_bits	PART.h	/^	unsigned long k_bits : 16;$/;"	m	struct:__anon3
+key	PART.h	/^	unsigned char key;$/;"	m	struct:__anon2
+key	PART.h	/^	unsigned long key;$/;"	m	struct:__anon8
+key_len	PART.h	/^    uint32_t key_len;	$/;"	m	struct:__anon8
+keys	PART.h	/^    unsigned char keys[16];$/;"	m	struct:__anon5
+keys	PART.h	/^    unsigned char keys[256];$/;"	m	struct:__anon6
+leaf_count	PART.c	/^unsigned long leaf_count = 0;$/;"	v
+leaf_count	PART.h	/^unsigned long leaf_count;$/;"	v
+leaf_matches	PART.c	/^static int leaf_matches(const art_leaf *n, const unsigned char *key, int key_len, int depth) {$/;"	f	file:
+longest_common_prefix	PART.c	/^static int longest_common_prefix(art_leaf *l1, art_leaf *l2, int depth) {$/;"	f	file:
+main	main.c	/^int main(void)$/;"	f
+make_leaf	PART.c	/^static art_leaf* make_leaf(const unsigned char *key, int key_len, void *value) {$/;"	f	file:
+mfence	PART.c	10;"	d	file:
+mfence_count	PART.c	/^unsigned long mfence_count = 0;$/;"	v
+mfence_count	PART.h	/^unsigned long mfence_count;$/;"	v
+min	PART.c	/^static inline int min(int a, int b) {$/;"	f	file:
+minimum	PART.c	/^static art_leaf* minimum(const art_node *n) {$/;"	f	file:
+n	PART.h	/^    art_node n;$/;"	m	struct:__anon4
+n	PART.h	/^    art_node n;$/;"	m	struct:__anon5
+n	PART.h	/^    art_node n;$/;"	m	struct:__anon6
+n	PART.h	/^    art_node n;$/;"	m	struct:__anon7
+node16_count	PART.c	/^unsigned long node16_count = 0;$/;"	v
+node16_count	PART.h	/^unsigned long node16_count;$/;"	v
+node256_count	PART.c	/^unsigned long node256_count = 0;$/;"	v
+node256_count	PART.h	/^unsigned long node256_count;$/;"	v
+node48_bitmap	PART.h	/^} node48_bitmap;$/;"	t	typeref:struct:__anon3
+node48_count	PART.c	/^unsigned long node48_count = 0;$/;"	v
+node48_count	PART.h	/^unsigned long node48_count;$/;"	v
+node4_count	PART.c	/^unsigned long node4_count = 0;$/;"	v
+node4_count	PART.h	/^unsigned long node4_count;$/;"	v
+p_bits	PART.h	/^	unsigned long p_bits : 48;$/;"	m	struct:__anon3
+partial	PART.h	/^    unsigned char partial[MAX_PREFIX_LEN];$/;"	m	struct:__anon1
+partial_len	PART.h	/^    uint32_t partial_len;$/;"	m	struct:__anon1
+prefix_mismatch	PART.c	/^static int prefix_mismatch(const art_node *n, const unsigned char *key, int key_len, int depth, art_leaf **l) {$/;"	f	file:
+read_tsc	PART.c	/^static inline unsigned long read_tsc(void)$/;"	f	file:
+recursive_insert	PART.c	/^static void* recursive_insert(art_node *n, art_node **ref, const unsigned char *key,$/;"	f	file:
+root	PART.h	/^    art_node *root;$/;"	m	struct:__anon9
+size	PART.h	/^    uint64_t size;$/;"	m	struct:__anon9
+slot	PART.h	/^	slot_array slot[4];$/;"	m	struct:__anon4
+slot_array	PART.h	/^} slot_array;$/;"	t	typeref:struct:__anon2
+type	PART.h	/^    uint8_t type;$/;"	m	struct:__anon1
+value	PART.h	/^    void *value;$/;"	m	struct:__anon8

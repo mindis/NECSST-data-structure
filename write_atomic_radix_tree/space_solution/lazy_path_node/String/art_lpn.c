@@ -768,8 +768,8 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned char *
 			if (l == NULL)
 				l = minimum(copy_node);
             add_child4_noflush(new_node, ref, l->key[depth + prefix_diff], copy_node);
-            memcpy(n->partial, l->key+depth+prefix_diff+1,
-                    min(MAX_PREFIX_LEN, n->partial_len));
+            memcpy(copy_node->partial, l->key+depth+prefix_diff+1,
+                    min(MAX_PREFIX_LEN, copy_node->partial_len));
         }
 
         // Insert the new leaf

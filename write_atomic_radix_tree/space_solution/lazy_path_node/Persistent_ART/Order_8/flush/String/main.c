@@ -3,7 +3,7 @@
 #include <string.h>
 #include <malloc.h>
 #include <time.h>
-#include "art_lpn.h"
+#include "PART.h"
 
 int main(void)
 {
@@ -16,7 +16,7 @@ int main(void)
 	void *ret;
 	FILE *fp;
 
-	if((fp = fopen("/home/sekwon/Public/input_file/uuid.txt","r")) == NULL)
+	if((fp = fopen("/home/sekwon/Public/input_file/words.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
@@ -47,10 +47,20 @@ int main(void)
 	printf("Insertion Time = %lu ns\n", total_elapsed_time);
 
 	/* Check space overhead */
+	printf("sizeof(art_node4) = %lu\n", sizeof(art_node4));
 	printf("sizeof(art_node16) = %lu\n", sizeof(art_node16));
+	printf("sizeof(art_node48) = %lu\n", sizeof(art_node48));
+	printf("sizeof(art_node256) = %lu\n", sizeof(art_node256));
 	printf("sizeof(art_leaf) = %lu\n", sizeof(art_leaf) + len);
-	printf("Total space = %lu byte\n", (node_count * sizeof(art_node16) + leaf_count * (sizeof(art_leaf) + len)));
-	printf("Space efficiency = %lu\n", (node_count * sizeof(art_node16) + leaf_count * (sizeof(art_leaf) + len)) / input_count);
+	printf("Total space = %lu byte\n", (node4_count * sizeof(art_node4) + node16_count * sizeof(art_node16) 
+				+ node48_count * sizeof(art_node48) + node256_count * sizeof(art_node256) + leaf_count * (sizeof(art_leaf) + len)));
+	printf("Space efficiency = %lu\n", (node4_count * sizeof(art_node4) + node16_count * sizeof(art_node16) 
+				+ node48_count * sizeof(art_node48) + node256_count * sizeof(art_node256) + leaf_count * (sizeof(art_leaf) + len)) / input_count);
+	printf("node4_count = %lu\n", node4_count);
+	printf("node16_count = %lu\n", node16_count);
+	printf("node48_count = %lu\n", node48_count);
+	printf("node256_count = %lu\n", node256_count);
+	printf("leaf count = %lu\n", leaf_count);
 	printf("clflush count = %lu\n", clflush_count);
 	printf("mfence count = %lu\n", mfence_count);
 
