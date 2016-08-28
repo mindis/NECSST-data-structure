@@ -1,0 +1,14 @@
+Insertion Time = 789920989308 ns
+sizeof(art_node4) = 64
+sizeof(art_node16) = 312
+sizeof(art_node128) = 1048
+sizeof(art_leaf) = 24
+Total space = 60182503536 byte
+Space efficiency = 58
+node4_count = 487129089
+node16_count = 0
+node128_count = 4227330
+leaf count = 1024000000
+clflush count = 3372906626
+mfence count = 2048000000
+Search Time = 461531697860 ns

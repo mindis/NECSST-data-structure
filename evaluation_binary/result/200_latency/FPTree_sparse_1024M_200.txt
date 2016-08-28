@@ -1,0 +1,9 @@
+Insertion Time = 1364024974099 ns
+sizeof(LN) = 1104
+sizeof(IN) = 4096
+Total space = 26321088400 byte
+Space efficiency = 25
+IN count = 131650
+LN count = 23353125
+clflush count = 4963603044
+mfence count = 2048000000
