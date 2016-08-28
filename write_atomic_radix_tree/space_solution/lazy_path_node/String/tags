@@ -6,14 +6,14 @@
 !_TAG_PROGRAM_VERSION	5.8	//
 ART_H	art_lpn.h	4;"	d
 BIN_DIR	Makefile	/^BIN_DIR = .\/$/;"	m
-BROKEN_GCC_C99_INLINE	art_lpn.h	34;"	d
+BROKEN_GCC_C99_INLINE	art_lpn.h	33;"	d
 CACHE_LINE_SIZE	art_lpn.h	23;"	d
 CFLAGS	Makefile	/^CFLAGS = -c$/;"	m
 CPU_FREQ_MHZ	art_lpn.c	28;"	d	file:
 IS_LEAF	art_lpn.c	23;"	d	file:
 LATENCY	art_lpn.c	27;"	d	file:
 LEAF_RAW	art_lpn.c	25;"	d	file:
-MAX_PREFIX_LEN	art_lpn.h	25;"	d
+MAX_PREFIX_LEN	art_lpn.h	24;"	d
 NODE16	art_lpn.h	19;"	d
 NODE256	art_lpn.h	21;"	d
 NODE4	art_lpn.h	18;"	d
@@ -49,12 +49,12 @@ clflush_count	art_lpn.c	/^unsigned long clflush_count = 0;$/;"	v
 clflush_count	art_lpn.h	/^unsigned long clflush_count;$/;"	v
 copy_header	art_lpn.c	/^static void copy_header(art_node *dest, art_node *src) {$/;"	f	file:
 cpu_pause	art_lpn.c	/^static inline void cpu_pause()$/;"	f	file:
-destroy_art_tree	art_lpn.h	129;"	d
+destroy_art_tree	art_lpn.h	128;"	d
 destroy_node	art_lpn.c	/^static void destroy_node(art_node *n) {$/;"	f	file:
 find_child	art_lpn.c	/^static art_node** find_child(art_node *n, unsigned char c) {$/;"	f	file:
 flush_buffer	art_lpn.c	/^void flush_buffer(void *buf, unsigned long len, bool fence)$/;"	f
 flush_buffer_nocount	art_lpn.c	/^void flush_buffer_nocount(void *buf, unsigned long len, bool fence)$/;"	f
-init_art_tree	art_lpn.h	116;"	d
+init_art_tree	art_lpn.h	115;"	d
 key	art_lpn.h	/^    unsigned char key[];$/;"	m	struct:__anon6
 key_len	art_lpn.h	/^    uint32_t key_len;$/;"	m	struct:__anon6
 keys	art_lpn.h	/^    unsigned char keys[16];$/;"	m	struct:__anon3
