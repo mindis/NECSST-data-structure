@@ -190,19 +190,22 @@ int search_leaf_node(LN *node, unsigned long key)
 		if (node->LN_Element[i].key == key &&
 				node->LN_Element[i].flag == true) {
 			pos = i;
-			valid++;
+			return pos;
+//			valid++;
 		}
 
 		if (node->LN_Element[i].key == key &&
 				node->LN_Element[i].flag == false) {
-			valid--;
+			pos = -1;
+			return pos;
+//			valid--;
 		}
 	}
 
-	if (valid > 0)
-		return pos;
-	else
-		return -1;
+//	if (valid > 0)
+//		return pos;
+//	else
+//		return -1;
 }
 
 void *Lookup(tree *t, unsigned long key)

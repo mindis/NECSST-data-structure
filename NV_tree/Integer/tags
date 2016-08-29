@@ -1,0 +1,90 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+BIN_DIR	Makefile	/^BIN_DIR=.\/$/;"	m
+CACHE_LINE_SIZE	NV-tree.h	4;"	d
+CFLAGS	Makefile	/^CFLAGS= -c $/;"	m
+CPU_FREQ_MHZ	NV-tree.c	22;"	d	file:
+Delete	NV-tree.c	/^int Delete(tree *t, unsigned long key)$/;"	f
+IN	NV-tree.h	/^typedef struct Internal_Node IN;$/;"	t	typeref:struct:Internal_Node
+INPUT_NUM	main.c	8;"	d	file:
+IN_count	NV-tree.c	/^unsigned long IN_count = 0;$/;"	v
+IN_count	NV-tree.h	/^unsigned long IN_count;$/;"	v
+Insert	NV-tree.c	/^int Insert(tree *t, unsigned long key, void *value)$/;"	f
+Internal_Node	NV-tree.h	/^struct Internal_Node {$/;"	s
+LATENCY	NV-tree.c	21;"	d	file:
+LN	NV-tree.h	/^typedef struct Leaf_Node LN;$/;"	t	typeref:struct:Leaf_Node
+LN_Element	NV-tree.h	/^	struct LN_entry LN_Element[MAX_NUM_ENTRY_LN];$/;"	m	struct:Leaf_Node	typeref:struct:Leaf_Node::LN_entry
+LN_count	NV-tree.c	/^unsigned long LN_count = 0;$/;"	v
+LN_count	NV-tree.h	/^unsigned long LN_count;$/;"	v
+LN_entry	NV-tree.h	/^struct LN_entry {$/;"	s
+Leaf_Node	NV-tree.h	/^struct Leaf_Node {$/;"	s
+Lookup	NV-tree.c	/^void *Lookup(tree *t, unsigned long key)$/;"	f
+MAX_KEY	NV-tree.h	8;"	d
+MAX_NUM_ENTRY_IN	NV-tree.h	5;"	d
+MAX_NUM_ENTRY_LN	NV-tree.h	7;"	d
+MAX_NUM_ENTRY_PLN	NV-tree.h	6;"	d
+PLN	NV-tree.h	/^typedef struct Parent_Leaf_Node PLN;$/;"	t	typeref:struct:Parent_Leaf_Node
+PLN_entry	NV-tree.h	/^struct PLN_entry {$/;"	s
+Parent_Leaf_Node	NV-tree.h	/^struct Parent_Leaf_Node {$/;"	s
+Range_Lookup	NV-tree.c	/^int Range_Lookup(tree *t, unsigned long start_key, unsigned int num, $/;"	f
+Update	NV-tree.c	/^int Update(tree *t, unsigned long key, void *value)$/;"	f
+allocINode	NV-tree.c	/^void *allocINode(unsigned long num)$/;"	f
+allocLNode	NV-tree.c	/^LN *allocLNode()$/;"	f
+binary_search_IN	NV-tree.c	/^int binary_search_IN(unsigned long key, IN *node)$/;"	f
+binary_search_PLN	NV-tree.c	/^int binary_search_PLN(unsigned long key, PLN *node)$/;"	f
+clflush_count	NV-tree.c	/^unsigned long clflush_count = 0;$/;"	v
+clflush_count	NV-tree.h	/^unsigned long clflush_count;$/;"	v
+cpu_pause	NV-tree.c	/^static inline void cpu_pause()$/;"	f	file:
+create_new_tree	NV-tree.c	/^int create_new_tree(tree *t, unsigned long key, void *value)$/;"	f
+delete_entry_to_leaf	NV-tree.c	/^void delete_entry_to_leaf(LN *leaf, unsigned long key, void *value, bool flush)$/;"	f
+dummy	NV-tree.h	/^	char dummy[16];$/;"	m	struct:Internal_Node
+dummy	NV-tree.h	/^	char dummy[16];$/;"	m	struct:Leaf_Node
+dummy	NV-tree.h	/^	char dummy[8];$/;"	m	struct:Parent_Leaf_Node
+entries	NV-tree.h	/^	struct PLN_entry entries[MAX_NUM_ENTRY_PLN];$/;"	m	struct:Parent_Leaf_Node	typeref:struct:Parent_Leaf_Node::PLN_entry
+entry	NV-tree.h	/^typedef struct entry entry;$/;"	t	typeref:struct:entry
+find_leaf	NV-tree.c	/^LN *find_leaf(tree *t, unsigned long key)$/;"	f
+first_PLN_id	NV-tree.h	/^	unsigned long first_PLN_id;$/;"	m	struct:tree
+first_leaf	NV-tree.h	/^	LN *first_leaf;$/;"	m	struct:tree
+flag	NV-tree.h	/^	bool flag;$/;"	m	struct:LN_entry
+flush_buffer	NV-tree.c	/^void flush_buffer(void *buf, unsigned long len, bool fence)$/;"	f
+flush_buffer_nocount	NV-tree.c	/^void flush_buffer_nocount(void *buf, unsigned long len, bool fence)$/;"	f
+height	NV-tree.h	/^	unsigned char height;$/;"	m	struct:tree
+initTree	NV-tree.c	/^tree *initTree()$/;"	f
+insert_entry_to_leaf	NV-tree.c	/^void insert_entry_to_leaf(LN *leaf, unsigned long key, void *value, bool flush)$/;"	f
+insert_node_to_PLN	NV-tree.c	/^int insert_node_to_PLN(PLN *new_PLNs, unsigned long parent_id, unsigned long insert_key,$/;"	f
+insert_to_PLN	NV-tree.c	/^int insert_to_PLN(tree *t, unsigned long parent_id, $/;"	f
+insertion_sort	NV-tree.c	/^void insertion_sort(struct LN_entry *base, int num)$/;"	f
+is_leaf	NV-tree.h	/^	unsigned char is_leaf;	\/\/ 0.LN 1.PLN 2.IN$/;"	m	struct:tree
+key	NV-tree.h	/^	unsigned long key;$/;"	m	struct:LN_entry
+key	NV-tree.h	/^	unsigned long key;$/;"	m	struct:PLN_entry
+key	NV-tree.h	/^	unsigned long key[MAX_NUM_ENTRY_IN];$/;"	m	struct:Internal_Node
+last_PLN_id	NV-tree.h	/^	unsigned long last_PLN_id;$/;"	m	struct:tree
+leaf_scan_divide	NV-tree.c	/^int leaf_scan_divide(tree *t, LN *leaf, LN *split_node1, LN *split_node2)$/;"	f
+leaf_split_and_delete	NV-tree.c	/^int leaf_split_and_delete(tree *t, LN *leaf, unsigned long key, void *value)$/;"	f
+leaf_split_and_insert	NV-tree.c	/^int leaf_split_and_insert(tree *t, LN *leaf, unsigned long key, void *value)$/;"	f
+leaf_split_and_update	NV-tree.c	/^int leaf_split_and_update(tree *t, LN *leaf, unsigned long key, void *value,$/;"	f
+main	main.c	/^int main(void)$/;"	f
+mfence	NV-tree.c	14;"	d	file:
+mfence_count	NV-tree.c	/^unsigned long mfence_count = 0;$/;"	v
+mfence_count	NV-tree.h	/^unsigned long mfence_count;$/;"	v
+nElements	NV-tree.h	/^	unsigned char nElements;$/;"	m	struct:Leaf_Node
+nKeys	NV-tree.h	/^	unsigned int nKeys;$/;"	m	struct:Internal_Node
+nKeys	NV-tree.h	/^	unsigned int nKeys;$/;"	m	struct:Parent_Leaf_Node
+parent_id	NV-tree.h	/^	unsigned long parent_id;$/;"	m	struct:Leaf_Node
+ptr	NV-tree.h	/^	LN *ptr;$/;"	m	struct:PLN_entry
+quick_sort	NV-tree.c	/^void quick_sort(struct LN_entry *base, int left, int right)$/;"	f
+read_tsc	NV-tree.c	/^static inline unsigned long read_tsc(void)$/;"	f	file:
+reconstruct_PLN	NV-tree.c	/^int reconstruct_PLN(tree *t, unsigned long parent_id, unsigned long insert_key,$/;"	f
+reconstruct_from_PLN	NV-tree.c	/^int reconstruct_from_PLN(void *root_addr, unsigned long first_PLN_id, $/;"	f
+recursive_insert_IN	NV-tree.c	/^int recursive_insert_IN(void *root_addr, unsigned long first_IN_id,$/;"	f
+root	NV-tree.h	/^	void *root;$/;"	m	struct:tree
+search_leaf_node	NV-tree.c	/^int search_leaf_node(LN *node, unsigned long key)$/;"	f
+sibling	NV-tree.h	/^	LN *sibling;$/;"	m	struct:Leaf_Node
+tree	NV-tree.h	/^struct tree{$/;"	s
+tree	NV-tree.h	/^typedef struct tree tree;$/;"	t	typeref:struct:tree
+update_entry_to_leaf	NV-tree.c	/^void update_entry_to_leaf(LN *leaf, unsigned long old_key, void *old_value,$/;"	f
+value	NV-tree.h	/^	void *value;$/;"	m	struct:LN_entry

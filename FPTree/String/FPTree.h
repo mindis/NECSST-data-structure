@@ -38,8 +38,13 @@ typedef struct {
 	char log_data[LOG_AREA_SIZE];
 } log_area;
 
+typedef struct {
+	int key_len;
+	unsigned char key[];
+} key_item;
+
 struct entry{
-	unsigned long key;
+	key_item *key;
 	void *ptr;
 };
 
@@ -47,7 +52,7 @@ struct Internal_Node {
 	unsigned char type;
 	IN *parent;
 	unsigned int nKeys;
-	unsigned long keys[NUM_IN_ENTRY];
+	key_item *keys[NUM_IN_ENTRY];
 	void *leftmostPtr;
 	void *ptr[NUM_IN_ENTRY];
 };
@@ -66,19 +71,19 @@ struct tree {
 	log_area *start_log;
 };
 
-void flush_buffer_nocount(void *buf, unsigned int len, bool fence);
+void flush_buffer_nocount(void *buf, unsigned long len, bool fence);
 tree *initTree();
 void Range_Lookup(tree *t, unsigned long start_key, unsigned int num, 
 		unsigned long buf[]);
-void *Lookup(tree *t, unsigned long key);
-int Search(IN *curr, unsigned long key);
-void *find_leaf_node(void *curr, unsigned long key);
-void Insert(tree *t, unsigned long key, void *value);
+void *Lookup(tree *t, unsigned char *key, int key_len);
+int Search(IN *curr, unsigned char *key, int key_len);
+void *find_leaf_node(void *curr, unsigned char *key, int key_len);
+void Insert(tree *t, unsigned char *key, int key_len, void *value);
 void *Update(tree *t, unsigned long key, void *value);
-int insert_in_leaf_noflush(LN *curr, unsigned long key, void *value);
-void insert_in_leaf(LN *curr, unsigned long key, void *value);
-void insert_in_inner(IN *curr, unsigned long key, void *value);
-void insert_in_parent(tree *t, void *curr, unsigned long key, void *splitNode);
+int insert_in_leaf_noflush(LN *curr, key_item *new_item, void *value);
+void insert_in_leaf(LN *curr, key_item *new_item, void *value);
+void insert_in_inner(IN *curr, key_item *inserted_item, void *value);
+void insert_in_parent(tree *t, void *curr, key_item *inserted_item, void *splitNode);
 int Delete(tree *t, unsigned long key);
 
 static inline unsigned long __ffs(unsigned long word)

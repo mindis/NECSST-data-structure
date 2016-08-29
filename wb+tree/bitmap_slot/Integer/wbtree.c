@@ -15,7 +15,7 @@ unsigned long node_count = 0;
 unsigned long mfence_count = 0;
 unsigned long clflush_count = 0;
 
-#define LATENCY			200
+#define LATENCY			400
 #define CPU_FREQ_MHZ	2400
 
 static inline void cpu_pause()

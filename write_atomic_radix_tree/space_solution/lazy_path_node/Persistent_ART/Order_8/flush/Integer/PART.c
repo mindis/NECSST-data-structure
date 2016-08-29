@@ -25,7 +25,7 @@ unsigned long mfence_count = 0;
 #define SET_LEAF(x) ((void*)((uintptr_t)x | 1))
 #define LEAF_RAW(x) ((art_leaf*)((void*)((uintptr_t)x & ~1)))
 
-#define LATENCY			200
+#define LATENCY			400
 #define CPU_FREQ_MHZ	2400
 
 static inline void cpu_pause()

@@ -59,7 +59,7 @@ struct tree{
 };
 
 tree *initTree();
-void flush_buffer_nocount(void *buf, unsigned int len, bool fence);
+void flush_buffer_nocount(void *buf, unsigned long len, bool fence);
 int Insert(tree *t, unsigned long key, void *value);
 int Update(tree *t, unsigned long key, void *value);
 int Range_Lookup(tree *t, unsigned long start_key, unsigned int num, 

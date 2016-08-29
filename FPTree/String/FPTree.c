@@ -76,6 +76,10 @@ void flush_buffer_nocount(void *buf, unsigned long len, bool fence)
 	}
 }
 
+static inline int max(int a, int b) {
+	return (a > b) ? a : b;
+}
+
 void add_log_entry(tree *t, void *addr, unsigned int size, unsigned char type)
 {
 	log_entry *log;
@@ -134,6 +138,17 @@ void add_log_entry(tree *t, void *addr, unsigned int size, unsigned char type)
 	}
 }
 
+key_item *make_key_item(unsigned char *key, int key_len)
+{
+	key_item *new_key = malloc(sizeof(key_item) + key_len);
+	new_key->key_len = key_len;
+	memcpy(new_key->key, key, key_len);
+
+	flush_buffer(new_key, sizeof(key_item) + key_len, false);
+
+	return new_key;
+}
+
 LN *allocLNode()
 {
 	LN *node = malloc(sizeof(LN));
@@ -162,8 +177,11 @@ tree *initTree()
 	return t;
 }
 
-unsigned char hash(unsigned long key) {
-	unsigned char hash_key = key % 256;
+extern uint32_t jenkins_hash(const void *key, size_t length);
+
+unsigned char hash(unsigned char *key, int key_len) {
+	uint32_t jenkins = jenkins_hash(key, key_len);
+	unsigned char hash_key = jenkins % 256;
 	return hash_key;
 }
 
@@ -174,7 +192,7 @@ void insertion_sort(entry *base, int num)
 
 	for (i = 1; i < num; i++) {
 		for (j = i; j > 0; j--) {
-			if (base[j - 1].key > base[j].key) {
+			if (memcmp((base[j - 1].key)->key, (base[j].key)->key, max((base[j - 1].key)->key_len, (base[j].key)->key_len)) > 0) {
 				temp = base[j - 1];
 				base[j - 1] = base[j];
 				base[j] = temp;
@@ -268,20 +286,21 @@ found_middle:
 	return result + ffz(tmp);
 }
 
-void *Lookup(tree *t, unsigned long key)
+void *Lookup(tree *t, unsigned char *key, int key_len)
 {
 	unsigned long loc = 0;
 	void *value = NULL;
 	LN *curr = t->root;
-	curr = find_leaf_node(curr, key);
+	curr = find_leaf_node(curr, key, key_len);
 
 	while (loc < NUM_LN_ENTRY) {
 		loc = find_next_bit(&curr->bitmap, BITMAP_SIZE, loc);
 		if (loc == BITMAP_SIZE)
 			break;
 		
-		if (curr->fingerprints[loc] == hash(key) &&
-				curr->entries[loc].key == key) {
+		if (curr->fingerprints[loc] == hash(key, key_len) &&
+				memcmp((curr->entries[loc].key)->key, key, 
+					max((curr->entries[loc].key)->key_len, key_len)) == 0) {
 			value = curr->entries[loc].ptr;
 			break;
 		}
@@ -290,7 +309,7 @@ void *Lookup(tree *t, unsigned long key)
 
 	return value;
 }
-
+/*
 void Range_Lookup(tree *t, unsigned long start_key, unsigned int num, 
 		unsigned long buf[])
 {
@@ -323,17 +342,20 @@ void Range_Lookup(tree *t, unsigned long start_key, unsigned int num,
 		curr = curr->pNext;
 	}
 }
-
-int Search(IN *curr, unsigned long key)
+*/
+int Search(IN *curr, unsigned char *key, int key_len)
 {
 	int low = 0, mid = 0;
 	int high = curr->nKeys - 1;
+	int len, decision;
 
 	while (low <= high){
 		mid = (low + high) / 2;
-		if (curr->keys[mid] > key)
+		len = max((curr->keys[mid])->key_len, key_len);
+		decision = memcmp((curr->keys[mid])->key, key, len);
+		if (decision > 0)
 			high = mid - 1;
-		else if (curr->keys[mid] < key)
+		else if (decision < 0)
 			low = mid + 1;
 		else
 			break;
@@ -345,30 +367,33 @@ int Search(IN *curr, unsigned long key)
 	return mid;
 }
 
-void *find_leaf_node(void *curr, unsigned long key) 
+void *find_leaf_node(void *curr, unsigned char *key, int key_len) 
 {
 	unsigned long loc;
 
 	if (((LN *)curr)->type == THIS_LN) 
 		return curr;
-	loc = Search(curr, key);
+	loc = Search(curr, key, key_len);
 
 	if (loc > ((IN *)curr)->nKeys - 1) 
-		return find_leaf_node(((IN *)curr)->ptr[loc - 1], key);
-	else if (((IN *)curr)->keys[loc] <= key) 
-		return find_leaf_node(((IN *)curr)->ptr[loc], key);
+		return find_leaf_node(((IN *)curr)->ptr[loc - 1], key, key_len);
+	else if (memcmp((((IN *)curr)->keys[loc])->key, key, max((((IN *)curr)->keys[loc])->key_len, key_len)) <= 0)
+		return find_leaf_node(((IN *)curr)->ptr[loc], key, key_len);
 	else if (loc == 0) 
-		return find_leaf_node(((IN *)curr)->leftmostPtr, key);
+		return find_leaf_node(((IN *)curr)->leftmostPtr, key, key_len);
 	else 
-		return find_leaf_node(((IN *)curr)->ptr[loc - 1], key);
+		return find_leaf_node(((IN *)curr)->ptr[loc - 1], key, key_len);
 }
 
 
-void Insert(tree *t, unsigned long key, void *value)
+void Insert(tree *t, unsigned char *key, int key_len, void *value)
 {
 	LN *curr = t->root;
 	/* Find proper leaf */
-	curr = find_leaf_node(curr, key);
+	curr = find_leaf_node(curr, key, key_len);
+
+	/* Make new key item */
+	key_item *new_item = make_key_item(key, key_len);
 
 	/* Check overflow & split */
 	if(curr->bitmap == IS_FULL) {
@@ -396,10 +421,10 @@ void Insert(tree *t, unsigned long key, void *value)
 
 		free(valid_entry);
 
-		if (split_LNode->entries[0].key > key) {
-			insert_in_leaf_noflush(curr, key, value);
+		if (memcmp((split_LNode->entries[0].key)->key, new_item->key, max((split_LNode->entries[0].key)->key_len, key_len)) > 0) {
+			insert_in_leaf_noflush(curr, new_item, value);
 		} else
-			insert_in_leaf_noflush(split_LNode, key, value);
+			insert_in_leaf_noflush(split_LNode, new_item, value);
 
 		insert_in_parent(t, curr, split_LNode->entries[0].key, split_LNode);
 
@@ -411,11 +436,11 @@ void Insert(tree *t, unsigned long key, void *value)
 		add_log_entry(t, NULL, 0, LE_COMMIT);
 	}
 	else{
-		insert_in_leaf(curr, key, value);
+		insert_in_leaf(curr, new_item, value);
 	}
 }
 
-int insert_in_leaf_noflush(LN *curr, unsigned long key, void *value)
+int insert_in_leaf_noflush(LN *curr, key_item *new_item, void *value)
 {
 	int errval = -1;
 	unsigned long index;
@@ -423,23 +448,23 @@ int insert_in_leaf_noflush(LN *curr, unsigned long key, void *value)
 	if (index == BITMAP_SIZE)
 		return errval;
 
-	curr->entries[index].key = key;
+	curr->entries[index].key = new_item;
 	curr->entries[index].ptr = value;
-	curr->fingerprints[index] = hash(key);
+	curr->fingerprints[index] = hash(new_item->key, new_item->key_len);
 	curr->bitmap = curr->bitmap + (0x1UL << index);
 	return index;
 }
 
-void insert_in_leaf(LN *curr, unsigned long key, void *value)
+void insert_in_leaf(LN *curr, key_item *new_item, void *value)
 {
 	unsigned long index;
 	index = find_next_zero_bit(&curr->bitmap, BITMAP_SIZE, 0);
 	if (index == BITMAP_SIZE)
 		return ;
 
-	curr->entries[index].key = key;
+	curr->entries[index].key = new_item;
 	curr->entries[index].ptr = value;
-	curr->fingerprints[index] = hash(key);
+	curr->fingerprints[index] = hash(new_item->key, new_item->key_len);		//change with jenkins
 	curr->bitmap = curr->bitmap + (0x1UL << index);
 
 	flush_buffer(&curr->entries[index], sizeof(entry), false);
@@ -447,28 +472,28 @@ void insert_in_leaf(LN *curr, unsigned long key, void *value)
 	flush_buffer(&curr->bitmap, sizeof(unsigned long), true);
 }
 
-void insert_in_inner(IN *curr, unsigned long key, void *child)
+void insert_in_inner(IN *curr, key_item *inserted_item, void *child)
 {
 	int loc, mid, j;
 
-	mid = Search(curr, key);
+	mid = Search(curr, inserted_item->key, inserted_item->key_len);
 
 	for (j = (curr->nKeys - 1); j >= mid; j--) {
 		curr->keys[j + 1] = curr->keys[j];
 		curr->ptr[j + 1] = curr->ptr[j];
 	}
 
-	curr->keys[mid] = key;
+	curr->keys[mid] = inserted_item;
 	curr->ptr[mid] = child;
 
 	curr->nKeys++;
 }
 
-void insert_in_parent(tree *t, void *curr, unsigned long key, void *splitNode) {
+void insert_in_parent(tree *t, void *curr, key_item *inserted_item, void *splitNode) {
 	if (curr == t->root) {
 		IN *root = allocINode();
 		root->leftmostPtr = curr;
-		root->keys[0] = key;
+		root->keys[0] = inserted_item;
 		root->ptr[0] = splitNode;
 		root->nKeys++;
 
@@ -486,7 +511,7 @@ void insert_in_parent(tree *t, void *curr, unsigned long key, void *splitNode) {
 		parent = ((LN *)curr)->parent;
 
 	if (parent->nKeys < NUM_IN_ENTRY) {
-		insert_in_inner(parent, key, splitNode);
+		insert_in_inner(parent, inserted_item, splitNode);
 		((IN *)splitNode)->parent = parent;
 	} else {
 		int i, j, loc, parent_nKeys;
@@ -501,20 +526,21 @@ void insert_in_parent(tree *t, void *curr, unsigned long key, void *splitNode) {
 			parent->nKeys--;
 		}
 
-		if (split_INode->keys[0] > key) {
-			insert_in_inner(parent, key, splitNode);
+		if (memcmp((split_INode->keys[0])->key, inserted_item->key,
+					max((split_INode->keys[0])->key_len, inserted_item->key_len)) > 0) {
+			insert_in_inner(parent, inserted_item, splitNode);
 			((IN *)splitNode)->parent = parent;
 		}
 		else {
 			((IN *)splitNode)->parent = split_INode;
-			insert_in_inner(split_INode, key, splitNode);
+			insert_in_inner(split_INode, inserted_item, splitNode);
 		}
 
 		insert_in_parent(t, parent, split_INode->keys[0], split_INode);
 	}
 }
 
-
+/*
 void *Update(tree *t, unsigned long key, void *value)
 {
 	unsigned long loc = 0;
@@ -537,6 +563,7 @@ void *Update(tree *t, unsigned long key, void *value)
 
 	return NULL;
 }
+*/
 
 /*
 int delete_in_leaf(node *curr, unsigned long key)
