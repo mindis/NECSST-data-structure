@@ -1,4 +1,4 @@
-cscope 15 $HOME/study/NECSST-data-structure/wb+tree/bitmap_slot/String               0000306701
+cscope 15 $HOME/study/data_structures/wb+tree/bitmap_slot/String               0000306875
 	@main.c
 
 1 
@@ -3259,18 +3259,6 @@ chžd
 ±r
 ;
 
-542 
-	`add_log_’Œy
-(
-t
-, &
-chžd
-->
-·»Á
-, 8, 
-LE_DATA
-);
-
 543 
 chžd
 ->
@@ -3355,7 +3343,7 @@ key_Ën
 
 555 ià(
 	`memcmp
-(
+((
 ¥l™P¬’t
 ->
 ’Œ›s
@@ -3363,7 +3351,7 @@ key_Ën
 ¦Ù
 [1]].
 key
-, 
+)->key, 
 š£¹ed_™em
 ->key, 
 Ën
@@ -38355,11 +38343,51 @@ __STDC_VERSION__
 
 	)
 
-365 
+365 #ià
+__GNUC__
+ >= 3
+
+366 
+	#__glibc_uÆik–y
+(
+cÚd
+è
+	`__bužtš_ex³ù
+ ((cÚd), 0)
+
+	)
+
+367 
+	#__glibc_lik–y
+(
+cÚd
+è
+	`__bužtš_ex³ù
+ ((cÚd), 1)
+
+	)
+
+369 
+	#__glibc_uÆik–y
+(
+cÚd
+è(cÚd)
+
+	)
+
+370 
+	#__glibc_lik–y
+(
+cÚd
+è(cÚd)
+
+	)
+
+373 
 	~<b™s/wÜdsize.h
 >
 
-367 #ià
+375 #ià
 defšed
  
 __LONG_DOUBLE_MATH_OPTIONAL
@@ -38367,17 +38395,17 @@ __LONG_DOUBLE_MATH_OPTIONAL
 __NO_LONG_DOUBLE_MATH
 
 
-368 
+376 
 	#__LDBL_COMPAT
  1
 
 	)
 
-369 #ifdeà
+377 #ifdeà
 __REDIRECT
 
 
-370 
+378 
 	#__LDBL_REDIR1
 (
 Çme
@@ -38391,7 +38419,7 @@ __REDIRECT
 
 	)
 
-371 
+379 
 	#__LDBL_REDIR
 (
 Çme
@@ -38399,7 +38427,7 @@ __REDIRECT
 ´Ùo
 ) \
 
-372 
+380 
 	`__LDBL_REDIR1
  (
 Çme
@@ -38411,7 +38439,7 @@ __Ædbl_
 
 	)
 
-373 
+381 
 	#__LDBL_REDIR1_NTH
 (
 Çme
@@ -38425,7 +38453,7 @@ __Ædbl_
 
 	)
 
-374 
+382 
 	#__LDBL_REDIR_NTH
 (
 Çme
@@ -38433,7 +38461,7 @@ __Ædbl_
 ´Ùo
 ) \
 
-375 
+383 
 	`__LDBL_REDIR1_NTH
  (
 Çme
@@ -38445,7 +38473,7 @@ __Ædbl_
 
 	)
 
-376 
+384 
 	#__LDBL_REDIR1_DECL
 (
 Çme
@@ -38453,7 +38481,7 @@ __Ædbl_
 ®Ÿs
 ) \
 
-377 
+385 
 	`__ty³of
  (
 Çme
@@ -38465,13 +38493,13 @@ __Ædbl_
 
 	)
 
-378 
+386 
 	#__LDBL_REDIR_DECL
 (
 Çme
 ) \
 
-379 
+387 
 	`__ty³of
  (
 Çme
@@ -38483,7 +38511,7 @@ __Ædbl_
 
 	)
 
-380 
+388 
 	#__REDIRECT_LDBL
 (
 Çme
@@ -38493,7 +38521,7 @@ __Ædbl_
 ®Ÿs
 ) \
 
-381 
+389 
 	`__LDBL_REDIR1
  (
 Çme
@@ -38507,7 +38535,7 @@ __Ædbl_
 
 	)
 
-382 
+390 
 	#__REDIRECT_NTH_LDBL
 (
 Çme
@@ -38517,7 +38545,7 @@ __Ædbl_
 ®Ÿs
 ) \
 
-383 
+391 
 	`__LDBL_REDIR1_NTH
  (
 Çme
@@ -38531,7 +38559,7 @@ __Ædbl_
 
 	)
 
-386 #ià!
+394 #ià!
 defšed
  
 __LDBL_COMPAT
@@ -38539,7 +38567,7 @@ __LDBL_COMPAT
 __REDIRECT
 
 
-387 
+395 
 	#__LDBL_REDIR1
 (
 Çme
@@ -38551,7 +38579,7 @@ __REDIRECT
 	)
 proto
 
-388 
+396 
 	#__LDBL_REDIR
 (
 Çme
@@ -38561,7 +38589,7 @@ proto
 	)
 proto
 
-389 
+397 
 	#__LDBL_REDIR1_NTH
 (
 Çme
@@ -38575,7 +38603,7 @@ __THROW
 
 	)
 
-390 
+398 
 	#__LDBL_REDIR_NTH
 (
 Çme
@@ -38587,7 +38615,7 @@ __THROW
 
 	)
 
-391 
+399 
 	#__LDBL_REDIR_DECL
 (
 Çme
@@ -38595,11 +38623,11 @@ __THROW
 
 	)
 
-392 #ifdeà
+400 #ifdeà
 __REDIRECT
 
 
-393 
+401 
 	#__REDIRECT_LDBL
 (
 Çme
@@ -38613,7 +38641,7 @@ __REDIRECT
 
 	)
 
-394 
+402 
 	#__REDIRECT_NTH_LDBL
 (
 Çme
@@ -38623,7 +38651,7 @@ __REDIRECT
 ®Ÿs
 ) \
 
-395 
+403 
 	`__REDIRECT_NTH
  (
 Çme

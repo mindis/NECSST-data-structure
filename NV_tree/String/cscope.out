@@ -1,43 +1,43 @@
-cscope 15 $HOME/study/data_structures/FPTree/String               0000309794
-	@FPTree.c
+cscope 15 $HOME/study/data_structures/NV_tree/String               0000328513
+	@NV-tree.c
 
-1 
+4 
 	~<°dio.h
 >
 
-2 
+5 
 	~<°dlib.h
 >
 
-3 
+6 
 	~<°rög.h
 >
 
-4 
+7 
 	~<sys/time.h
 >
 
-5 
+8 
 	~<x86öåö.h
 >
 
-6 
+9 
 	~<mÆloc.h
 >
 
-7 
+10 
 	~<°döt.h
 >
 
-8 
+11 
 	~<time.h
 >
 
-9 
-	~"FPTªe.h
+12 
+	~"NV-åì.h
 "
 
-11 
+14 
 	#m„n˚
 (Ë
 asm
@@ -45,75 +45,65 @@ asm
 
 	)
 
-12 
-	#BITOP_WORD
-(
-ƒ
-Ë(“rË/ 
-BITS_PER_LONG
-)
-
-	)
-
-14 
+16 
 	gIN_cou¡
  = 0;
 
-15 
+17 
 	gLN_cou¡
  = 0;
 
-16 
+18 
 	g˛Êush_cou¡
  = 0;
 
-17 
+19 
 	gm„n˚_cou¡
  = 0;
 
-19 
+21 
 	#LATENCY
  200
 
 	)
 
-20 
+22 
 	#CPU_FREQ_MHZ
  2400
 
 	)
 
-22 
+24 
 ölöe
  
 	$˝u_∑u£
 ()
 
-24 
+26 
 __asm__
  volatile ("pause" ::: "memory");
 
-25 
+27 
 	}
 }
 
-27 
+29 
 ölöe
  
 	$ªad_tsc
 ()
 
-29 
+31 
 v¨
 ;
 
-30 
+32 
 hi
 , 
 lo
 ;
 
-32 
+34 
 asm
  vﬁ©ûê("rdtsc" : "˜" (
 lo
@@ -121,7 +111,7 @@ lo
 hi
 ));
 
-33 
+35 
 v¨
  = ((Ë
 hi
@@ -129,15 +119,15 @@ hi
 lo
 ;
 
-35  
+37  
 v¨
 ;
 
-36 
+38 
 	}
 }
 
-38 
+40 
 	$Êush_buf„r
 (*
 buf
@@ -149,13 +139,13 @@ boﬁ
 „n˚
 )
 
-40 
+42 
 i
 , 
 ësc
 ;
 
-41 
+43 
 Àn
  =Üí + (()(
 buf
@@ -163,15 +153,15 @@ buf
 CACHE_LINE_SIZE
  - 1));
 
-42 i‡(
+44 i‡(
 „n˚
 ) {
 
-43 
+45 
 	`m„n˚
 ();
 
-44 
+46 
 i
  = 0; i < 
 Àn
@@ -179,11 +169,11 @@ i
 CACHE_LINE_SIZE
 ) {
 
-45 
+47 
 ˛Êush_cou¡
 ++;
 
-47 
+49 
 asm
  vﬁ©ûê("˛Êush %0\n" : "+m" (*(*)(
 buf
@@ -191,15 +181,15 @@ buf
 i
 )));
 
-51 
+53 
 	`m„n˚
 ();
 
-52 
+54 
 m„n˚_cou¡
  = mfence_count + 2;
 
-54 
+56 
 i
  = 0; i < 
 Àn
@@ -207,11 +197,11 @@ i
 CACHE_LINE_SIZE
 ) {
 
-55 
+57 
 ˛Êush_cou¡
 ++;
 
-57 
+59 
 asm
  vﬁ©ûê("˛Êush %0\n" : "+m" (*(*)(
 buf
@@ -219,11 +209,11 @@ buf
 i
 )));
 
-62 
+64 
 	}
 }
 
-64 
+66 
 	$Êush_buf„r_nocou¡
 (*
 buf
@@ -235,11 +225,11 @@ boﬁ
 „n˚
 )
 
-66 
+68 
 i
 ;
 
-67 
+69 
 Àn
  =Üí + (()(
 buf
@@ -247,35 +237,15 @@ buf
 CACHE_LINE_SIZE
  - 1));
 
-68 i‡(
+70 i‡(
 „n˚
 ) {
 
-69 
-	`m„n˚
-();
-
-70 
-i
- = 0; i < 
-Àn
-; i +
-CACHE_LINE_SIZE
-)
-
 71 
-asm
- vﬁ©ûê("˛Êush %0\n" : "+m" (*(*)(
-buf
-+
-i
-)));
-
-72 
 	`m„n˚
 ();
 
-74 
+72 
 i
  = 0; i < 
 Àn
@@ -283,19 +253,39 @@ i
 CACHE_LINE_SIZE
 )
 
-75 
+73 
 asm
  vﬁ©ûê("˛Êush %0\n" : "+m" (*(*)(
 buf
 +
 i
 )));
+
+74 
+	`m„n˚
+();
+
+76 
+i
+ = 0; i < 
+Àn
+; i +
+CACHE_LINE_SIZE
+)
 
 77 
+asm
+ vﬁ©ûê("˛Êush %0\n" : "+m" (*(*)(
+buf
++
+i
+)));
+
+79 
 	}
 }
 
-79 
+81 
 ölöe
  
 	$max
@@ -305,343 +295,17 @@ a
 b
 ) {
 
-80  (
+82  (
 a
  > 
 b
 ) ?á : b;
 
-81 
+83 
 	}
 }
-
-83 
-	$add_log_íåy
-(
-åì
- *
-t
-, *
-addr
-, 
-size
-, 
-ty≥
-)
 
 85 
-log_íåy
- *
-log
-;
-
-86 
-i
-, 
-ªmaö_size
-;
-
-88 
-ªmaö_size
- = 
-size
- - ((sizê/ 
-LOG_DATA_SIZE
-) * LOG_DATA_SIZE);
-
-90 i‡((*)
-t
-->
-°¨t_log
-->
-√xt_off£t
- ==
-
-91 (
-t
-->
-°¨t_log
-->
-log_d©a
- + 
-LOG_AREA_SIZE
-))
-
-92 
-t
-->
-°¨t_log
-->
-√xt_off£t
- = (
-log_íåy
- *È->°¨t_log->
-log_d©a
-;
-
-94 i‡(
-size
- <
-LOG_DATA_SIZE
-) {
-
-95 
-log
- = 
-t
-->
-°¨t_log
-->
-√xt_off£t
-;
-
-96 
-log
-->
-size
- = size;
-
-97 
-log
-->
-ty≥
- =Åype;
-
-98 
-log
-->
-addr
- =áddr;
-
-99 
-	`mem˝y
-(
-log
-->
-d©a
-, 
-addr
-, 
-size
-);
-
-101 i‡(
-ty≥
- =
-LE_DATA
-)
-
-102 
-	`Êush_buf„r
-(
-log
-, (
-log_íåy
-), 
-Ál£
-);
-
-104 
-	`Êush_buf„r
-(
-log
-, (
-log_íåy
-), 
-åue
-);
-
-106 
-t
-->
-°¨t_log
-->
-√xt_off£t
- =Å->start_log->next_offset + 1;
-
-108 *
-√xt_addr
- = 
-addr
-;
-
-110 
-i
- = 0; i < 
-size
- / 
-LOG_DATA_SIZE
-; i++) {
-
-111 
-log
- = 
-t
-->
-°¨t_log
-->
-√xt_off£t
-;
-
-112 
-log
-->
-size
- = 
-LOG_DATA_SIZE
-;
-
-113 
-log
-->
-ty≥
- =Åype;
-
-114 
-log
-->
-addr
- = 
-√xt_addr
-;
-
-115 
-	`mem˝y
-(
-log
-->
-d©a
-, 
-√xt_addr
-, 
-LOG_DATA_SIZE
-);
-
-117 
-	`Êush_buf„r
-(
-log
-, (
-log_íåy
-), 
-Ál£
-);
-
-119 
-t
-->
-°¨t_log
-->
-√xt_off£t
- =Å->start_log->next_offset + 1;
-
-120 i‡((*)
-t
-->
-°¨t_log
-->
-√xt_off£t
- ==
-
-121 (
-t
-->
-°¨t_log
-->
-log_d©a
- + 
-LOG_AREA_SIZE
-))
-
-122 
-t
-->
-°¨t_log
-->
-√xt_off£t
- = (
-log_íåy
- *È->°¨t_log->
-log_d©a
-;
-
-124 
-√xt_addr
- = (*Íext_add∏+ 
-LOG_DATA_SIZE
-;
-
-127 i‡(
-ªmaö_size
- > 0) {
-
-128 
-log
- = 
-t
-->
-°¨t_log
-->
-√xt_off£t
-;
-
-129 
-log
-->
-size
- = 
-LOG_DATA_SIZE
-;
-
-130 
-log
-->
-ty≥
- =Åype;
-
-131 
-log
-->
-addr
- = 
-√xt_addr
-;
-
-132 
-	`mem˝y
-(
-log
-->
-d©a
-, 
-√xt_addr
-, 
-ªmaö_size
-);
-
-134 
-	`Êush_buf„r
-(
-log
-, (
-log_íåy
-), 
-Ál£
-);
-
-136 
-t
-->
-°¨t_log
-->
-√xt_off£t
- =Å->start_log->next_offset + 1;
-
-139 
-	}
-}
-
-141 
 key_ôem
  *
 	$make_key_ôem
@@ -651,7 +315,7 @@ key
 key_Àn
 )
 
-143 
+87 
 key_ôem
  *
 √w_key
@@ -661,13 +325,13 @@ key_ôem
 key_Àn
 );
 
-144 
+88 
 √w_key
 ->
 key_Àn
  = key_len;
 
-145 
+89 
 	`mem˝y
 (
 √w_key
@@ -677,7 +341,7 @@ key
 key_Àn
 );
 
-147 
+91 
 	`Êush_buf„r
 (
 √w_key
@@ -689,643 +353,643 @@ key_Àn
 Ál£
 );
 
-149  
+93  
 √w_key
-;
 
-150 
+
+94 
 	}
 }
 
-152 
+97 *
+	$ÆlocINode
+(
+num
+)
+
+99 
+IN
+ *
+√w_INs
+ = 
+	`ˇŒoc
+(
+num
+, (IN));
+
+100 
+IN_cou¡
+ = 
+num
+;
+
+101  (*)
+√w_INs
+;
+
+102 
+	}
+}
+
+105 
 LN
  *
 	$ÆlocLNode
 ()
 
-154 
+107 
 LN
  *
-node
+√w_LN
  = 
-	`mÆloc
-((LN));
+	`ˇŒoc
+(1, (LN));
 
-155 
-node
-->
-ty≥
- = 
-THIS_LN
-;
+108 
+	`Êush_buf„r
+(
+√w_LN
+, (
+LN
+), 
+Ál£
+);
 
-156 
-node
-->
-bôm≠
- = 0;
-
-157 
+109 
 LN_cou¡
 ++;
 
-158  
-node
+110  
+√w_LN
 ;
 
-159 
+111 
 	}
 }
 
-161 
-IN
- *
-	$ÆlocINode
-()
-
-163 
-IN
- *
-node
- = 
-	`mÆloc
-((IN));
-
-164 
-node
-->
-ty≥
- = 
-THIS_IN
-;
-
-165 
-node
-->
-nKeys
- = 0;
-
-166 
-IN_cou¡
-++;
-
-167  
-node
-;
-
-168 
-	}
-}
-
-170 
+113 
 åì
  *
 	$öôTªe
 ()
 
-172 
+115 
 åì
  *
 t
- =
-	`mÆloc
-((tree));
+ = 
+	`ˇŒoc
+(1, (tree));
+
+116  
+t
+;
+
+117 
+	}
+}
+
+119 
+	$bö¨y_£¨ch_IN
+(*
+key
+, 
+key_Àn
+, 
+IN
+ *
+node
+)
+
+121 
+low
+ = 0, 
+mid
+ = 0, 
+high
+ = (
+node
+->
+nKeys
+ - 1);
+
+122 
+Àn
+, 
+decisi⁄
+;
+
+124 
+low
+ <
+high
+) {
+
+125 
+mid
+ = (
+low
+ + 
+high
+) / 2;
+
+126 
+Àn
+ = 
+	`max
+((
+node
+->
+key
+[
+mid
+])->
+key_Àn
+, key_len);
+
+127 
+decisi⁄
+ = 
+	`memcmp
+((
+node
+->
+key
+[
+mid
+])->key, key, 
+Àn
+);
+
+128 i‡(
+decisi⁄
+ > 0)
+
+129 
+high
+ = 
+mid
+ - 1;
+
+130 i‡(
+decisi⁄
+ < 0)
+
+131 
+low
+ = 
+mid
+ + 1;
+
+136 i‡(
+low
+ > 
+mid
+)
+
+137 
+mid
+ = 
+low
+;
+
+139  
+mid
+;
+
+140 
+	}
+}
+
+142 
+	$bö¨y_£¨ch_PLN
+(*
+key
+, 
+key_Àn
+, 
+PLN
+ *
+node
+)
+
+144 
+low
+ = 0, 
+mid
+ = 0, 
+high
+ = (
+node
+->
+nKeys
+ - 1);
+
+145 
+Àn
+, 
+decisi⁄
+;
+
+147 
+low
+ <
+high
+) {
+
+148 
+mid
+ = (
+low
+ + 
+high
+) / 2;
+
+149 
+Àn
+ = 
+	`max
+((
+node
+->
+íåõs
+[
+mid
+].
+key
+)->
+key_Àn
+, key_len);
+
+150 
+decisi⁄
+ = 
+	`memcmp
+((
+node
+->
+íåõs
+[
+mid
+].
+key
+)->key, key, 
+Àn
+);
+
+151 i‡(
+decisi⁄
+ > 0)
+
+152 
+high
+ = 
+mid
+ - 1;
+
+153 i‡(
+decisi⁄
+ < 0)
+
+154 
+low
+ = 
+mid
+ + 1;
+
+159 i‡(
+low
+ > 
+mid
+)
+
+160 
+mid
+ = 
+low
+;
+
+162  
+mid
+;
+
+163 
+	}
+}
+
+165 
+LN
+ *
+	$föd_Àaf
+(
+åì
+ *
+t
+, *
+key
+, 
+key_Àn
+)
+
+167 
+pos
+, 
+id
+, 
+i
+;
+
+168 
+IN
+ *
+cuºít_IN
+;
+
+169 
+PLN
+ *
+cuºít_PLN
+;
+
+170 
+LN
+ *
+cuºít_LN
+;
+
+172 i‡(
+t
+->
+is_Àaf
+ == 2) {
 
 173 
+id
+ = 0;
+
+175 
+cuºít_IN
+ = (
+IN
+ *)
 t
 ->
 roŸ
- = 
-	`ÆlocLNode
-();
+;
 
-174 ((
+177 
+id
+ < 
+t
+->
+fú°_PLN_id
+) {
+
+178 
+pos
+ = 
+	`bö¨y_£¨ch_IN
+(
+key
+, 
+key_Àn
+, &
+cuºít_IN
+[
+id
+]);
+
+180 
+id
+ = id * (
+MAX_NUM_ENTRY_IN
+)+ 1 + 
+pos
+;
+
+183 
+cuºít_PLN
+ = (
+PLN
+ *)
+t
+->
+roŸ
+;
+
+185 
+pos
+ = 
+	`bö¨y_£¨ch_PLN
+(
+key
+, 
+key_Àn
+, &
+cuºít_PLN
+[
+id
+]);
+
+187 i‡(
+pos
+ < 
+cuºít_PLN
+[
+id
+].
+nKeys
+)
+
+188  
+cuºít_PLN
+[
+id
+].
+íåõs
+[
+pos
+].
+±r
+;
+
+190  
+NULL
+;
+
+191 } i‡(
+t
+->
+is_Àaf
+ == 1) {
+
+192 
+cuºít_PLN
+ = (
+PLN
+ *)
+t
+->
+roŸ
+;
+
+194 
+pos
+ = 
+	`bö¨y_£¨ch_PLN
+(
+key
+, 
+key_Àn
+, &
+cuºít_PLN
+[0]);
+
+196 i‡(
+pos
+ < 
+cuºít_PLN
+[0].
+nKeys
+)
+
+197  
+cuºít_PLN
+[0].
+íåõs
+[
+pos
+].
+±r
+;
+
+199  
+NULL
+;
+
+201 
+cuºít_LN
+ = (
 LN
  *)
 t
 ->
 roŸ
-)->
-pNext
- = 
-NULL
 ;
 
-175 
-t
-->
-°¨t_log
- = 
-	`mÆloc
-((
-log_¨ó
-));
-
-176 
-t
-->
-°¨t_log
-->
-√xt_off£t
- = (
-log_íåy
- *È->°¨t_log->
-log_d©a
+202  
+cuºít_LN
 ;
 
-177  
-t
-;
-
-178 
+204 
 	}
 }
 
-180 
-uöt32_t
- 
-jíkös_hash
-(c⁄° *
-key
-, 
-size_t
- 
-Àngth
-);
-
-182 
-	$hash
-(*
-key
-, 
-key_Àn
-) {
-
-183 
-uöt32_t
- 
-jíkös
- = 
-	`jíkös_hash
+206 
+	$£¨ch_Àaf_node
 (
-key
-, 
-key_Àn
-);
-
-184 
-hash_key
- = 
-jíkös
- % 256;
-
-185  
-hash_key
-;
-
-186 
-	}
-}
-
-188 
-	$ö£πi⁄_s‹t
-(
-íåy
+LN
  *
-ba£
+node
+, *
+key
 , 
-num
+key_Àn
 )
 
-190 
+208 
 i
 , 
-j
+pos
 ;
 
-191 
-íåy
- 
-ãmp
-;
-
-193 
+210 
 i
- = 1; i < 
-num
+ = 0; i < 
+node
+->
+nEÀmíts
 ; i++) {
 
-194 
-j
- = 
-i
-; j > 0; j--) {
-
-195 i‡(
+211 i‡(
 	`memcmp
 ((
-ba£
+node
+->
+LN_EÀmít
 [
-j
- - 1].
+i
+].
 key
-)->key, (ba£[j].key)->key, 
+)->key, key, 
 	`max
-((ba£[j - 1].key)->
+(“ode->LN_EÀmít[i].key)->
 key_Àn
-, (base[j].key)->key_len)) > 0) {
+, key_len)) == 0 &&
 
-196 
-ãmp
- = 
-ba£
+212 
+node
+->
+LN_EÀmít
 [
-j
- - 1];
+i
+].
+Êag
+ =
+åue
+) {
 
-197 
-ba£
-[
-j
- - 1] = base[j];
-
-198 
-ba£
-[
-j
-] = 
-ãmp
-;
-
-203 
-	}
-}
-
-208 
-	$föd_√xt_bô
-(c⁄° *
-addr
-, 
-size
-,
-
-209 
-off£t
-)
-
-211 c⁄° *
-p
+213 
+pos
  = 
-addr
- + 
-	`BITOP_WORD
-(
-off£t
-);
-
-212 
-ªsu…
- = 
-off£t
- & ~(
-BITS_PER_LONG
--1);
-
-213 
-tmp
+i
 ;
 
-215 i‡(
-off£t
- >
-size
-)
-
-216  
-size
+214  
+pos
 ;
 
-217 
-size
- -
-ªsu…
-;
+217 i‡(
+	`memcmp
+((
+node
+->
+LN_EÀmít
+[
+i
+].
+key
+)->key, key, 
+	`max
+(“ode->LN_EÀmít[i].key)->
+key_Àn
+, key_len)) == 0 &&
 
 218 
-off£t
- %
-BITS_PER_LONG
-;
-
-219 i‡(
-off£t
+node
+->
+LN_EÀmít
+[
+i
+].
+Êag
+ =
+Ál£
 ) {
 
-220 
-tmp
- = *(
-p
-++);
+219 
+pos
+ = -1;
 
-221 
-tmp
- &(~0UL << 
-off£t
-);
-
-222 i‡(
-size
- < 
-BITS_PER_LONG
-)
-
-223 
-found_fú°
+220  
+pos
 ;
 
-224 i‡(
-tmp
-)
-
-225 
-found_middÀ
-;
-
-226 
-size
- -
-BITS_PER_LONG
-;
-
-227 
-ªsu…
- +
-BITS_PER_LONG
-;
-
-229 
-size
- & ~(
-BITS_PER_LONG
--1)) {
-
-230 i‡((
-tmp
- = *(
-p
-++)))
-
-231 
-found_middÀ
-;
-
-232 
-ªsu…
- +
-BITS_PER_LONG
-;
-
-233 
-size
- -
-BITS_PER_LONG
-;
-
-235 i‡(!
-size
-)
-
-236  
-ªsu…
-;
-
-237 
-tmp
- = *
-p
-;
-
-239 
-found_fú°
-:
-
-240 
-tmp
- &(~0UL >> (
-BITS_PER_LONG
- - 
-size
-));
-
-241 i‡(
-tmp
- == 0UL)
-
-242  
-ªsu…
- + 
-size
-;
-
-243 
-found_middÀ
-:
-
-244  
-ªsu…
- + 
-	`__ffs
-(
-tmp
-);
-
-245 
+224 
 	}
 }
 
-250 
-	$föd_√xt_zîo_bô
-(c⁄° *
-addr
-, 
-size
-,
-
-251 
-off£t
-)
-
-253 c⁄° *
-p
- = 
-addr
- + 
-	`BITOP_WORD
-(
-off£t
-);
-
-254 
-ªsu…
- = 
-off£t
- & ~(
-BITS_PER_LONG
- - 1);
-
-255 
-tmp
-;
-
-257 i‡(
-off£t
- >
-size
-)
-
-258  
-size
-;
-
-259 
-size
- -
-ªsu…
-;
-
-260 
-off£t
- %
-BITS_PER_LONG
-;
-
-261 i‡(
-off£t
-) {
-
-262 
-tmp
- = *(
-p
-++);
-
-263 
-tmp
- |~0UL >> (
-BITS_PER_LONG
- - 
-off£t
-);
-
-264 i‡(
-size
- < 
-BITS_PER_LONG
-)
-
-265 
-found_fú°
-;
-
-266 i‡(~
-tmp
-)
-
-267 
-found_middÀ
-;
-
-268 
-size
- -
-BITS_PER_LONG
-;
-
-269 
-ªsu…
- +
-BITS_PER_LONG
-;
-
-271 
-size
- & ~(
-BITS_PER_LONG
- - 1)) {
-
-272 i‡(~(
-tmp
- = *(
-p
-++)))
-
-273 
-found_middÀ
-;
-
-274 
-ªsu…
- +
-BITS_PER_LONG
-;
-
-275 
-size
- -
-BITS_PER_LONG
-;
-
-277 i‡(!
-size
-)
-
-278  
-ªsu…
-;
-
-279 
-tmp
- = *
-p
-;
-
-281 
-found_fú°
-:
-
-282 
-tmp
- |~0UL << 
-size
-;
-
-283 i‡(
-tmp
- == ~0UL)
-
-284  
-ªsu…
- + 
-size
-;
-
-285 
-found_middÀ
-:
-
-286  
-ªsu…
- + 
-	`ffz
-(
-tmp
-);
-
-287 
-	}
-}
-
-289 *
+226 *
 	$Lookup
 (
 åì
@@ -1337,379 +1001,3261 @@ key
 key_Àn
 )
 
-291 
-loc
- = 0;
-
-292 *
-vÆue
- = 
-NULL
+228 
+pos
+, 
+i
 ;
 
-293 
+229 
 LN
  *
-cuº
+cuºít_LN
+;
+
+230 
+IN
+ *
+cuºít_IN
  = 
 t
 ->
 roŸ
 ;
 
-294 
-cuº
+232 
+cuºít_LN
  = 
-	`föd_Àaf_node
-(cuº, 
+	`föd_Àaf
+(
+t
+, 
 key
 , 
 key_Àn
 );
 
-296 
-loc
- < 
-NUM_LN_ENTRY
-) {
-
-297 
-loc
- = 
-	`föd_√xt_bô
-(&
-cuº
-->
-bôm≠
-, 
-BITMAP_SIZE
-,Üoc);
-
-298 i‡(
-loc
+233 i‡(
+cuºít_LN
  =
-BITMAP_SIZE
+NULL
 )
 
-301 i‡(
-cuº
-->
-fögî¥öts
-[
-loc
-] =
-	`hash
+234 
+Áû
+;
+
+236 
+pos
+ = 
+	`£¨ch_Àaf_node
 (
+cuºít_LN
+, 
 key
 , 
 key_Àn
-) &&
-
-302 
-	`memcmp
-((
-cuº
-->
-íåõs
-[
-loc
-].
-key
-)->key, key,
-
-303 
-	`max
-((
-cuº
-->
-íåõs
-[
-loc
-].
-key
-)->
-key_Àn
-, key_len)) == 0) {
-
-304 
-vÆue
- = 
-cuº
-->
-íåõs
-[
-loc
-].
-±r
-;
-
-307 
-loc
-++;
-
-310  
-vÆue
-;
-
-311 
-	}
-}
-
-346 
-	$Sórch
-(
-IN
- *
-cuº
-, *
-key
-, 
-key_Àn
-)
-
-348 
-low
- = 0, 
-mid
- = 0;
-
-349 
-high
- = 
-cuº
-->
-nKeys
- - 1;
-
-350 
-Àn
-, 
-decisi⁄
-;
-
-352 
-low
- <
-high
-){
-
-353 
-mid
- = (
-low
- + 
-high
-) / 2;
-
-354 
-Àn
- = 
-	`max
-((
-cuº
-->
-keys
-[
-mid
-])->
-key_Àn
-, key_len);
-
-355 
-decisi⁄
- = 
-	`memcmp
-((
-cuº
-->
-keys
-[
-mid
-])->
-key
-, key, 
-Àn
 );
 
-356 i‡(
-decisi⁄
- > 0)
-
-357 
-high
- = 
-mid
- - 1;
-
-358 i‡(
-decisi⁄
+237 i‡(
+pos
  < 0)
 
-359 
-low
- = 
-mid
- + 1;
-
-364 i‡(
-low
- > 
-mid
-)
-
-365 
-mid
- = 
-low
+238 
+Áû
 ;
 
-367  
-mid
+240  
+cuºít_LN
+->
+LN_EÀmít
+[
+pos
+].
+vÆue
 ;
 
-368 
+241 
+Áû
+:
+
+243 
 	}
 }
 
-370 *
-	$föd_Àaf_node
-(*
-cuº
-, *
-key
+245 
+	$ö£πi⁄_s‹t
+(
+LN_íåy
+ *
+ba£
 , 
-key_Àn
+num
 )
 
-372 
-loc
+247 
+i
+, 
+j
 ;
 
-374 i‡(((
+248 
+LN_íåy
+ 
+ãmp
+;
+
+250 
+i
+ = 1; i < 
+num
+; i++) {
+
+251 
+j
+ = 
+i
+; j > 0; j--) {
+
+252 i‡(
+	`memcmp
+((
+ba£
+[
+j
+ - 1].
+key
+)->key, (base[j].key)->key,
+
+253 
+	`max
+((
+ba£
+[
+j
+ - 1].
+key
+)->
+key_Àn
+, (base[j].key)->key_len)) > 0) {
+
+254 
+ãmp
+ = 
+ba£
+[
+j
+ - 1];
+
+255 
+ba£
+[
+j
+ - 1] = base[j];
+
+256 
+ba£
+[
+j
+] = 
+ãmp
+;
+
+261 
+	}
+}
+
+263 
+	$R™ge_Lookup
+(
+åì
+ *
+t
+, 
+°¨t_key
+, 
+num
+,
+
+264 
+buf
+[])
+
+266 
+i
+, 
+j
+ = 0, 
+cou¡
+ = 0, 
+övÆid_cou¡
+, 
+vÆid_num
+;
+
+267 
+LN
+ *
+cuºít_LN
+;
+
+268 *
+övÆid_key
+ =
+
+269 
+	`mÆloc
+(((
+MAX_NUM_ENTRY_LN
+)/2 + 1) * ());
+
+270 
+LN_íåy
+ *
+vÆid_EÀmít
+ =
+
+271 
+	`mÆloc
+(
+MAX_NUM_ENTRY_LN
+ * (
+LN_íåy
+));
+
+273 
+cuºít_LN
+ = 
+	`föd_Àaf
+(
+t
+, 
+°¨t_key
+);
+
+274 i‡(
+cuºít_LN
+ =
+NULL
+)
+
+275 
+Áû
+;
+
+277 
+cuºít_LN
+ !
+NULL
+ && 
+j
+ < 
+num
+) {
+
+278 
+vÆid_num
+ = 0;
+
+279 
+övÆid_cou¡
+ = 0;
+
+280 
+i
+ = 0; i < 
+cuºít_LN
+->
+nEÀmíts
+; i++) {
+
+281 i‡(
+cuºít_LN
+->
+LN_EÀmít
+[
+i
+].
+Êag
+ =
+Ál£
+) {
+
+282 
+övÆid_key
+[
+övÆid_cou¡
+] = 
+cuºít_LN
+->
+LN_EÀmít
+[
+i
+].
+key
+;
+
+283 
+övÆid_cou¡
+++;
+
+287 
+i
+ = 0; i < 
+cuºít_LN
+->
+nEÀmíts
+; i++) {
+
+288 i‡(
+cuºít_LN
+->
+LN_EÀmít
+[
+i
+].
+Êag
+ =
+Ál£
+)
+
+291 i‡(
+övÆid_cou¡
+ > 0) {
+
+292 i‡(
+cuºít_LN
+->
+LN_EÀmít
+[
+i
+].
+key
+ =
+övÆid_key
+[
+cou¡
+]) {
+
+293 
+cou¡
+++;
+
+294 
+övÆid_cou¡
+--;
+
+298 
+vÆid_EÀmít
+[
+vÆid_num
+] = 
+cuºít_LN
+->
+LN_EÀmít
+[
+i
+];
+
+299 
+vÆid_num
+++;
+
+302 
+	`ö£πi⁄_s‹t
+(
+vÆid_EÀmít
+, 
+vÆid_num
+);
+
+304 
+i
+ = 0; i < 
+cuºít_LN
+->
+nEÀmíts
+; i++) {
+
+305 
+buf
+[
+j
+] = *(*)
+vÆid_EÀmít
+[
+i
+].
+vÆue
+;
+
+306 
+j
+++;
+
+307 i‡(
+j
+ =
+num
+)
+
+310 
+cuºít_LN
+ = cuºít_LN->
+siblög
+;
+
+314 
+Áû
+:
+
+316 
+	}
+}
+
+318 
+	$¸óã_√w_åì
+(
+åì
+ *
+t
+, 
+key_ôem
+ *
+√w_ôem
+, *
+vÆue
+)
+
+320 
+îrvÆ
+ = -1;
+
+321 
+LN
+ *
+cuºít_LN
+;
+
+322 
+t
+->
+roŸ
+ = (
 LN
  *)
-cuº
-)->
-ty≥
+	`ÆlocLNode
+();
+
+323 i‡(
+t
+->
+roŸ
  =
-THIS_LN
+NULL
 )
 
-375  
-cuº
+324  
+îrvÆ
 ;
 
-376 
-loc
+326 
+cuºít_LN
+ = (
+LN
+ *)
+t
+->
+roŸ
+;
+
+328 
+cuºít_LN
+->
+∑ª¡_id
+ = -1;
+
+329 
+cuºít_LN
+->
+siblög
  = 
-	`Sórch
+NULL
+;
+
+330 
+cuºít_LN
+->
+LN_EÀmít
+[0].
+Êag
+ = 
+åue
+;
+
+331 
+cuºít_LN
+->
+LN_EÀmít
+[0].
+key
+ = 
+√w_ôem
+;
+
+332 
+cuºít_LN
+->
+LN_EÀmít
+[0].
+vÆue
+ = value;
+
+333 
+cuºít_LN
+->
+nEÀmíts
+++;
+
+334 
+	`Êush_buf„r
 (
-cuº
-, 
-key
-, 
-key_Àn
+cuºít_LN
+, (
+LN
+), 
+åue
 );
 
-378 i‡(
-loc
- > ((
-IN
- *)
-cuº
-)->
-nKeys
- - 1)
+336 
+t
+->
+height
+ = 0;
 
-379  
-	`föd_Àaf_node
-(((
-IN
- *)
-cuº
-)->
-±r
-[
-loc
- - 1], 
-key
-, 
-key_Àn
-);
+337 
+t
+->
+fú°_Àaf
+ = (
+LN
+ *È->
+roŸ
+;
 
-380 i‡(
-	`memcmp
-((((
-IN
- *)
-cuº
-)->
-keys
-[
-loc
-])->
-key
-, key, 
-	`max
-((((IN *)cuº)->keys[loc])->
-key_Àn
-, key_len)) <= 0)
+338 
+t
+->
+is_Àaf
+ = 0;
 
-381  
-	`föd_Àaf_node
-(((
-IN
- *)
-cuº
-)->
-±r
-[
-loc
-], 
-key
-, 
-key_Àn
-);
+339 
+t
+->
+fú°_PLN_id
+ = 0;
 
-382 i‡(
-loc
- == 0)
+340 
+t
+->
+œ°_PLN_id
+ = 0;
 
-383  
-	`föd_Àaf_node
-(((
-IN
- *)
-cuº
-)->
-À·mo°På
-, 
-key
-, 
-key_Àn
-);
-
-385  
-	`föd_Àaf_node
-(((
-IN
- *)
-cuº
-)->
-±r
-[
-loc
- - 1], 
-key
-, 
-key_Àn
-);
-
-386 
+343 
 	}
 }
 
-389 
+345 
+	$quick_s‹t
+(
+LN_íåy
+ *
+ba£
+, 
+À·
+, 
+right
+)
+
+347 
+i
+, 
+j
+, 
+pivŸ
+ = 
+ba£
+[
+À·
+].
+key
+;
+
+348 
+LN_íåy
+ 
+ãmp
+;
+
+350 i‡(
+À·
+ < 
+right
+)
+
+352 
+i
+ = 
+À·
+;
+
+353 
+j
+ = 
+right
+ + 1;
+
+354 
+i
+ <
+j
+) {
+
+356 
+i
+++;
+
+357 
+ba£
+[
+i
+].
+key
+ < 
+pivŸ
+);
+
+360 
+j
+--;
+
+361 
+ba£
+[
+j
+].
+key
+ > 
+pivŸ
+);
+
+363 i‡(
+i
+ < 
+j
+) {
+
+364 
+ãmp
+ = 
+ba£
+[
+i
+];
+
+365 
+ba£
+[
+i
+] = ba£[
+j
+];
+
+366 
+ba£
+[
+j
+] = 
+ãmp
+;
+
+371 
+ãmp
+ = 
+ba£
+[
+j
+];
+
+372 
+ba£
+[
+j
+] = ba£[
+À·
+];
+
+373 
+ba£
+[
+À·
+] = 
+ãmp
+;
+
+375 
+	`quick_s‹t
+(
+ba£
+, 
+À·
+, 
+j
+ - 1);
+
+376 
+	`quick_s‹t
+(
+ba£
+, 
+j
+ + 1, 
+right
+);
+
+378 
+	}
+}
+
+380 
+	$Àaf_sˇn_divide
+(
+åì
+ *
+t
+, 
+LN
+ *
+Àaf
+, LN *
+•lô_node1
+, LN *
+•lô_node2
+)
+
+382 
+i
+, 
+j
+ = 0, 
+cou¡
+ = 0, 
+övÆid_cou¡
+ = 0, 
+îrvÆ
+ = -1;
+
+383 
+key_ôem
+ *
+övÆid_key
+ =
+
+384 
+	`mÆloc
+(((
+MAX_NUM_ENTRY_LN
+)/2 + 1Ë* (
+key_ôem
+));
+
+385 
+LN_íåy
+ *
+vÆid_EÀmít
+ =
+
+386 
+	`mÆloc
+(
+MAX_NUM_ENTRY_LN
+ * (
+LN_íåy
+));
+
+388 
+i
+ = 0; i < 
+Àaf
+->
+nEÀmíts
+; i++) {
+
+389 i‡(
+Àaf
+->
+LN_EÀmít
+[
+i
+].
+Êag
+ =
+Ál£
+) {
+
+390 
+övÆid_key
+[
+övÆid_cou¡
+] = 
+Àaf
+->
+LN_EÀmít
+[
+i
+].
+key
+;
+
+391 
+övÆid_cou¡
+++;
+
+395 
+i
+ = 0; i < 
+Àaf
+->
+nEÀmíts
+; i++) {
+
+396 i‡(
+Àaf
+->
+LN_EÀmít
+[
+i
+].
+Êag
+ =
+Ál£
+)
+
+399 i‡(
+övÆid_cou¡
+ > 0) {
+
+400 i‡(
+Àaf
+->
+LN_EÀmít
+[
+i
+].
+key
+ =
+övÆid_key
+[
+cou¡
+]) {
+
+401 
+cou¡
+++;
+
+402 
+övÆid_cou¡
+--;
+
+406 
+vÆid_EÀmít
+[
+j
+] = 
+Àaf
+->
+LN_EÀmít
+[
+i
+];
+
+407 
+j
+++;
+
+411 
+	`ö£πi⁄_s‹t
+(
+vÆid_EÀmít
+, 
+j
+);
+
+413 
+	`mem˝y
+(
+•lô_node1
+->
+LN_EÀmít
+, 
+vÆid_EÀmít
+,
+
+414 (
+LN_íåy
+Ë* (
+j
+ / 2));
+
+415 
+•lô_node1
+->
+nEÀmíts
+ = (
+j
+ / 2);
+
+417 
+	`mem˝y
+(
+•lô_node2
+->
+LN_EÀmít
+, &
+vÆid_EÀmít
+[
+j
+ / 2],
+
+418 (
+LN_íåy
+Ë* (
+j
+ - (j / 2)));
+
+419 
+•lô_node2
+->
+nEÀmíts
+ = (
+j
+ - (j / 2));
+
+422 
+	}
+}
+
+424 
+	$ªcursive_ö£π_IN
+(*
+roŸ_addr
+, 
+fú°_IN_id
+,
+
+425 
+num_IN
+)
+
+427 
+îrvÆ
+ = -1;
+
+428 
+id
+, 
+œ°_id
+, 
+pos
+, 
+¥ev_id
+, 
+IN_cou¡
+ = 0;
+
+429 
+IN
+ *
+cuºít_IN
+, *
+¥ev_IN
+;
+
+431 
+id
+ = 
+fú°_IN_id
+;
+
+432 
+œ°_id
+ = 
+fú°_IN_id
+ + 
+num_IN
+ - 1;
+
+434 i‡(
+id
+ > 0) {
+
+435 
+id
+ <
+œ°_id
+) {
+
+436 
+pos
+ = 0;Öo†< 
+MAX_NUM_ENTRY_IN
+;Öos++) {
+
+437 
+cuºít_IN
+ = (
+IN
+ *)
+roŸ_addr
+;
+
+438 
+¥ev_id
+ = (
+id
+ - 
+pos
+ - 1Ë/ 
+MAX_NUM_ENTRY_IN
+;
+
+439 
+¥ev_IN
+ = (
+IN
+ *)
+roŸ_addr
+;
+
+440 
+¥ev_IN
+[
+¥ev_id
+].
+key
+[¥ev_IN[¥ev_id].
+nKeys
+] =
+
+441 
+cuºít_IN
+[
+id
+].
+key
+[cuºít_IN[id].
+nKeys
+ - 1];
+
+442 
+¥ev_IN
+[
+¥ev_id
+].
+nKeys
+++;
+
+443 
+id
+++;
+
+444 i‡(
+id
+ > 
+œ°_id
+)
+
+447 
+IN_cou¡
+++;
+
+450 
+fú°_IN_id
+ = (fú°_IN_id - 1Ë/ 
+MAX_NUM_ENTRY_IN
+;
+
+451 
+îrvÆ
+ = 
+	`ªcursive_ö£π_IN
+(
+roŸ_addr
+, 
+fú°_IN_id
+, 
+IN_cou¡
+);
+
+452 i‡(
+îrvÆ
+ < 0)
+
+453 
+Áû
+;
+
+456 
+îrvÆ
+ = 0;
+
+457 
+Áû
+:
+
+458  
+îrvÆ
+;
+
+459 
+	}
+}
+
+461 
+	$ªc⁄°ru˘_‰om_PLN
+(*
+roŸ_addr
+, 
+fú°_PLN_id
+,
+
+462 
+num_PLN
+)
+
+464 
+¥ev_id
+, 
+id
+, 
+pos
+, 
+œ°_id
+, 
+IN_cou¡
+ = 0, 
+fú°_IN_id
+;
+
+465 
+i
+, 
+îrvÆ
+;
+
+466 
+IN
+ *
+¥ev_IN
+;
+
+467 
+PLN
+ *
+cuºít_PLN
+;
+
+469 
+id
+ = 
+fú°_PLN_id
+;
+
+470 
+œ°_id
+ = 
+fú°_PLN_id
+ + 
+num_PLN
+ - 1;
+
+472 
+id
+ <
+œ°_id
+) {
+
+473 
+pos
+ = 0;Öo†< 
+MAX_NUM_ENTRY_IN
+;Öos++) {
+
+474 
+cuºít_PLN
+ = (
+PLN
+ *)
+roŸ_addr
+;
+
+475 
+¥ev_id
+ = (
+id
+ - 
+pos
+ - 1Ë/ 
+MAX_NUM_ENTRY_IN
+;
+
+477 
+¥ev_IN
+ = (
+IN
+ *)
+roŸ_addr
+;
+
+478 
+¥ev_IN
+[
+¥ev_id
+].
+key
+[¥ev_IN[¥ev_id].
+nKeys
+] =
+
+479 
+cuºít_PLN
+[
+id
+].
+íåõs
+[cuºít_PLN[id].
+nKeys
+ - 1].
+key
+;
+
+480 
+¥ev_IN
+[
+¥ev_id
+].
+nKeys
+++;
+
+482 
+i
+ = 0; i < 
+cuºít_PLN
+[
+id
+].
+nKeys
+; i++) {
+
+483 
+cuºít_PLN
+[
+id
+].
+íåõs
+[
+i
+].
+±r
+->
+∑ª¡_id
+ = id;
+
+489 
+id
+++;
+
+490 i‡(
+id
+ > 
+œ°_id
+)
+
+493 
+IN_cou¡
+++;
+
+496 
+fú°_IN_id
+ = (
+fú°_PLN_id
+ - 1Ë/ 
+MAX_NUM_ENTRY_IN
+;
+
+497 i‡(
+fú°_IN_id
+ > 0) {
+
+498 
+îrvÆ
+ = 
+	`ªcursive_ö£π_IN
+(
+roŸ_addr
+, 
+fú°_IN_id
+, 
+IN_cou¡
+);
+
+499 i‡(
+îrvÆ
+ < 0)
+
+500  
+îrvÆ
+;
+
+504 
+	}
+}
+
+506 
+	$ö£π_node_to_PLN
+(
+PLN
+ *
+√w_PLNs
+, 
+∑ª¡_id
+, 
+key_ôem
+ *
+ö£π_key
+,
+
+507 
+key_ôem
+ *
+•lô_max_key
+, 
+LN
+ *
+•lô_node1
+, LN *
+•lô_node2
+)
+
+509 
+íåy_ödex
+, 
+i
+;
+
+510 
+ö£πed_PLN_id
+;
+
+512 i‡(
+	`memcmp
+(
+•lô_max_key
+->
+key
+, (
+√w_PLNs
+[
+∑ª¡_id
+].
+íåõs
+[√w_PLNs[∑ª¡_id].
+nKeys
+ - 1].key)->key,
+
+513 
+	`max
+(
+•lô_max_key
+->
+key_Àn
+, (
+√w_PLNs
+[
+∑ª¡_id
+].
+íåõs
+[√w_PLNs[∑ª¡_id].
+nKeys
+ - 1].
+key
+)->key_len)) > 0)
+
+514 
+ö£πed_PLN_id
+ = 
+∑ª¡_id
+ + 1;
+
+516 
+ö£πed_PLN_id
+ = 
+∑ª¡_id
+;
+
+518 
+i
+ = 0; i < 
+√w_PLNs
+[
+ö£πed_PLN_id
+].
+nKeys
+; i++) {
+
+519 i‡(
+	`memcmp
+(
+•lô_max_key
+->
+key
+, (
+√w_PLNs
+[
+ö£πed_PLN_id
+].
+íåõs
+[
+i
+].key)->key,
+
+520 
+	`max
+(
+•lô_max_key
+->
+key_Àn
+, (
+√w_PLNs
+[
+ö£πed_PLN_id
+].
+íåõs
+[
+i
+].
+key
+)->key_len)) <= 0) {
+
+521 
+PLN_íåy
+ 
+ãmp
+[
+√w_PLNs
+[
+ö£πed_PLN_id
+].
+nKeys
+ - 
+i
+];
+
+522 
+	`mem˝y
+(
+ãmp
+, &
+√w_PLNs
+[
+ö£πed_PLN_id
+].
+íåõs
+[
+i
+],
+
+523 (
+PLN_íåy
+Ë* (
+√w_PLNs
+[
+ö£πed_PLN_id
+].
+nKeys
+ - 
+i
+));
+
+524 
+	`mem˝y
+(&
+√w_PLNs
+[
+ö£πed_PLN_id
+].
+íåõs
+[
+i
+ + 1], 
+ãmp
+,
+
+525 (
+PLN_íåy
+Ë* (
+√w_PLNs
+[
+ö£πed_PLN_id
+].
+nKeys
+ - 
+i
+));
+
+526 
+√w_PLNs
+[
+ö£πed_PLN_id
+].
+íåõs
+[
+i
+].
+key
+ = 
+ö£π_key
+;
+
+527 
+√w_PLNs
+[
+ö£πed_PLN_id
+].
+íåõs
+[
+i
+].
+±r
+ = 
+•lô_node1
+;
+
+528 
+√w_PLNs
+[
+ö£πed_PLN_id
+].
+íåõs
+[
+i
+ + 1].
+±r
+ = 
+•lô_node2
+;
+
+529 
+√w_PLNs
+[
+ö£πed_PLN_id
+].
+nKeys
+++;
+
+530 
+íåy_ödex
+ = 
+i
+;
+
+535  
+íåy_ödex
+;
+
+536 
+	}
+}
+
+538 
+	$ªc⁄°ru˘_PLN
+(
+åì
+ *
+t
+, 
+∑ª¡_id
+, 
+key_ôem
+ *
+ö£π_key
+,
+
+539 
+key_ôem
+ *
+•lô_max_key
+, 
+LN
+ *
+•lô_node1
+, LN *
+•lô_node2
+)
+
+541 
+height
+, 
+max_PLN
+, 
+tŸÆ_PLN
+, 
+tŸÆ_IN
+ = 1;
+
+542 
+√w_∑ª¡_id
+;
+
+543 
+i
+, 
+íåy_ödex
+;
+
+544 
+îrvÆ
+;
+
+545 
+IN
+ *
+√w_INs
+;
+
+546 
+PLN
+ *
+ﬁd_PLNs
+, *
+√w_PLNs
+;
+
+548 
+height
+ = 
+t
+->height;
+
+550 
+max_PLN
+ = 1;
+
+552 
+height
+) {
+
+553 
+max_PLN
+ = max_PLN * 
+MAX_NUM_ENTRY_IN
+;
+
+554 
+height
+--;
+
+557 
+tŸÆ_PLN
+ = (
+t
+->
+œ°_PLN_id
+ -Å->
+fú°_PLN_id
+) + 2;
+
+559 i‡(
+t
+->
+is_Àaf
+ != 1) {
+
+560 i‡(
+tŸÆ_PLN
+ > 
+max_PLN
+) {
+
+561 
+height
+ = 
+t
+->height;
+
+562 
+height
+++;
+
+563 
+i
+ = 1; i < 
+height
+; i++)
+
+564 
+tŸÆ_IN
+ +tŸÆ_IN * 
+MAX_NUM_ENTRY_IN
+;
+
+566 
+√w_∑ª¡_id
+ = 
+tŸÆ_IN
+ + 
+∑ª¡_id
+ - 
+t
+->
+fú°_PLN_id
+;
+
+568 
+√w_PLNs
+ = (
+PLN
+ *)
+	`ÆlocINode
+(
+tŸÆ_IN
+ + 
+tŸÆ_PLN
+);
+
+569 
+ﬁd_PLNs
+ = (
+PLN
+ *)
+t
+->
+roŸ
+;
+
+571 
+	`mem˝y
+(&
+√w_PLNs
+[
+tŸÆ_IN
+], &
+ﬁd_PLNs
+[
+t
+->
+fú°_PLN_id
+],
+
+572 (
+PLN
+Ë* (
+∑ª¡_id
+ - 
+t
+->
+fú°_PLN_id
+ + 1));
+
+573 
+	`mem˝y
+(&
+√w_PLNs
+[
+√w_∑ª¡_id
+ + 2], &
+ﬁd_PLNs
+[
+∑ª¡_id
+ + 1],
+
+574 (
+PLN
+Ë* (
+t
+->
+œ°_PLN_id
+ - 
+∑ª¡_id
+));
+
+575 
+	`mem˝y
+(&
+√w_PLNs
+[
+√w_∑ª¡_id
+ + 1].
+íåõs
+,
+
+576 &
+√w_PLNs
+[
+√w_∑ª¡_id
+].
+íåõs
+[√w_PLNs[√w_∑ª¡_id].
+nKeys
+ / 2],
+
+577 (
+PLN_íåy
+Ë* (
+√w_PLNs
+[
+√w_∑ª¡_id
+].
+nKeys
+ -
+
+578 (
+√w_PLNs
+[
+√w_∑ª¡_id
+].
+nKeys
+ / 2)));
+
+580 
+√w_PLNs
+[
+√w_∑ª¡_id
+ + 1].
+nKeys
+ = (new_PLNs[new_parent_id].nKeys -
+
+581 (
+√w_PLNs
+[
+√w_∑ª¡_id
+].
+nKeys
+ / 2));
+
+582 
+√w_PLNs
+[
+√w_∑ª¡_id
+].
+nKeys
+ = (new_PLNs[new_parent_id].nKeys / 2);
+
+584 
+íåy_ödex
+ = 
+	`ö£π_node_to_PLN
+(
+√w_PLNs
+, 
+√w_∑ª¡_id
+,
+
+585 
+ö£π_key
+, 
+•lô_max_key
+, 
+•lô_node1
+, 
+•lô_node2
+);
+
+587 
+îrvÆ
+ = 
+	`ªc⁄°ru˘_‰om_PLN
+(
+√w_PLNs
+, 
+tŸÆ_IN
+, 
+tŸÆ_PLN
+);
+
+588 i‡(
+îrvÆ
+ < 0)
+
+589 
+Áû
+;
+
+591 
+	`‰ì
+(
+t
+->
+roŸ
+);
+
+592 
+t
+->
+height
+ = height;
+
+593 
+t
+->
+roŸ
+ = (
+IN
+ *)
+√w_PLNs
+;
+
+594 
+t
+->
+fú°_PLN_id
+ = 
+tŸÆ_IN
+;
+
+595 
+t
+->
+œ°_PLN_id
+ = 
+tŸÆ_IN
+ + 
+tŸÆ_PLN
+ - 1;
+
+596 
+t
+->
+is_Àaf
+ = 2;
+
+598 
+ﬁd_PLNs
+ = (
+PLN
+ *)
+t
+->
+roŸ
+;
+
+599 
+√w_PLNs
+ = (
+PLN
+ *)
+	`ÆlocINode
+(
+t
+->
+fú°_PLN_id
+ + 
+tŸÆ_PLN
+);
+
+602 
+	`mem˝y
+(&
+√w_PLNs
+[
+t
+->
+fú°_PLN_id
+], &
+ﬁd_PLNs
+[t->first_PLN_id],
+
+603 (
+PLN
+Ë* (
+∑ª¡_id
+ - 
+t
+->
+fú°_PLN_id
+ + 1));
+
+606 
+	`mem˝y
+(&
+√w_PLNs
+[
+∑ª¡_id
+ + 2], &
+ﬁd_PLNs
+[parent_id + 1],
+
+607 (
+PLN
+Ë* (
+t
+->
+œ°_PLN_id
+ - 
+∑ª¡_id
+));
+
+609 
+	`mem˝y
+(&
+√w_PLNs
+[
+∑ª¡_id
+ + 1].
+íåõs
+,
+
+610 &
+√w_PLNs
+[
+∑ª¡_id
+].
+íåõs
+[√w_PLNs[∑ª¡_id].
+nKeys
+ / 2],
+
+611 (
+PLN_íåy
+Ë* (
+√w_PLNs
+[
+∑ª¡_id
+].
+nKeys
+ -
+
+612 (
+√w_PLNs
+[
+∑ª¡_id
+].
+nKeys
+ / 2)));
+
+614 
+√w_PLNs
+[
+∑ª¡_id
+ + 1].
+nKeys
+ = (new_PLNs[parent_id].nKeys -
+
+615 (
+√w_PLNs
+[
+∑ª¡_id
+].
+nKeys
+ / 2));
+
+616 
+√w_PLNs
+[
+∑ª¡_id
+].
+nKeys
+ = (new_PLNs[parent_id].nKeys / 2);
+
+618 
+íåy_ödex
+ = 
+	`ö£π_node_to_PLN
+(
+√w_PLNs
+, 
+∑ª¡_id
+, 
+ö£π_key
+,
+
+619 
+•lô_max_key
+, 
+•lô_node1
+, 
+•lô_node2
+);
+
+621 
+îrvÆ
+ = 
+	`ªc⁄°ru˘_‰om_PLN
+(
+√w_PLNs
+, 
+t
+->
+fú°_PLN_id
+, 
+tŸÆ_PLN
+);
+
+622 i‡(
+îrvÆ
+ < 0)
+
+623 
+Áû
+;
+
+625 
+	`‰ì
+(
+t
+->
+roŸ
+);
+
+626 
+t
+->
+roŸ
+ = (
+IN
+ *)
+√w_PLNs
+;
+
+627 
+t
+->
+œ°_PLN_id
+++;
+
+628 
+t
+->
+is_Àaf
+ = 2;
+
+631 
+tŸÆ_IN
+ = 1;
+
+632 
+ﬁd_PLNs
+ = (
+PLN
+ *)
+t
+->
+roŸ
+;
+
+633 
+√w_PLNs
+ = (
+PLN
+ *)
+	`ÆlocINode
+(
+tŸÆ_IN
+ + 
+tŸÆ_PLN
+);
+
+634 
+√w_∑ª¡_id
+ = 
+tŸÆ_IN
+ + 
+∑ª¡_id
+ - 
+t
+->
+fú°_PLN_id
+;
+
+636 
+	`mem˝y
+(&
+√w_PLNs
+[
+tŸÆ_IN
+], &
+ﬁd_PLNs
+[
+t
+->
+fú°_PLN_id
+], (
+PLN
+) * 1);
+
+637 
+	`mem˝y
+(&
+√w_PLNs
+[2].
+íåõs
+, &√w_PLNs[1].íåõs[√w_PLNs[1].
+nKeys
+ / 2],
+
+638 (
+PLN_íåy
+Ë* (
+√w_PLNs
+[1].
+nKeys
+ - (new_PLNs[1].nKeys / 2)));
+
+640 
+√w_PLNs
+[
+√w_∑ª¡_id
+ + 1].
+nKeys
+ = (new_PLNs[new_parent_id].nKeys -
+
+641 (
+√w_PLNs
+[
+√w_∑ª¡_id
+].
+nKeys
+ / 2));
+
+642 
+√w_PLNs
+[
+√w_∑ª¡_id
+].
+nKeys
+ = (new_PLNs[new_parent_id].nKeys / 2);
+
+644 
+íåy_ödex
+ = 
+	`ö£π_node_to_PLN
+(
+√w_PLNs
+, 
+√w_∑ª¡_id
+,
+
+645 
+ö£π_key
+, 
+•lô_max_key
+, 
+•lô_node1
+, 
+•lô_node2
+);
+
+647 
+îrvÆ
+ = 
+	`ªc⁄°ru˘_‰om_PLN
+(
+√w_PLNs
+, 
+tŸÆ_IN
+, 
+tŸÆ_PLN
+);
+
+648 i‡(
+îrvÆ
+ < 0)
+
+649 
+Áû
+;
+
+651 
+	`‰ì
+(
+t
+->
+roŸ
+);
+
+652 
+t
+->
+height
+ = 1;
+
+653 
+t
+->
+roŸ
+ = (
+IN
+ *)
+√w_PLNs
+;
+
+654 
+t
+->
+fú°_PLN_id
+ = 
+tŸÆ_IN
+;
+
+655 
+t
+->
+œ°_PLN_id
+ = 
+tŸÆ_IN
+ + 
+tŸÆ_PLN
+ - 1;
+
+656 
+t
+->
+is_Àaf
+ = 2;
+
+658  
+íåy_ödex
+;
+
+659 
+Áû
+:
+
+660  
+îrvÆ
+;
+
+661 
+	}
+}
+
+663 
+	$ö£π_to_PLN
+(
+åì
+ *
+t
+, 
+∑ª¡_id
+,
+
+664 
+LN
+ *
+•lô_node1
+, LN *
+•lô_node2
+)
+
+666 
+íåy_ödex
+;
+
+668 
+key_ôem
+ *
+ö£π_key
+ = 
+•lô_node1
+->
+LN_EÀmít
+[•lô_node1->
+nEÀmíts
+ - 1].
+key
+;
+
+669 
+key_ôem
+ *
+•lô_max_key
+ = 
+•lô_node2
+->
+LN_EÀmít
+[•lô_node2->
+nEÀmíts
+ - 1].
+key
+;
+
+671 
+PLN
+ *
+∑ª¡
+ = (PLN *)
+t
+->
+roŸ
+;
+
+673 i‡(
+∑ª¡
+[
+∑ª¡_id
+].
+nKeys
+ =
+MAX_NUM_ENTRY_PLN
+) {
+
+675 
+íåy_ödex
+ = 
+	`ªc⁄°ru˘_PLN
+(
+t
+, 
+∑ª¡_id
+, 
+ö£π_key
+,
+
+676 
+•lô_max_key
+, 
+•lô_node1
+, 
+•lô_node2
+);
+
+677 i‡(
+íåy_ödex
+ < 0)
+
+678 
+Áû
+;
+
+679 } i‡(
+	`memcmp
+(
+•lô_max_key
+->
+key
+, (
+∑ª¡
+[
+∑ª¡_id
+].
+íåõs
+[∑ª¡[∑ª¡_id].
+nKeys
+ - 1].key)->key,
+
+680 
+	`max
+(
+•lô_max_key
+->
+key_Àn
+, (
+∑ª¡
+[
+∑ª¡_id
+].
+íåõs
+[∑ª¡[∑ª¡_id].
+nKeys
+ - 1].
+key
+)->key_len)) <= 0) {
+
+682 
+íåy_ödex
+ = 0;É¡ry_ödex < 
+∑ª¡
+[
+∑ª¡_id
+].
+nKeys
+;Éntry_index++) {
+
+683 i‡(
+	`memcmp
+(
+•lô_max_key
+->
+key
+, (
+∑ª¡
+[
+∑ª¡_id
+].
+íåõs
+[
+íåy_ödex
+].key)->key,
+
+684 
+	`max
+(
+•lô_max_key
+->
+key_Àn
+, (
+∑ª¡
+[
+∑ª¡_id
+].
+íåõs
+[∑ª¡[∑ª¡_id].
+nKeys
+ - 1].
+key
+)->key_len)) <= 0) {
+
+686 
+PLN_íåy
+ 
+ãmp
+[
+∑ª¡
+[
+∑ª¡_id
+].
+nKeys
+ - 
+íåy_ödex
+];
+
+688 
+	`mem˝y
+(
+ãmp
+, &
+∑ª¡
+[
+∑ª¡_id
+].
+íåõs
+[
+íåy_ödex
+],
+
+689 (
+PLN_íåy
+Ë* (
+∑ª¡
+[
+∑ª¡_id
+].
+nKeys
+ - 
+íåy_ödex
+));
+
+690 
+	`mem˝y
+(&
+∑ª¡
+[
+∑ª¡_id
+].
+íåõs
+[
+íåy_ödex
+ + 1], 
+ãmp
+,
+
+691 (
+PLN_íåy
+Ë* (
+∑ª¡
+[
+∑ª¡_id
+].
+nKeys
+ - 
+íåy_ödex
+));
+
+693 
+∑ª¡
+[
+∑ª¡_id
+].
+íåõs
+[
+íåy_ödex
+].
+key
+ = 
+ö£π_key
+;
+
+694 
+∑ª¡
+[
+∑ª¡_id
+].
+íåõs
+[
+íåy_ödex
+].
+±r
+ = 
+•lô_node1
+;
+
+695 
+∑ª¡
+[
+∑ª¡_id
+].
+íåõs
+[
+íåy_ödex
+ + 1].
+±r
+ = 
+•lô_node2
+;
+
+697 
+•lô_node1
+->
+∑ª¡_id
+ =Öarent_id;
+
+698 
+•lô_node2
+->
+∑ª¡_id
+ =Öarent_id;
+
+699 
+∑ª¡
+[
+∑ª¡_id
+].
+nKeys
+++;
+
+705 
+Áû
+:
+
+706  
+íåy_ödex
+;
+
+707 
+	}
+}
+
+709 
+	$ö£π_íåy_to_Àaf
+(
+LN
+ *
+Àaf
+, 
+key_ôem
+ *
+√w_ôem
+, *
+vÆue
+, 
+boﬁ
+ 
+Êush
+)
+
+711 i‡(
+Êush
+ =
+åue
+) {
+
+712 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+].
+Êag
+ = 
+åue
+;
+
+713 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+].
+key
+ = 
+√w_ôem
+;
+
+714 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+].
+vÆue
+ = value;
+
+715 
+	`Êush_buf„r
+(&
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+],
+
+716 (
+LN_íåy
+), 
+Ál£
+);
+
+717 
+Àaf
+->
+nEÀmíts
+++;
+
+718 
+	`Êush_buf„r
+(&
+Àaf
+->
+nEÀmíts
+, (), 
+åue
+);
+
+720 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+].
+Êag
+ = 
+åue
+;
+
+721 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+].
+key
+ = 
+√w_ôem
+;
+
+722 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+].
+vÆue
+ = value;
+
+723 
+Àaf
+->
+nEÀmíts
+++;
+
+725 
+	}
+}
+
+727 
+	$Àaf_•lô_™d_ö£π
+(
+åì
+ *
+t
+, 
+LN
+ *
+Àaf
+, 
+key_ôem
+ *
+√w_ôem
+, *
+vÆue
+)
+
+729 
+îrvÆ
+ = -1, 
+cuºít_idx
+;
+
+730 
+LN
+ *
+•lô_node1
+, *
+•lô_node2
+, *
+¥ev_Àaf
+, *
+√w_Àaf
+;
+
+731 
+PLN
+ *
+¥ev_PLN
+;
+
+733 
+•lô_node1
+ = 
+	`ÆlocLNode
+();
+
+734 
+•lô_node2
+ = 
+	`ÆlocLNode
+();
+
+735 
+•lô_node1
+->
+siblög
+ = 
+•lô_node2
+;
+
+736 
+•lô_node2
+->
+siblög
+ = 
+Àaf
+->sibling;
+
+738 i‡(
+•lô_node1
+ =
+NULL
+ || 
+•lô_node2
+ == NULL)
+
+739  
+îrvÆ
+;
+
+741 
+	`Àaf_sˇn_divide
+(
+t
+, 
+Àaf
+, 
+•lô_node1
+, 
+•lô_node2
+);
+
+743 i‡(
+t
+->
+is_Àaf
+ != 0) {
+
+744 
+cuºít_idx
+ = 
+	`ö£π_to_PLN
+(
+t
+, 
+Àaf
+->
+∑ª¡_id
+, 
+•lô_node1
+, 
+•lô_node2
+);
+
+745 i‡(
+cuºít_idx
+ < 0)
+
+746 
+Áû
+;
+
+748 i‡(
+cuºít_idx
+ != 0) {
+
+749 
+¥ev_PLN
+ = (
+PLN
+ *)
+t
+->
+roŸ
+;
+
+750 
+¥ev_Àaf
+ = 
+¥ev_PLN
+[
+•lô_node1
+->
+∑ª¡_id
+].
+íåõs
+[
+cuºít_idx
+ - 1].
+±r
+;
+
+752 i‡(
+•lô_node1
+->
+∑ª¡_id
+ > 
+t
+->
+fú°_PLN_id
+) {
+
+753 
+¥ev_PLN
+ = (
+PLN
+ *)
+t
+->
+roŸ
+;
+
+754 
+¥ev_Àaf
+ = 
+¥ev_PLN
+[
+•lô_node1
+->
+∑ª¡_id
+ - 1].
+íåõs
+[¥ev_PLN[•lô_node1->∑ª¡_id - 1].
+nKeys
+ - 1].
+±r
+;
+
+756 
+t
+->
+fú°_Àaf
+ = 
+•lô_node1
+;
+
+757 
+íd
+;
+
+761 
+√w_Àaf
+ = 
+	`föd_Àaf
+(
+t
+, 
+√w_ôem
+->
+key
+,Çew_ôem->
+key_Àn
+);
+
+763 
+	`ö£π_íåy_to_Àaf
+(
+√w_Àaf
+, 
+√w_ôem
+, 
+vÆue
+, 
+Ál£
+);
+
+765 
+	`Êush_buf„r
+(
+•lô_node1
+, (
+LN
+), 
+Ál£
+);
+
+766 
+	`Êush_buf„r
+(
+•lô_node2
+, (
+LN
+), 
+Ál£
+);
+
+768 
+¥ev_Àaf
+->
+siblög
+ = 
+•lô_node1
+;
+
+769 
+	`Êush_buf„r
+(&
+¥ev_Àaf
+->
+siblög
+, (&¥ev_Àaf->siblög), 
+åue
+);
+
+771 
+PLN
+ *
+√w_PLN
+ = (PLN *)
+	`ÆlocINode
+(1);
+
+773 
+•lô_node1
+->
+∑ª¡_id
+ = 0;
+
+774 
+•lô_node2
+->
+∑ª¡_id
+ = 0;
+
+775 
+•lô_node2
+->
+siblög
+ = 
+NULL
+;
+
+777 
+√w_PLN
+->
+íåõs
+[√w_PLN->
+nKeys
+].
+key
+ =
+
+778 
+•lô_node1
+->
+LN_EÀmít
+[•lô_node1->
+nEÀmíts
+ - 1].
+key
+;
+
+779 
+√w_PLN
+->
+íåõs
+[√w_PLN->
+nKeys
+].
+±r
+ = 
+•lô_node1
+;
+
+780 
+√w_PLN
+->
+nKeys
+++;
+
+781 
+√w_PLN
+->
+íåõs
+[√w_PLN->
+nKeys
+].
+key
+ = 
+	`make_key_ôem
+(
+MAX_KEY
+, 
+	`°æí
+(MAX_KEY));
+
+782 
+√w_PLN
+->
+íåõs
+[√w_PLN->
+nKeys
+].
+±r
+ = 
+•lô_node2
+;
+
+783 
+√w_PLN
+->
+nKeys
+++;
+
+785 
+t
+->
+height
+ = 0;
+
+786 
+t
+->
+is_Àaf
+ = 1;
+
+787 
+t
+->
+fú°_PLN_id
+ = 0;
+
+788 
+t
+->
+œ°_PLN_id
+ = 0;
+
+789 
+t
+->
+roŸ
+ = 
+√w_PLN
+;
+
+791 
+√w_Àaf
+ = 
+	`föd_Àaf
+(
+t
+, 
+√w_ôem
+->
+key
+,Çew_ôem->
+key_Àn
+);
+
+793 
+	`ö£π_íåy_to_Àaf
+(
+√w_Àaf
+, 
+√w_ôem
+, 
+vÆue
+, 
+Ál£
+);
+
+795 
+	`Êush_buf„r
+(
+•lô_node1
+, (
+LN
+), 
+Ál£
+);
+
+796 
+	`Êush_buf„r
+(
+•lô_node2
+, (
+LN
+), 
+åue
+);
+
+799 
+íd
+:
+
+800 
+	`‰ì
+(
+Àaf
+);
+
+802 
+Áû
+:
+
+803  
+cuºít_idx
+;
+
+804 
+	}
+}
+
+806 
 	$In£π
 (
 åì
@@ -1723,27 +4269,17 @@ key_Àn
 vÆue
 )
 
-391 
+808 
+îrvÆ
+ = -1;
+
+809 
 LN
  *
-cuº
- = 
-t
-->
-roŸ
+Àaf
 ;
 
-393 
-cuº
- = 
-	`föd_Àaf_node
-(cuº, 
-key
-, 
-key_Àn
-);
-
-396 
+812 
 key_ôem
  *
 √w_ôem
@@ -1755,1163 +4291,1843 @@ key
 key_Àn
 );
 
-399 if(
-cuº
+814 i‡(
+t
 ->
-bôm≠
+roŸ
  =
-IS_FULL
+NULL
 ) {
 
-400 
-j
-;
-
-401 
-LN
- *
-•lô_LNode
+815 
+îrvÆ
  = 
-	`ÆlocLNode
-();
-
-402 
-íåy
- *
-vÆid_íåy
- = 
-	`mÆloc
-(
-NUM_LN_ENTRY
- * (entry));
-
-404 
-	`add_log_íåy
+	`¸óã_√w_åì
 (
 t
 , 
-cuº
-, (
-LN
-), 
-LE_DATA
-);
-
-406 
-•lô_LNode
-->
-pNext
- = 
-cuº
-->pNext;
-
-408 
-j
- = 0; j < 
-NUM_LN_ENTRY
-; j++)
-
-409 
-vÆid_íåy
-[
-j
-] = 
-cuº
-->
-íåõs
-[j];
-
-411 
-	`ö£πi⁄_s‹t
-(
-vÆid_íåy
-, 
-NUM_LN_ENTRY
-);
-
-413 
-cuº
-->
-bôm≠
- = 0;
-
-414 
-j
- = 0; j < 
-MIN_LN_ENTRIES
-; j++)
-
-415 
-	`ö£π_ö_Àaf_noÊush
-(
-cuº
-, 
-vÆid_íåy
-[
-j
-].
-key
-,
-
-416 
-vÆid_íåy
-[
-j
-].
-±r
-);
-
-418 
-j
- = 
-MIN_LN_ENTRIES
-; j < 
-NUM_LN_ENTRY
-; j++)
-
-419 
-	`ö£π_ö_Àaf_noÊush
-(
-•lô_LNode
-, 
-vÆid_íåy
-[
-j
-].
-key
-,
-
-420 
-vÆid_íåy
-[
-j
-].
-±r
-);
-
-422 
-	`‰ì
-(
-vÆid_íåy
-);
-
-424 i‡(
-	`memcmp
-((
-•lô_LNode
-->
-íåõs
-[0].
-key
-)->key, 
 √w_ôem
-->key, 
-	`max
-((•lô_LNode->íåõs[0].key)->
+, 
+vÆue
+);
+
+816 i‡(
+îrvÆ
+ < 0)
+
+817 
+Áû
+;
+
+818  
+îrvÆ
+;
+
+821 
+Àaf
+ = 
+	`föd_Àaf
+(
+t
+, 
+√w_ôem
+->
+key
+,Çew_ôem->
 key_Àn
-, key_len)) > 0) {
-
-425 
-	`ö£π_ö_Àaf_noÊush
-(
-cuº
-, 
-√w_ôem
-, 
-vÆue
 );
 
-427 
-	`ö£π_ö_Àaf_noÊush
-(
-•lô_LNode
-, 
-√w_ôem
-, 
-vÆue
-);
-
-429 
-	`ö£π_ö_∑ª¡
-(
-t
-, 
-cuº
-, 
-•lô_LNode
-->
-íåõs
-[0].
-key
-, split_LNode);
-
-431 
-cuº
-->
-pNext
- = 
-•lô_LNode
-;
-
-433 
-	`Êush_buf„r
-(
-cuº
-, (
-LN
-), 
-Ál£
-);
-
-434 
-	`Êush_buf„r
-(
-•lô_LNode
-, (
-LN
-), 
-Ál£
-);
-
-436 
-	`add_log_íåy
-(
-t
-, 
+823 i‡(
+Àaf
+ =
 NULL
-, 0, 
-LE_COMMIT
+) {
+
+824 
+	`¥ötf
+("key = %lu\n",
+key
 );
 
-439 
-	`ö£π_ö_Àaf
-(
-cuº
-, 
-√w_ôem
-, 
-vÆue
-);
+825 
+Áû
+;
 
-441 
-	}
-}
-
-443 
-	$ö£π_ö_Àaf_noÊush
-(
-LN
- *
-cuº
-, 
-key_ôem
- *
-√w_ôem
-, *
-vÆue
+828 i‡(
+Àaf
+->
+nEÀmíts
+ < 
+MAX_NUM_ENTRY_LN
 )
 
-445 
-îrvÆ
- = -1;
-
-446 
-ödex
-;
-
-447 
-ödex
- = 
-	`föd_√xt_zîo_bô
-(&
-cuº
-->
-bôm≠
-, 
-BITMAP_SIZE
-, 0);
-
-448 i‡(
-ödex
- =
-BITMAP_SIZE
-)
-
-449  
-îrvÆ
-;
-
-451 
-cuº
-->
-íåõs
-[
-ödex
-].
-key
- = 
-√w_ôem
-;
-
-452 
-cuº
-->
-íåõs
-[
-ödex
-].
-±r
- = 
-vÆue
-;
-
-453 
-cuº
-->
-fögî¥öts
-[
-ödex
-] = 
-	`hash
+829 
+	`ö£π_íåy_to_Àaf
 (
-√w_ôem
-->
-key
-,Çew_ôem->
-key_Àn
-);
-
-454 
-cuº
-->
-bôm≠
- = cuº->bôm≠ + (0x1UL << 
-ödex
-);
-
-455  
-ödex
-;
-
-456 
-	}
-}
-
-458 
-	$ö£π_ö_Àaf
-(
-LN
- *
-cuº
+Àaf
 , 
-key_ôem
- *
 √w_ôem
-, *
-vÆue
-)
-
-460 
-ödex
-;
-
-461 
-ödex
- = 
-	`föd_√xt_zîo_bô
-(&
-cuº
-->
-bôm≠
 , 
-BITMAP_SIZE
-, 0);
-
-462 i‡(
-ödex
- =
-BITMAP_SIZE
-)
-
-465 
-cuº
-->
-íåõs
-[
-ödex
-].
-key
- = 
-√w_ôem
-;
-
-466 
-cuº
-->
-íåõs
-[
-ödex
-].
-±r
- = 
 vÆue
-;
-
-467 
-cuº
-->
-fögî¥öts
-[
-ödex
-] = 
-	`hash
-(
-√w_ôem
-->
-key
-,Çew_ôem->
-key_Àn
-);
-
-468 
-cuº
-->
-bôm≠
- = cuº->bôm≠ + (0x1UL << 
-ödex
-);
-
-470 
-	`Êush_buf„r
-(&
-cuº
-->
-íåõs
-[
-ödex
-], (
-íåy
-), 
-Ál£
-);
-
-471 
-	`Êush_buf„r
-(&
-cuº
-->
-fögî¥öts
-[
-ödex
-], (), 
-Ál£
-);
-
-472 
-	`Êush_buf„r
-(&
-cuº
-->
-bôm≠
-, (), 
+, 
 åue
 );
 
-473 
-	}
-}
-
-475 
-	$ö£π_ö_ö√r
-(
-IN
- *
-cuº
-, 
-key_ôem
- *
-ö£πed_ôem
-, *
-chûd
-)
-
-477 
-loc
-, 
-mid
-, 
-j
-;
-
-479 
-mid
+832 
+îrvÆ
  = 
-	`Sórch
+	`Àaf_•lô_™d_ö£π
 (
-cuº
+t
 , 
-ö£πed_ôem
-->
-key
-, in£πed_ôem->
-key_Àn
+Àaf
+, 
+√w_ôem
+, 
+vÆue
 );
 
-481 
-j
- = (
-cuº
-->
-nKeys
- - 1); j >
-mid
-; j--) {
+833 i‡(
+îrvÆ
+ < 0)
 
-482 
-cuº
-->
-keys
-[
-j
- + 1] = curr->keys[j];
-
-483 
-cuº
-->
-±r
-[
-j
- + 1] = curr->ptr[j];
-
-486 
-cuº
-->
-keys
-[
-mid
-] = 
-ö£πed_ôem
+834 
+Áû
 ;
 
-487 
-cuº
-->
-±r
-[
-mid
-] = 
-chûd
+838 
+Áû
+:
+
+839  
+îrvÆ
 ;
 
-489 
-cuº
-->
-nKeys
-++;
-
-490 
+840 
 	}
 }
 
-492 
-	$ö£π_ö_∑ª¡
+842 
+	$upd©e_íåy_to_Àaf
+(
+LN
+ *
+Àaf
+, 
+ﬁd_key
+, *
+ﬁd_vÆue
+,
+
+843 
+√w_key
+, *
+√w_vÆue
+, 
+boﬁ
+ 
+Êush
+)
+
+845 i‡(
+Êush
+ =
+åue
+) {
+
+846 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+].
+Êag
+ = 
+Ál£
+;
+
+847 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+].
+key
+ = 
+ﬁd_key
+;
+
+848 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+].
+vÆue
+ = 
+ﬁd_vÆue
+;
+
+849 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+ + 1].
+Êag
+ = 
+åue
+;
+
+850 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+ + 1].
+key
+ = 
+√w_key
+;
+
+851 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+ + 1].
+vÆue
+ = 
+√w_vÆue
+;
+
+852 
+	`Êush_buf„r
+(&
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+],
+
+853 (
+LN_íåy
+Ë* 2, 
+Ál£
+);
+
+854 
+Àaf
+->
+nEÀmíts
+ =Üeaf->nElements + 2;
+
+855 
+	`Êush_buf„r
+(&
+Àaf
+->
+nEÀmíts
+, (), 
+åue
+);
+
+857 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+].
+Êag
+ = 
+Ál£
+;
+
+858 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+].
+key
+ = 
+ﬁd_key
+;
+
+859 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+].
+vÆue
+ = 
+ﬁd_vÆue
+;
+
+860 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+ + 1].
+Êag
+ = 
+åue
+;
+
+861 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+ + 1].
+key
+ = 
+√w_key
+;
+
+862 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+ + 1].
+vÆue
+ = 
+√w_vÆue
+;
+
+863 
+Àaf
+->
+nEÀmíts
+ =Üeaf->nElements + 2;
+
+865 
+	}
+}
+
+867 
+	$Àaf_•lô_™d_upd©e
 (
 åì
  *
 t
-, *
-cuº
 , 
-key_ôem
+LN
  *
-ö£πed_ôem
+Àaf
+, 
+key
 , *
-•lôNode
-) {
+vÆue
+,
 
-493 i‡(
-cuº
- =
-t
-->
-roŸ
-) {
-
-494 
-IN
- *
-roŸ
- = 
-	`ÆlocINode
-();
-
-495 
-roŸ
-->
-À·mo°På
- = 
-cuº
-;
-
-496 
-roŸ
-->
-keys
-[0] = 
-ö£πed_ôem
-;
-
-497 
-roŸ
-->
-±r
-[0] = 
-•lôNode
-;
-
-498 
-roŸ
-->
-nKeys
-++;
-
-500 ((
-IN
- *)
-•lôNode
-)->
-∑ª¡
- = 
-roŸ
-;
-
-501 ((
-IN
- *)
-cuº
-)->
-∑ª¡
- = 
-roŸ
-;
-
-502 
-t
-->
-roŸ
- =Ñoot;
-
-506 
-IN
- *
-∑ª¡
-;
-
-508 i‡(((
-IN
- *)
-cuº
-)->
-ty≥
- =
-THIS_IN
+868 
+√w_key
+, *
+√w_vÆue
 )
 
-509 
-∑ª¡
- = ((
-IN
- *)
-cuº
-)->parent;
-
-511 
-∑ª¡
- = ((
-LN
- *)
-cuº
-)->parent;
-
-513 i‡(
-∑ª¡
-->
-nKeys
- < 
-NUM_IN_ENTRY
-) {
-
-514 
-	`ö£π_ö_ö√r
-(
-∑ª¡
-, 
-ö£πed_ôem
-, 
-•lôNode
-);
-
-515 ((
-IN
- *)
-•lôNode
-)->
-∑ª¡
- =Öarent;
-
-517 
-i
-, 
-j
-, 
-loc
-, 
-∑ª¡_nKeys
+870 
+îrvÆ
+ = -1, 
+cuºít_idx
 ;
 
-518 
-IN
+871 
+LN
  *
-•lô_INode
+•lô_node1
+, *
+•lô_node2
+, *
+¥ev_Àaf
+, *
+√w_Àaf
+;
+
+872 
+PLN
+ *
+¥ev_PLN
+;
+
+874 
+•lô_node1
  = 
-	`ÆlocINode
+	`ÆlocLNode
 ();
 
-519 
-∑ª¡_nKeys
+875 
+•lô_node2
  = 
-∑ª¡
+	`ÆlocLNode
+();
+
+876 
+•lô_node1
 ->
-nKeys
+siblög
+ = 
+•lô_node2
 ;
 
-521 
-j
+877 
+•lô_node2
+->
+siblög
  = 
-MIN_IN_ENTRIES
+Àaf
+->sibling;
+
+879 i‡(
+•lô_node1
+ =
+NULL
+ || 
+•lô_node2
+ == NULL)
+
+880  
+îrvÆ
+;
+
+882 
+	`Àaf_sˇn_divide
+(
+t
 , 
-i
- = 0; j < 
-∑ª¡_nKeys
-; j++, i++) {
+Àaf
+, 
+•lô_node1
+, 
+•lô_node2
+);
 
-522 
-•lô_INode
+884 i‡(
+t
 ->
-keys
-[
-i
-] = 
-∑ª¡
-->keys[
-j
-];
+is_Àaf
+ != 0) {
 
-523 
-•lô_INode
+885 
+cuºít_idx
+ = 
+	`ö£π_to_PLN
+(
+t
+, 
+Àaf
 ->
-±r
-[
-i
-] = 
-∑ª¡
-->±r[
-j
-];
+∑ª¡_id
+, 
+•lô_node1
+, 
+•lô_node2
+);
 
-524 ((
-IN
+886 i‡(
+cuºít_idx
+ < 0)
+
+887 
+Áû
+;
+
+889 i‡(
+cuºít_idx
+ != 0) {
+
+890 
+¥ev_PLN
+ = (
+PLN
  *)
-•lô_INode
+t
 ->
-±r
-[
-i
-])->
-∑ª¡
- = split_INode;
+roŸ
+;
 
-525 
-•lô_INode
+891 
+¥ev_Àaf
+ = 
+¥ev_PLN
+[
+•lô_node1
+->
+∑ª¡_id
+].
+íåõs
+[
+cuºít_idx
+ - 1].
+±r
+;
+
+893 i‡(
+•lô_node1
+->
+∑ª¡_id
+ > 
+t
+->
+fú°_PLN_id
+) {
+
+894 
+¥ev_PLN
+ = (
+PLN
+ *)
+t
+->
+roŸ
+;
+
+895 
+¥ev_Àaf
+ = 
+¥ev_PLN
+[
+•lô_node1
+->
+∑ª¡_id
+ - 1].
+íåõs
+[¥ev_PLN[•lô_node1->∑ª¡_id - 1].
+nKeys
+ - 1].
+±r
+;
+
+897 
+t
+->
+fú°_Àaf
+ = 
+•lô_node1
+;
+
+898 
+íd
+;
+
+902 
+√w_Àaf
+ = 
+	`föd_Àaf
+(
+t
+, 
+key
+);
+
+904 
+	`upd©e_íåy_to_Àaf
+(
+√w_Àaf
+, 
+key
+, 
+vÆue
+, 
+√w_key
+, 
+√w_vÆue
+, 
+Ál£
+);
+
+906 
+	`Êush_buf„r
+(
+•lô_node1
+, (
+LN
+), 
+Ál£
+);
+
+907 
+	`Êush_buf„r
+(
+•lô_node2
+, (
+LN
+), 
+Ál£
+);
+
+909 
+¥ev_Àaf
+->
+siblög
+ = 
+•lô_node1
+;
+
+910 
+	`Êush_buf„r
+(&
+¥ev_Àaf
+->
+siblög
+, (&¥ev_Àaf->siblög), 
+åue
+);
+
+912 
+PLN
+ *
+√w_PLN
+ = (PLN *)
+	`ÆlocINode
+(1);
+
+914 
+•lô_node1
+->
+∑ª¡_id
+ = 0;
+
+915 
+•lô_node2
+->
+∑ª¡_id
+ = 0;
+
+916 
+•lô_node2
+->
+siblög
+ = 
+NULL
+;
+
+918 
+√w_PLN
+->
+íåõs
+[√w_PLN->
+nKeys
+].
+key
+ =
+
+919 
+•lô_node1
+->
+LN_EÀmít
+[•lô_node1->
+nEÀmíts
+ - 1].
+key
+;
+
+920 
+√w_PLN
+->
+íåõs
+[√w_PLN->
+nKeys
+].
+±r
+ = 
+•lô_node1
+;
+
+921 
+√w_PLN
 ->
 nKeys
 ++;
 
-526 
-∑ª¡
+922 
+√w_PLN
 ->
+íåõs
+[√w_PLN->
 nKeys
---;
-
-529 i‡(
-	`memcmp
-((
-•lô_INode
-->
-keys
-[0])->
+].
 key
-, 
-ö£πed_ôem
-->key,
-
-530 
-	`max
-((
-•lô_INode
-->
-keys
-[0])->
-key_Àn
-, 
-ö£πed_ôem
-->key_len)) > 0) {
-
-531 
-	`ö£π_ö_ö√r
-(
-∑ª¡
-, 
-ö£πed_ôem
-, 
-•lôNode
-);
-
-532 ((
-IN
- *)
-•lôNode
-)->
-∑ª¡
- =Öarent;
-
-535 ((
-IN
- *)
-•lôNode
-)->
-∑ª¡
  = 
-•lô_INode
+MAX_KEY
 ;
 
-536 
-	`ö£π_ö_ö√r
-(
-•lô_INode
-, 
-ö£πed_ôem
-, 
-•lôNode
-);
+923 
+√w_PLN
+->
+íåõs
+[√w_PLN->
+nKeys
+].
+±r
+ = 
+•lô_node2
+;
 
-539 
-	`ö£π_ö_∑ª¡
+924 
+√w_PLN
+->
+nKeys
+++;
+
+926 
+t
+->
+height
+ = 0;
+
+927 
+t
+->
+is_Àaf
+ = 1;
+
+928 
+t
+->
+fú°_PLN_id
+ = 0;
+
+929 
+t
+->
+œ°_PLN_id
+ = 0;
+
+930 
+t
+->
+roŸ
+ = 
+√w_PLN
+;
+
+932 
+√w_Àaf
+ = 
+	`föd_Àaf
 (
 t
 , 
-∑ª¡
-, 
-•lô_INode
-->
-keys
-[0], split_INode);
+key
+);
 
-541 
+934 
+	`upd©e_íåy_to_Àaf
+(
+√w_Àaf
+, 
+key
+, 
+vÆue
+, 
+√w_key
+, 
+√w_vÆue
+, 
+Ál£
+);
+
+936 
+	`Êush_buf„r
+(
+•lô_node1
+, (
+LN
+), 
+Ál£
+);
+
+937 
+	`Êush_buf„r
+(
+•lô_node2
+, (
+LN
+), 
+åue
+);
+
+940 
+íd
+:
+
+941 
+	`‰ì
+(
+Àaf
+);
+
+943 
+Áû
+:
+
+944  
+cuºít_idx
+;
+
+945 
 	}
 }
 
-	@FPTree.h
+947 
+	$Upd©e
+(
+åì
+ *
+t
+, 
+key
+, *
+vÆue
+)
+
+949 
+îrvÆ
+ = -1, 
+pos
+, 
+i
+;
+
+950 
+ﬁd_key
+, 
+√w_key
+;
+
+951 *
+ﬁd_vÆue
+, *
+√w_vÆue
+;
+
+952 
+LN
+ *
+cuºít_LN
+;
+
+953 
+IN
+ *
+cuºít_IN
+ = 
+t
+->
+roŸ
+;
+
+955 
+cuºít_LN
+ = 
+	`föd_Àaf
+(
+t
+, 
+key
+);
+
+956 i‡(
+cuºít_LN
+ =
+NULL
+)
+
+957 
+Áû
+;
+
+959 i‡(
+cuºít_LN
+->
+nEÀmíts
+ < 
+MAX_NUM_ENTRY_LN
+ - 1)
+
+960 
+	`upd©e_íåy_to_Àaf
+(
+cuºít_LN
+, 
+key
+, 
+NULL
+, key, 
+vÆue
+, 
+åue
+);
+
+963 
+îrvÆ
+ = 
+	`Àaf_•lô_™d_upd©e
+(
+t
+, 
+cuºít_LN
+, 
+key
+, 
+NULL
+, key, 
+vÆue
+);
+
+964 i‡(
+îrvÆ
+ < 0)
+
+965 
+Áû
+;
+
+969 
+Áû
+:
+
+970  
+îrvÆ
+;
+
+971 
+	}
+}
+
+973 
+	$dñëe_íåy_to_Àaf
+(
+LN
+ *
+Àaf
+, 
+key
+, *
+vÆue
+, 
+boﬁ
+ 
+Êush
+)
+
+975 i‡(
+Êush
+ =
+åue
+) {
+
+976 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+].
+Êag
+ = 
+Ál£
+;
+
+977 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+].
+key
+ = key;
+
+978 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+].
+vÆue
+ = value;
+
+979 
+	`Êush_buf„r
+(&
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+],
+
+980 (
+LN_íåy
+), 
+Ál£
+);
+
+981 
+Àaf
+->
+nEÀmíts
+++;
+
+982 
+	`Êush_buf„r
+(&
+Àaf
+->
+nEÀmíts
+, (), 
+åue
+);
+
+984 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+].
+Êag
+ = 
+Ál£
+;
+
+985 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+].
+key
+ = key;
+
+986 
+Àaf
+->
+LN_EÀmít
+[Àaf->
+nEÀmíts
+].
+vÆue
+ = value;
+
+987 
+Àaf
+->
+nEÀmíts
+++;
+
+989 
+	}
+}
+
+991 
+	$Àaf_•lô_™d_dñëe
+(
+åì
+ *
+t
+, 
+LN
+ *
+Àaf
+, 
+key
+, *
+vÆue
+)
+
+993 
+îrvÆ
+ = -1, 
+cuºít_idx
+;
+
+994 
+LN
+ *
+•lô_node1
+, *
+•lô_node2
+, *
+¥ev_Àaf
+, *
+√w_Àaf
+;
+
+995 
+PLN
+ *
+¥ev_PLN
+;
+
+997 
+•lô_node1
+ = 
+	`ÆlocLNode
+();
+
+998 
+•lô_node2
+ = 
+	`ÆlocLNode
+();
+
+999 
+•lô_node1
+->
+siblög
+ = 
+•lô_node2
+;
+
+1000 
+•lô_node2
+->
+siblög
+ = 
+Àaf
+->sibling;
+
+1002 i‡(
+•lô_node1
+ =
+NULL
+ || 
+•lô_node2
+ == NULL)
+
+1003  
+îrvÆ
+;
+
+1005 
+	`Àaf_sˇn_divide
+(
+t
+, 
+Àaf
+, 
+•lô_node1
+, 
+•lô_node2
+);
+
+1007 i‡(
+t
+->
+is_Àaf
+ != 0) {
+
+1008 
+cuºít_idx
+ = 
+	`ö£π_to_PLN
+(
+t
+, 
+Àaf
+->
+∑ª¡_id
+, 
+•lô_node1
+, 
+•lô_node2
+);
+
+1009 i‡(
+cuºít_idx
+ < 0)
+
+1010 
+Áû
+;
+
+1012 i‡(
+cuºít_idx
+ != 0) {
+
+1013 
+¥ev_PLN
+ = (
+PLN
+ *)
+t
+->
+roŸ
+;
+
+1014 
+¥ev_Àaf
+ = 
+¥ev_PLN
+[
+•lô_node1
+->
+∑ª¡_id
+].
+íåõs
+[
+cuºít_idx
+ - 1].
+±r
+;
+
+1016 i‡(
+•lô_node1
+->
+∑ª¡_id
+ > 
+t
+->
+fú°_PLN_id
+) {
+
+1017 
+¥ev_PLN
+ = (
+PLN
+ *)
+t
+->
+roŸ
+;
+
+1018 
+¥ev_Àaf
+ = 
+¥ev_PLN
+[
+•lô_node1
+->
+∑ª¡_id
+ - 1].
+íåõs
+[¥ev_PLN[•lô_node1->∑ª¡_id - 1].
+nKeys
+ - 1].
+±r
+;
+
+1020 
+t
+->
+fú°_Àaf
+ = 
+•lô_node1
+;
+
+1021 
+íd
+;
+
+1025 
+√w_Àaf
+ = 
+	`föd_Àaf
+(
+t
+, 
+key
+);
+
+1027 
+	`dñëe_íåy_to_Àaf
+(
+√w_Àaf
+, 
+key
+, 
+vÆue
+, 
+Ál£
+);
+
+1029 
+	`Êush_buf„r
+(
+•lô_node1
+, (
+LN
+), 
+Ál£
+);
+
+1030 
+	`Êush_buf„r
+(
+•lô_node2
+, (
+LN
+), 
+Ál£
+);
+
+1032 
+¥ev_Àaf
+->
+siblög
+ = 
+•lô_node1
+;
+
+1033 
+	`Êush_buf„r
+(&
+¥ev_Àaf
+->
+siblög
+, (&¥ev_Àaf->siblög), 
+åue
+);
+
+1035 
+PLN
+ *
+√w_PLN
+ = (PLN *)
+	`ÆlocINode
+(1);
+
+1037 
+•lô_node1
+->
+∑ª¡_id
+ = 0;
+
+1038 
+•lô_node2
+->
+∑ª¡_id
+ = 0;
+
+1039 
+•lô_node2
+->
+siblög
+ = 
+NULL
+;
+
+1041 
+√w_PLN
+->
+íåõs
+[√w_PLN->
+nKeys
+].
+key
+ =
+
+1042 
+•lô_node1
+->
+LN_EÀmít
+[•lô_node1->
+nEÀmíts
+ - 1].
+key
+;
+
+1043 
+√w_PLN
+->
+íåõs
+[√w_PLN->
+nKeys
+].
+±r
+ = 
+•lô_node1
+;
+
+1044 
+√w_PLN
+->
+nKeys
+++;
+
+1045 
+√w_PLN
+->
+íåõs
+[√w_PLN->
+nKeys
+].
+key
+ = 
+MAX_KEY
+;
+
+1046 
+√w_PLN
+->
+íåõs
+[√w_PLN->
+nKeys
+].
+±r
+ = 
+•lô_node2
+;
+
+1047 
+√w_PLN
+->
+nKeys
+++;
+
+1049 
+t
+->
+height
+ = 0;
+
+1050 
+t
+->
+is_Àaf
+ = 1;
+
+1051 
+t
+->
+fú°_PLN_id
+ = 0;
+
+1052 
+t
+->
+œ°_PLN_id
+ = 0;
+
+1053 
+t
+->
+roŸ
+ = 
+√w_PLN
+;
+
+1055 
+√w_Àaf
+ = 
+	`föd_Àaf
+(
+t
+, 
+key
+);
+
+1057 
+	`dñëe_íåy_to_Àaf
+(
+√w_Àaf
+, 
+key
+, 
+vÆue
+, 
+Ál£
+);
+
+1059 
+	`Êush_buf„r
+(
+•lô_node1
+, (
+LN
+), 
+Ál£
+);
+
+1060 
+	`Êush_buf„r
+(
+•lô_node2
+, (
+LN
+), 
+åue
+);
+
+1063 
+íd
+:
+
+1064 
+	`‰ì
+(
+Àaf
+);
+
+1066 
+Áû
+:
+
+1067  
+cuºít_idx
+;
+
+1068 
+	}
+}
+
+1070 
+	$Dñëe
+(
+åì
+ *
+t
+, 
+key
+)
+
+1072 
+îrvÆ
+ = -1;
+
+1073 
+LN
+ *
+Àaf
+;
+
+1075 
+Àaf
+ = 
+	`föd_Àaf
+(
+t
+, 
+key
+);
+
+1076 i‡(
+Àaf
+ =
+NULL
+)
+
+1077 
+Áû
+;
+
+1079 i‡(
+Àaf
+->
+nEÀmíts
+ < 
+MAX_NUM_ENTRY_LN
+)
+
+1080 
+	`dñëe_íåy_to_Àaf
+(
+Àaf
+, 
+key
+, 
+NULL
+, 
+åue
+);
+
+1083 
+îrvÆ
+ = 
+	`Àaf_•lô_™d_dñëe
+(
+t
+, 
+Àaf
+, 
+key
+, 
+NULL
+);
+
+1084 i‡(
+îrvÆ
+ < 0)
+
+1085 
+Áû
+;
+
+1089 
+Áû
+:
+
+1090  
+îrvÆ
+;
+
+1091 
+	}
+}
+
+	@NV-tree.h
 
 1 
 	~<°dboﬁ.h
 >
 
-2 
-	#NUM_LN_ENTRY
- 63
-
-	)
-
-3 
-	#NUM_IN_ENTRY
- 254
-
-	)
+2 
+	~<limôs.h
+>
 
 4 
-	#MIN_IN_ENTRIES
- (
-NUM_IN_ENTRY
- / 2)
-
-	)
-
-5 
-	#MIN_LN_ENTRIES
- (
-NUM_LN_ENTRY
- / 2)
-
-	)
-
-6 
 	#CACHE_LINE_SIZE
  64
 
 	)
 
+5 
+	#MAX_NUM_ENTRY_IN
+ 509
+
+	)
+
+6 
+	#MAX_NUM_ENTRY_PLN
+ 255
+
+	)
+
 7 
-	#IS_FULL
- ((0x1UL << 
-NUM_LN_ENTRY
-Ë- 1)
+	#MAX_NUM_ENTRY_LN
+ 169
 
 	)
 
 8 
-	#THIS_IN
- 1
+	#MAX_KEY
+ "~"
 
 	)
 
-9 
-	#THIS_LN
- 2
-
-	)
-
-11 
-	#LOG_DATA_SIZE
- 48
-
-	)
-
-12 
-	#LOG_AREA_SIZE
- 4194304
-
-	)
-
-13 
-	#LE_DATA
- 0
-
-	)
-
-14 
-	#LE_COMMIT
- 1
-
-	)
-
-16 
-	#BITS_PER_LONG
- 64
-
-	)
-
-17 
-	#BITMAP_SIZE
- 
-NUM_LN_ENTRY
-
-
-	)
-
-19 
+10 
 íåy
  
 	tíåy
 ;
 
-20 
+11 
 I¡î«l_Node
  
 	tIN
 ;
 
-21 
+12 
+P¨ít_Lóf_Node
+ 
+	tPLN
+;
+
+13 
 Lóf_Node
  
 	tLN
 ;
 
-22 
+14 
 åì
  
 	tåì
 ;
 
-24 
+16 
 	gIN_cou¡
 ;
 
-25 
+17 
 	gLN_cou¡
 ;
 
-26 
+18 
 	g˛Êush_cou¡
 ;
 
-27 
+19 
 	gm„n˚_cou¡
 ;
 
-30 
-	msize
-;
+21 
+	sPLN_íåy
+ {
 
-31 
-	mty≥
-;
-
-32 *
-	maddr
-;
-
-33 
-	md©a
-[
-LOG_DATA_SIZE
-];
-
-34 } 
-	tlog_íåy
-;
-
-37 
-log_íåy
+22 
+key_ôem
  *
-	m√xt_off£t
+	mkey
 ;
 
-38 
-	mlog_d©a
-[
-LOG_AREA_SIZE
-];
-
-39 } 
-	tlog_¨ó
+23 
+LN
+ *
+	m±r
 ;
 
-42 
+26 
+	sLN_íåy
+ {
+
+27 
+boﬁ
+ 
+	mÊag
+;
+
+28 
+key_ôem
+ *
+	mkey
+;
+
+29 *
+	mvÆue
+;
+
+33 
 	mkey_Àn
 ;
 
-43 
+34 
 	mkey
 [];
 
-44 } 
+35 } 
 	tkey_ôem
 ;
 
-46 
-	síåy
-{
-
-47 
-key_ôem
- *
-	mkey
-;
-
-48 *
-	m±r
-;
-
-51 
+37 
 	sI¡î«l_Node
  {
 
-52 
-	mty≥
-;
-
-53 
-IN
- *
-	m∑ª¡
-;
-
-54 
+38 
 	mnKeys
 ;
 
-55 
+39 
 key_ôem
  *
-	mkeys
+	mkey
 [
-NUM_IN_ENTRY
+MAX_NUM_ENTRY_IN
 ];
 
-56 *
-	mÀ·mo°På
-;
+40 
+	mdummy
+[16];
 
-57 *
-	m±r
-[
-NUM_IN_ENTRY
-];
-
-60 
-	sLóf_Node
+43 
+	sP¨ít_Lóf_Node
  {
 
-61 
-	mty≥
+44 
+	mnKeys
 ;
 
-62 
-IN
- *
-	m∑ª¡
-;
-
-63 
-	mbôm≠
-;
-
-64 
-LN
- *
-	mpNext
-;
-
-65 
-	mfögî¥öts
-[
-NUM_LN_ENTRY
-];
-
-66 
-íåy
+45 
+PLN_íåy
  
 	míåõs
 [
-NUM_LN_ENTRY
+MAX_NUM_ENTRY_PLN
 ];
 
-69 
-	såì
+46 
+	mdummy
+[8];
+
+49 
+	sLóf_Node
  {
 
-70 *
+50 
+	mnEÀmíts
+;
+
+51 
+LN
+ *
+	msiblög
+;
+
+52 
+	m∑ª¡_id
+;
+
+53 
+LN_íåy
+ 
+	mLN_EÀmít
+[
+MAX_NUM_ENTRY_LN
+];
+
+54 
+	mdummy
+[16];
+
+57 
+	såì
+{
+
+58 
+	mheight
+;
+
+59 
+	mis_Àaf
+;
+
+60 
+	mfú°_PLN_id
+;
+
+61 
+	mœ°_PLN_id
+;
+
+62 *
 	mroŸ
 ;
 
-71 
-log_¨ó
+63 
+LN
  *
-	m°¨t_log
+	mfú°_Àaf
 ;
 
-74 
+66 
+åì
+ *
+öôTªe
+();
+
+67 
 Êush_buf„r_nocou¡
 (*
 buf
@@ -2923,63 +6139,7 @@ boﬁ
 „n˚
 );
 
-75 
-åì
- *
-öôTªe
-();
-
-76 
-R™ge_Lookup
-(
-åì
- *
-t
-, 
-°¨t_key
-, 
-num
-,
-
-77 
-buf
-[]);
-
-78 *
-Lookup
-(
-åì
- *
-t
-, *
-key
-, 
-key_Àn
-);
-
-79 
-Sórch
-(
-IN
- *
-cuº
-, *
-key
-, 
-key_Àn
-);
-
-80 *
-föd_Àaf_node
-(*
-cuº
-, *
-key
-, 
-key_Àn
-);
-
-81 
+68 
 In£π
 (
 åì
@@ -2993,7 +6153,7 @@ key_Àn
 vÆue
 );
 
-82 *
+69 
 Upd©e
 (
 åì
@@ -3005,65 +6165,35 @@ key
 vÆue
 );
 
-83 
-ö£π_ö_Àaf_noÊush
-(
-LN
- *
-cuº
-, 
-key_ôem
- *
-√w_ôem
-, *
-vÆue
-);
-
-84 
-ö£π_ö_Àaf
-(
-LN
- *
-cuº
-, 
-key_ôem
- *
-√w_ôem
-, *
-vÆue
-);
-
-85 
-ö£π_ö_ö√r
-(
-IN
- *
-cuº
-, 
-key_ôem
- *
-ö£πed_ôem
-, *
-vÆue
-);
-
-86 
-ö£π_ö_∑ª¡
+70 
+R™ge_Lookup
 (
 åì
  *
 t
-, *
-cuº
-, 
-key_ôem
+, 
+°¨t_key
+, 
+num
+,
+
+71 
+buf
+[]);
+
+72 *
+Lookup
+(
+åì
  *
-ö£πed_ôem
-, *
-•lôNode
+t
+, *
+key
+, 
+key_Àn
 );
 
-87 
+73 
 Dñëe
 (
 åì
@@ -3072,906 +6202,6 @@ t
 , 
 key
 );
-
-89 
-ölöe
- 
-	$__ffs
-(
-w‹d
-)
-
-91 
-	`asm
-("rep; bsf %1,%0"
-
-92 : "Ù" (
-w‹d
-)
-
-93 : "rm" (
-w‹d
-));
-
-94  
-w‹d
-;
-
-95 
-	}
-}
-
-97 
-ölöe
- 
-	$ffz
-(
-w‹d
-)
-
-99 
-	`asm
-("rep; bsf %1,%0"
-
-100 : "Ù" (
-w‹d
-)
-
-101 : "r" (~
-w‹d
-));
-
-102  
-w‹d
-;
-
-103 
-	}
-}
-
-	@jenkins_hash.c
-
-1 
-	~<°dio.h
->
-
-2 
-	~<°döt.h
->
-
-14 
-	#HASH_LITTLE_ENDIAN
- 1
-
-	)
-
-15 
-	#HASH_BIG_ENDIAN
- 0
-
-	)
-
-17 
-	#rŸ
-(
-x
-,
-k
-Ë(((x)<<(k)Ë^ ((x)>>(32-(k))))
-
-	)
-
-63 
-	#mix
-(
-a
-,
-b
-,
-c
-) \
-
-65 
-a
- -
-c
-;á ^
-	`rŸ
-(c, 4); c +
-b
-; \
-
-66 
-b
- -
-a
-; b ^
-	`rŸ
-◊, 6);á +
-c
-; \
-
-67 
-c
- -
-b
-; c ^
-	`rŸ
-(b, 8); b +
-a
-; \
-
-68 
-a
- -
-c
-;á ^
-	`rŸ
-(c,16); c +
-b
-; \
-
-69 
-b
- -
-a
-; b ^
-	`rŸ
-◊,19);á +
-c
-; \
-
-70 
-c
- -
-b
-; c ^
-	`rŸ
-(b, 4); b +
-a
-; \
-
-71 }
-
-	)
-
-98 
-	#föÆ
-(
-a
-,
-b
-,
-c
-) \
-
-100 
-c
- ^
-b
-; c -
-	`rŸ
-(b,14); \
-
-101 
-a
- ^
-c
-;á -
-	`rŸ
-(c,11); \
-
-102 
-b
- ^
-a
-; b -
-	`rŸ
-(a,25); \
-
-103 
-c
- ^
-b
-; c -
-	`rŸ
-(b,16); \
-
-104 
-a
- ^
-c
-;á -
-	`rŸ
-(c,4); \
-
-105 
-b
- ^
-a
-; b -
-	`rŸ
-(a,14); \
-
-106 
-c
- ^
-b
-; c -
-	`rŸ
-(b,24); \
-
-107 }
-
-	)
-
-109 
-uöt32_t
- 
-	$jíkös_hash
-(
-
-110 c⁄° *
-key
-,
-
-111 
-size_t
- 
-Àngth
-)
-
-113 
-uöt32_t
- 
-a
-,
-b
-,
-c
-;
-
-114 uni⁄ { c⁄° *
-±r
-; 
-size_t
- 
-i
-; } 
-u
-;
-
-117 
-a
- = 
-b
- = 
-c
- = 0xdódbì‡+ ((
-uöt32_t
-)
-Àngth
-) + 0;
-
-119 
-u
-.
-±r
- = 
-key
-;
-
-120 i‡(
-HASH_LITTLE_ENDIAN
- && ((
-u
-.
-i
- & 0x3) == 0)) {
-
-121 c⁄° 
-uöt32_t
- *
-k
- = 
-key
-;
-
-124 
-Àngth
- > 12)
-
-126 
-a
- +
-k
-[0];
-
-127 
-b
- +
-k
-[1];
-
-128 
-c
- +
-k
-[2];
-
-129 
-	`mix
-(
-a
-,
-b
-,
-c
-);
-
-130 
-Àngth
- -= 12;
-
-131 
-k
- += 3;
-
-144 
-Àngth
-)
-
-146 12: 
-c
-+=
-k
-[2]; 
-b
-+=k[1]; 
-a
-+=k[0]; ;
-
-147 11: 
-c
-+=
-k
-[2]&0xffffff; 
-b
-+=k[1]; 
-a
-+=k[0]; ;
-
-148 10: 
-c
-+=
-k
-[2]&0xffff; 
-b
-+=k[1]; 
-a
-+=k[0]; ;
-
-149 9 : 
-c
-+=
-k
-[2]&0xff; 
-b
-+=k[1]; 
-a
-+=k[0]; ;
-
-150 8 : 
-b
-+=
-k
-[1]; 
-a
-+=k[0]; ;
-
-151 7 : 
-b
-+=
-k
-[1]&0xffffff; 
-a
-+=k[0]; ;
-
-152 6 : 
-b
-+=
-k
-[1]&0xffff; 
-a
-+=k[0]; ;
-
-153 5 : 
-b
-+=
-k
-[1]&0xff; 
-a
-+=k[0]; ;
-
-154 4 : 
-a
-+=
-k
-[0]; ;
-
-155 3 : 
-a
-+=
-k
-[0]&0xffffff; ;
-
-156 2 : 
-a
-+=
-k
-[0]&0xffff; ;
-
-157 1 : 
-a
-+=
-k
-[0]&0xff; ;
-
-158 0 :  
-c
-;
-
-160 } i‡(
-HASH_LITTLE_ENDIAN
- && ((
-u
-.
-i
- & 0x1) == 0)) {
-
-161 c⁄° 
-uöt16_t
- *
-k
- = 
-key
-;
-
-162 c⁄° 
-uöt8_t
- *
-k8
-;
-
-165 
-Àngth
- > 12)
-
-167 
-a
- +
-k
-[0] + (((
-uöt32_t
-)k[1])<<16);
-
-168 
-b
- +
-k
-[2] + (((
-uöt32_t
-)k[3])<<16);
-
-169 
-c
- +
-k
-[4] + (((
-uöt32_t
-)k[5])<<16);
-
-170 
-	`mix
-(
-a
-,
-b
-,
-c
-);
-
-171 
-Àngth
- -= 12;
-
-172 
-k
- += 6;
-
-176 
-k8
- = (c⁄° 
-uöt8_t
- *)
-k
-;
-
-177 
-Àngth
-)
-
-179 12: 
-c
-+=
-k
-[4]+(((
-uöt32_t
-)k[5])<<16);
-
-180 
-b
-+=
-k
-[2]+(((
-uöt32_t
-)k[3])<<16);
-
-181 
-a
-+=
-k
-[0]+(((
-uöt32_t
-)k[1])<<16);
-
-183 11: 
-c
-+=((
-uöt32_t
-)
-k8
-[10])<<16;
-
-184 10: 
-c
-+=
-k
-[4];
-
-185 
-b
-+=
-k
-[2]+(((
-uöt32_t
-)k[3])<<16);
-
-186 
-a
-+=
-k
-[0]+(((
-uöt32_t
-)k[1])<<16);
-
-188 9 : 
-c
-+=
-k8
-[8];
-
-189 8 : 
-b
-+=
-k
-[2]+(((
-uöt32_t
-)k[3])<<16);
-
-190 
-a
-+=
-k
-[0]+(((
-uöt32_t
-)k[1])<<16);
-
-192 7 : 
-b
-+=((
-uöt32_t
-)
-k8
-[6])<<16;
-
-193 6 : 
-b
-+=
-k
-[2];
-
-194 
-a
-+=
-k
-[0]+(((
-uöt32_t
-)k[1])<<16);
-
-196 5 : 
-b
-+=
-k8
-[4];
-
-197 4 : 
-a
-+=
-k
-[0]+(((
-uöt32_t
-)k[1])<<16);
-
-199 3 : 
-a
-+=((
-uöt32_t
-)
-k8
-[2])<<16;
-
-200 2 : 
-a
-+=
-k
-[0];
-
-202 1 : 
-a
-+=
-k8
-[0];
-
-204 0 :  
-c
-;
-
-208 c⁄° 
-uöt8_t
- *
-k
- = 
-key
-;
-
-211 
-Àngth
- > 12)
-
-213 
-a
- +
-k
-[0];
-
-214 
-a
- +((
-uöt32_t
-)
-k
-[1])<<8;
-
-215 
-a
- +((
-uöt32_t
-)
-k
-[2])<<16;
-
-216 
-a
- +((
-uöt32_t
-)
-k
-[3])<<24;
-
-217 
-b
- +
-k
-[4];
-
-218 
-b
- +((
-uöt32_t
-)
-k
-[5])<<8;
-
-219 
-b
- +((
-uöt32_t
-)
-k
-[6])<<16;
-
-220 
-b
- +((
-uöt32_t
-)
-k
-[7])<<24;
-
-221 
-c
- +
-k
-[8];
-
-222 
-c
- +((
-uöt32_t
-)
-k
-[9])<<8;
-
-223 
-c
- +((
-uöt32_t
-)
-k
-[10])<<16;
-
-224 
-c
- +((
-uöt32_t
-)
-k
-[11])<<24;
-
-225 
-	`mix
-(
-a
-,
-b
-,
-c
-);
-
-226 
-Àngth
- -= 12;
-
-227 
-k
- += 12;
-
-231 
-Àngth
-)
-
-233 12: 
-c
-+=((
-uöt32_t
-)
-k
-[11])<<24;
-
-234 11: 
-c
-+=((
-uöt32_t
-)
-k
-[10])<<16;
-
-235 10: 
-c
-+=((
-uöt32_t
-)
-k
-[9])<<8;
-
-236 9 : 
-c
-+=
-k
-[8];
-
-237 8 : 
-b
-+=((
-uöt32_t
-)
-k
-[7])<<24;
-
-238 7 : 
-b
-+=((
-uöt32_t
-)
-k
-[6])<<16;
-
-239 6 : 
-b
-+=((
-uöt32_t
-)
-k
-[5])<<8;
-
-240 5 : 
-b
-+=
-k
-[4];
-
-241 4 : 
-a
-+=((
-uöt32_t
-)
-k
-[3])<<24;
-
-242 3 : 
-a
-+=((
-uöt32_t
-)
-k
-[2])<<16;
-
-243 2 : 
-a
-+=((
-uöt32_t
-)
-k
-[1])<<8;
-
-244 1 : 
-a
-+=
-k
-[0];
-
-246 0 :  
-c
-;
-
-250 
-	`föÆ
-(
-a
-,
-b
-,
-c
-);
-
-251  
-c
-;
-
-252 
-	}
-}
 
 	@main.c
 
@@ -3996,7 +6226,7 @@ c
 >
 
 6 
-	~"FPTªe.h
+	~"NV-åì.h
 "
 
 8 
@@ -4702,6 +6932,334 @@ t1
 139 
 	}
 }
+
+	@test.c
+
+1 
+	~<°dio.h
+>
+
+2 
+	~<°rög.h
+>
+
+4 
+	#MAX
+ "~"
+
+	)
+
+6 
+	$maö
+()
+
+8 *
+a
+ = 
+MAX
+;
+
+9 
+	`¥ötf
+("%s\n", 
+a
+);
+
+10 
+	`¥ötf
+("sizeof(MAXË%d\n", 
+	`°æí
+(
+MAX
+));
+
+13 
+	}
+}
+
+	@/usr/include/limits.h
+
+24 #i‚de‡
+_LIBC_LIMITS_H_
+
+
+25 
+	#_LIBC_LIMITS_H_
+ 1
+
+	)
+
+27 
+	~<„©uªs.h
+>
+
+33 
+	#MB_LEN_MAX
+ 16
+
+	)
+
+38 #i‡!
+deföed
+ 
+__GNUC__
+ || __GNUC__ < 2
+
+43 #i‚de‡
+_LIMITS_H
+
+
+44 
+	#_LIMITS_H
+ 1
+
+	)
+
+46 
+	~<bôs/w‹dsize.h
+>
+
+55 
+	#CHAR_BIT
+ 8
+
+	)
+
+58 
+	#SCHAR_MIN
+ (-128)
+
+	)
+
+59 
+	#SCHAR_MAX
+ 127
+
+	)
+
+62 
+	#UCHAR_MAX
+ 255
+
+	)
+
+65 #ifde‡
+__CHAR_UNSIGNED__
+
+
+66 
+	#CHAR_MIN
+ 0
+
+	)
+
+67 
+	#CHAR_MAX
+ 
+UCHAR_MAX
+
+
+	)
+
+69 
+	#CHAR_MIN
+ 
+SCHAR_MIN
+
+
+	)
+
+70 
+	#CHAR_MAX
+ 
+SCHAR_MAX
+
+
+	)
+
+74 
+	#SHRT_MIN
+ (-32768)
+
+	)
+
+75 
+	#SHRT_MAX
+ 32767
+
+	)
+
+78 
+	#USHRT_MAX
+ 65535
+
+	)
+
+81 
+	#INT_MIN
+ (-
+INT_MAX
+ - 1)
+
+	)
+
+82 
+	#INT_MAX
+ 2147483647
+
+	)
+
+85 
+	#UINT_MAX
+ 4294967295U
+
+	)
+
+88 #i‡
+__WORDSIZE
+ == 64
+
+89 
+	#LONG_MAX
+ 9223372036854775807L
+
+	)
+
+91 
+	#LONG_MAX
+ 2147483647L
+
+	)
+
+93 
+	#LONG_MIN
+ (-
+LONG_MAX
+ - 1L)
+
+	)
+
+96 #i‡
+__WORDSIZE
+ == 64
+
+97 
+	#ULONG_MAX
+ 18446744073709551615UL
+
+	)
+
+99 
+	#ULONG_MAX
+ 4294967295UL
+
+	)
+
+102 #ifde‡
+__USE_ISOC99
+
+
+105 
+	#LLONG_MAX
+ 9223372036854775807LL
+
+	)
+
+106 
+	#LLONG_MIN
+ (-
+LLONG_MAX
+ - 1LL)
+
+	)
+
+109 
+	#ULLONG_MAX
+ 18446744073709551615ULL
+
+	)
+
+123 #i‡
+deföed
+ 
+__GNUC__
+ && !deföed 
+_GCC_LIMITS_H_
+
+
+125 #ö˛ude_√xà<
+limôs
+.
+h
+>
+
+131 #i‡
+deföed
+ 
+__USE_ISOC99
+ && deföed 
+__GNUC__
+
+
+132 #i‚de‡
+LLONG_MIN
+
+
+133 
+	#LLONG_MIN
+ (-
+LLONG_MAX
+-1)
+
+	)
+
+135 #i‚de‡
+LLONG_MAX
+
+
+136 
+	#LLONG_MAX
+ 
+__LONG_LONG_MAX__
+
+
+	)
+
+138 #i‚de‡
+ULLONG_MAX
+
+
+139 
+	#ULLONG_MAX
+ (
+LLONG_MAX
+ * 2ULL + 1)
+
+	)
+
+143 #ifdef 
+__USE_POSIX
+
+
+145 
+	~<bôs/posix1_lim.h
+>
+
+148 #ifdef 
+__USE_POSIX2
+
+
+149 
+	~<bôs/posix2_lim.h
+>
+
+152 #ifdef 
+__USE_XOPEN
+
+
+153 
+	~<bôs/x›í_lim.h
+>
 
 	@/usr/include/malloc.h
 
@@ -16992,6 +19550,462 @@ size
 39 
 __END_DECLS
 
+
+	@/usr/include/bits/posix1_lim.h
+
+25 #i‚def 
+_BITS_POSIX1_LIM_H
+
+
+26 
+	#_BITS_POSIX1_LIM_H
+ 1
+
+	)
+
+32 
+	#_POSIX_AIO_LISTIO_MAX
+ 2
+
+	)
+
+35 
+	#_POSIX_AIO_MAX
+ 1
+
+	)
+
+38 
+	#_POSIX_ARG_MAX
+ 4096
+
+	)
+
+41 #ifde‡
+__USE_XOPEN2K
+
+
+42 
+	#_POSIX_CHILD_MAX
+ 25
+
+	)
+
+44 
+	#_POSIX_CHILD_MAX
+ 6
+
+	)
+
+48 
+	#_POSIX_DELAYTIMER_MAX
+ 32
+
+	)
+
+52 
+	#_POSIX_HOST_NAME_MAX
+ 255
+
+	)
+
+55 
+	#_POSIX_LINK_MAX
+ 8
+
+	)
+
+58 
+	#_POSIX_LOGIN_NAME_MAX
+ 9
+
+	)
+
+61 
+	#_POSIX_MAX_CANON
+ 255
+
+	)
+
+65 
+	#_POSIX_MAX_INPUT
+ 255
+
+	)
+
+68 
+	#_POSIX_MQ_OPEN_MAX
+ 8
+
+	)
+
+71 
+	#_POSIX_MQ_PRIO_MAX
+ 32
+
+	)
+
+74 
+	#_POSIX_NAME_MAX
+ 14
+
+	)
+
+77 #ifde‡
+__USE_XOPEN2K
+
+
+78 
+	#_POSIX_NGROUPS_MAX
+ 8
+
+	)
+
+80 
+	#_POSIX_NGROUPS_MAX
+ 0
+
+	)
+
+84 #ifde‡
+__USE_XOPEN2K
+
+
+85 
+	#_POSIX_OPEN_MAX
+ 20
+
+	)
+
+87 
+	#_POSIX_OPEN_MAX
+ 16
+
+	)
+
+90 #i‡!
+deföed
+ 
+__USE_XOPEN2K
+ || deföed 
+__USE_GNU
+
+
+93 
+	#_POSIX_FD_SETSIZE
+ 
+_POSIX_OPEN_MAX
+
+
+	)
+
+97 
+	#_POSIX_PATH_MAX
+ 256
+
+	)
+
+100 
+	#_POSIX_PIPE_BUF
+ 512
+
+	)
+
+104 
+	#_POSIX_RE_DUP_MAX
+ 255
+
+	)
+
+107 
+	#_POSIX_RTSIG_MAX
+ 8
+
+	)
+
+110 
+	#_POSIX_SEM_NSEMS_MAX
+ 256
+
+	)
+
+113 
+	#_POSIX_SEM_VALUE_MAX
+ 32767
+
+	)
+
+116 
+	#_POSIX_SIGQUEUE_MAX
+ 32
+
+	)
+
+119 
+	#_POSIX_SSIZE_MAX
+ 32767
+
+	)
+
+122 
+	#_POSIX_STREAM_MAX
+ 8
+
+	)
+
+125 
+	#_POSIX_SYMLINK_MAX
+ 255
+
+	)
+
+129 
+	#_POSIX_SYMLOOP_MAX
+ 8
+
+	)
+
+132 
+	#_POSIX_TIMER_MAX
+ 32
+
+	)
+
+135 
+	#_POSIX_TTY_NAME_MAX
+ 9
+
+	)
+
+138 
+	#_POSIX_TZNAME_MAX
+ 6
+
+	)
+
+140 #i‡!
+deföed
+ 
+__USE_XOPEN2K
+ || deföed 
+__USE_GNU
+
+
+142 
+	#_POSIX_QLIMIT
+ 1
+
+	)
+
+146 
+	#_POSIX_HIWAT
+ 
+_POSIX_PIPE_BUF
+
+
+	)
+
+149 
+	#_POSIX_UIO_MAXIOV
+ 16
+
+	)
+
+153 
+	#_POSIX_CLOCKRES_MIN
+ 20000000
+
+	)
+
+157 
+	~<bôs/loˇl_lim.h
+>
+
+160 #i‚def 
+SSIZE_MAX
+
+
+161 
+	#SSIZE_MAX
+ 
+LONG_MAX
+
+
+	)
+
+168 #i‚def 
+NGROUPS_MAX
+
+
+169 
+	#NGROUPS_MAX
+ 8
+
+	)
+
+	@/usr/include/bits/posix2_lim.h
+
+23 #i‚def 
+_BITS_POSIX2_LIM_H
+
+
+24 
+	#_BITS_POSIX2_LIM_H
+ 1
+
+	)
+
+28 
+	#_POSIX2_BC_BASE_MAX
+ 99
+
+	)
+
+31 
+	#_POSIX2_BC_DIM_MAX
+ 2048
+
+	)
+
+34 
+	#_POSIX2_BC_SCALE_MAX
+ 99
+
+	)
+
+37 
+	#_POSIX2_BC_STRING_MAX
+ 1000
+
+	)
+
+41 
+	#_POSIX2_COLL_WEIGHTS_MAX
+ 2
+
+	)
+
+45 
+	#_POSIX2_EXPR_NEST_MAX
+ 32
+
+	)
+
+48 
+	#_POSIX2_LINE_MAX
+ 2048
+
+	)
+
+52 
+	#_POSIX2_RE_DUP_MAX
+ 255
+
+	)
+
+56 
+	#_POSIX2_CHARCLASS_NAME_MAX
+ 14
+
+	)
+
+63 #i‚def 
+BC_BASE_MAX
+
+
+64 
+	#BC_BASE_MAX
+ 
+_POSIX2_BC_BASE_MAX
+
+
+	)
+
+66 #i‚def 
+BC_DIM_MAX
+
+
+67 
+	#BC_DIM_MAX
+ 
+_POSIX2_BC_DIM_MAX
+
+
+	)
+
+69 #i‚def 
+BC_SCALE_MAX
+
+
+70 
+	#BC_SCALE_MAX
+ 
+_POSIX2_BC_SCALE_MAX
+
+
+	)
+
+72 #i‚def 
+BC_STRING_MAX
+
+
+73 
+	#BC_STRING_MAX
+ 
+_POSIX2_BC_STRING_MAX
+
+
+	)
+
+75 #i‚def 
+COLL_WEIGHTS_MAX
+
+
+76 
+	#COLL_WEIGHTS_MAX
+ 255
+
+	)
+
+78 #i‚def 
+EXPR_NEST_MAX
+
+
+79 
+	#EXPR_NEST_MAX
+ 
+_POSIX2_EXPR_NEST_MAX
+
+
+	)
+
+81 #i‚def 
+LINE_MAX
+
+
+82 
+	#LINE_MAX
+ 
+_POSIX2_LINE_MAX
+
+
+	)
+
+84 #i‚def 
+CHARCLASS_NAME_MAX
+
+
+85 
+	#CHARCLASS_NAME_MAX
+ 2048
+
+	)
+
+89 
+	#RE_DUP_MAX
+ (0x7fff)
+
+	)
 
 	@/usr/include/bits/stdio-ldbl.h
 
@@ -29387,6 +32401,220 @@ __x86_64__
 
 	)
 
+	@/usr/include/bits/xopen_lim.h
+
+30 #i‚de‡
+_XOPEN_LIM_H
+
+
+31 
+	#_XOPEN_LIM_H
+ 1
+
+	)
+
+33 
+	#__√ed_IOV_MAX
+
+
+	)
+
+34 
+	~<bôs/°dio_lim.h
+>
+
+66 
+	#_XOPEN_IOV_MAX
+ 
+_POSIX_UIO_MAXIOV
+
+
+	)
+
+71 
+	#NL_ARGMAX
+ 
+_POSIX_ARG_MAX
+
+
+	)
+
+74 
+	#NL_LANGMAX
+ 
+_POSIX2_LINE_MAX
+
+
+	)
+
+77 
+	#NL_MSGMAX
+ 
+INT_MAX
+
+
+	)
+
+81 
+	#NL_NMAX
+ 
+INT_MAX
+
+
+	)
+
+84 
+	#NL_SETMAX
+ 
+INT_MAX
+
+
+	)
+
+87 
+	#NL_TEXTMAX
+ 
+INT_MAX
+
+
+	)
+
+90 
+	#NZERO
+ 20
+
+	)
+
+94 #ifde‡
+INT_MAX
+
+
+95 #i‡
+INT_MAX
+ == 32767
+
+96 
+	#WORD_BIT
+ 16
+
+	)
+
+98 #i‡
+INT_MAX
+ == 2147483647
+
+99 
+	#WORD_BIT
+ 32
+
+	)
+
+102 
+	#WORD_BIT
+ 64
+
+	)
+
+105 #ñi‡
+deföed
+ 
+__INT_MAX__
+
+
+106 #i‡
+__INT_MAX__
+ == 32767
+
+107 
+	#WORD_BIT
+ 16
+
+	)
+
+109 #i‡
+__INT_MAX__
+ == 2147483647
+
+110 
+	#WORD_BIT
+ 32
+
+	)
+
+113 
+	#WORD_BIT
+ 64
+
+	)
+
+117 
+	#WORD_BIT
+ 32
+
+	)
+
+121 #ifde‡
+LONG_MAX
+
+
+122 #i‡
+LONG_MAX
+ == 2147483647
+
+123 
+	#LONG_BIT
+ 32
+
+	)
+
+126 
+	#LONG_BIT
+ 64
+
+	)
+
+128 #ñi‡
+deföed
+ 
+__LONG_MAX__
+
+
+129 #i‡
+__LONG_MAX__
+ == 2147483647
+
+130 
+	#LONG_BIT
+ 32
+
+	)
+
+133 
+	#LONG_BIT
+ 64
+
+	)
+
+136 
+	~<bôs/w‹dsize.h
+>
+
+137 #i‡
+__WORDSIZE
+ == 64
+
+138 
+	#LONG_BIT
+ 64
+
+	)
+
+140 
+	#LONG_BIT
+ 32
+
+	)
+
 	@/usr/include/features.h
 
 19 #i‚def 
@@ -34490,6 +37718,184 @@ _IO_vfsˇnf
  (
 _IO_vÂrötf
 )
+
+	@/usr/include/bits/local_lim.h
+
+25 #i‚de‡
+NR_OPEN
+
+
+26 
+	#__undef_NR_OPEN
+
+
+	)
+
+28 #i‚de‡
+LINK_MAX
+
+
+29 
+	#__undef_LINK_MAX
+
+
+	)
+
+31 #i‚de‡
+OPEN_MAX
+
+
+32 
+	#__undef_OPEN_MAX
+
+
+	)
+
+34 #i‚de‡
+ARG_MAX
+
+
+35 
+	#__undef_ARG_MAX
+
+
+	)
+
+39 
+	~<löux/limôs.h
+>
+
+42 #ifde‡
+__undef_NR_OPEN
+
+
+43 #unde‡
+NR_OPEN
+
+
+44 #unde‡
+__undef_NR_OPEN
+
+
+47 #ifde‡
+__undef_LINK_MAX
+
+
+48 #unde‡
+LINK_MAX
+
+
+49 #unde‡
+__undef_LINK_MAX
+
+
+52 #ifde‡
+__undef_OPEN_MAX
+
+
+53 #unde‡
+OPEN_MAX
+
+
+54 #unde‡
+__undef_OPEN_MAX
+
+
+57 #ifde‡
+__undef_ARG_MAX
+
+
+58 #unde‡
+ARG_MAX
+
+
+59 #unde‡
+__undef_ARG_MAX
+
+
+63 
+	#_POSIX_THREAD_KEYS_MAX
+ 128
+
+	)
+
+65 
+	#PTHREAD_KEYS_MAX
+ 1024
+
+	)
+
+68 
+	#_POSIX_THREAD_DESTRUCTOR_ITERATIONS
+ 4
+
+	)
+
+70 
+	#PTHREAD_DESTRUCTOR_ITERATIONS
+ 
+_POSIX_THREAD_DESTRUCTOR_ITERATIONS
+
+
+	)
+
+73 
+	#_POSIX_THREAD_THREADS_MAX
+ 64
+
+	)
+
+75 #unde‡
+PTHREAD_THREADS_MAX
+
+
+79 
+	#AIO_PRIO_DELTA_MAX
+ 20
+
+	)
+
+82 
+	#PTHREAD_STACK_MIN
+ 16384
+
+	)
+
+85 
+	#DELAYTIMER_MAX
+ 2147483647
+
+	)
+
+88 
+	#TTY_NAME_MAX
+ 32
+
+	)
+
+91 
+	#LOGIN_NAME_MAX
+ 256
+
+	)
+
+94 
+	#HOST_NAME_MAX
+ 64
+
+	)
+
+97 
+	#MQ_PRIO_MAX
+ 32768
+
+	)
+
+100 
+	#SEM_VALUE_MAX
+ (2147483647)
+
+	)
 
 	@/usr/include/bits/pthreadtypes.h
 
@@ -41884,6 +45290,96 @@ _LIBC
 23 
 	#__°ub_°ty
 
+
+	)
+
+	@/usr/include/linux/limits.h
+
+1 #i‚de‡
+_LINUX_LIMITS_H
+
+
+2 
+	#_LINUX_LIMITS_H
+
+
+	)
+
+4 
+	#NR_OPEN
+ 1024
+
+	)
+
+6 
+	#NGROUPS_MAX
+ 65536
+
+	)
+
+7 
+	#ARG_MAX
+ 131072
+
+	)
+
+8 
+	#LINK_MAX
+ 127
+
+	)
+
+9 
+	#MAX_CANON
+ 255
+
+	)
+
+10 
+	#MAX_INPUT
+ 255
+
+	)
+
+11 
+	#NAME_MAX
+ 255
+
+	)
+
+12 
+	#PATH_MAX
+ 4096
+
+	)
+
+13 
+	#PIPE_BUF
+ 4096
+
+	)
+
+14 
+	#XATTR_NAME_MAX
+ 255
+
+	)
+
+15 
+	#XATTR_SIZE_MAX
+ 65536
+
+	)
+
+16 
+	#XATTR_LIST_MAX
+ 65536
+
+	)
+
+18 
+	#RTSIG_MAX
+ 32
 
 	)
 
@@ -55302,12 +58798,13 @@ __END_DECLS
 .
 1
 /usr/include
-59
-1470
-FPTree.c
-FPTree.h
-jenkins_hash.c
+65
+1636
+NV-tree.c
+NV-tree.h
 main.c
+test.c
+/usr/include/limits.h
 /usr/include/malloc.h
 /usr/include/stdint.h
 /usr/include/stdio.h
@@ -55316,6 +58813,8 @@ main.c
 /usr/include/sys/time.h
 /usr/include/time.h
 /usr/include/alloca.h
+/usr/include/bits/posix1_lim.h
+/usr/include/bits/posix2_lim.h
 /usr/include/bits/stdio-ldbl.h
 /usr/include/bits/stdio.h
 /usr/include/bits/stdio2.h
@@ -55332,6 +58831,7 @@ main.c
 /usr/include/bits/waitstatus.h
 /usr/include/bits/wchar.h
 /usr/include/bits/wordsize.h
+/usr/include/bits/xopen_lim.h
 /usr/include/features.h
 /usr/include/getopt.h
 /usr/include/libio.h
@@ -55340,6 +58840,7 @@ main.c
 /usr/include/xlocale.h
 /usr/include/_G_config.h
 /usr/include/bits/libio-ldbl.h
+/usr/include/bits/local_lim.h
 /usr/include/bits/pthreadtypes.h
 /usr/include/bits/select.h
 /usr/include/bits/sigset.h
@@ -55355,6 +58856,7 @@ main.c
 /usr/include/bits/libc-lock.h
 /usr/include/gconv.h
 /usr/include/gnu/stubs-64.h
+/usr/include/linux/limits.h
 /usr/include/wchar.h
 /usr/include/bits/wchar-ldbl.h
 /usr/include/bits/wchar2.h

@@ -5,7 +5,7 @@
 #define MAX_NUM_ENTRY_IN	509
 #define MAX_NUM_ENTRY_PLN	255
 #define MAX_NUM_ENTRY_LN	169
-#define MAX_KEY 			ULONG_MAX
+#define MAX_KEY 			"~"
 
 typedef struct entry entry;
 typedef struct Internal_Node IN;
@@ -18,20 +18,25 @@ unsigned long LN_count;
 unsigned long clflush_count;
 unsigned long mfence_count;
 
+typedef struct {
+	int key_len;
+	unsigned char key[];
+} key_item;
+
 struct PLN_entry {
-	unsigned long key;
+	key_item *key;
 	LN *ptr;
 };
 
 struct LN_entry {
 	bool flag;
-	unsigned long key;
+	key_item *key;
 	void *value;
 };
 
 struct Internal_Node {
 	unsigned int nKeys;
-	unsigned long key[MAX_NUM_ENTRY_IN];
+	key_item *key[MAX_NUM_ENTRY_IN];
 	char dummy[16];
 };
 
@@ -59,10 +64,10 @@ struct tree{
 };
 
 tree *initTree();
-void flush_buffer_nocount(void *buf, unsigned int len, bool fence);
-int Insert(tree *t, unsigned long key, void *value);
+void flush_buffer_nocount(void *buf, unsigned long len, bool fence);
+int Insert(tree *t, unsigned char *key, int key_len, void *value);
 int Update(tree *t, unsigned long key, void *value);
 int Range_Lookup(tree *t, unsigned long start_key, unsigned int num, 
 		unsigned long buf[]);
-void *Lookup(tree *t, unsigned long key);
+void *Lookup(tree *t, unsigned char *key, int key_len);
 int Delete(tree *t, unsigned long key);

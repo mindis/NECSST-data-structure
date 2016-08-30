@@ -1,4 +1,4 @@
-/* Developted by Se Kwon Lee in UNIST NECSST Lab
+/* Implemented by Se Kwon Lee in UNIST NECSST Lab
  * E-mail: sekwonlee90@gmail.com */
 
 #include <stdio.h>
@@ -78,6 +78,21 @@ void flush_buffer_nocount(void *buf, unsigned long len, bool fence)
 	}
 }
 
+static inline int max(int a, int b) {
+	return (a > b) ? a : b;
+}
+
+key_item *make_key_item(unsigned char *key, int key_len)
+{
+	key_item *new_key = malloc(sizeof(key_item) + key_len);
+	new_key->key_len = key_len;
+	memcpy(new_key->key, key, key_len);
+
+	flush_buffer(new_key, sizeof(key_item) + key_len, false);
+
+	return new_key;
+}
+
 /* Alloc volatile node */
 void *allocINode(unsigned long num)
 {
@@ -101,15 +116,18 @@ tree *initTree()
 	return t;
 }
 
-int binary_search_IN(unsigned long key, IN *node)
+int binary_search_IN(unsigned char *key, int key_len, IN *node)
 {
 	int low = 0, mid = 0, high = (node->nKeys - 1);
+	int len, decision;
 
 	while (low <= high) {
 		mid = (low + high) / 2;
-		if (node->key[mid] > key)
+		len = max((node->key[mid])->key_len, key_len);
+		decision = memcmp((node->key[mid])->key, key, len);
+		if (decision > 0)
 			high = mid - 1;
-		else if (node->key[mid] < key)
+		else if (decision < 0)
 			low = mid + 1;
 		else
 			break;
@@ -121,15 +139,18 @@ int binary_search_IN(unsigned long key, IN *node)
 	return mid;
 }
 
-int binary_search_PLN(unsigned long key, PLN *node)
+int binary_search_PLN(unsigned char *key, int key_len, PLN *node)
 {
 	int low = 0, mid = 0, high = (node->nKeys - 1);
+	int len, decision;
 
 	while (low <= high) {
 		mid = (low + high) / 2;
-		if (node->entries[mid].key > key)
+		len = max((node->entries[mid].key)->key_len, key_len);
+		decision = memcmp((node->entries[mid].key)->key, key, len);
+		if (decision > 0)
 			high = mid - 1;
-		else if (node->entries[mid].key < key)
+		else if (decision < 0)
 			low = mid + 1;
 		else
 			break;
@@ -141,7 +162,7 @@ int binary_search_PLN(unsigned long key, PLN *node)
 	return mid;
 }
 
-LN *find_leaf(tree *t, unsigned long key)
+LN *find_leaf(tree *t, unsigned char *key, int key_len)
 {
 	unsigned int pos, id, i;
 	IN *current_IN;
@@ -154,14 +175,14 @@ LN *find_leaf(tree *t, unsigned long key)
 		current_IN = (IN *)t->root;
 
 		while (id < t->first_PLN_id) {
-			pos = binary_search_IN(key, &current_IN[id]);
+			pos = binary_search_IN(key, key_len, &current_IN[id]);
 			/* MAX_NUM_ENTRY_IN = 2m + 1 */
 			id = id * (MAX_NUM_ENTRY_IN)+ 1 + pos;
 		}
 
 		current_PLN = (PLN *)t->root;
 
-		pos = binary_search_PLN(key, &current_PLN[id]);
+		pos = binary_search_PLN(key, key_len, &current_PLN[id]);
 
 		if (pos < current_PLN[id].nKeys)
 			return current_PLN[id].entries[pos].ptr;
@@ -170,7 +191,7 @@ LN *find_leaf(tree *t, unsigned long key)
 	} else if (t->is_leaf == 1) {
 		current_PLN = (PLN *)t->root;
 
-		pos = binary_search_PLN(key, &current_PLN[0]);
+		pos = binary_search_PLN(key, key_len, &current_PLN[0]);
 
 		if (pos < current_PLN[0].nKeys)
 			return current_PLN[0].entries[pos].ptr;
@@ -182,40 +203,37 @@ LN *find_leaf(tree *t, unsigned long key)
 	}
 }
 
-int search_leaf_node(LN *node, unsigned long key)
+int search_leaf_node(LN *node, unsigned char *key, int key_len)
 {
-	int i, pos, valid = 0;
+	int i, pos;
 
 	for (i = 0; i < node->nElements; i++) {
-		if (node->LN_Element[i].key == key &&
+		if (memcmp((node->LN_Element[i].key)->key, key, max((node->LN_Element[i].key)->key_len, key_len)) == 0 &&
 				node->LN_Element[i].flag == true) {
 			pos = i;
-			valid++;
+			return pos;
 		}
 
-		if (node->LN_Element[i].key == key &&
+		if (memcmp((node->LN_Element[i].key)->key, key, max((node->LN_Element[i].key)->key_len, key_len)) == 0 &&
 				node->LN_Element[i].flag == false) {
-			valid--;
+			pos = -1;
+			return pos;
 		}
 	}
-
-	if (valid > 0)
-		return pos;
-	else
-		return -1;
+	return -1;
 }
 
-void *Lookup(tree *t, unsigned long key)
+void *Lookup(tree *t, unsigned char *key, int key_len)
 {
 	int pos, i;
 	LN *current_LN;
 	IN *current_IN = t->root;
 
-	current_LN = find_leaf(t, key);
+	current_LN = find_leaf(t, key, key_len);
 	if (current_LN == NULL)
 		goto fail;
 
-	pos = search_leaf_node(current_LN, key);
+	pos = search_leaf_node(current_LN, key, key_len);
 	if (pos < 0)
 		goto fail;
 
@@ -231,7 +249,8 @@ void insertion_sort(struct LN_entry *base, int num)
 
 	for (i = 1; i < num; i++) {
 		for (j = i; j > 0; j--) {
-			if (base[j - 1].key > base[j].key) {
+			if (memcmp((base[j - 1].key)->key, (base[j].key)->key,
+						max((base[j - 1].key)->key_len, (base[j].key)->key_len)) > 0) {
 				temp = base[j - 1];
 				base[j - 1] = base[j];
 				base[j] = temp;
@@ -240,7 +259,7 @@ void insertion_sort(struct LN_entry *base, int num)
 		}
 	}
 }
-
+/*
 int Range_Lookup(tree *t, unsigned long start_key, unsigned int num, 
 		unsigned long buf[])
 {
@@ -295,8 +314,8 @@ int Range_Lookup(tree *t, unsigned long start_key, unsigned int num,
 fail:
 	return -1;
 }
-
-int create_new_tree(tree *t, unsigned long key, void *value)
+*/
+int create_new_tree(tree *t, key_item *new_item, void *value)
 {
 	int errval = -1;
 	LN *current_LN;
@@ -309,7 +328,7 @@ int create_new_tree(tree *t, unsigned long key, void *value)
 	current_LN->parent_id = -1;
 	current_LN->sibling = NULL;
 	current_LN->LN_Element[0].flag = true;
-	current_LN->LN_Element[0].key = key;
+	current_LN->LN_Element[0].key = new_item;
 	current_LN->LN_Element[0].value = value;
 	current_LN->nElements++;
 	flush_buffer(current_LN, sizeof(LN), true);
@@ -322,7 +341,7 @@ int create_new_tree(tree *t, unsigned long key, void *value)
 
 	return 0;
 }
-
+/*
 void quick_sort(struct LN_entry *base, int left, int right)
 {
 	unsigned long i, j, pivot = base[left].key;
@@ -357,18 +376,18 @@ void quick_sort(struct LN_entry *base, int left, int right)
 		quick_sort(base, j + 1, right);
 	}
 }
-
+*/
 int leaf_scan_divide(tree *t, LN *leaf, LN *split_node1, LN *split_node2)
 {
 	int i, j = 0, count = 0, invalid_count = 0, errval = -1;
-	unsigned long *invalid_key = 
-		malloc(((MAX_NUM_ENTRY_LN)/2 + 1) * sizeof(unsigned long));
+	struct LN_entry *invalid_key = 
+		malloc(((MAX_NUM_ENTRY_LN)/2 + 1) * sizeof(struct LN_entry));
 	struct LN_entry *valid_Element =
 		malloc(MAX_NUM_ENTRY_LN * sizeof(struct LN_entry));
 
 	for (i = 0; i < leaf->nElements; i++) {
 		if (leaf->LN_Element[i].flag == false) {
-			invalid_key[invalid_count] = leaf->LN_Element[i].key;
+			invalid_key[invalid_count] = leaf->LN_Element[i];
 			invalid_count++;
 		}
 	}
@@ -378,7 +397,8 @@ int leaf_scan_divide(tree *t, LN *leaf, LN *split_node1, LN *split_node2)
 			continue;
 
 		if (invalid_count > 0) {
-			if (leaf->LN_Element[i].key == invalid_key[count]) {
+			if (memcmp((leaf->LN_Element[i].key)->key, (invalid_key[count].key)->key,
+						max((leaf->LN_Element[i].key)->key_len, (invalid_key[count].key)->key_len)) == 0) {
 				count++;
 				invalid_count--;
 				continue;
@@ -484,20 +504,21 @@ int reconstruct_from_PLN(void *root_addr, unsigned long first_PLN_id,
 	return 0;
 }
 
-int insert_node_to_PLN(PLN *new_PLNs, unsigned long parent_id, unsigned long insert_key,
-		unsigned long split_max_key, LN *split_node1, LN *split_node2)
+int insert_node_to_PLN(PLN *new_PLNs, unsigned long parent_id, key_item *insert_key,
+		key_item *split_max_key, LN *split_node1, LN *split_node2)
 {
 	int entry_index, i;
 	unsigned long inserted_PLN_id;
 
-	if (split_max_key >
-			new_PLNs[parent_id].entries[new_PLNs[parent_id].nKeys - 1].key)
+	if (memcmp(split_max_key->key, (new_PLNs[parent_id].entries[new_PLNs[parent_id].nKeys - 1].key)->key,
+				max(split_max_key->key_len, (new_PLNs[parent_id].entries[new_PLNs[parent_id].nKeys - 1].key)->key_len)) > 0)
 		inserted_PLN_id = parent_id + 1;
 	else
 		inserted_PLN_id = parent_id;
 
 	for (i = 0; i < new_PLNs[inserted_PLN_id].nKeys; i++) {
-		if (split_max_key <= new_PLNs[inserted_PLN_id].entries[i].key) {
+		if (memcmp(split_max_key->key, (new_PLNs[inserted_PLN_id].entries[i].key)->key,
+					max(split_max_key->key_len, (new_PLNs[inserted_PLN_id].entries[i].key)->key_len)) <= 0) {
 			struct PLN_entry temp[new_PLNs[inserted_PLN_id].nKeys - i];
 			memcpy(temp, &new_PLNs[inserted_PLN_id].entries[i],
 					sizeof(struct PLN_entry) * (new_PLNs[inserted_PLN_id].nKeys - i));
@@ -515,8 +536,8 @@ int insert_node_to_PLN(PLN *new_PLNs, unsigned long parent_id, unsigned long ins
 	return entry_index;
 }
 
-int reconstruct_PLN(tree *t, unsigned long parent_id, unsigned long insert_key,
-		unsigned long split_max_key, LN *split_node1, LN *split_node2)
+int reconstruct_PLN(tree *t, unsigned long parent_id, key_item *insert_key,
+		key_item *split_max_key, LN *split_node1, LN *split_node2)
 {
 	unsigned long height, max_PLN, total_PLN, total_IN = 1;
 	unsigned long new_parent_id;
@@ -645,8 +666,8 @@ int insert_to_PLN(tree *t, unsigned long parent_id,
 {
 	int entry_index;
 	/* Newly inserted key to PLN */
-	unsigned long insert_key = split_node1->LN_Element[split_node1->nElements - 1].key;
-	unsigned long split_max_key = split_node2->LN_Element[split_node2->nElements - 1].key;
+	key_item *insert_key = split_node1->LN_Element[split_node1->nElements - 1].key;
+	key_item *split_max_key = split_node2->LN_Element[split_node2->nElements - 1].key;
 
 	PLN *parent = (PLN *)t->root;
 
@@ -656,10 +677,12 @@ int insert_to_PLN(tree *t, unsigned long parent_id,
 				split_max_key, split_node1, split_node2);
 		if (entry_index < 0)
 			goto fail;
-	} else if (split_max_key <= parent[parent_id].entries[parent[parent_id].nKeys - 1].key) {
+	} else if (memcmp(split_max_key->key, (parent[parent_id].entries[parent[parent_id].nKeys - 1].key)->key,
+				max(split_max_key->key_len, (parent[parent_id].entries[parent[parent_id].nKeys - 1].key)->key_len)) <= 0) {
 		/* Not PLN split */
 		for (entry_index = 0; entry_index < parent[parent_id].nKeys; entry_index++) {
-			if (split_max_key <= parent[parent_id].entries[entry_index].key) {
+			if (memcmp(split_max_key->key, (parent[parent_id].entries[entry_index].key)->key,
+						max(split_max_key->key_len, (parent[parent_id].entries[parent[parent_id].nKeys - 1].key)->key_len)) <= 0) {
 
 				struct PLN_entry temp[parent[parent_id].nKeys - entry_index];
 
@@ -684,11 +707,11 @@ fail:
 	return entry_index;	//새로운 key가 삽입된 PLN의 entry index번호
 }
 
-void insert_entry_to_leaf(LN *leaf, unsigned long key, void *value, bool flush)
+void insert_entry_to_leaf(LN *leaf, key_item *new_item, void *value, bool flush)
 {
 	if (flush == true) {
 		leaf->LN_Element[leaf->nElements].flag = true;
-		leaf->LN_Element[leaf->nElements].key = key;
+		leaf->LN_Element[leaf->nElements].key = new_item;
 		leaf->LN_Element[leaf->nElements].value = value;
 		flush_buffer(&leaf->LN_Element[leaf->nElements], 
 				sizeof(struct LN_entry), false);
@@ -696,13 +719,13 @@ void insert_entry_to_leaf(LN *leaf, unsigned long key, void *value, bool flush)
 		flush_buffer(&leaf->nElements, sizeof(unsigned char), true);
 	} else {
 		leaf->LN_Element[leaf->nElements].flag = true;
-		leaf->LN_Element[leaf->nElements].key = key;
+		leaf->LN_Element[leaf->nElements].key = new_item;
 		leaf->LN_Element[leaf->nElements].value = value;
 		leaf->nElements++;
 	}
 }
 
-int leaf_split_and_insert(tree *t, LN *leaf, unsigned long key, void *value)
+int leaf_split_and_insert(tree *t, LN *leaf, key_item *new_item, void *value)
 {
 	int errval = -1, current_idx;
 	LN *split_node1, *split_node2, *prev_leaf, *new_leaf;
@@ -736,9 +759,9 @@ int leaf_split_and_insert(tree *t, LN *leaf, unsigned long key, void *value)
 			}
 		}
 
-		new_leaf = find_leaf(t, key);
+		new_leaf = find_leaf(t, new_item->key, new_item->key_len);
 
-		insert_entry_to_leaf(new_leaf, key, value, false);
+		insert_entry_to_leaf(new_leaf, new_item, value, false);
 
 		flush_buffer(split_node1, sizeof(LN), false);
 		flush_buffer(split_node2, sizeof(LN), false);
@@ -756,7 +779,7 @@ int leaf_split_and_insert(tree *t, LN *leaf, unsigned long key, void *value)
 			split_node1->LN_Element[split_node1->nElements - 1].key;
 		new_PLN->entries[new_PLN->nKeys].ptr = split_node1;
 		new_PLN->nKeys++;
-		new_PLN->entries[new_PLN->nKeys].key = MAX_KEY;
+		new_PLN->entries[new_PLN->nKeys].key = make_key_item(MAX_KEY, strlen(MAX_KEY));
 		new_PLN->entries[new_PLN->nKeys].ptr = split_node2;
 		new_PLN->nKeys++;
 
@@ -766,9 +789,9 @@ int leaf_split_and_insert(tree *t, LN *leaf, unsigned long key, void *value)
 		t->last_PLN_id = 0;
 		t->root = new_PLN;
 
-		new_leaf = find_leaf(t, key);
+		new_leaf = find_leaf(t, new_item->key, new_item->key_len);
 		
-		insert_entry_to_leaf(new_leaf, key, value, false);
+		insert_entry_to_leaf(new_leaf, new_item, value, false);
 
 		flush_buffer(split_node1, sizeof(LN), false);
 		flush_buffer(split_node2, sizeof(LN), true);
@@ -781,19 +804,22 @@ fail:
 	return current_idx;
 }
 
-int Insert(tree *t, unsigned long key, void *value)
+int Insert(tree *t, unsigned char *key, int key_len, void *value)
 {
 	int errval = -1;
 	LN *leaf;
 
+	/* Make new key item */
+	key_item *new_item = make_key_item(key, key_len);
+
 	if (t->root == NULL) {
-		errval = create_new_tree(t, key, value);
+		errval = create_new_tree(t, new_item, value);
 		if (errval < 0)
 			goto fail;
 		return errval;
 	}
 
-	leaf = find_leaf(t, key);
+	leaf = find_leaf(t, new_item->key, new_item->key_len);
 	
 	if (leaf == NULL) {
 		printf("key = %lu\n",key);
@@ -801,10 +827,10 @@ int Insert(tree *t, unsigned long key, void *value)
 	}	
 
 	if (leaf->nElements < MAX_NUM_ENTRY_LN)
-		insert_entry_to_leaf(leaf, key, value, true);
+		insert_entry_to_leaf(leaf, new_item, value, true);
 	else {
 		/* Insert after split */
-		errval = leaf_split_and_insert(t, leaf, key, value);
+		errval = leaf_split_and_insert(t, leaf, new_item, value);
 		if (errval < 0)
 			goto fail;
 	}
@@ -813,7 +839,7 @@ int Insert(tree *t, unsigned long key, void *value)
 fail:
 	return errval;
 }
-
+/*
 void update_entry_to_leaf(LN *leaf, unsigned long old_key, void *old_value,
 		unsigned long new_key, void *new_value, bool flush)
 {
@@ -934,7 +960,7 @@ int Update(tree *t, unsigned long key, void *value)
 	if (current_LN->nElements < MAX_NUM_ENTRY_LN - 1)
 		update_entry_to_leaf(current_LN, key, NULL, key, value, true);
 	else {
-		/* Insert after split */
+		// Insert after split
 		errval = leaf_split_and_update(t, current_LN, key, NULL, key, value);
 		if (errval < 0)
 			goto fail;
@@ -1054,7 +1080,7 @@ int Delete(tree *t, unsigned long key)
 	if (leaf->nElements < MAX_NUM_ENTRY_LN)
 		delete_entry_to_leaf(leaf, key, NULL, true);
 	else {
-		/* Delete after split */
+		// Delete after split 
 		errval = leaf_split_and_delete(t, leaf, key, NULL);
 		if (errval < 0)
 			goto fail;
@@ -1064,3 +1090,4 @@ int Delete(tree *t, unsigned long key)
 fail:
 	return errval;
 }
+*/

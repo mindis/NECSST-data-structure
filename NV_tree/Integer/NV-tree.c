@@ -1,4 +1,4 @@
-/* Developted by Se Kwon Lee in UNIST NECSST Lab
+/* Implemented by Se Kwon Lee in UNIST NECSST Lab
  * E-mail: sekwonlee90@gmail.com */
 
 #include <stdio.h>
@@ -184,28 +184,22 @@ LN *find_leaf(tree *t, unsigned long key)
 
 int search_leaf_node(LN *node, unsigned long key)
 {
-	int i, pos, valid = 0;
+	int i, pos;
 
 	for (i = 0; i < node->nElements; i++) {
 		if (node->LN_Element[i].key == key &&
 				node->LN_Element[i].flag == true) {
 			pos = i;
 			return pos;
-//			valid++;
 		}
 
 		if (node->LN_Element[i].key == key &&
 				node->LN_Element[i].flag == false) {
 			pos = -1;
 			return pos;
-//			valid--;
 		}
 	}
-
-//	if (valid > 0)
-//		return pos;
-//	else
-//		return -1;
+	return -1;
 }
 
 void *Lookup(tree *t, unsigned long key)

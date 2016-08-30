@@ -5,94 +5,78 @@
 #include <time.h>
 #include "NV-tree.h"
 
-#define INPUT_NUM	1024000000
-
 int main(void)
 {
 	struct timespec t1, t2;
-	int i;
+	int i, len;
 	char *dummy;
-	unsigned long *keys, *new_value;
-	unsigned long elapsed_time;
+	unsigned long *new_value;
+	char buf[512];
+	unsigned long elapsed_time, total_elapsed_time, input_count = 0, search_count = 0;
 	void *ret;
 	FILE *fp;
-	unsigned long *buf;
-	unsigned long max;
-	unsigned long min;
 
-	if ((fp = fopen("/home/sekwon/Public/input_file/input_random_dense_1024M.txt","r")) == NULL)
+	if((fp = fopen("/home/sekwon/Public/input_file/words.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
 	}
 
-	printf("sizeof(IN) = %d\n", sizeof(IN));
-	printf("sizeof(PLN) = %d\n", sizeof(PLN));
-	printf("sizeof(LN) = %d\n", sizeof(LN));
-
-	keys = malloc(sizeof(unsigned long) * INPUT_NUM);
-	buf = malloc(sizeof(unsigned long) * INPUT_NUM);
-	memset(buf, 0, sizeof(unsigned long) * INPUT_NUM);
-	for(i = 0; i < INPUT_NUM; i++) {
-//		keys[i] = i;
-		fscanf(fp, "%lu", &keys[i]);
-	}
-	fclose(fp);
-
-	max = keys[0];
-	min = keys[0];
-	for (i = 1; i < INPUT_NUM; i++) {
-		if (keys[i] > max)
-			max = keys[i];
-		if (keys[i] < min)
-			min = keys[i];
-	}
-
 	tree *t = initTree();
 
 	/* Insertion */
-	dummy = (char *)malloc(15*1024*1024);
+	dummy = (char *)malloc(15*1024*1024);	// [kh] CPU cache size is 15M?
 	memset(dummy, 0, 15*1024*1024);
 	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
-	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 0; i < INPUT_NUM; i++) {
-		if (Insert(t, keys[i], &keys[i]) < 0)
-			return 0;
+	total_elapsed_time = 0;
+	while (fgets(buf, sizeof(buf), fp)) {
+		len = strlen(buf);
+		buf[len - 1] = '\0';
+		clock_gettime(CLOCK_MONOTONIC, &t1);
+		Insert(t, (unsigned char *)buf, len, (void *)buf);
+		clock_gettime(CLOCK_MONOTONIC, &t2);
+		elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
+		elapsed_time += (t2.tv_nsec - t1.tv_nsec);
+		total_elapsed_time += elapsed_time;
+		input_count++;
 	}
-	clock_gettime(CLOCK_MONOTONIC, &t2);
-	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
-	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
-	printf("Insertion Time = %lu ns\n",elapsed_time);
+	printf("Insertion Time = %lu ns\n", total_elapsed_time);
 
 	/* Check space overhead */
-	printf("Total space = %lu byte\n", (IN_count + LN_count) * sizeof(LN));
-	printf("Space efficiency = %lu\n", 
-			((IN_count + LN_count) * sizeof(LN)) / INPUT_NUM);
-	printf("IN_count = %lu\n", IN_count);
-	printf("LN_count = %lu\n", LN_count);
+	printf("Total space = %lu byte\n", IN_count * sizeof(IN)+ LN_count * sizeof(LN) + input_count * (sizeof(key_item) + len));
+	printf("Space efficiency = %lu\n", (IN_count * sizeof(IN) + LN_count * sizeof(LN) + input_count * (sizeof(key_item) + len)) / input_count);
+	printf("sizeof(IN) = %lu\n", sizeof(IN));
+	printf("sizeof(LN) = %lu\n", sizeof(LN));
+	printf("sizeof(key_item) = %lu\n", sizeof(key_item) + len);
+	printf("IN count = %lu\n", IN_count);
+	printf("LN count = %lu\n", LN_count);
 	printf("clflush count = %lu\n", clflush_count);
 	printf("mfence count = %lu\n", mfence_count);
+
+	fseek(fp, 0, SEEK_SET);	
 
 	/* Lookup */
 	memset(dummy, 0, 15*1024*1024);
 	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
-	clock_gettime(CLOCK_MONOTONIC, &t1);
-	for(i = 0; i < INPUT_NUM; i++) {
-		ret = (void *)Lookup(t, keys[i]);		
+	while (fgets(buf, sizeof(buf), fp)) {
+		len = strlen(buf);
+		buf[len - 1] = '\0';
+		clock_gettime(CLOCK_MONOTONIC, &t1);
+		ret = Lookup(t, (unsigned char *)buf, len);
 		if (ret == NULL) {
-			printf("There is no key[%d] = %lu\n", i, keys[i]);
+			printf("There is no key = %s\n", (unsigned char *)ret);
+			printf("search count = %lu\n", search_count);
 			exit(1);
-		}/*
-		else {
-			printf("Search value = %lu\n", *(unsigned long*)ret);
-		//	sleep(1);
-		}*/
+		}
+		clock_gettime(CLOCK_MONOTONIC, &t2);
+		elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
+		elapsed_time += (t2.tv_nsec - t1.tv_nsec);
+		total_elapsed_time += elapsed_time;
+		search_count++;
 	}
-	clock_gettime(CLOCK_MONOTONIC, &t2);
-	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
-	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
-	printf("Search Time = %lu ns\n", elapsed_time);
-
+	printf("Search Time = %lu ns\n", total_elapsed_time);
+	fclose(fp);
+#ifdef sekwon
 	/* Range scan 0.1% */
 	memset(dummy, 0, 15*1024*1024);
 	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
@@ -122,7 +106,7 @@ int main(void)
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
 	printf("Range scan 10% = %lu ns\n", elapsed_time);
-	return 0;
+
 	/* Update */
 	new_value = malloc(sizeof(unsigned long) * INPUT_NUM);
 	for (i = 0; i < INPUT_NUM; i++)
@@ -134,20 +118,21 @@ int main(void)
 		Update(t, keys[i], &new_value[i]);
 	clock_gettime(CLOCK_MONOTONIC, &t2);
 	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
-	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
-	printf("Update time = %lu ns\n", elapsed_time);
-
+	elapsed_time += (t2.tv_nsec - t1.tv_nsec);	
+	printf("Update Time = %lu ns\n", elapsed_time);
+#endif
 	/* Delete */
 //	memset(dummy, 0, 15*1024*1024);
-//	flush_buffer_nocount((void *)dummy, 15*1024*1024, true);
+//	flush_buffer((void *)dummy, 15*1024*1024, true);
 //	clock_gettime(CLOCK_MONOTONIC, &t1);
 //	for (i = 0; i < 100; i++)
 //		Delete(t, keys[i]);
 //	clock_gettime(CLOCK_MONOTONIC, &t2);
 //	elapsed_time = (t2.tv_sec - t1.tv_sec) * 1000000000;
 //	elapsed_time += (t2.tv_nsec - t1.tv_nsec);
-//	printf("Delete time = %lu ns\n", elapsed_time);
-//	for (i = 0; i < 100000100; i++)
+//	printf("Delete Time = %lu ns\n", elapsed_time);
+
+//	for (i = 0; i < 50000100; i++)
 //		printf("buf[%d] = %lu\n", i, buf[i]);
 
 	return 0;
