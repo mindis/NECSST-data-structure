@@ -51,20 +51,20 @@ void flush_buffer(void *buf, unsigned long len, bool fence)
 		mfence();
 		for (i = 0; i < len; i += CACHE_LINE_SIZE) {
 			clflush_count++;
-			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
+//			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
-			while (read_tsc() < etsc)
-				cpu_pause();
+//			while (read_tsc() < etsc)
+//				cpu_pause();
 		}
 		mfence();
 		mfence_count = mfence_count + 2;
 	} else {
 		for (i = 0; i < len; i += CACHE_LINE_SIZE) {
 			clflush_count++;
-			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
+//			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
-			while (read_tsc() < etsc)
-				cpu_pause();
+//			while (read_tsc() < etsc)
+//				cpu_pause();
 		}
 	}
 }
@@ -1126,6 +1126,62 @@ int art_iter(art_tree *t, art_callback cb, void *data) {
 	return recursive_iter(t->root, cb, data);
 }
 */
+
+static void recursive_lookup(art_node *n, unsigned long num,
+		unsigned long *search_count, unsigned long buf[]) {
+	// Handle base cases
+	if (!n) return ;
+	if (IS_LEAF(n)) {
+		art_leaf *l = LEAF_RAW(n);
+		buf[*search_count] = *(unsigned long *)l->value;
+		(*search_count)++;
+		return ;
+	}
+
+	int i, j, idx, count16 = 0;
+	switch (n->type) {
+		case NODE4:
+			for (i = 0; i < (((art_node4*)n)->slot[i].i_ptr != -1) && i < 4; i++) {
+				recursive_lookup(((art_node4*)n)->children[((art_node4*)n)->slot[i].i_ptr],
+						num, search_count, buf);
+				if (*search_count == num)
+					break;
+			}
+			break;
+		case NODE16:
+			for (i = 0; i < 4; i++) {
+				for (j = 0; j < 32; j++) { 
+					j = find_next_bit((unsigned long *)&((art_node16*)n)->bitmap[i][0], 32, j);
+					if (j < 32) {
+						recursive_lookup(((art_node16*)n)->children[((art_node16*)n)->keys[j + (i * 32)]],
+								num, search_count, buf);
+						count16++;
+						if (*search_count == num || count16 == 16)
+							break;
+					}
+				}
+				if (*search_count == num || count16 == 16)
+					break;
+			}
+			break;
+		case NODE128:
+			for (i = 0; i < 128; i++) {
+				if (!((art_node128*)n)->children[i]) continue;
+				recursive_lookup(((art_node128*)n)->children[i], num, search_count, buf);
+				if (*search_count == num)
+					break;
+			}
+			break;
+		default:
+			abort();
+	}
+	return ;
+}
+
+void Range_Lookup(art_tree *t, unsigned long num, unsigned long buf[]) {
+	unsigned long search_count = 0;
+	return recursive_lookup(t->root, num, &search_count, buf);
+}
 
 /**
  * Checks if a leaf prefix matches

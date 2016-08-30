@@ -26,6 +26,7 @@ NODE4	PART.h	19;"	d
 NODE48	PART.h	21;"	d
 NODE_BITS	PART.h	29;"	d
 NUM_NODE_ENTRIES	PART.h	31;"	d
+Range_Lookup	PART.c	/^void Range_Lookup(art_tree *t, unsigned long num, unsigned long buf[]) {$/;"	f
 SET_LEAF	PART.c	25;"	d	file:
 __ffs	PART.h	/^static inline unsigned long __ffs(unsigned long word)$/;"	f
 add_child	PART.c	/^static void add_child(art_node *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
@@ -106,6 +107,7 @@ partial_len	PART.h	/^    uint32_t partial_len;$/;"	m	struct:__anon1
 prefix_mismatch	PART.c	/^static int prefix_mismatch(const art_node *n, const unsigned long key, int key_len, int depth, art_leaf **l) {$/;"	f	file:
 read_tsc	PART.c	/^static inline unsigned long read_tsc(void)$/;"	f	file:
 recursive_insert	PART.c	/^static void* recursive_insert(art_node *n, art_node **ref, const unsigned long key,$/;"	f	file:
+recursive_iter	PART.c	/^static void recursive_iter(art_node *n, unsigned long num, $/;"	f	file:
 root	PART.h	/^    art_node *root;$/;"	m	struct:__anon9
 size	PART.h	/^    uint64_t size;$/;"	m	struct:__anon9
 slot	PART.h	/^	slot_array slot[4];$/;"	m	struct:__anon4

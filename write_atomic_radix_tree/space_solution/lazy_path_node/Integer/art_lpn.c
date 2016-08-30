@@ -1012,8 +1012,8 @@ void* art_delete(art_tree *t, const unsigned char *key, int key_len) {
     return NULL;
 }
 */
-// Recursively iterates over the tree
 /*
+// Recursively iterates over the tree
 static int recursive_iter(art_node *n, art_callback cb, void *data) {
     // Handle base cases
     if (!n) return 0;
@@ -1062,6 +1062,7 @@ static int recursive_iter(art_node *n, art_callback cb, void *data) {
     return 0;
 }
 */
+
 /**
  * Iterates through the entries pairs in the map,
  * invoking a callback for each. The call back gets a
@@ -1077,6 +1078,66 @@ int art_iter(art_tree *t, art_callback cb, void *data) {
     return recursive_iter(t->root, cb, data);
 }
 */
+
+static void recursive_lookup(art_node *n, unsigned long num,
+		unsigned long *search_count, unsigned long buf[]) {
+    // Handle base cases
+    if (!n) return ;
+    if (IS_LEAF(n)) {
+        art_leaf *l = LEAF_RAW(n);
+		buf[*search_count] = *(unsigned long *)l->value;
+		(*search_count)++;
+		return ;
+    }
+
+    int i, idx;
+    switch (n->type) {
+        case NODE4:
+            for (i=0; i < n->num_children; i++) {
+                recursive_lookup(((art_node4*)n)->children[i], num,
+						search_count, buf);
+				if (*search_count == num)
+					break;
+            }
+            break;
+        case NODE16:
+            for (i=0; i < n->num_children; i++) {
+                recursive_lookup(((art_node16*)n)->children[i], num,
+						search_count, buf);
+				if (*search_count == num)
+					break;
+            }
+            break;
+        case NODE48:
+            for (i=0; i < 256; i++) {
+                idx = ((art_node48*)n)->keys[i];
+                if (!idx) continue;
+
+                recursive_lookup(((art_node48*)n)->children[idx-1], num,
+						search_count, buf);
+				if (*search_count == num)
+					break;
+            }
+            break;
+        case NODE256:
+            for (i=0; i < 256; i++) {
+                if (!((art_node256*)n)->children[i]) continue;
+                recursive_lookup(((art_node256*)n)->children[i], num,
+						search_count, buf);
+				if (*search_count == num)
+					break;
+            }
+            break;
+        default:
+            abort();
+    }
+    return ;
+}
+
+void Range_Lookup(art_tree *t, unsigned long num, unsigned long buf[]) {
+	unsigned long search_count = 0;
+    return recursive_lookup(t->root, num, &search_count, buf);
+}
 
 /**
  * Checks if a leaf prefix matches

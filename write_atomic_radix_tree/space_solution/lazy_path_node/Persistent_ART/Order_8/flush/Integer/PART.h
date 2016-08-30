@@ -142,6 +142,14 @@ typedef struct {
     uint64_t size;
 } art_tree;
 
+/*
+ * For range lookup in NODE16
+ */
+typedef struct {
+	unsigned char key;
+	art_node *child;
+} key_pos;
+
 /**
  * Initializes an ART tree
  * @return 0 on success.
@@ -250,6 +258,8 @@ int art_iter(art_tree *t, art_callback cb, void *data);
 int art_iter_prefix(art_tree *t, const unsigned char *prefix, int prefix_len, art_callback cb, void *data);
 
 void flush_buffer_nocount(void *buf, unsigned long len, bool fence);
+
+void Range_Lookup(art_tree *t, unsigned long num, unsigned long buf[]);
 
 #ifdef __cplusplus
 }

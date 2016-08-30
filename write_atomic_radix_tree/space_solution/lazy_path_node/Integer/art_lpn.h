@@ -217,6 +217,8 @@ int art_iter_prefix(art_tree *t, const unsigned char *prefix, int prefix_len, ar
 
 void flush_buffer_nocount(void *buf, unsigned long len, bool fence);
 
+void Range_Lookup(art_tree *t, unsigned long num, unsigned long buf[]);
+
 #ifdef __cplusplus
 }
 #endif
