@@ -16,6 +16,7 @@ unsigned long node256_count = 0;
 unsigned long leaf_count = 0;
 unsigned long clflush_count = 0;
 unsigned long mfence_count = 0;
+unsigned long path_comp_count = 0;
 
 /**
  * Macros to manipulate pointer tags
@@ -51,20 +52,20 @@ void flush_buffer(void *buf, unsigned long len, bool fence)
 		mfence();
 		for (i = 0; i < len; i += CACHE_LINE_SIZE) {
 			clflush_count++;
-			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
+//			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
-			while (read_tsc() < etsc)
-				cpu_pause();
+//			while (read_tsc() < etsc)
+//				cpu_pause();
 		}
 		mfence();
 		mfence_count = mfence_count + 2;
 	} else {
 		for (i = 0; i < len; i += CACHE_LINE_SIZE) {
 			clflush_count++;
-			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
+//			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
-			while (read_tsc() < etsc)
-				cpu_pause();
+//			while (read_tsc() < etsc)
+//				cpu_pause();
 		}
 	}
 }
@@ -440,7 +441,10 @@ static void add_child256(art_node256 *n, art_node **ref, unsigned char c, void *
 }
 
 static void add_child48(art_node48 *n, art_node **ref, unsigned char c, void *child) {
-	if (n->n.num_children < 48) {
+	int pos = 0;
+	while (pos < 48 && n->children[pos]) pos++;
+	if (pos < 48) {
+		/*
 		art_node48 *copy_node = (art_node48 *)alloc_node(NODE48);
 		memcpy(copy_node, n, sizeof(art_node48));
 
@@ -456,6 +460,13 @@ static void add_child48(art_node48 *n, art_node **ref, unsigned char c, void *ch
 
 		node48_count--;
 		free(n);
+		*/
+		n->children[pos] = (art_node*)child;
+		n->keys[c] = pos + 1;
+//		n->n.num_children++;
+//		flush_buffer(&n->n.num_children, sizeof(uint8_t), false);
+		flush_buffer(&n->children[pos], 8, false);
+		flush_buffer(&n->keys[c], sizeof(unsigned char), true);
 	} else {
 		int i;
 		art_node256 *new_node = (art_node256*)alloc_node(NODE256);
@@ -466,7 +477,7 @@ static void add_child48(art_node48 *n, art_node **ref, unsigned char c, void *ch
 		}
 		copy_header((art_node*)new_node, (art_node*)n);
 		
-		new_node->n.num_children++;
+//		new_node->n.num_children++;
 		new_node->children[c] = (art_node*)child;
 		*ref = (art_node*)new_node;
 		flush_buffer(new_node, sizeof(art_node256), false);
@@ -536,7 +547,7 @@ static void add_child16(art_node16 *n, art_node **ref, unsigned char c, void *ch
 		while (new_node->children[pos]) pos++;
 		new_node->children[pos] = (art_node*)child;
 		new_node->keys[c] = pos + 1;
-		new_node->n.num_children++;
+//		new_node->n.num_children++;
 
 		*ref = (art_node *)new_node;
 		flush_buffer(new_node, sizeof(art_node48), false);
@@ -737,6 +748,8 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned long k
             depth += n->partial_len;
             goto RECURSE_SEARCH;
         }
+
+		path_comp_count++;
 
         // Create a new node
         art_node4 *new_node = (art_node4*)alloc_node(NODE4);
@@ -1090,7 +1103,7 @@ static void recursive_lookup(art_node *n, unsigned long num,
 		return ;
     }
 
-    int i, idx;
+    int i, idx, count48;
     switch (n->type) {
         case NODE4:
             for (i=0; i < n->num_children; i++) {
@@ -1109,13 +1122,14 @@ static void recursive_lookup(art_node *n, unsigned long num,
             }
             break;
         case NODE48:
+			count48 = 0;
             for (i=0; i < 256; i++) {
                 idx = ((art_node48*)n)->keys[i];
                 if (!idx) continue;
 
                 recursive_lookup(((art_node48*)n)->children[idx-1], num,
 						search_count, buf);
-				if (*search_count == num)
+				if (*search_count == num || count48 == 48)
 					break;
             }
             break;

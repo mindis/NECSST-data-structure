@@ -14,6 +14,7 @@ unsigned long node256_count;
 unsigned long leaf_count;
 unsigned long clflush_count;
 unsigned long mfence_count;
+unsigned long path_comp_count;
 
 #define NODE4   1
 #define NODE16  2

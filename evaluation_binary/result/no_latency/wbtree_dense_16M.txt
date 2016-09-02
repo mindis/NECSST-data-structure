@@ -1,8 +1,0 @@
-Insertion Time = 19673853913 ns
-sizeof(node) = 1152
-Total space = 430262784 byte
-Space efficiency = 26
-node count = 373492
-clflush count = 108619477
-mfence count = 63269862
-Search Time = 10212601850 ns

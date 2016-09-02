@@ -5,7 +5,7 @@
 #include <time.h>
 #include "art_lpn.h"
 
-#define INPUT_NUM	16000000
+#define INPUT_NUM	1024000000
 
 int main(void)
 {
@@ -20,7 +20,7 @@ int main(void)
 	unsigned long max;
 	unsigned long min;
 
-	if((fp = fopen("/home/sekwon/Public/input_file/input_random_sparse_16M.txt","r")) == NULL)
+	if((fp = fopen("/home/sekwon/Public/input_file/input_random_synthetic_1024M.txt","r")) == NULL)
 	{
 		puts("error");
 		exit(0);
@@ -90,6 +90,7 @@ int main(void)
 	printf("leaf count = %lu\n", leaf_count);
 	printf("clflush count = %lu\n", clflush_count);
 	printf("mfence count = %lu\n", mfence_count);
+	printf("path compression count = %lu\n", path_comp_count);
 
 	/* Lookup */
 	memset(dummy, 0, 15*1024*1024);

@@ -17,6 +17,7 @@ unsigned long node256_count = 0;
 unsigned long leaf_count = 0;
 unsigned long clflush_count = 0;
 unsigned long mfence_count = 0;
+unsigned long path_comp_count = 0;
 
 /**
  * Macros to manipulate pointer tags
@@ -52,20 +53,20 @@ void flush_buffer(void *buf, unsigned long len, bool fence)
 		mfence();
 		for (i = 0; i < len; i += CACHE_LINE_SIZE) {
 			clflush_count++;
-			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
+//			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
-			while (read_tsc() < etsc)
-				cpu_pause();
+//			while (read_tsc() < etsc)
+//				cpu_pause();
 		}
 		mfence();
 		mfence_count = mfence_count + 2;
 	} else {
 		for (i = 0; i < len; i += CACHE_LINE_SIZE) {
 			clflush_count++;
-			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
+//			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
-			while (read_tsc() < etsc)
-				cpu_pause();
+//			while (read_tsc() < etsc)
+//				cpu_pause();
 		}
 	}
 }
@@ -866,6 +867,8 @@ static void* recursive_insert(art_node *n, art_node **ref, const unsigned long k
 			depth += n->partial_len;
 			goto RECURSE_SEARCH;
 		}
+
+		path_comp_count++;
 
 		// Create a new node
 		art_node4 *new_node = (art_node4*)alloc_node(NODE4);

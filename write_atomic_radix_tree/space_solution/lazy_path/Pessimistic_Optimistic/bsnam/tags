@@ -1,0 +1,95 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ART_H	art_lp.h	5;"	d
+BIN_DIR	Makefile	/^BIN_DIR = .\/$/;"	m
+BROKEN_GCC_C99_INLINE	art_lp.h	37;"	d
+CACHE_LINE_SIZE	art_lp.h	17;"	d
+CFLAGS	Makefile	/^CFLAGS = -c$/;"	m
+CPU_FREQ_MHZ	art_lp.c	26;"	d	file:
+INPUT_NUM	main.c	8;"	d	file:
+IS_LEAF	art_lp.c	21;"	d	file:
+LATENCY	art_lp.c	25;"	d	file:
+LEAF_RAW	art_lp.c	23;"	d	file:
+LOW_BIT_MASK	art_lp.h	24;"	d
+MAX_DEPTH	art_lp.h	22;"	d
+MAX_HEIGHT	art_lp.h	28;"	d
+MAX_PREFIX_LEN	art_lp.h	27;"	d
+NODE_BITS	art_lp.h	21;"	d
+NUM_NODE_ENTRIES	art_lp.h	23;"	d
+SET_LEAF	art_lp.c	22;"	d	file:
+a	test.c	/^	unsigned char a : 4;$/;"	m	struct:bit_array	file:
+add_child	art_lp.c	/^static void add_child(art_node16 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+add_child_noflush	art_lp.c	/^static void add_child_noflush(art_node16 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
+alloc_node	art_lp.c	/^static art_node* alloc_node() {$/;"	f	file:
+art_callback	art_lp.h	/^typedef int(*art_callback)(void *data, const unsigned char *key, uint32_t key_len, void *value);$/;"	t
+art_insert	art_lp.c	/^void* art_insert(art_tree *t, const unsigned long key, int key_len, void *value) {$/;"	f
+art_leaf	art_lp.h	/^} art_leaf;$/;"	t	typeref:struct:__anon4
+art_node	art_lp.h	/^} art_node;$/;"	t	typeref:struct:__anon1
+art_node16	art_lp.h	/^} art_node16;$/;"	t	typeref:struct:__anon3
+art_search	art_lp.c	/^void* art_search(const art_tree *t, const unsigned long key, int key_len) {$/;"	f
+art_tree	art_lp.h	/^} art_tree;$/;"	t	typeref:struct:__anon5
+art_tree_init	art_lp.c	/^int art_tree_init(art_tree *t) {$/;"	f
+b	test.c	/^	unsigned char b : 4;$/;"	m	struct:bit_array	file:
+bit_array	test.c	/^typedef struct bit_array {$/;"	s	file:
+bit_array	test.c	/^} bit_array;$/;"	t	typeref:struct:bit_array	file:
+c	test.c	/^	unsigned char c : 4;$/;"	m	struct:bit_array	file:
+check_prefix	art_lp.c	/^static int check_prefix(const art_node *n, const unsigned long key, int key_len, int depth) {$/;"	f	file:
+child_group	art_lp.h	/^	child_node *child_group[8];$/;"	m	struct:__anon3
+child_node	art_lp.h	/^} child_node;$/;"	t	typeref:struct:__anon2
+child_node_count	art_lp.c	/^unsigned long child_node_count = 0;$/;"	v
+child_node_count	art_lp.h	/^unsigned long child_node_count;$/;"	v
+children	art_lp.h	/^	art_node *children[32];$/;"	m	struct:__anon2
+clflush_count	art_lp.c	/^unsigned long clflush_count = 0;$/;"	v
+clflush_count	art_lp.h	/^unsigned long clflush_count;$/;"	v
+cpu_pause	art_lp.c	/^static inline void cpu_pause()$/;"	f	file:
+d	test.c	/^	unsigned char d : 4;$/;"	m	struct:bit_array	file:
+destroy_art_tree	art_lp.h	109;"	d
+e	test.c	/^	unsigned char e : 4;$/;"	m	struct:bit_array	file:
+f	test.c	/^	unsigned char f : 4;$/;"	m	struct:bit_array	file:
+find_child	art_lp.c	/^static art_node** find_child(art_node *n, unsigned char c) {$/;"	f	file:
+flush_buffer	art_lp.c	/^void flush_buffer(void *buf, unsigned long len, bool fence)$/;"	f
+flush_buffer_nocount	art_lp.c	/^void flush_buffer_nocount(void *buf, unsigned long len, bool fence)$/;"	f
+g	test.c	/^	unsigned char g : 4;$/;"	m	struct:bit_array	file:
+get_index	art_lp.c	/^static int get_index(unsigned long key, int depth) $/;"	f	file:
+h	test.c	/^	unsigned char h : 4;$/;"	m	struct:bit_array	file:
+i	test.c	/^	unsigned char i : 4;$/;"	m	struct:bit_array	file:
+init_art_tree	art_lp.h	96;"	d
+j	test.c	/^	unsigned char j : 4;$/;"	m	struct:bit_array	file:
+k	test.c	/^	unsigned char k : 4;$/;"	m	struct:bit_array	file:
+key	art_lp.h	/^	unsigned long key;$/;"	m	struct:__anon4
+key_len	art_lp.h	/^    uint32_t key_len;	$/;"	m	struct:__anon4
+keys	art_lp.h	/^	unsigned char keys[256];$/;"	m	struct:__anon3
+l	test.c	/^	unsigned char l : 4;$/;"	m	struct:bit_array	file:
+leaf_count	art_lp.c	/^unsigned long leaf_count = 0;$/;"	v
+leaf_count	art_lp.h	/^unsigned long leaf_count;$/;"	v
+leaf_matches	art_lp.c	/^static int leaf_matches(const art_leaf *n, unsigned long key, int key_len, int depth) {$/;"	f	file:
+longest_common_prefix	art_lp.c	/^static int longest_common_prefix(art_leaf *l1, art_leaf *l2, int depth) {$/;"	f	file:
+m	test.c	/^	unsigned char m : 4;$/;"	m	struct:bit_array	file:
+main	main.c	/^int main(void)$/;"	f
+main	test.c	/^int main(void) {$/;"	f
+make_leaf	art_lp.c	/^static art_leaf* make_leaf(const unsigned long key, int key_len, void *value) {$/;"	f	file:
+mfence	art_lp.c	10;"	d	file:
+mfence_count	art_lp.c	/^unsigned long mfence_count = 0;$/;"	v
+mfence_count	art_lp.h	/^unsigned long mfence_count;$/;"	v
+min	art_lp.c	/^static inline int min(int a, int b) {$/;"	f	file:
+minimum	art_lp.c	/^static art_leaf* minimum(const art_node *n) {$/;"	f	file:
+n	art_lp.h	/^    art_node n;$/;"	m	struct:__anon3
+n	test.c	/^	unsigned char n : 4;$/;"	m	struct:bit_array	file:
+node_count	art_lp.c	/^unsigned long node_count = 0;$/;"	v
+node_count	art_lp.h	/^unsigned long node_count;$/;"	v
+num_children	art_lp.h	/^	uint8_t num_children;$/;"	m	struct:__anon1
+o	test.c	/^	unsigned char o : 4;$/;"	m	struct:bit_array	file:
+p	test.c	/^	unsigned char p : 4;$/;"	m	struct:bit_array	file:
+partial	art_lp.h	/^    unsigned char partial[MAX_PREFIX_LEN];$/;"	m	struct:__anon1
+partial_len	art_lp.h	/^    uint32_t partial_len;$/;"	m	struct:__anon1
+prefix_mismatch	art_lp.c	/^static int prefix_mismatch(const art_node *n, const unsigned long key, int key_len, int depth, art_leaf **l) {$/;"	f	file:
+read_tsc	art_lp.c	/^static inline unsigned long read_tsc(void)$/;"	f	file:
+recursive_insert	art_lp.c	/^static void* recursive_insert(art_node *n, art_node **ref, const unsigned long key,$/;"	f	file:
+root	art_lp.h	/^    art_node *root;$/;"	m	struct:__anon5
+size	art_lp.h	/^    uint64_t size;$/;"	m	struct:__anon5
+type	art_lp.h	/^	uint8_t type;$/;"	m	struct:__anon1
+value	art_lp.h	/^    void *value;$/;"	m	struct:__anon4

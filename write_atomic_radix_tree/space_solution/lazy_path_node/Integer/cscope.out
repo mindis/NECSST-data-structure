@@ -1,4 +1,4 @@
-cscope 15 $HOME/study/data_structures/write_atomic_radix_tree/space_solution/lazy_path_node/Integer               0000315131
+cscope 15 $HOME/study/data_structures/write_atomic_radix_tree/space_solution/lazy_path_node/Integer               0000316769
 	@art_lpn.c
 
 1 
@@ -213,16 +213,6 @@ CACHE_LINE_SIZE
 ˛Êush_cou¡
 ++;
 
-54 
-ësc
- = 
-	`ªad_tsc
-(Ë+ ()(
-LATENCY
- * 
-CPU_FREQ_MHZ
- / 1000);
-
 55 
 asm
  vﬁ©ûê("˛Êush %0\n" : "+m" (*(*)(
@@ -230,16 +220,6 @@ buf
 +
 i
 )));
-
-56 
-	`ªad_tsc
-(Ë< 
-ësc
-)
-
-57 
-	`˝u_∑u£
-();
 
 59 
 	`m„n˚
@@ -261,16 +241,6 @@ CACHE_LINE_SIZE
 ˛Êush_cou¡
 ++;
 
-64 
-ësc
- = 
-	`ªad_tsc
-(Ë+ ()(
-LATENCY
- * 
-CPU_FREQ_MHZ
- / 1000);
-
 65 
 asm
  vﬁ©ûê("˛Êush %0\n" : "+m" (*(*)(
@@ -278,16 +248,6 @@ buf
 +
 i
 )));
-
-66 
-	`ªad_tsc
-(Ë< 
-ësc
-)
-
-67 
-	`˝u_∑u£
-();
 
 70 
 	}
@@ -2001,11 +1961,11 @@ node48_cou¡
 n
 );
 
-460 
+472 
 i
 ;
 
-461 
+473 
 ¨t_node256
  *
 √w_node
@@ -2015,11 +1975,11 @@ i
 NODE256
 );
 
-462 
+474 
 i
 =0;i<256;i++) {
 
-463 i‡(
+475 i‡(
 n
 ->
 keys
@@ -2027,7 +1987,7 @@ keys
 i
 ]) {
 
-464 
+476 
 √w_node
 ->
 chûdªn
@@ -2039,7 +1999,7 @@ n
 keys
 [i] - 1];
 
-467 
+479 
 	`c›y_hódî
 ((
 ¨t_node
@@ -2049,7 +2009,7 @@ keys
 n
 );
 
-469 
+481 
 √w_node
 ->
 n
@@ -2057,7 +2017,7 @@ n
 num_chûdªn
 ++;
 
-470 
+482 
 √w_node
 ->
 chûdªn
@@ -2069,7 +2029,7 @@ c
 chûd
 ;
 
-471 *
+483 *
 ªf
  = (
 ¨t_node
@@ -2077,7 +2037,7 @@ chûd
 √w_node
 ;
 
-472 
+484 
 	`Êush_buf„r
 (
 √w_node
@@ -2087,7 +2047,7 @@ chûd
 Ál£
 );
 
-473 
+485 
 	`Êush_buf„r
 (
 ªf
@@ -2095,21 +2055,21 @@ chûd
 åue
 );
 
-475 
+487 
 node48_cou¡
 --;
 
-476 
+488 
 	`‰ì
 (
 n
 );
 
-478 
+490 
 	}
 }
 
-480 
+492 
 	$add_chûd16
 (
 ¨t_node16
@@ -2125,19 +2085,19 @@ c
 chûd
 ) {
 
-481 i‡(
+493 i‡(
 n
 ->n.
 num_chûdªn
  < 16) {
 
-482 
+494 
 __m128i
  
 cmp
 ;
 
-485 
+497 
 cmp
  = 
 	`_mm_cm∂t_ïi8
@@ -2147,7 +2107,7 @@ cmp
 c
 ),
 
-486 
+498 
 	`_mm_lﬂdu_si128
 ((
 __m128i
@@ -2157,7 +2117,7 @@ n
 keys
 ));
 
-489 
+501 
 mask
  = (1 << 
 n
@@ -2165,7 +2125,7 @@ n
 num_chûdªn
 ) - 1;
 
-490 
+502 
 bôfõld
  = 
 	`_mm_movemask_ïi8
@@ -2175,15 +2135,15 @@ cmp
 mask
 ;
 
-493 
+505 
 idx
 ;
 
-494 i‡(
+506 i‡(
 bôfõld
 ) {
 
-495 
+507 
 ¨t_node16
  *
 c›y_node
@@ -2193,7 +2153,7 @@ c›y_node
 NODE16
 );
 
-496 
+508 
 	`mem˝y
 (
 c›y_node
@@ -2203,7 +2163,7 @@ n
 ¨t_node16
 ));
 
-498 
+510 
 idx
  = 
 	`__buûtö_˘z
@@ -2211,7 +2171,7 @@ idx
 bôfõld
 );
 
-499 
+511 
 	`memmove
 (
 c›y_node
@@ -2225,7 +2185,7 @@ n
 num_chûdªn
 -idx);
 
-500 
+512 
 	`memmove
 (
 c›y_node
@@ -2235,7 +2195,7 @@ chûdªn
 idx
 +1,copy_node->children+idx,
 
-501 (
+513 (
 c›y_node
 ->
 n
@@ -2245,7 +2205,7 @@ num_chûdªn
 idx
 )*(*));
 
-503 
+515 
 c›y_node
 ->
 keys
@@ -2255,7 +2215,7 @@ idx
 c
 ;
 
-504 
+516 
 c›y_node
 ->
 chûdªn
@@ -2267,7 +2227,7 @@ idx
 chûd
 ;
 
-505 
+517 
 c›y_node
 ->
 n
@@ -2275,7 +2235,7 @@ n
 num_chûdªn
 ++;
 
-507 *
+519 *
 ªf
  = (
 ¨t_node
@@ -2283,7 +2243,7 @@ num_chûdªn
 c›y_node
 ;
 
-508 
+520 
 	`Êush_buf„r
 (
 c›y_node
@@ -2293,7 +2253,7 @@ c›y_node
 Ál£
 );
 
-509 
+521 
 	`Êush_buf„r
 (
 ªf
@@ -2301,17 +2261,17 @@ c›y_node
 åue
 );
 
-511 
+523 
 node16_cou¡
 --;
 
-512 
+524 
 	`‰ì
 (
 n
 );
 
-514 
+526 
 idx
  = 
 n
@@ -2319,7 +2279,7 @@ n
 num_chûdªn
 ;
 
-515 
+527 
 n
 ->
 keys
@@ -2329,7 +2289,7 @@ idx
 c
 ;
 
-516 
+528 
 n
 ->
 chûdªn
@@ -2341,13 +2301,13 @@ idx
 chûd
 ;
 
-517 
+529 
 n
 ->n.
 num_chûdªn
 ++;
 
-519 
+531 
 	`Êush_buf„r
 (&
 n
@@ -2359,7 +2319,7 @@ idx
 Ál£
 );
 
-520 
+532 
 	`Êush_buf„r
 (&
 n
@@ -2371,7 +2331,7 @@ idx
 Ál£
 );
 
-521 
+533 
 	`Êush_buf„r
 (&
 n
@@ -2383,13 +2343,13 @@ uöt8_t
 åue
 );
 
-524 
+536 
 i
 , 
 pos
 ;
 
-525 
+537 
 ¨t_node48
  *
 √w_node
@@ -2399,7 +2359,7 @@ pos
 NODE48
 );
 
-528 
+540 
 	`mem˝y
 (
 √w_node
@@ -2409,13 +2369,13 @@ chûdªn
 n
 ->children,
 
-529 (*)*
+541 (*)*
 n
 ->n.
 num_chûdªn
 );
 
-530 
+542 
 i
 =0;i<
 n
@@ -2423,7 +2383,7 @@ n
 num_chûdªn
 ;i++) {
 
-531 
+543 
 √w_node
 ->
 keys
@@ -2433,7 +2393,7 @@ n
 i
 ]] = i + 1;
 
-533 
+545 
 	`c›y_hódî
 ((
 ¨t_node
@@ -2443,11 +2403,11 @@ i
 n
 );
 
-535 
+547 
 pos
  = 0;
 
-536 
+548 
 √w_node
 ->
 chûdªn
@@ -2455,7 +2415,7 @@ chûdªn
 pos
 ])Öos++;
 
-537 
+549 
 √w_node
 ->
 chûdªn
@@ -2467,7 +2427,7 @@ pos
 chûd
 ;
 
-538 
+550 
 √w_node
 ->
 keys
@@ -2477,7 +2437,7 @@ c
 pos
  + 1;
 
-539 
+551 
 √w_node
 ->
 n
@@ -2485,7 +2445,7 @@ n
 num_chûdªn
 ++;
 
-541 *
+553 *
 ªf
  = (
 ¨t_node
@@ -2493,7 +2453,7 @@ num_chûdªn
 √w_node
 ;
 
-542 
+554 
 	`Êush_buf„r
 (
 √w_node
@@ -2503,7 +2463,7 @@ num_chûdªn
 Ál£
 );
 
-543 
+555 
 	`Êush_buf„r
 (
 ªf
@@ -2511,21 +2471,21 @@ num_chûdªn
 åue
 );
 
-545 
+557 
 node16_cou¡
 --;
 
-546 
+558 
 	`‰ì
 (
 n
 );
 
-548 
+560 
 	}
 }
 
-550 
+562 
 	$add_chûd4_noÊush
 (
 ¨t_node4
@@ -2541,11 +2501,11 @@ c
 chûd
 ) {
 
-551 
+563 
 idx
 ;
 
-552 
+564 
 idx
 =0; idx < 
 n
@@ -2553,7 +2513,7 @@ n
 num_chûdªn
 ; idx++) {
 
-553 i‡(
+565 i‡(
 c
  < 
 n
@@ -2563,7 +2523,7 @@ keys
 idx
 ]) ;
 
-557 
+569 
 	`memmove
 (
 n
@@ -2575,7 +2535,7 @@ idx
 num_chûdªn
  - idx);
 
-558 
+570 
 	`memmove
 (
 n
@@ -2585,7 +2545,7 @@ chûdªn
 idx
 +1,Ç->children+idx,
 
-559 (
+571 (
 n
 ->n.
 num_chûdªn
@@ -2593,7 +2553,7 @@ num_chûdªn
 idx
 )*(*));
 
-562 
+574 
 n
 ->
 keys
@@ -2603,7 +2563,7 @@ idx
 c
 ;
 
-563 
+575 
 n
 ->
 chûdªn
@@ -2615,17 +2575,17 @@ idx
 chûd
 ;
 
-564 
+576 
 n
 ->n.
 num_chûdªn
 ++;
 
-565 
+577 
 	}
 }
 
-567 
+579 
 	$add_chûd4
 (
 ¨t_node4
@@ -2641,17 +2601,17 @@ c
 chûd
 ) {
 
-568 i‡(
+580 i‡(
 n
 ->n.
 num_chûdªn
  < 4) {
 
-569 
+581 
 idx
 ;
 
-570 
+582 
 idx
 =0; idx < 
 n
@@ -2659,7 +2619,7 @@ n
 num_chûdªn
 ; idx++) {
 
-571 i‡(
+583 i‡(
 c
  < 
 n
@@ -2669,11 +2629,11 @@ keys
 idx
 ]) ;
 
-574 i‡(
+586 i‡(
 idx
  < 3) {
 
-575 
+587 
 ¨t_node4
  *
 c›y_node
@@ -2683,7 +2643,7 @@ c›y_node
 NODE4
 );
 
-576 
+588 
 	`mem˝y
 (
 c›y_node
@@ -2693,7 +2653,7 @@ n
 ¨t_node4
 ));
 
-578 
+590 
 	`memmove
 (
 c›y_node
@@ -2707,7 +2667,7 @@ n
 num_chûdªn
  - idx);
 
-579 
+591 
 	`memmove
 (
 c›y_node
@@ -2717,7 +2677,7 @@ chûdªn
 idx
 +1, copy_node->children+idx,
 
-580 (
+592 (
 c›y_node
 ->
 n
@@ -2727,7 +2687,7 @@ num_chûdªn
 idx
 )*(*));
 
-583 
+595 
 c›y_node
 ->
 keys
@@ -2737,7 +2697,7 @@ idx
 c
 ;
 
-584 
+596 
 c›y_node
 ->
 chûdªn
@@ -2749,7 +2709,7 @@ idx
 chûd
 ;
 
-585 
+597 
 c›y_node
 ->
 n
@@ -2757,7 +2717,7 @@ n
 num_chûdªn
 ++;
 
-587 *
+599 *
 ªf
  = (
 ¨t_node
@@ -2765,7 +2725,7 @@ num_chûdªn
 c›y_node
 ;
 
-588 
+600 
 	`Êush_buf„r
 (
 c›y_node
@@ -2775,7 +2735,7 @@ c›y_node
 Ál£
 );
 
-589 
+601 
 	`Êush_buf„r
 (
 ªf
@@ -2783,17 +2743,17 @@ c›y_node
 åue
 );
 
-591 
+603 
 node4_cou¡
 --;
 
-592 
+604 
 	`‰ì
 (
 n
 );
 
-594 
+606 
 n
 ->
 keys
@@ -2803,7 +2763,7 @@ idx
 c
 ;
 
-595 
+607 
 n
 ->
 chûdªn
@@ -2815,13 +2775,13 @@ idx
 chûd
 ;
 
-596 
+608 
 n
 ->n.
 num_chûdªn
 ++;
 
-598 
+610 
 	`Êush_buf„r
 (&
 n
@@ -2833,7 +2793,7 @@ idx
 Ál£
 );
 
-599 
+611 
 	`Êush_buf„r
 (&
 n
@@ -2845,7 +2805,7 @@ idx
 Ál£
 );
 
-600 
+612 
 	`Êush_buf„r
 (&
 n
@@ -2857,13 +2817,13 @@ uöt8_t
 åue
 );
 
-603 
+615 
 __m128i
  
 cmp
 ;
 
-604 
+616 
 ¨t_node16
  *
 √w_node
@@ -2873,7 +2833,7 @@ cmp
 NODE16
 );
 
-607 
+619 
 	`mem˝y
 (
 √w_node
@@ -2883,13 +2843,13 @@ chûdªn
 n
 ->children,
 
-608 (*)*
+620 (*)*
 n
 ->n.
 num_chûdªn
 );
 
-609 
+621 
 	`mem˝y
 (
 √w_node
@@ -2899,13 +2859,13 @@ keys
 n
 ->keys,
 
-610 ()*
+622 ()*
 n
 ->n.
 num_chûdªn
 );
 
-611 
+623 
 	`c›y_hódî
 ((
 ¨t_node
@@ -2915,7 +2875,7 @@ num_chûdªn
 n
 );
 
-616 
+628 
 cmp
  = 
 	`_mm_cm∂t_ïi8
@@ -2925,7 +2885,7 @@ cmp
 c
 ),
 
-617 
+629 
 	`_mm_lﬂdu_si128
 ((
 __m128i
@@ -2935,7 +2895,7 @@ __m128i
 keys
 ));
 
-620 
+632 
 mask
  = (1 << 
 √w_node
@@ -2945,7 +2905,7 @@ n
 num_chûdªn
 ) - 1;
 
-621 
+633 
 bôfõld
  = 
 	`_mm_movemask_ïi8
@@ -2955,15 +2915,15 @@ cmp
 mask
 ;
 
-624 
+636 
 idx
 ;
 
-625 i‡(
+637 i‡(
 bôfõld
 ) {
 
-626 
+638 
 idx
  = 
 	`__buûtö_˘z
@@ -2971,7 +2931,7 @@ idx
 bôfõld
 );
 
-627 
+639 
 	`memmove
 (
 √w_node
@@ -2985,7 +2945,7 @@ n
 num_chûdªn
 -idx);
 
-628 
+640 
 	`memmove
 (
 √w_node
@@ -2995,7 +2955,7 @@ chûdªn
 idx
 +1,new_node->children+idx,
 
-629 (
+641 (
 √w_node
 ->
 n
@@ -3005,7 +2965,7 @@ num_chûdªn
 idx
 )*(*));
 
-631 
+643 
 idx
  = 
 √w_node
@@ -3015,7 +2975,7 @@ n
 num_chûdªn
 ;
 
-634 
+646 
 √w_node
 ->
 keys
@@ -3025,7 +2985,7 @@ idx
 c
 ;
 
-635 
+647 
 √w_node
 ->
 chûdªn
@@ -3037,7 +2997,7 @@ idx
 chûd
 ;
 
-636 
+648 
 √w_node
 ->
 n
@@ -3045,7 +3005,7 @@ n
 num_chûdªn
 ++;
 
-638 *
+650 *
 ªf
  = (
 ¨t_node
@@ -3053,7 +3013,7 @@ num_chûdªn
 √w_node
 ;
 
-639 
+651 
 	`Êush_buf„r
 (
 √w_node
@@ -3063,7 +3023,7 @@ num_chûdªn
 Ál£
 );
 
-640 
+652 
 	`Êush_buf„r
 (
 ªf
@@ -3071,21 +3031,21 @@ num_chûdªn
 åue
 );
 
-642 
+654 
 node4_cou¡
 --;
 
-643 
+655 
 	`‰ì
 (
 n
 );
 
-645 
+657 
 	}
 }
 
-647 
+659 
 	$add_chûd
 (
 ¨t_node
@@ -3099,17 +3059,17 @@ c
 chûd
 ) {
 
-648 
+660 
 n
 ->
 ty≥
 ) {
 
-649 
+661 
 NODE4
 :
 
-650  
+662  
 	`add_chûd4
 ((
 ¨t_node4
@@ -3123,11 +3083,11 @@ c
 chûd
 );
 
-651 
+663 
 NODE16
 :
 
-652  
+664  
 	`add_chûd16
 ((
 ¨t_node16
@@ -3141,11 +3101,11 @@ c
 chûd
 );
 
-653 
+665 
 NODE48
 :
 
-654  
+666  
 	`add_chûd48
 ((
 ¨t_node48
@@ -3159,11 +3119,11 @@ c
 chûd
 );
 
-655 
+667 
 NODE256
 :
 
-656  
+668  
 	`add_chûd256
 ((
 ¨t_node256
@@ -3177,15 +3137,15 @@ c
 chûd
 );
 
-658 
+670 
 	`ab‹t
 ();
 
-660 
+672 
 	}
 }
 
-665 
+677 
 	$¥efix_mism©ch
 (c⁄° 
 ¨t_node
@@ -3203,7 +3163,7 @@ dïth
 l
 ) {
 
-666 
+678 
 max_cmp
  = 
 	`mö
@@ -3219,17 +3179,17 @@ key_Àn
 dïth
 );
 
-667 
+679 
 idx
 ;
 
-668 
+680 
 idx
 =0; idx < 
 max_cmp
 ; idx++) {
 
-669 i‡(
+681 i‡(
 n
 ->
 ∑πül
@@ -3243,11 +3203,11 @@ key
 dïth
  + idx))
 
-670  
+682  
 idx
 ;
 
-674 i‡(
+686 i‡(
 n
 ->
 ∑πül_Àn
@@ -3255,7 +3215,7 @@ n
 MAX_PREFIX_LEN
 ) {
 
-676 *
+688 *
 l
  = 
 	`möimum
@@ -3263,7 +3223,7 @@ l
 n
 );
 
-677 
+689 
 max_cmp
  = 
 	`mö
@@ -3275,13 +3235,13 @@ key_Àn
 dïth
 ;
 
-678 ; 
+690 ; 
 idx
  < 
 max_cmp
 ; idx++) {
 
-679 i‡(
+691 i‡(
 	`gë_ödex
 ((*
 l
@@ -3293,19 +3253,19 @@ idx
 dïth
 ) != get_index(key, depth + idx))
 
-680  
+692  
 idx
 ;
 
-683  
+695  
 idx
 ;
 
-684 
+696 
 	}
 }
 
-686 * 
+698 * 
 	$ªcursive_ö£π
 (
 ¨t_node
@@ -3325,11 +3285,11 @@ dïth
 ﬁd
 ) {
 
-688 i‡(!
+700 i‡(!
 n
 ) {
 
-689 *
+701 *
 ªf
  = (
 ¨t_node
@@ -3345,7 +3305,7 @@ key_Àn
 vÆue
 ));
 
-690 
+702 
 	`Êush_buf„r
 (*
 ªf
@@ -3355,7 +3315,7 @@ vÆue
 Ál£
 );
 
-691 
+703 
 	`Êush_buf„r
 (
 ªf
@@ -3363,17 +3323,17 @@ vÆue
 åue
 );
 
-692  
+704  
 NULL
 ;
 
-696 i‡(
+708 i‡(
 	`IS_LEAF
 (
 n
 )) {
 
-697 
+709 
 ¨t_Àaf
  *
 l
@@ -3383,7 +3343,7 @@ l
 n
 );
 
-700 i‡(!
+712 i‡(!
 	`Àaf_m©ches
 (
 l
@@ -3395,11 +3355,11 @@ key_Àn
 dïth
 )) {
 
-701 *
+713 *
 ﬁd
  = 1;
 
-702 *
+714 *
 ﬁd_vÆ
  = 
 l
@@ -3407,13 +3367,13 @@ l
 vÆue
 ;
 
-703 
+715 
 l
 ->
 vÆue
  = value;
 
-704 
+716 
 	`Êush_buf„r
 (&
 l
@@ -3423,11 +3383,11 @@ vÆue
 åue
 );
 
-705  
+717  
 ﬁd_vÆ
 ;
 
-709 
+721 
 ¨t_node4
  *
 √w_node
@@ -3437,7 +3397,7 @@ vÆue
 NODE4
 );
 
-712 
+724 
 ¨t_Àaf
  *
 l2
@@ -3451,7 +3411,7 @@ key_Àn
 vÆue
 );
 
-715 
+727 
 i
 , 
 l⁄ge°_¥efix
@@ -3465,7 +3425,7 @@ l2
 dïth
 );
 
-716 
+728 
 √w_node
 ->
 n
@@ -3475,7 +3435,7 @@ n
 l⁄ge°_¥efix
 ;
 
-717 
+729 
 i
  = 0; i < 
 	`mö
@@ -3485,7 +3445,7 @@ MAX_PREFIX_LEN
 l⁄ge°_¥efix
 ); i++)
 
-718 
+730 
 √w_node
 ->
 n
@@ -3501,7 +3461,7 @@ key
 dïth
  + i);
 
-721 *
+733 *
 ªf
  = (
 ¨t_node
@@ -3509,7 +3469,7 @@ dïth
 √w_node
 ;
 
-722 
+734 
 	`add_chûd4_noÊush
 (
 √w_node
@@ -3529,7 +3489,7 @@ l⁄ge°_¥efix
 	`SET_LEAF
 (l));
 
-723 
+735 
 	`add_chûd4_noÊush
 (
 √w_node
@@ -3549,7 +3509,7 @@ l⁄ge°_¥efix
 	`SET_LEAF
 (l2));
 
-725 
+737 
 	`Êush_buf„r
 (
 √w_node
@@ -3559,7 +3519,7 @@ l⁄ge°_¥efix
 Ál£
 );
 
-726 
+738 
 	`Êush_buf„r
 (
 l2
@@ -3569,7 +3529,7 @@ l2
 Ál£
 );
 
-727 
+739 
 	`Êush_buf„r
 (
 ªf
@@ -3577,17 +3537,17 @@ l2
 åue
 );
 
-728  
+740  
 NULL
 ;
 
-732 i‡(
+744 i‡(
 n
 ->
 ∑πül_Àn
 ) {
 
-734 
+746 
 ¨t_Àaf
  *
 l
@@ -3595,7 +3555,7 @@ l
 NULL
 ;
 
-735 
+747 
 ¥efix_diff
  = 
 	`¥efix_mism©ch
@@ -3611,7 +3571,7 @@ dïth
 l
 );
 
-736 i‡((
+748 i‡((
 uöt32_t
 )
 ¥efix_diff
@@ -3621,7 +3581,7 @@ n
 ∑πül_Àn
 ) {
 
-737 
+749 
 dïth
  +
 n
@@ -3629,11 +3589,11 @@ n
 ∑πül_Àn
 ;
 
-738 
+750 
 RECURSE_SEARCH
 ;
 
-742 
+754 
 ¨t_node4
  *
 √w_node
@@ -3643,23 +3603,23 @@ RECURSE_SEARCH
 NODE4
 );
 
-744 
+756 
 ¨t_node
  *
 c›y_node
 ;
 
-745 
+757 
 n
 ->
 ty≥
 ) {
 
-746 
+758 
 NODE4
 :
 
-747 
+759 
 c›y_node
  = (
 ¨t_node
@@ -3669,7 +3629,7 @@ c›y_node
 ¨t_node4
 ));
 
-748 
+760 
 	`mem˝y
 (
 c›y_node
@@ -3679,17 +3639,17 @@ n
 ¨t_node4
 ));
 
-749 
+761 
 	`‰ì
 (
 n
 );
 
-751 
+763 
 NODE16
 :
 
-752 
+764 
 c›y_node
  = (
 ¨t_node
@@ -3699,7 +3659,7 @@ c›y_node
 ¨t_node16
 ));
 
-753 
+765 
 	`mem˝y
 (
 c›y_node
@@ -3709,17 +3669,17 @@ n
 ¨t_node16
 ));
 
-754 
+766 
 	`‰ì
 (
 n
 );
 
-756 
+768 
 NODE48
 :
 
-757 
+769 
 c›y_node
  = (
 ¨t_node
@@ -3729,7 +3689,7 @@ c›y_node
 ¨t_node48
 ));
 
-758 
+770 
 	`mem˝y
 (
 c›y_node
@@ -3739,17 +3699,17 @@ n
 ¨t_node48
 ));
 
-759 
+771 
 	`‰ì
 (
 n
 );
 
-761 
+773 
 NODE256
 :
 
-762 
+774 
 c›y_node
  = (
 ¨t_node
@@ -3759,7 +3719,7 @@ c›y_node
 ¨t_node256
 ));
 
-763 
+775 
 	`mem˝y
 (
 c›y_node
@@ -3769,17 +3729,17 @@ n
 ¨t_node256
 ));
 
-764 
+776 
 	`‰ì
 (
 n
 );
 
-767 
+779 
 	`ab‹t
 ();
 
-770 *
+782 *
 ªf
  = (
 ¨t_node
@@ -3787,7 +3747,7 @@ n
 √w_node
 ;
 
-771 
+783 
 √w_node
 ->
 n
@@ -3797,7 +3757,7 @@ n
 ¥efix_diff
 ;
 
-772 
+784 
 	`mem˝y
 (
 √w_node
@@ -3815,7 +3775,7 @@ MAX_PREFIX_LEN
 ¥efix_diff
 ));
 
-775 i‡(
+787 i‡(
 c›y_node
 ->
 ∑πül_Àn
@@ -3823,7 +3783,7 @@ c›y_node
 MAX_PREFIX_LEN
 ) {
 
-776 
+788 
 	`add_chûd4_noÊush
 (
 √w_node
@@ -3837,7 +3797,7 @@ c›y_node
 ¥efix_diff
 ], copy_node);
 
-777 
+789 
 c›y_node
 ->
 ∑πül_Àn
@@ -3845,7 +3805,7 @@ c›y_node
 ¥efix_diff
 +1);
 
-778 
+790 
 	`memmove
 (
 c›y_node
@@ -3855,7 +3815,7 @@ c›y_node
 ¥efix_diff
 +1,
 
-779 
+791 
 	`mö
 (
 MAX_PREFIX_LEN
@@ -3865,11 +3825,11 @@ c›y_node
 ∑πül_Àn
 ));
 
-781 
+793 
 i
 ;
 
-782 
+794 
 c›y_node
 ->
 ∑πül_Àn
@@ -3877,13 +3837,13 @@ c›y_node
 ¥efix_diff
 +1);
 
-783 i‡(
+795 i‡(
 l
  =
 NULL
 )
 
-784 
+796 
 l
  = 
 	`möimum
@@ -3891,7 +3851,7 @@ l
 c›y_node
 );
 
-785 
+797 
 	`add_chûd4_noÊush
 (
 √w_node
@@ -3911,7 +3871,7 @@ dïth
 c›y_node
 );
 
-786 
+798 
 i
  = 0; i < 
 	`mö
@@ -3923,7 +3883,7 @@ c›y_node
 ∑πül_Àn
 ); i++)
 
-787 
+799 
 c›y_node
 ->
 ∑πül
@@ -3941,7 +3901,7 @@ dïth
 ¥efix_diff
  + 1 + i);
 
-793 
+805 
 l
  = 
 	`make_Àaf
@@ -3953,7 +3913,7 @@ key_Àn
 vÆue
 );
 
-794 
+806 
 	`add_chûd4_noÊush
 (
 √w_node
@@ -3973,7 +3933,7 @@ dïth
 l
 ));
 
-796 
+808 
 	`Êush_buf„r
 (
 √w_node
@@ -3983,7 +3943,7 @@ l
 Ál£
 );
 
-797 
+809 
 	`Êush_buf„r
 (
 l
@@ -3993,7 +3953,7 @@ l
 Ál£
 );
 
-798 i‡(
+810 i‡(
 c›y_node
 ->
 ty≥
@@ -4001,7 +3961,7 @@ ty≥
 NODE4
 )
 
-799 
+811 
 	`Êush_buf„r
 (
 c›y_node
@@ -4011,7 +3971,7 @@ c›y_node
 Ál£
 );
 
-800 i‡(
+812 i‡(
 c›y_node
 ->
 ty≥
@@ -4019,7 +3979,7 @@ ty≥
 NODE16
 )
 
-801 
+813 
 	`Êush_buf„r
 (
 c›y_node
@@ -4029,7 +3989,7 @@ c›y_node
 Ál£
 );
 
-802 i‡(
+814 i‡(
 c›y_node
 ->
 ty≥
@@ -4037,7 +3997,7 @@ ty≥
 NODE48
 )
 
-803 
+815 
 	`Êush_buf„r
 (
 c›y_node
@@ -4047,7 +4007,7 @@ c›y_node
 Ál£
 );
 
-805 
+817 
 	`Êush_buf„r
 (
 c›y_node
@@ -4057,7 +4017,7 @@ c›y_node
 Ál£
 );
 
-806 
+818 
 	`Êush_buf„r
 (
 ªf
@@ -4065,15 +4025,15 @@ c›y_node
 åue
 );
 
-807  
+819  
 NULL
 ;
 
-810 
+822 
 RECURSE_SEARCH
 :;
 
-813 
+825 
 ¨t_node
  **
 chûd
@@ -4089,11 +4049,11 @@ key
 dïth
 ));
 
-814 i‡(
+826 i‡(
 chûd
 ) {
 
-815  
+827  
 	`ªcursive_ö£π
 (*
 chûd
@@ -4109,7 +4069,7 @@ dïth
 ﬁd
 );
 
-819 
+831 
 ¨t_Àaf
  *
 l
@@ -4123,7 +4083,7 @@ key_Àn
 vÆue
 );
 
-820 
+832 
 	`Êush_buf„r
 (
 l
@@ -4133,7 +4093,7 @@ l
 Ál£
 );
 
-822 
+834 
 	`add_chûd
 (
 n
@@ -4151,15 +4111,15 @@ dïth
 l
 ));
 
-823  
+835  
 NULL
 ;
 
-824 
+836 
 	}
 }
 
-835 * 
+847 * 
 	$¨t_ö£π
 (
 ¨t_åì
@@ -4173,11 +4133,11 @@ key_Àn
 vÆue
 ) {
 
-836 
+848 
 ﬁd_vÆ
  = 0;
 
-837 *
+849 *
 ﬁd
  = 
 	`ªcursive_ö£π
@@ -4195,7 +4155,7 @@ vÆue
 ﬁd_vÆ
 );
 
-838 i‡(!
+850 i‡(!
 ﬁd_vÆ
 Ë
 t
@@ -4203,11 +4163,285 @@ t
 size
 ++;
 
-839  
+851  
 ﬁd
 ;
 
-840 
+852 
+	}
+}
+
+1094 
+	$ªcursive_lookup
+(
+¨t_node
+ *
+n
+, 
+num
+,
+
+1095 *
+£¨ch_cou¡
+, 
+buf
+[]) {
+
+1097 i‡(!
+n
+)  ;
+
+1098 i‡(
+	`IS_LEAF
+(
+n
+)) {
+
+1099 
+¨t_Àaf
+ *
+l
+ = 
+	`LEAF_RAW
+(
+n
+);
+
+1100 
+buf
+[*
+£¨ch_cou¡
+] = *(*)
+l
+->
+vÆue
+;
+
+1101 (*
+£¨ch_cou¡
+)++;
+
+1105 
+i
+, 
+idx
+;
+
+1106 
+n
+->
+ty≥
+) {
+
+1107 
+NODE4
+:
+
+1108 
+i
+=0; i < 
+n
+->
+num_chûdªn
+; i++) {
+
+1109 
+	`ªcursive_lookup
+(((
+¨t_node4
+*)
+n
+)->
+chûdªn
+[
+i
+], 
+num
+,
+
+1110 
+£¨ch_cou¡
+, 
+buf
+);
+
+1111 i‡(*
+£¨ch_cou¡
+ =
+num
+)
+
+1115 
+NODE16
+:
+
+1116 
+i
+=0; i < 
+n
+->
+num_chûdªn
+; i++) {
+
+1117 
+	`ªcursive_lookup
+(((
+¨t_node16
+*)
+n
+)->
+chûdªn
+[
+i
+], 
+num
+,
+
+1118 
+£¨ch_cou¡
+, 
+buf
+);
+
+1119 i‡(*
+£¨ch_cou¡
+ =
+num
+)
+
+1123 
+NODE48
+:
+
+1124 
+i
+=0; i < 256; i++) {
+
+1125 
+idx
+ = ((
+¨t_node48
+*)
+n
+)->
+keys
+[
+i
+];
+
+1126 i‡(!
+idx
+) ;
+
+1128 
+	`ªcursive_lookup
+(((
+¨t_node48
+*)
+n
+)->
+chûdªn
+[
+idx
+-1], 
+num
+,
+
+1129 
+£¨ch_cou¡
+, 
+buf
+);
+
+1130 i‡(*
+£¨ch_cou¡
+ =
+num
+)
+
+1134 
+NODE256
+:
+
+1135 
+i
+=0; i < 256; i++) {
+
+1136 i‡(!((
+¨t_node256
+*)
+n
+)->
+chûdªn
+[
+i
+]) ;
+
+1137 
+	`ªcursive_lookup
+(((
+¨t_node256
+*)
+n
+)->
+chûdªn
+[
+i
+], 
+num
+,
+
+1138 
+£¨ch_cou¡
+, 
+buf
+);
+
+1139 i‡(*
+£¨ch_cou¡
+ =
+num
+)
+
+1144 
+	`ab‹t
+();
+
+1147 
+	}
+}
+
+1149 
+	$R™ge_Lookup
+(
+¨t_åì
+ *
+t
+, 
+num
+, 
+buf
+[]) {
+
+1150 
+£¨ch_cou¡
+ = 0;
+
+1151  
+	`ªcursive_lookup
+(
+t
+->
+roŸ
+, 
+num
+, &
+£¨ch_cou¡
+, 
+buf
+);
+
+1152 
 	}
 }
 
@@ -4651,7 +4885,19 @@ boﬁ
 „n˚
 );
 
-220 #ifde‡
+220 
+R™ge_Lookup
+(
+¨t_åì
+ *
+t
+, 
+num
+, 
+buf
+[]);
+
+222 #ifde‡
 __˝lu•lus
 
 
@@ -4683,7 +4929,7 @@ __˝lu•lus
 
 8 
 	#INPUT_NUM
- 1024000000
+ 128000000
 
 	)
 
@@ -4745,7 +4991,7 @@ mö
 Â
  = 
 	`f›í
-("/home/£kw⁄/Public/öput_fûe/öput_øndom_sy¡hëic_1024M.txt","r")Ë=
+("/home/£kw⁄/Public/öput_fûe/öput_øndom_sy¡hëic_128M.txt","r")Ë=
 NULL
 )
 
@@ -5093,10 +5339,6 @@ node256_cou¡
 m„n˚_cou¡
 );
 
-93 #ifde‡
-£kw⁄
-
-
 95 
 	`mem£t
 (
@@ -5216,8 +5458,6 @@ t1
 (
 t
 , 
-mö
-, 
 INPUT_NUM
  / 1000, 
 buf
@@ -5283,8 +5523,6 @@ t1
 	`R™ge_Lookup
 (
 t
-, 
-mö
 , 
 INPUT_NUM
  / 100, 
@@ -5352,8 +5590,6 @@ t1
 (
 t
 , 
-mö
-, 
 INPUT_NUM
  / 10, 
 buf
@@ -5392,6 +5628,10 @@ t1
 ("R™gêsˇ¿10% = %luÇs\n", 
 ñ≠£d_time
 );
+
+144 #ifde‡
+£kw⁄
+
 
 146 
 √w_vÆue
@@ -5486,6 +5726,88 @@ t1
 ("Upd©êTimê%luÇs\n", 
 ñ≠£d_time
 );
+
+160 
+	`mem£t
+(
+dummy
+, 0, 15*1024*1024);
+
+161 
+	`Êush_buf„r
+((*)
+dummy
+, 15*1024*1024, 
+åue
+);
+
+162 
+	`˛ock_gëtime
+(
+CLOCK_MONOTONIC
+, &
+t1
+);
+
+163 
+i
+ = 0; i < 100; i++)
+
+164 
+	`Dñëe
+(
+t
+, 
+keys
+[
+i
+]);
+
+165 
+	`˛ock_gëtime
+(
+CLOCK_MONOTONIC
+, &
+t2
+);
+
+166 
+ñ≠£d_time
+ = (
+t2
+.
+tv_£c
+ - 
+t1
+.tv_sec) * 1000000000;
+
+167 
+ñ≠£d_time
+ +(
+t2
+.
+tv_n£c
+ - 
+t1
+.tv_nsec);
+
+168 
+	`¥ötf
+("DñëêTimê%luÇs\n", 
+ñ≠£d_time
+);
+
+170 
+i
+ = 0; i < 50000100; i++)
+
+171 
+	`¥ötf
+("buf[%d] = %lu\n", 
+i
+, 
+buf
+[i]);
 
 174 
 	}

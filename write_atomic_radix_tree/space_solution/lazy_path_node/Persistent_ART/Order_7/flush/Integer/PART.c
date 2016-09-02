@@ -24,7 +24,7 @@ unsigned long mfence_count = 0;
 #define SET_LEAF(x) ((void*)((uintptr_t)x | 1))
 #define LEAF_RAW(x) ((art_leaf*)((void*)((uintptr_t)x & ~1)))
 
-#define LATENCY			200
+#define LATENCY			400
 #define CPU_FREQ_MHZ	2400
 
 static inline void cpu_pause()
@@ -51,20 +51,20 @@ void flush_buffer(void *buf, unsigned long len, bool fence)
 		mfence();
 		for (i = 0; i < len; i += CACHE_LINE_SIZE) {
 			clflush_count++;
-//			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
+			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
-//			while (read_tsc() < etsc)
-//				cpu_pause();
+			while (read_tsc() < etsc)
+				cpu_pause();
 		}
 		mfence();
 		mfence_count = mfence_count + 2;
 	} else {
 		for (i = 0; i < len; i += CACHE_LINE_SIZE) {
 			clflush_count++;
-//			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
+			etsc = read_tsc() + (unsigned long)(LATENCY * CPU_FREQ_MHZ / 1000);
 			asm volatile ("clflush %0\n" : "+m" (*(char *)(buf+i)));
-//			while (read_tsc() < etsc)
-//				cpu_pause();
+			while (read_tsc() < etsc)
+				cpu_pause();
 		}
 	}
 }

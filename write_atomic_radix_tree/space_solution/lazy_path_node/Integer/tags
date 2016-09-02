@@ -24,6 +24,7 @@ NODE4	art_lpn.h	18;"	d
 NODE48	art_lpn.h	20;"	d
 NODE_BITS	art_lpn.h	25;"	d
 NUM_NODE_ENTRIES	art_lpn.h	27;"	d
+Range_Lookup	art_lpn.c	/^void Range_Lookup(art_tree *t, unsigned long num, unsigned long buf[]) {$/;"	f
 SET_LEAF	art_lpn.c	24;"	d	file:
 add_child	art_lpn.c	/^static void add_child(art_node *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
 add_child16	art_lpn.c	/^static void add_child16(art_node16 *n, art_node **ref, unsigned char c, void *child) {$/;"	f	file:
@@ -97,6 +98,7 @@ partial_len	art_lpn.h	/^    uint32_t partial_len;$/;"	m	struct:__anon1
 prefix_mismatch	art_lpn.c	/^static int prefix_mismatch(const art_node *n, const unsigned long key, int key_len, int depth, art_leaf **l) {$/;"	f	file:
 read_tsc	art_lpn.c	/^static inline unsigned long read_tsc(void)$/;"	f	file:
 recursive_insert	art_lpn.c	/^static void* recursive_insert(art_node *n, art_node **ref, const unsigned long key, int key_len, void *value, int depth, int *old) {$/;"	f	file:
+recursive_lookup	art_lpn.c	/^static void recursive_lookup(art_node *n, unsigned long num,$/;"	f	file:
 root	art_lpn.h	/^    art_node *root;$/;"	m	struct:__anon7
 size	art_lpn.h	/^    uint64_t size;$/;"	m	struct:__anon7
 type	art_lpn.h	/^    uint8_t type;$/;"	m	struct:__anon1
